@@ -6,7 +6,7 @@
  */
 #include "../headers/ventanaGrafica.h"
 
-int main(int argc,char** argv){
+int main(int argc,char* argv[]){
 
 	//Aca habria que cargar en memoria al JSON
 

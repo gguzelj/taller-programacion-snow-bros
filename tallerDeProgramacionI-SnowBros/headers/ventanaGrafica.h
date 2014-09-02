@@ -12,9 +12,10 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include "../headers/constants.h"
+#include "../headers/Viewer.h"
 using namespace std;
 
-class VentanaGrafica{
+class VentanaGrafica : public Viewer{
 	private:
 		int alto_px;
 		int ancho_px;

@@ -42,9 +42,11 @@ void VentanaGrafica::inicializarSDL(){
 		SDL_Quit();
 		throw;
 	}
+	int coordenadaX = COORD_X_INI;
+	int coordenadaY = COORD_Y_INI;
 
 	//Opening a window
-	window = SDL_CreateWindow("Snow Bros", 300, 100, ancho_px, alto_px, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Snow Bros", coordenadaX , coordenadaY, ancho_px, alto_px, SDL_WINDOW_SHOWN);
 	if (window == nullptr){
 		logSDLError(std::cout, "CreateWindow");
 		IMG_Quit();

@@ -2,10 +2,13 @@
 #include "../headers/Viewer.h"
 #include "../headers/ObjectFactory.h"
 #include "../headers/Drawer.h"
+#include "../headers/JsonParser.h"
 
 int main(int argc,char* argv[]){
 
 	//Aca habria que cargar en memoria al JSON
+	JsonParser *parser = new JsonParser();
+	parser->test();
 
 	//Inicializar la ventana
 	VentanaGrafica* window = new VentanaGrafica();

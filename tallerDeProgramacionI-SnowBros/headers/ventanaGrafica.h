@@ -24,7 +24,6 @@ class VentanaGrafica : public Viewer{
 		string imagePath;
 
 		SDL_Window *window;
-		SDL_Renderer *renderer;
 		SDL_Texture *image;
 
 		void inicializarSDL();
@@ -68,6 +67,7 @@ class VentanaGrafica : public Viewer{
 		void logSDLError(std::ostream &os, const std::string &msg);
 
 	public:
+		SDL_Renderer *renderer;
 		/*
 		 * Constructor de la clase. En caso que no se indiquen parametros de la ventana
 		 * se setearan los valores establecidos por default. Estos valores de configuraion

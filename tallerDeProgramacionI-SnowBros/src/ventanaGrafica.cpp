@@ -42,11 +42,8 @@ void VentanaGrafica::inicializarSDL(){
 		SDL_Quit();
 		throw;
 	}
-	int coordenadaX = COORD_X_INI;
-	int coordenadaY = COORD_Y_INI;
-
 	//Opening a window
-	window = SDL_CreateWindow("Snow Bros", coordenadaX , coordenadaY, ancho_px, alto_px, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Snow Bros", SDL_WINDOWPOS_CENTERED , SDL_WINDOWPOS_CENTERED, ancho_px, alto_px, SDL_WINDOW_SHOWN);
 	if (window == nullptr){
 		logSDLError(std::cout, "CreateWindow");
 		IMG_Quit();
@@ -59,6 +56,17 @@ void VentanaGrafica::inicializarSDL(){
 	if (renderer == nullptr){
 		SDL_DestroyWindow(window);
 		logSDLError(std::cout, "CreateRenderer");
+		IMG_Quit();
+		SDL_Quit();
+		throw;
+	}
+
+	//Loading the image
+	SDL_Texture *image = this->loadTexture(this->imagePath, renderer);
+	if (image == nullptr){
+		SDL_DestroyTexture(image);
+		SDL_DestroyRenderer(renderer);
+		SDL_DestroyWindow(window);
 		IMG_Quit();
 		SDL_Quit();
 		throw;
@@ -92,21 +100,8 @@ void VentanaGrafica::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, i
 
 //Aca hay que ver temas referentes a errores.
 void VentanaGrafica::reproducirVentana(){
-	SDL_Texture *image = this->loadTexture(this->imagePath, renderer);
-	if (image == nullptr){
-		SDL_DestroyTexture(image);
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		IMG_Quit();
-		SDL_Quit();
-		throw;
-	}
-
 	//Drawing the texture
-	SDL_RenderClear(renderer);
 	SDL_RenderCopy(renderer, image, NULL, NULL); //Se pasa NULL para que ocupe todo el renderer
-	SDL_RenderPresent(renderer);
-	SDL_Delay(2000);
 }
 
 void VentanaGrafica::logSDLError(std::ostream &os, const std::string &msg){

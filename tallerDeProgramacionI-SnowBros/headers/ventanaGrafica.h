@@ -19,8 +19,6 @@ class VentanaGrafica : public Viewer{
 	private:
 		int alto_px;
 		int ancho_px;
-		float alto_un;
-		float ancho_un;
 		string imagePath;
 
 		SDL_Window *window;

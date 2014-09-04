@@ -11,8 +11,6 @@
 VentanaGrafica::VentanaGrafica(){
 	this->alto_px = ALTO_PX;
 	this->ancho_px = ANCHO_PX;
-	this->alto_un = ALTO_UN;
-	this->ancho_un = ANCHO_UN;
 	this->imagePath = defaultImagePath;
 	this->window = nullptr;
 	this->renderer = nullptr;
@@ -24,8 +22,6 @@ VentanaGrafica::VentanaGrafica(){
 VentanaGrafica::VentanaGrafica(int alto_px ,int ancho_px ,float alto_un ,float ancho_un, string imagePath){
 	this->alto_px = alto_px;
 	this->ancho_px = ancho_px;
-	this->alto_un = alto_un;
-	this->ancho_un = ancho_un;
 	this->imagePath = imagePath;
 	this->window = nullptr;
 	this->renderer = nullptr;
@@ -62,7 +58,7 @@ void VentanaGrafica::inicializarSDL(){
 	}
 
 	//Loading the image
-	SDL_Texture *image = this->loadTexture(this->imagePath, renderer);
+	image = this->loadTexture(this->imagePath, renderer);
 	if (image == nullptr){
 		SDL_DestroyTexture(image);
 		SDL_DestroyRenderer(renderer);

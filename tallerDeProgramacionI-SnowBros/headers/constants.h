@@ -15,7 +15,8 @@
 #define ALTO_UN 150;
 #define ANCHO_UN 100;
 //Aqui deberia existir la funcion que obtenga el path
-#define defaultImagePath "/home/lmasello/git/snowbros/tallerDeProgramacionI-SnowBros/resources/chapelco.jpg";
+#define defaultImagePath "/home/lmasello/tallerDeProgramacionWorkspace/tallerDeProgramacionI-SnowBros/resources/ImagenGrande.jpg"; //Aca hay que agregar una funcion que obtenga automaticamente el path
+//#define defaultImagePath "/home/fdc/git/taller-programacion-snow-bros/tallerDeProgramacionI-SnowBros/resources/ImagenGrande.jpg";
 
 
 #endif /* CONSTANTS_H_ */

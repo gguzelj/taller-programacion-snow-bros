@@ -84,7 +84,7 @@ void VentanaGrafica::inicializarSDL(){
 	//Opening a window
 	window = SDL_CreateWindow("Snow Bros", SDL_WINDOWPOS_CENTERED , SDL_WINDOWPOS_CENTERED, ancho_px, alto_px, SDL_WINDOW_SHOWN);
 	if (window == nullptr){
-		logSDLError(std::cout, "CreateWindow");
+		logSDLError(std::cout, "Error al utilizar SDL_CreateWindow() window devolvio nullptr");
 		IMG_Quit();
 		SDL_Quit();
 		throw;
@@ -94,7 +94,7 @@ void VentanaGrafica::inicializarSDL(){
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (renderer == nullptr){
 		SDL_DestroyWindow(window);
-		logSDLError(std::cout, "CreateRenderer");
+		logSDLError(std::cout, "Error al utilizar SDL_CreateRenderer() renderer devolvio nullptr");
 		IMG_Quit();
 		SDL_Quit();
 		throw;
@@ -115,7 +115,7 @@ void VentanaGrafica::inicializarSDL(){
 SDL_Texture* VentanaGrafica::loadTexture(const std::string &file, SDL_Renderer *ren){
 	SDL_Texture *texture = IMG_LoadTexture(ren, file.c_str());
 	if (texture == nullptr){
-		logSDLError(std::cout, "LoadTexture");
+		logSDLError(std::cout, "Error al utilizar IMG_LoadTexture() texture devolvio nullptr");
 	}
 	return texture;
 }

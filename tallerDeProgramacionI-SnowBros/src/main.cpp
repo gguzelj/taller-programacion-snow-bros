@@ -58,9 +58,7 @@ int main(int argc,char* argv[]){
 		delete g_eventos;
 		delete window;
 		delete world;
-		for(int i=1;i<2000;i++){
-			wait();
-		}
+
 	}while(reset);
 
 	return 0;

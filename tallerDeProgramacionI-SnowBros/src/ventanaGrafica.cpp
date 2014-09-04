@@ -19,7 +19,7 @@ VentanaGrafica::VentanaGrafica(){
 	this->inicializarSDL();
 }
 
-VentanaGrafica::VentanaGrafica(int alto_px ,int ancho_px ,float alto_un ,float ancho_un, string imagePath){
+VentanaGrafica::VentanaGrafica(int alto_px ,int ancho_px , string imagePath){
 	this->alto_px = alto_px;
 	this->ancho_px = ancho_px;
 	this->imagePath = imagePath;
@@ -28,6 +28,49 @@ VentanaGrafica::VentanaGrafica(int alto_px ,int ancho_px ,float alto_un ,float a
 	this-> image = nullptr;
 
 	this->inicializarSDL();
+}
+
+void VentanaGrafica::clearScenary(){
+	SDL_RenderClear(this->renderer);
+}
+
+void VentanaGrafica::drawBackground(){
+	//Drawing the texture
+	SDL_RenderCopy(renderer, image, NULL, NULL); //Se pasa NULL para que ocupe todo el renderer
+}
+
+void VentanaGrafica::drawScenary(b2World* world){
+	for(b2Body* body = world->GetBodyList(); body; body = body->GetNext()){
+		this->drawStaticBody(body);
+	}
+}
+
+//Dibuja un cuerpo estatico
+void VentanaGrafica::drawStaticBody(b2Body* body){
+	SDL_SetRenderDrawColor(this->renderer, 50, 50, 50, 255);
+	int ox = 320;
+	int oy = 400;
+	float sc = 40.0;
+	//http://box2d.org/forum/viewtopic.php?f=3&t=1933
+	for( b2Fixture *fixture = body->GetFixtureList(); fixture; fixture = fixture->GetNext() ){
+		if( fixture->GetType() == b2Shape::e_polygon ){
+			b2PolygonShape *poly = (b2PolygonShape*)fixture->GetShape();
+
+			const int count = poly->GetVertexCount();
+
+			for( int i = 0; i < count; i++ ){
+				int ind0 = (i + 1) % count ;
+				b2Vec2 p0 = body->GetWorldPoint(  poly->GetVertex( ind0 ) );
+				b2Vec2 p1 = body->GetWorldPoint(  poly->GetVertex(i) );
+
+				SDL_RenderDrawLine(this->renderer, sc * p0.x + ox, -sc * p0.y + oy , sc * p1.x + ox, -sc * p1.y + oy);
+			}
+		}
+	}
+}
+
+void VentanaGrafica::presentScenary(){
+	SDL_RenderPresent(this->renderer);
 }
 
 //Aca hay que ver temas referentes a errores.
@@ -69,7 +112,6 @@ void VentanaGrafica::inicializarSDL(){
 	}
 }
 
-//Aca hay que ver temas referentes a errores.
 SDL_Texture* VentanaGrafica::loadTexture(const std::string &file, SDL_Renderer *ren){
 	SDL_Texture *texture = IMG_LoadTexture(ren, file.c_str());
 	if (texture == nullptr){
@@ -92,12 +134,6 @@ void VentanaGrafica::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, i
 	int w, h;
 	SDL_QueryTexture(tex, NULL, NULL, &w, &h);
 	renderTexture(tex, ren, x, y, w, h);
-}
-
-//Aca hay que ver temas referentes a errores.
-void VentanaGrafica::reproducirVentana(){
-	//Drawing the texture
-	SDL_RenderCopy(renderer, image, NULL, NULL); //Se pasa NULL para que ocupe todo el renderer
 }
 
 void VentanaGrafica::logSDLError(std::ostream &os, const std::string &msg){

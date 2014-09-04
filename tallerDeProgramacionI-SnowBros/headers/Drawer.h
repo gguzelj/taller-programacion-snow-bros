@@ -9,20 +9,20 @@
 #define DRAWER_H_
 
 #include <iostream>
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_image.h"
 #include <Box2D/Box2D.h>
-#include "../headers/constants.h"
-#include "../headers/ventanaGrafica.h"
+
 using namespace std;
 
 class Drawer{
 	private:
 	public:
-		Drawer();
-		~Drawer();
-		void drawStaticBody(SDL_Renderer* renderer, b2Body* body);
-		void drawScenary(b2World* world, VentanaGrafica* window);
+		Drawer(){};
+		virtual ~Drawer(){};
+		virtual void drawBackground() = 0;
+		virtual void drawStaticBody(b2Body* body) = 0;
+		virtual void drawScenary(b2World* world) = 0;
+		virtual void presentScenary() = 0;
+		virtual void clearScenary() = 0;
 };
 
 

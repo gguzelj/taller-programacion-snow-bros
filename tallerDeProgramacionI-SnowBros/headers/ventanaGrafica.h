@@ -12,10 +12,10 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include "../headers/constants.h"
-#include "../headers/Viewer.h"
+#include "../headers/Drawer.h"
 using namespace std;
 
-class VentanaGrafica : public Viewer{
+class VentanaGrafica : public Drawer{
 	private:
 		int alto_px;
 		int ancho_px;
@@ -64,8 +64,11 @@ class VentanaGrafica : public Viewer{
 
 		void logSDLError(std::ostream &os, const std::string &msg);
 
+		void drawStaticBody(b2Body* body);
+
 	public:
 		SDL_Renderer *renderer;
+
 		/*
 		 * Constructor de la clase. En caso que no se indiquen parametros de la ventana
 		 * se setearan los valores establecidos por default. Estos valores de configuraion
@@ -74,13 +77,18 @@ class VentanaGrafica : public Viewer{
 		VentanaGrafica();
 		/*
 		 * Constructor de la clase. Se indican por parametros las dimensiones en pixeles,
-		 * asi como tambien las dimensiones en unidades. Las variables que representen
-		 * unidades de medida (alto_un y ancho_un) deben ser numeros reales.
 		 */
-		VentanaGrafica(int alto_px ,int ancho_px ,float alto_un ,float ancho_un, string imagePath);
+		VentanaGrafica(int alto_px ,int ancho_px ,string imagePath);
+
 		~VentanaGrafica();
 
-		void reproducirVentana();
+		void clearScenary();
+
+		void drawBackground();
+
+		void drawScenary(b2World* world);
+
+		void presentScenary();
 };
 
 #endif /* VENTANAGRAFICA_H_ */

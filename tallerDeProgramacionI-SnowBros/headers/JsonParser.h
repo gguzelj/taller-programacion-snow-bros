@@ -17,6 +17,15 @@ public:
 	JsonParser();
 	virtual ~JsonParser();
 
+	//Implementar
+	int getAlto_px();
+	int getAncho_px();
+	int getAlto_un();
+	int getAncho_un();
+	std::string getImagePath();
+	int getCharacterX();
+	int getCharacterY();
+
 	void test();
 };
 

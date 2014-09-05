@@ -1,0 +1,34 @@
+{
+    "escenario": {
+        "alto-px": 768,
+        "ancho-px":1024,
+        "alto-un":100,
+        "ancho-un":50,
+        "imagen_fondo":"fondo1.png",
+        "personaje": {"x": 100,"y":100},
+        "objetos": [ 
+                     {
+                       "tipo":"rect",
+                       "x":5,
+                       "y":90,
+                       "ancho":2,
+                       "alto":1,
+                       "color":"#00FF00",
+                       "rot":45,
+                       "masa":3,
+                       "estatico":false
+                     },
+                     {
+                       "tipo":"poli",
+                       "lados":3,
+                       "x":50,
+                       "y":50,
+                       "escala":3.5,
+                       "color":"#FF0000",
+                       "rot":90,
+                       "masa":1,
+                       "estatico":true
+                     }
+                   ]
+    }
+}

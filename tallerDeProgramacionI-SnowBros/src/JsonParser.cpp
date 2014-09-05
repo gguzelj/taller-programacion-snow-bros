@@ -1,4 +1,3 @@
-
 /*
  * JsonParser.cpp
  *
@@ -8,17 +7,98 @@
 
 #include "../headers/JsonParser.h"
 
+/**
+ * Constructor
+ */
 JsonParser::JsonParser() {
-	// TODO Auto-generated constructor stub
-
+	return;
 }
 
-JsonParser::~JsonParser() {
-	// TODO Auto-generated destructor stub
+JsonParser::JsonParser(std::string jsonFile) {
+	jsonFile_ = jsonFile;
 }
 
 /**
- *
+ * Destructor
+ */
+JsonParser::~JsonParser() {
+}
+
+/**
+ * Set jsonFile
+ */
+void JsonParser::setJsonFile(std::string jsonFile) {
+	jsonFile_ = jsonFile;
+}
+
+/**
+ * Get jsonFile
+ */
+std::string JsonParser::getJsonFile() {
+	return jsonFile_;
+}
+
+/**
+ * Realizamos el parseo del archivo
+ */
+void JsonParser::parse() {
+
+	std::ifstream t("/home/german/Desktop/taller-programacion-snow-bros/tallerDeProgramacionI-SnowBros/resources/example.json");
+	std::string str;
+
+	if (t.is_open()) {
+		t.seekg(0, std::ios::end);
+		jsonFile_.reserve(t.tellg());
+		t.seekg(0, std::ios::beg);
+
+		jsonFile_.assign((std::istreambuf_iterator<char>(t)),
+				std::istreambuf_iterator<char>());
+
+	}
+
+	if (jsonFile_.empty())
+		this->setDefaultValues();
+	else
+		this->setValuesFromFile();
+
+	return;
+}
+
+/**
+ * En los casos donde no se haya seteado ningun archivo json, cargamos juego
+ * con los valores por default
+ */
+void JsonParser::setDefaultValues() {
+	//Logica para cargar vlores por default
+}
+
+/**
+ * En los casos donde no se haya asignado un algun archivo json, cargamos los valores
+ * del mismo
+ */
+void JsonParser::setValuesFromFile() {
+
+	Json::Value root;
+	Json::Reader reader;
+	bool parsedSuccess = reader.parse(jsonFile_, root, false);
+
+	if (not parsedSuccess) {
+		//ERROR, agregar logica para el manero de errores
+		return;
+	}
+
+	const Json::Value escenario = root["escenario"]; //Cambiar por cte
+
+	Json::Value alto_px = escenario["alto-px"]; //Cambiar por cte
+
+	std::cout << alto_px.asString() << std::endl;
+
+	return;
+
+}
+
+/**
+ * Test
  */
 void JsonParser::test() {
 

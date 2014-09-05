@@ -1,10 +1,3 @@
-/*
- * GestorDeEventos.h
- *
- *  Created on: 4/9/2014
- *      Author: anonimo
- */
-
 #ifndef GESTORDEEVENTOS_H_
 #define GESTORDEEVENTOS_H_
 #include "SDL2/SDL.h"
@@ -12,12 +5,16 @@
 #include <sstream>
 #include <iostream>
 #include "constants.h"
+#include "../headers/constants.h"
 
 class GestorDeEventos {
 public:
-	GestorDeEventos();
-	virtual ~GestorDeEventos();
-	void interpretarEvento(SDL_Event evento,bool* quit, bool* reload);
+        GestorDeEventos();
+        virtual ~GestorDeEventos();
+
+        void listenEvents(SDL_Event* event, bool* running, bool* reload);
+
+        void interpretarEvento(SDL_Event* evento,bool* quit, bool* reload);
 
 };
 

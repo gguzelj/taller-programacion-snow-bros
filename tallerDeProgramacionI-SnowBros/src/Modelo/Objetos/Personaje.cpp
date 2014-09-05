@@ -1,6 +1,41 @@
 #include "../../../headers/Modelo/Objetos/Personaje.h"
 
+Personaje::Personaje(){
+	this->movimientoIzquierda = -1;
+	this->movimientoDerecha = 1;
+	this->movimientoNada = 0;
+	this->velocidadLimite = 20;
+	this->aceleracion = 10;
+	this->frenado = -10;
+	//definiendo el body del personaje
+	b2BodyDef cuerpoDelPersonaje;
+	cuerpoDelPersonaje.type = b2_dynamicBody; 							//El personaje sera un cuerpo dinamico
+	cuerpoDelPersonaje.angle = 0; 										//Angulo 0 asi empieza recto
+	cuerpoDelPersonaje.position.Set(0,0); 								//donde queremos que empiece
 
+	b2Body* cuerpoDinamicoDelPersonaje = this->mundoDeJuego->CreateBody(&cuerpoDelPersonaje);
+	this->cuerpoDinamicoPersonaje = cuerpoDinamicoDelPersonaje;
+	//definiendo ahora el fixture del personaje
+	 b2PolygonShape formaDelPersonaje; 					//esto va a ser si queremos que sea una caja...
+	 formaDelPersonaje.SetAsBox(1,1); 							//...con las siguientes dimensiones
+	 b2FixtureDef fixtureDelPersonaje;					//creo el fixture
+	 fixtureDelPersonaje.shape = &formaDelPersonaje;	//le asigno la forma que determine antes
+	 fixtureDelPersonaje.density = 1;	//una densidad cualquiera
+	 cuerpoDinamicoDelPersonaje->CreateFixture(&fixtureDelPersonaje);
+
+}
+void Personaje::DestruirPersonaje(){
+//una destruccion del personaje
+	this->mundoDeJuego->DestroyBody(this->cuerpoDinamicoPersonaje);
+	//no se si me estare olvidando de algun destructor
+}
+Figura::Figura(){
+Personaje();
+}
+
+Figura::~Figura(){
+Personaje DestruirPersonaje();
+}
 
 
 void Personaje::Moverse(int numeroIngresado){

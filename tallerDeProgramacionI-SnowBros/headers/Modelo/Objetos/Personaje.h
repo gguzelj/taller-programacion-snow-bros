@@ -13,7 +13,7 @@ class Personaje : public Figura{
 		int movimientoIzquierda, movimientoDerecha, movimientoNada, velocidadLimite, aceleracion, frenado;
 	public:
 		Personaje();
-		~Personaje(); //Destructor del personaje
+		void DestruirPersonaje(); //Destructor del personaje
 		void Moverse(int); //Alguna clase controlador o algo, hasta tal vez un int segun que tipo de movimiento se eligio
 		void Saltar();
 		b2Vec2 Posicion();

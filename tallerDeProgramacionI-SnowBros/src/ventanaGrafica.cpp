@@ -6,12 +6,13 @@
  */
 
 #include "../headers/ventanaGrafica.h"
+#include "../headers/res_path.h"
 
 
 VentanaGrafica::VentanaGrafica(){
 	this->alto_px = ALTO_PX;
 	this->ancho_px = ANCHO_PX;
-	this->imagePath = defaultImagePath;
+	this->imagePath = getResourcePath("chapelco.jpg");
 	this->window = nullptr;
 	this->renderer = nullptr;
 	this-> image = nullptr;
@@ -48,8 +49,8 @@ void VentanaGrafica::drawScenary(b2World* world){
 //Dibuja un cuerpo estatico
 void VentanaGrafica::drawStaticBody(b2Body* body){
 	SDL_SetRenderDrawColor(this->renderer, 50, 50, 50, 255);
-	int ox = 320;
-	int oy = 400;
+	int ox = ANCHO_PX/2;
+	int oy = ALTO_PX/2;
 	float sc = 40.0;
 	//http://box2d.org/forum/viewtopic.php?f=3&t=1933
 	for( b2Fixture *fixture = body->GetFixtureList(); fixture; fixture = fixture->GetNext() ){

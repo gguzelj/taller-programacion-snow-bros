@@ -75,6 +75,7 @@ void VentanaGrafica::presentScenary(){
 
 //Aca hay que ver temas referentes a errores.
 void VentanaGrafica::inicializarSDL(){
+	SDL_Init(SDL_INIT_VIDEO);
 	//Starting SDL2_IMAGE
 	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG){
 		logSDLError(std::cout, "IMG_Init");

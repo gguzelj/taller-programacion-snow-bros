@@ -4,14 +4,15 @@
 #include "../headers/JsonParser.h"
 #include "../headers/GestorDeEventos.h"
 
-int main(int argc,char* argv[]){
-	bool quit,reset;
-	do{
+int main(int argc, char* argv[]) {
+	bool quit, reset;
+	do {
 		reset = false;
 		GestorDeEventos* g_eventos = new GestorDeEventos();
 
 		JsonParser *parser = new JsonParser();
-		parser->test();
+		parser->parse();
+		return 0;
 
 		//Inicializar la ventana
 		VentanaGrafica* window = new VentanaGrafica();
@@ -34,11 +35,11 @@ int main(int argc,char* argv[]){
 		// Game loop.
 		quit = false;
 		SDL_Event evento;
-		while (!quit){
+		while (!quit) {
 
 			//Manejo de eventos
 			SDL_WaitEvent(&evento);
-			g_eventos->interpretarEvento(evento,&quit,&reset);
+			g_eventos->interpretarEvento(evento, &quit, &reset);
 
 			// Instruct the world to perform a single step of simulation.
 			// It is generally best to keep the time step and iterations fixed.
@@ -52,14 +53,12 @@ int main(int argc,char* argv[]){
 			SDL_Delay(2);
 		}
 
-
-
 		delete parser;
 		delete g_eventos;
 		delete window;
 		delete world;
 
-	}while(reset);
+	} while (reset);
 
 	return 0;
 }

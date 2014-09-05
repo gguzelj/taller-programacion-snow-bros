@@ -8,25 +8,31 @@
 #ifndef JSONPARSER_H_
 #define JSONPARSER_H_
 
-#include <cstring>
+#include <string>
 #include <iostream>
-#include "json/json.h"
+#include <fstream>
+#include <streambuf>
+#include <json/json.h>
 
 class JsonParser {
+
 public:
 	JsonParser();
+	JsonParser(std::string JsonFile);
 	virtual ~JsonParser();
 
-	//Implementar
-	int getAlto_px();
-	int getAncho_px();
-	int getAlto_un();
-	int getAncho_un();
-	std::string getImagePath();
-	int getCharacterX();
-	int getCharacterY();
+	void setJsonFile(std::string jsonFile);
+	std::string getJsonFile();
 
-	void test();
+	void parse();
+
+private:
+	std::string jsonFile_;
+
+
+	void setDefaultValues();
+	void setValuesFromFile();
+
 };
 
 #endif /* JSONPARSER_H_ */

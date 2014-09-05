@@ -1,7 +1,7 @@
 #include "../headers/ventanaGrafica.h"
 #include "../headers/ObjectFactory.h"
 #include "../headers/Drawer.h"
-#include "../headers/JsonParser.h"
+#include "../headers/Parser/JsonParser.h"
 #include "../headers/GestorDeEventos.h"
 
 int main(int argc, char* argv[]) {
@@ -10,7 +10,9 @@ int main(int argc, char* argv[]) {
 		reset = false;
 		GestorDeEventos* g_eventos = new GestorDeEventos();
 
-		JsonParser *parser = new JsonParser();
+		//Esta variable Path simula el argv[0] recibido por parametro!
+		string path = "/home/german/Desktop/taller-programacion-snow-bros/tallerDeProgramacionI-SnowBros/resources/example.json";
+		JsonParser *parser = new JsonParser(path);
 		parser->parse();
 
 		//Inicializar la ventana
@@ -52,7 +54,7 @@ int main(int argc, char* argv[]) {
 			SDL_Delay(2);
 		}
 
-		delete parser;
+		//delete parser;
 		delete g_eventos;
 		delete window;
 		delete world;

@@ -1,10 +1,3 @@
-/*
- * JsonParser.h
- *
- *  Created on: Sep 3, 2014
- *      Author: german
- */
-
 #ifndef JSONPARSER_H_
 #define JSONPARSER_H_
 
@@ -13,6 +6,9 @@
 #include <fstream>
 #include <streambuf>
 #include <json/json.h>
+
+#include "JsonParser_C.h"
+#include "FileReader.h"
 
 class JsonParser {
 

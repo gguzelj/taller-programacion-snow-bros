@@ -43,7 +43,9 @@ std::string JsonParser::getJsonFile() {
  */
 void JsonParser::parse() {
 
-	std::ifstream t("/home/german/Desktop/taller-programacion-snow-bros/tallerDeProgramacionI-SnowBros/resources/example.json");
+	//EL archivo ya deberia estar cargado por alguna otra clase. Esto hay que borrarlo!
+	std::ifstream t(
+			"/home/german/Desktop/taller-programacion-snow-bros/tallerDeProgramacionI-SnowBros/resources/example.json");
 	std::string str;
 
 	if (t.is_open()) {
@@ -53,9 +55,9 @@ void JsonParser::parse() {
 
 		jsonFile_.assign((std::istreambuf_iterator<char>(t)),
 				std::istreambuf_iterator<char>());
-
 	}
 
+	//El metodo empezaria aca
 	if (jsonFile_.empty())
 		this->setDefaultValues();
 	else
@@ -78,75 +80,65 @@ void JsonParser::setDefaultValues() {
  */
 void JsonParser::setValuesFromFile() {
 
-	Json::Value root;
+	bool parsedSuccess;
+
 	Json::Reader reader;
-	bool parsedSuccess = reader.parse(jsonFile_, root, false);
+
+	Json::Value root;
+	Json::Value escenario;
+	Json::Value alto_px;
+	Json::Value ancho_px;
+	Json::Value alto_un;
+	Json::Value ancho_un;
+	Json::Value imagen_fondo;
+	Json::Value personaje;
+	Json::Value x;
+	Json::Value y;
+	Json::Value objetos;
+	Json::Value objeto;
+	Json::Value tipo;
+	Json::Value ancho;
+	Json::Value alto;
+	Json::Value color;
+	Json::Value rot;
+	Json::Value masa;
+	Json::Value estatico;
+
+	//Leemos el archivo
+	parsedSuccess = reader.parse(jsonFile_, root, false);
 
 	if (not parsedSuccess) {
 		//ERROR, agregar logica para el manero de errores
 		return;
 	}
 
-	const Json::Value escenario = root["escenario"]; //Cambiar por cte
+	escenario = root["escenario"]; //Cambiar por cte
 
-	Json::Value alto_px = escenario["alto-px"]; //Cambiar por cte
+	alto_px = escenario.get("alto-px", 2); //Cambiar por cte
+	ancho_px = escenario.get("ancho-px", 2); //Cambiar por cte
+	alto_un = escenario.get("alto-un", 2); //Cambiar por cte
+	ancho_un = escenario.get("ancho-un", 2); //Cambiar por cte
+	imagen_fondo = escenario.get("imagen_fondo", 2); //Cambiar por cte
+	personaje = escenario.get("personaje", 2); //Cambiar por cte
 
-	std::cout << alto_px.asString() << std::endl;
+	x = personaje.get("x", 2); //Cambiar por cte
+	y = personaje.get("y", 2); //Cambiar por cte
 
+	objetos = escenario["objetos"];
+
+	for (unsigned int i = 0; i < objetos.size(); ++i) {
+		tipo = objetos[i].get("tipo", "rect");
+		x = objetos[i].get("x", 5);
+		y = objetos[i].get("y", 90);
+		ancho = objetos[i].get("ancho", 2);
+		alto = objetos[i].get("alto", 1);
+		color = objetos[i].get("color", "#00FF00");
+		rot = objetos[i].get("rot", 45);
+		masa = objetos[i].get("masa", 3);
+		estatico = objetos[i].get("estatico", false);
+	}
+
+
+	std::cout << rot.asInt() << std::endl;
 	return;
-
-}
-
-/**
- * Test
- */
-void JsonParser::test() {
-
-	std::string json_example =
-			"{\"array\": \
-	                            [\"item1\", \
-	                            \"item2\"], \
-	                            \"not an array\": \
-	                            \"asdf\" \
-	                         }";
-
-	// Let's parse it
-	Json::Value root;
-	Json::Reader reader;
-	bool parsedSuccess = reader.parse(json_example, root, false);
-
-	if (not parsedSuccess) {
-		// Report failures and their locations
-		// in the document.
-		std::cout << "Failed to parse JSON" << std::endl
-				<< reader.getFormatedErrorMessages() << std::endl;
-		return;
-	}
-
-	// Let's extract the array contained
-	// in the root object
-	const Json::Value array = root["array"];
-
-	// Iterate over sequence elements and
-	// print its values
-	for (unsigned int index = 0; index < array.size(); ++index) {
-		std::cout << "Element " << index << " in array: "
-				<< array[index].asString() << std::endl;
-	}
-
-	// Lets extract the not array element
-	// contained in the root object and
-	// print its value
-	const Json::Value notAnArray = root["not an array"];
-
-	if (not notAnArray.isNull()) {
-		std::cout << "Not an array: " << notAnArray.asString() << std::endl;
-	}
-
-	// If we want to print JSON is as easy as doing:
-	std::cout << "Json Example pretty print: " << std::endl
-			<< root.toStyledString() << std::endl;
-
-	return;
-
 }

@@ -26,8 +26,6 @@ public:
 
 	void parse();
 
-	void test();
-
 private:
 	std::string jsonFile_;
 

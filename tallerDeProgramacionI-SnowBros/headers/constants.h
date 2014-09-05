@@ -16,6 +16,4 @@ const int ANCHO_PX = 1024;
 #define ANCHO_UN 100;
 #define TECLA_RESET 114
 
-
-
 #endif /* CONSTANTS_H_ */

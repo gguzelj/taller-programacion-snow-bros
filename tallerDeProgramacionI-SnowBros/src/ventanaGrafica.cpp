@@ -6,13 +6,11 @@
  */
 
 #include "../headers/ventanaGrafica.h"
-#include "../headers/res_path.h"
-
 
 VentanaGrafica::VentanaGrafica(){
 	this->alto_px = ALTO_PX;
 	this->ancho_px = ANCHO_PX;
-	this->imagePath = getResourcePath("chapelco.jpg");
+	this->imagePath = "resources/Everest.png";
 	this->window = nullptr;
 	this->renderer = nullptr;
 	this-> image = nullptr;

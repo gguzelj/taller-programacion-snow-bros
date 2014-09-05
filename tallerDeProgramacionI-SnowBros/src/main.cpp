@@ -12,7 +12,6 @@ int main(int argc, char* argv[]) {
 
 		JsonParser *parser = new JsonParser();
 		parser->parse();
-		return 0;
 
 		//Inicializar la ventana
 		VentanaGrafica* window = new VentanaGrafica();

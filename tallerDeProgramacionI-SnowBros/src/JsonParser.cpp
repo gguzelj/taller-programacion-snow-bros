@@ -138,7 +138,6 @@ void JsonParser::setValuesFromFile() {
 		estatico = objetos[i].get("estatico", false);
 	}
 
-
 	std::cout << rot.asInt() << std::endl;
 	return;
 }

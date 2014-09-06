@@ -4,9 +4,10 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <Box2D/Box2D.h>
-#include "../headers/Controlador.h"
-#include "../headers/GestorDeEventos.h"
-#include "../headers/ObjectFactory.h"
+#include "Controlador/Controlador.h"
+#include "Modelo/Escenario.h"
+#include "Vista/Drawer.h"
+#include "Parser/JsonParser.h"
 
 using namespace std;
 
@@ -36,7 +37,7 @@ public:
 	/*
 	 * Controla los eventos realizados por el usuario mediante el eventHandler
 	 */
-	void onEvent(SDL_Event* event);
+	void onEvent();
 
 	/*
 	 * Maneja las actualizaciones en el modelo (Ej: La figura x se movio dos unidades a la derecha).
@@ -58,15 +59,12 @@ public:
 private:
 	bool running;
 	bool reload;
-	Drawer* drawer;
-	GestorDeEventos* eventHandler;
-	Controlador* dataHandler;
-    b2World* world;
 
-    /*
-     * Returns an instance of b2World
-     */
-    b2World* initModel();
+	Escenario *model;
+	Drawer* view;
+	Controlador* controller;
+	JsonParser* parser;
+
 };
 
 #endif /* GAME_H_ */

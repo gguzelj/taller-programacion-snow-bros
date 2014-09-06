@@ -1,10 +1,13 @@
-#include "../headers/Drawer.h"
+#include "../../headers/Vista/Drawer.h"
 
-Drawer::Drawer(){
-	imagePath = nullptr;
-	renderer = nullptr;
-	window = nullptr;
-	image = nullptr;
+Drawer::Drawer(JsonParser *parser, Escenario *model){
+
+	//Utilizar parser para obtener las definciones necesarias para crear objetos
+	this->model = model;
+	this->imagePath = nullptr;
+	this->renderer = nullptr;
+	this->window = nullptr;
+	this->image = nullptr;
 }
 
 Drawer::~Drawer(){

@@ -5,12 +5,14 @@
 #include <Box2D/Box2D.h>
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
+#include "../Parser/JsonParser.h"
+#include "../Modelo/Escenario.h"
 
 using namespace std;
 
 class Drawer{
 public:
-		Drawer();
+		Drawer(JsonParser *parser, Escenario* model);
 		~Drawer();
 
 		void runWindow(int ancho_px ,int alto_px ,string imagePath);
@@ -21,6 +23,7 @@ private:
 	SDL_Renderer *renderer;
 	SDL_Window *window;
 	SDL_Texture *image;
+	Escenario *model;
 
 	SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren);
 	void logSDLError(std::ostream &os, const std::string &msg);

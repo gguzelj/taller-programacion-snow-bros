@@ -7,10 +7,6 @@
 Game::Game(){
 	this->running = true;
 	this->reload = false;
-	this->drawer = new Drawer();
-	this->eventHandler = new GestorDeEventos();
-	this->dataHandler = new Controlador();
-	this->world = initModel();
 }
 
 int Game::onExecute(string jsonPath){
@@ -19,11 +15,10 @@ int Game::onExecute(string jsonPath){
 		return 1; //Exit with error
 	}
 
-	SDL_Event event;
 	while(running){
 
 		//Control all posible events
-		onEvent(&event);
+		onEvent();
 
 		//Update the model
 		onLoop();
@@ -42,41 +37,43 @@ int Game::onExecute(string jsonPath){
 
 bool Game::onInit(string jsonPath){
 
-	//Inicializa el modelo con los objetos requeridos por el JSON
-	if ((dataHandler->setWorldObjects(jsonPath,world)) == false) return false;
+	parser = new JsonParser(jsonPath);
 
-	//Inicializa la ventana para mostrar el modelo, de acuerdo a los parametros requeridos por el JSON
-	if((dataHandler->initWindow(jsonPath,drawer)) == false) return false;
+	model = new Escenario(parser);
+	view = new Drawer(parser, model); //La vista conoce al modelo ?
+	controller = new Controlador(model, view);
 
+	/*
+	 * Dentro de los constructores de la vista y el modelo deberian existir llamados a
+	 * metodos definidos en el parser, como por ejemplo:
+	 *
+	 * List<b2BodyDef> objetos = parser->getObjetos();
+	 * loop objetos into object
+	 * 		world->createBody();
+	 *
+	 */
 	return true;
 }
 
-void Game::onEvent(SDL_Event* event){
-	eventHandler->listenEvents(event, &running, &reload);
+void Game::onEvent(){
+	controller->handleEvents(&running, &reload);
 }
 
 void Game::onLoop(){
-
+//Game step
 }
 
 void Game::onRender(){
-	drawer->updateView(world);
+	//drawer->updateView(world);
 }
 
 void Game::onCleanup(){
-	delete drawer;
-	delete eventHandler;
-	delete dataHandler;
-    delete world;
+	delete view;
+	delete model;
+	delete controller;
+    delete parser;
 }
 
 // ########################## //
 // ##### Private methods #### //
 // ########################## //
-
-b2World* Game::initModel(){
-	ObjectFactory* objFactory = new ObjectFactory();
-	b2World* model = objFactory->crearb2World();
-	delete objFactory;
-	return model;
-}

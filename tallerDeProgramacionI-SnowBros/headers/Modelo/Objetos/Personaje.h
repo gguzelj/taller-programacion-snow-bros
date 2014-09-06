@@ -3,7 +3,6 @@
 
 #include <Box2D/Box2D.h>
 #include "../Objetos/Figuras/Figura.h"
-#include "../../constants.h"
 
 class Personaje : public Figura{
 	private:

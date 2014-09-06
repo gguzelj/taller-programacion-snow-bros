@@ -26,8 +26,8 @@ private:
 	void runWindow(int ancho_px ,int alto_px ,string imagePath);
 
 	void drawBackground();
-	void drawStaticBody(b2Body* body);
-	void drawScenary(b2World* world);
+	void drawStaticBody(Figura* figura);
+	void drawScenary(Escenario* model);
 	void presentScenary();
 	void clearScenary();
 

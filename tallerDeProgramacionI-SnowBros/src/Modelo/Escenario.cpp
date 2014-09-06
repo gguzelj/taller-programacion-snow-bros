@@ -1,10 +1,10 @@
 #include "../../headers/Modelo/Escenario.h"
 
 Escenario::Escenario(JsonParser *parser) {
-        // TODO Auto-generated constructor stub
+	// TODO Auto-generated constructor stub
 	//Utilizar el parser para buscar referencias a objetos que tienen que ser creados
 	/**
-	 * Ejemplo:
+	* Ejemplo:
 	 *
 	 *	alto_px = parser->getAltoPx();
 	 *
@@ -12,5 +12,5 @@ Escenario::Escenario(JsonParser *parser) {
 }
 
 Escenario::~Escenario() {
-        // TODO Auto-generated destructor stub
+	// TODO Auto-generated destructor stub
 }

@@ -10,6 +10,8 @@ public:
         Escenario(JsonParser *parser);
         virtual ~Escenario();
 
+        b2World* getModel();
+
 private:
 	b2World* world_;
 };

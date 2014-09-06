@@ -4,12 +4,15 @@ Drawer::Drawer(JsonParser *parser){
 	this->renderer = nullptr;
 	this->window = nullptr;
 	this->image = nullptr;
-	this->imagePath = nullptr;
+	this->imagePath = "";
 
 	//Utilizar parser para obtener las definciones necesarias para crear objetos
 	int ancho_px = parser->getAnchoPx();
 	int alto_px = parser->getAltoPx();
-	this->imagePath = parser->getImagenFondo();
+	this->imagePath = "resources/" + parser->getImagenFondo();
+
+	cout<<"Ancho: "<<ancho_px<<" Alto: "<<alto_px<<" imagePath: "<<imagePath<<endl;
+
 	this->runWindow(ancho_px,alto_px,imagePath);
 }
 
@@ -19,14 +22,14 @@ Drawer::~Drawer(){
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 	IMG_Quit();
-	delete imagePath;
 }
 
 void Drawer::updateView(Escenario* model){
 	this->clearScenary();
 	this->drawBackground();
-	this->drawScenary(model->getWorld());
+//	this->drawScenary(model->getWorld());
 	this->presentScenary();
+	SDL_Delay(100);
 }
 
 // ########################### //

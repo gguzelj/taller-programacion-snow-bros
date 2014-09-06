@@ -9,6 +9,7 @@ JsonParser::JsonParser() {
 
 JsonParser::JsonParser(std::string path) {
 	jsonFile_ = FileReader::read(path);
+	this->parse();
 }
 
 /**

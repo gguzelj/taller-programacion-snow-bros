@@ -14,3 +14,7 @@ Escenario::Escenario(JsonParser *parser) {
 Escenario::~Escenario() {
 	// TODO Auto-generated destructor stub
 }
+
+b2World* getModel(){
+
+}

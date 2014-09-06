@@ -21,7 +21,7 @@ void Controlador::handleEvent(SDL_Event* evento,bool* running, bool* reload){
 			switch(evento->key.keysym.sym){
 				case TECLA_RESET:{
 					(*reload) = true;
-					(*running) = true;
+					(*running) = false;
 					break;
 					}
 				}

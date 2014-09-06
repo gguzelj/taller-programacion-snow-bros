@@ -7,6 +7,10 @@
 Game::Game(){
 	this->running_ = true;
 	this->reload_ = false;
+	model_ = nullptr;
+	view_ = nullptr;
+	controller_ = nullptr;
+	parser_ = nullptr;
 }
 
 int Game::onExecute(string jsonPath){
@@ -37,11 +41,10 @@ int Game::onExecute(string jsonPath){
 
 bool Game::onInit(string jsonPath){
 
-	parser_ = new JsonParser(jsonPath);
-
-	model_ = new Escenario(parser_);
-	view_ = new Drawer(parser_, model_); //La vista conoce al modelo ?
-	controller_ = new Controlador(model_, view_);
+	if ((parser_ = new JsonParser(jsonPath)) == nullptr) return false;
+	if ((model_ = new Escenario(parser_)) == nullptr) return false;
+	if ((view_ = new Drawer(parser_)) == nullptr) return false; //La vista conoce al modelo ? No, se le pasa el modelo cuando se llama a updateView
+	if ((controller_ = new Controlador(model_, view_)) == nullptr) return false;
 
 	/*
 	 * Dentro de los constructores de la vista y el modelo deberian existir llamados a
@@ -64,7 +67,7 @@ void Game::onLoop(){
 }
 
 void Game::onRender(){
-	//drawer->updateView(world);
+	view_->updateView(model_);
 }
 
 void Game::onCleanup(){

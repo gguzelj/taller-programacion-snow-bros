@@ -1,13 +1,16 @@
 #include "../../headers/Vista/Drawer.h"
 
-Drawer::Drawer(JsonParser *parser, Escenario *model){
-
-	//Utilizar parser para obtener las definciones necesarias para crear objetos
-	this->model = model;
-	this->imagePath = nullptr;
+Drawer::Drawer(JsonParser *parser){
 	this->renderer = nullptr;
 	this->window = nullptr;
 	this->image = nullptr;
+	this->imagePath = nullptr;
+
+	//Utilizar parser para obtener las definciones necesarias para crear objetos
+	int ancho_px = parser->getAnchoPx();
+	int alto_px = parser->getAltoPx();
+	this->imagePath = parser->getImagenFondo();
+	this->runWindow(ancho_px,alto_px,imagePath);
 }
 
 Drawer::~Drawer(){
@@ -16,54 +19,13 @@ Drawer::~Drawer(){
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 	IMG_Quit();
+	delete imagePath;
 }
 
-void Drawer::runWindow(int ancho_px ,int alto_px ,string imagePath){
-	if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-        throw;
-    }
-	//Starting SDL2_IMAGE
-	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG){
-		logSDLError(std::cout, "IMG_Init");
-		SDL_Quit();
-		throw;
-	}
-
-	//Opening a window
-	window = SDL_CreateWindow("Snow Bros", SDL_WINDOWPOS_CENTERED , SDL_WINDOWPOS_CENTERED, ancho_px, alto_px, SDL_WINDOW_SHOWN);
-	if (window == nullptr){
-		logSDLError(std::cout, "Error al utilizar SDL_CreateWindow() window devolvio nullptr");
-		IMG_Quit();
-		SDL_Quit();
-		throw;
-	}
-
-	//Creating a renderer
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	if (renderer == nullptr){
-		SDL_DestroyWindow(window);
-		logSDLError(std::cout, "Error al utilizar SDL_CreateRenderer() renderer devolvio nullptr");
-		IMG_Quit();
-		SDL_Quit();
-		throw;
-	}
-
-	//Loading the image
-	image = this->loadTexture(this->imagePath, renderer);
-	if (image == nullptr){
-		SDL_DestroyTexture(image);
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		IMG_Quit();
-		SDL_Quit();
-		throw;
-	}
-}
-
-void Drawer::updateView(b2World* world){
+void Drawer::updateView(Escenario* model){
 	this->clearScenary();
 	this->drawBackground();
-	this->drawScenary(world);
+	this->drawScenary(model->getWorld());
 	this->presentScenary();
 }
 
@@ -114,6 +76,48 @@ void Drawer::presentScenary(){
 	SDL_RenderPresent(this->renderer);
 }
 
+void Drawer::runWindow(int ancho_px ,int alto_px ,string imagePath){
+	if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+        throw;
+    }
+	//Starting SDL2_IMAGE
+	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG){
+		logSDLError(std::cout, "IMG_Init");
+		SDL_Quit();
+		throw;
+	}
+
+	//Opening a window
+	window = SDL_CreateWindow("Snow Bros", SDL_WINDOWPOS_CENTERED , SDL_WINDOWPOS_CENTERED, ancho_px, alto_px, SDL_WINDOW_SHOWN);
+	if (window == nullptr){
+		logSDLError(std::cout, "Error al utilizar SDL_CreateWindow() window devolvio nullptr");
+		IMG_Quit();
+		SDL_Quit();
+		throw;
+	}
+
+	//Creating a renderer
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	if (renderer == nullptr){
+		SDL_DestroyWindow(window);
+		logSDLError(std::cout, "Error al utilizar SDL_CreateRenderer() renderer devolvio nullptr");
+		IMG_Quit();
+		SDL_Quit();
+		throw;
+	}
+
+	//Loading the image
+	image = this->loadTexture(this->imagePath, renderer);
+	if (image == nullptr){
+		SDL_DestroyTexture(image);
+		SDL_DestroyRenderer(renderer);
+		SDL_DestroyWindow(window);
+		IMG_Quit();
+		SDL_Quit();
+		throw;
+	}
+}
+
 
 SDL_Texture* Drawer::loadTexture(const std::string &file, SDL_Renderer *ren){
 	SDL_Texture *texture = IMG_LoadTexture(ren, file.c_str());
@@ -125,3 +129,4 @@ SDL_Texture* Drawer::loadTexture(const std::string &file, SDL_Renderer *ren){
 void Drawer::logSDLError(std::ostream &os, const std::string &msg){
 	os << msg << " error: " << SDL_GetError() << std::endl;
 }
+

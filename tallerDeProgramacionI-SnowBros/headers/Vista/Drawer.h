@@ -12,27 +12,27 @@ using namespace std;
 
 class Drawer{
 public:
-		Drawer(JsonParser *parser, Escenario* model);
+		Drawer(JsonParser *parser);
 		~Drawer();
 
-		void runWindow(int ancho_px ,int alto_px ,string imagePath);
-		void updateView(b2World* world);
+		void updateView(Escenario* model_);
 
 private:
-	string imagePath;
 	SDL_Renderer *renderer;
 	SDL_Window *window;
 	SDL_Texture *image;
-	Escenario *model;
+	string imagePath;
 
-	SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren);
-	void logSDLError(std::ostream &os, const std::string &msg);
+	void runWindow(int ancho_px ,int alto_px ,string imagePath);
 
 	void drawBackground();
 	void drawStaticBody(b2Body* body);
 	void drawScenary(b2World* world);
 	void presentScenary();
 	void clearScenary();
+
+	SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren);
+	void logSDLError(std::ostream &os, const std::string &msg);
 
 };
 

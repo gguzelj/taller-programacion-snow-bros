@@ -24,14 +24,14 @@ public:
 	void parse();
 
 	//Metodos utilizados por el modelo
-	int getAltoPx();
-	int getAnchoPx();
 	int getAltoUn();
 	int getAnchoUn();
 	std::list<b2BodyDef> getObjetos();
 
 	//Metodos utilizados por la vista
 	std::string getImagenFondo();
+	int getAltoPx();
+	int getAnchoPx();
 
 private:
 

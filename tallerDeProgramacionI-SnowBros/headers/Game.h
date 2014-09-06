@@ -57,13 +57,13 @@ public:
 	void onCleanup();
 
 private:
-	bool running;
-	bool reload;
+	bool running_;
+	bool reload_;
 
-	Escenario *model;
-	Drawer* view;
-	Controlador* controller;
-	JsonParser* parser;
+	Escenario *model_;
+	Drawer *view_;
+	Controlador *controller_;
+	JsonParser *parser_;
 
 };
 

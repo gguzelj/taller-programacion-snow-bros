@@ -3,6 +3,12 @@
 Escenario::Escenario(JsonParser *parser) {
         // TODO Auto-generated constructor stub
 	//Utilizar el parser para buscar referencias a objetos que tienen que ser creados
+	/**
+	 * Ejemplo:
+	 *
+	 *	alto_px = parser->getAltoPx();
+	 *
+	 */
 }
 
 Escenario::~Escenario() {

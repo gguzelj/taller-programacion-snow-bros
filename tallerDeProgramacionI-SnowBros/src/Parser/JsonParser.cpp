@@ -18,20 +18,6 @@ JsonParser::~JsonParser() {
 }
 
 /**
- * Set jsonFile
- */
-void JsonParser::setJsonFile(std::string jsonFile) {
-	jsonFile_ = jsonFile;
-}
-
-/**
- * Get jsonFile
- */
-std::string JsonParser::getJsonFile() {
-	return jsonFile_;
-}
-
-/**
  * Realizamos el parseo del archivo
  */
 void JsonParser::parse() {
@@ -61,63 +47,55 @@ void JsonParser::setDefaultValues() {
 void JsonParser::setValuesFromFile() {
 
 	bool parsedSuccess;
+	b2BodyDef obj;
 
-	Json::Reader reader;
-
-	Json::Value root;
-	Json::Value escenario;
-	Json::Value alto_px;
-	Json::Value ancho_px;
-	Json::Value alto_un;
-	Json::Value ancho_un;
-	Json::Value imagen_fondo;
-	Json::Value personaje;
-	Json::Value x;
-	Json::Value y;
-	Json::Value objetos;
-	Json::Value objeto;
-	Json::Value tipo;
-	Json::Value ancho;
-	Json::Value alto;
-	Json::Value color;
-	Json::Value rot;
-	Json::Value masa;
-	Json::Value estatico;
-
-	//Leemos el archivo
-	parsedSuccess = reader.parse(jsonFile_, root, false);
+	parsedSuccess = reader_.parse(jsonFile_, root_, false);
 
 	if (not parsedSuccess) {
-		//ERROR, agregar logica para el manero de errores
+		//TODO Agregar error
 		return;
 	}
 
-	escenario = root[ESCENARIO];
+	parseEscenario(root_[ESCENARIO]);
 
-	alto_px = escenario.get(ALTO_PX, 2);
-	ancho_px = escenario.get(ANCHO_PX, 2);
-	alto_un = escenario.get(ALTO_UN, 2);
-	ancho_un = escenario.get(ANCHO_UN, 2);
-	imagen_fondo = escenario.get(IMAGEN_FONDO, 2);
-	personaje = escenario.get(PERSONAJE, 2);
+	/*
+	parsePersonaje(escenario_[PERSONAJE]);
 
-	x = personaje.get(X, 2);
-	y = personaje.get(Y, 2);
 
-	objetos = escenario[OBJETOS];
+	objetosEscenario_ = escenario_[OBJETOS];
 
-	for (unsigned int i = 0; i < objetos.size(); ++i) {
-		tipo = objetos[i].get(TIPO, "rect");
-		x = objetos[i].get(X, 5);
-		y = objetos[i].get(Y, 90);
-		ancho = objetos[i].get(ANCHO, 2);
-		alto = objetos[i].get(ALTO, 1);
-		color = objetos[i].get(COLOR, "#00FF00");
-		rot = objetos[i].get(ROT, 45);
-		masa = objetos[i].get(MASA, 3);
-		estatico = objetos[i].get(ESTATICO, false);
-	}
+	for (unsigned int i = 0; i < objetos.size(); ++i)
+		parseObjeto( objetosEscenario_[index] );
+	*/
 
-	std::cout << rot.asInt() << std::endl;
 	return;
+}
+
+std::list<b2BodyDef> JsonParser::getObjetos(){
+	return objetos_;
+}
+
+void JsonParser::parseEscenario(Json::Value escenario){
+	alto_px_ = ParserValidator::valAltoPx(escenario.get(ALTO_PX, ALTO_PX_DEF));
+	ancho_px_ = ParserValidator::valAnchoPx(escenario.get(ANCHO_PX, ANCHO_PX_DEF));
+	alto_un_ = ParserValidator::valAltoUn(escenario.get(ALTO_UN, ALTO_UN_DEF));
+	ancho_un_ = ParserValidator::valAnchoUn(escenario.get(ANCHO_UN, ANCHO_UN_DEF));
+	imagen_fondo_ = ParserValidator::ImagenFondo(escenario.get(IMAGEN_FONDO, IMAGEN_FONDO_DEF));
+}
+
+int JsonParser::getAltoPx(){
+	return alto_px_.asInt();
+}
+int JsonParser::getAnchoPx(){
+	return ancho_px_.asInt();
+}
+int JsonParser::getAltoUn(){
+	return alto_un_.asInt();
+}
+int JsonParser::getAnchoUn(){
+	return ancho_un_.asInt();
+}
+
+std::string JsonParser::getImagenFondo(){
+	return imagen_fondo_.asString();
 }

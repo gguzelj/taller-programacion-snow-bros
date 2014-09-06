@@ -5,8 +5,8 @@
 // ########################## //
 
 Game::Game(){
-	this->running = true;
-	this->reload = false;
+	this->running_ = true;
+	this->reload_ = false;
 }
 
 int Game::onExecute(string jsonPath){
@@ -15,7 +15,7 @@ int Game::onExecute(string jsonPath){
 		return 1; //Exit with error
 	}
 
-	while(running){
+	while(running_){
 
 		//Control all posible events
 		onEvent();
@@ -30,18 +30,18 @@ int Game::onExecute(string jsonPath){
 	//cleaning up
 	onCleanup();
 
-	if (reload) return 2; //Reload the game
+	if (reload_) return 2; //Reload the game
 
 	return 0; //Exit with everything ok
 }
 
 bool Game::onInit(string jsonPath){
 
-	parser = new JsonParser(jsonPath);
+	parser_ = new JsonParser(jsonPath);
 
-	model = new Escenario(parser);
-	view = new Drawer(parser, model); //La vista conoce al modelo ?
-	controller = new Controlador(model, view);
+	model_ = new Escenario(parser_);
+	view_ = new Drawer(parser_, model_); //La vista conoce al modelo ?
+	controller_ = new Controlador(model_, view_);
 
 	/*
 	 * Dentro de los constructores de la vista y el modelo deberian existir llamados a
@@ -56,7 +56,7 @@ bool Game::onInit(string jsonPath){
 }
 
 void Game::onEvent(){
-	controller->handleEvents(&running, &reload);
+	controller_->handleEvents(&running_, &reload_);
 }
 
 void Game::onLoop(){
@@ -68,10 +68,10 @@ void Game::onRender(){
 }
 
 void Game::onCleanup(){
-	delete view;
-	delete model;
-	delete controller;
-    delete parser;
+	delete view_;
+	delete model_;
+	delete controller_;
+    delete parser_;
 }
 
 // ########################## //

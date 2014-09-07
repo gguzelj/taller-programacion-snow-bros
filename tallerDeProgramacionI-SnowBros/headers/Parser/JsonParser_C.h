@@ -23,6 +23,6 @@
 #define ANCHO_PX_DEF		1024
 #define ALTO_UN_DEF			100
 #define ANCHO_UN_DEF		50
-#define IMAGEN_FONDO_DEF 	"fondo1.png"
+#define IMAGEN_FONDO_DEF 	"Everest.png"
 
 #endif /* JSONPARSER_C_H_ */

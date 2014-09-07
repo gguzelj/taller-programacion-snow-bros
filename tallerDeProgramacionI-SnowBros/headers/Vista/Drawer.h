@@ -26,8 +26,9 @@ private:
 	void runWindow(int ancho_px ,int alto_px ,string imagePath);
 
 	void drawBackground();
-	void drawStaticBody(Figura* figura);
 	void drawScenary(Escenario* model);
+	void drawFigura(Figura* figura);
+	void drawCharacter();
 	void presentScenary();
 	void clearScenary();
 

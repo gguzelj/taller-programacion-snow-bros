@@ -41,10 +41,10 @@ int Game::onExecute(string jsonPath){
 
 bool Game::onInit(string jsonPath){
 
-	if ((parser_ = new JsonParser(jsonPath)) == nullptr) return false;
-	if ((model_ = new Escenario(parser_)) == nullptr) return false;
-	if ((view_ = new Drawer(parser_)) == nullptr) return false; //La vista conoce al modelo ? No, se le pasa el modelo cuando se llama a updateView
-	if ((controller_ = new Controlador(model_, view_)) == nullptr) return false;
+	if (!(parser_ = new JsonParser(jsonPath))) return false;
+	if (!(model_ = new Escenario(parser_))) return false;
+	if (!(view_ = new Drawer(parser_))) return false; //La vista conoce al modelo ? No, se le pasa el modelo cuando se llama a updateView
+	if (!(controller_ = new Controlador(model_, view_))) return false;
 	/*
 	 * Dentro de los constructores de la vista y el modelo deberian existir llamados a
 	 * metodos definidos en el parser, como por ejemplo:

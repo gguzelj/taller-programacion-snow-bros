@@ -46,34 +46,39 @@ void Drawer::drawBackground(){
 }
 
 void Drawer::drawScenary(Escenario* model){
-	for(Figura* figura = model->GetFiguras(); figura; figura = figura->GetNext()){
-		this->drawStaticBody(figura);
+	std::list<Figura> figuras = model->getFiguras();
+	for (auto figura : figuras){
+		this->drawFigura(&figura);
 	}
+	this->drawCharacter();
 }
 
 //Dibuja un cuerpo estatico
-void Drawer::drawStaticBody(Figura* figura){
-	SDL_SetRenderDrawColor(this->renderer, 50, 50, 50, 255);
-	int ox = 320;
-	int oy = 400;
-	float sc = 40.0;
-	//http://box2d.org/forum/viewtopic.php?f=3&t=1933
-	for( b2Fixture *fixture = figura->GetFixtureList(); fixture; fixture = fixture->GetNext() ){
-		if( fixture->GetType() == b2Shape::e_polygon ){
-			b2PolygonShape *poly = (b2PolygonShape*)fixture->GetShape();
-
-			const int count = poly->GetVertexCount();
-
-			for( int i = 0; i < count; i++ ){
-				int ind0 = (i + 1) % count ;
-				b2Vec2 p0 = figura->GetWorldPoint(  poly->GetVertex( ind0 ) );
-				b2Vec2 p1 = figura->GetWorldPoint(  poly->GetVertex(i) );
-
-				SDL_RenderDrawLine(this->renderer, sc * p0.x + ox, -sc * p0.y + oy , sc * p1.x + ox, -sc * p1.y + oy);
-			}
-		}
-	}
+void Drawer::drawFigura(Figura* figura){
+	//NOTA: cambiar esto por la forma actual. Vamos a tener que tener en cuenta a los circulos.
+//	SDL_SetRenderDrawColor(this->renderer, 50, 50, 50, 255);
+//	int ox = 320;
+//	int oy = 400;
+//	float sc = 40.0;
+//	//http://box2d.org/forum/viewtopic.php?f=3&t=1933
+//	for( b2Fixture *fixture = figura->GetFixtureList(); fixture; fixture = fixture->GetNext() ){
+//		if( fixture->GetType() == b2Shape::e_polygon ){
+//			b2PolygonShape *poly = (b2PolygonShape*)fixture->GetShape();
+//
+//			const int count = poly->GetVertexCount();
+//
+//			for( int i = 0; i < count; i++ ){
+//				int ind0 = (i + 1) % count ;
+//				b2Vec2 p0 = figura->GetWorldPoint(  poly->GetVertex( ind0 ) );
+//				b2Vec2 p1 = figura->GetWorldPoint(  poly->GetVertex(i) );
+//
+//				SDL_RenderDrawLine(this->renderer, sc * p0.x + ox, -sc * p0.y + oy , sc * p1.x + ox, -sc * p1.y + oy);
+//			}
+//		}
+//	}
 }
+
+void Drawer::drawCharacter(){}
 
 void Drawer::presentScenary(){
 	SDL_RenderPresent(this->renderer);

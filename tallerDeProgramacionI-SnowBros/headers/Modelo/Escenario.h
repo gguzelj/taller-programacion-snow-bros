@@ -4,14 +4,14 @@
 #include <list>
 #include <Box2D/Box2D.h>
 #include "../Parser/JsonParser.h"
-#include "../headers/Modelo/Objetos/Figuras/Figura.h"
+#include "Objetos/Figuras/Figura.h"
 
 class Escenario {
 public:
         Escenario(JsonParser *parser);
         virtual ~Escenario();
 
-        std::list<Figura>* getFiguras();
+        std::list<Figura> getFiguras();
 
 private:
 	b2World* world_;

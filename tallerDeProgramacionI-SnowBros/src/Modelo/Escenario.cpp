@@ -18,3 +18,5 @@ Escenario::~Escenario() {
 b2World* getModel(){
 
 }
+
+std::list<Figura> Escenario::getFiguras(){}

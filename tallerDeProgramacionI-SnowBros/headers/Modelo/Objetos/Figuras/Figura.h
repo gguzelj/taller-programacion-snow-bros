@@ -17,6 +17,7 @@ protected:
 	bool estatico;
 	b2World* world;
 	b2Body* body;
+public:
 	virtual ~Figura(){
 		this->world->DestroyBody(this->body);
 	}

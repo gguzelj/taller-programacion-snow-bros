@@ -14,8 +14,9 @@ public:
 	static Json::Value valAnchoPx( Json::Value anchoPx );
 	static Json::Value valAltoUn( Json::Value altoUn );
 	static Json::Value valAnchoUn( Json::Value anchoUn );
-	static Json::Value ImagenFondo( Json::Value imagenFondo );
-
+	static Json::Value valImagenFondo( Json::Value imagenFondo );
+	static float valPersonajeCoorX(float XCoor);
+	static float valPersonajeCoorY(float YCoor);
 };
 
 #endif /* PARSERVALIDATOR_H_ */

@@ -21,8 +21,15 @@ Json::Value ParserValidator::valAnchoUn( Json::Value anchoUn ){
 	return anchoUn;
 }
 
-Json::Value ParserValidator::ImagenFondo( Json::Value imagenFondo ){
+Json::Value ParserValidator::valImagenFondo( Json::Value imagenFondo ){
 	return imagenFondo;
+}
+
+float ParserValidator::valPersonajeCoorX(float XCoor){
+	return XCoor;
+}
+float ParserValidator::valPersonajeCoorY(float YCoor){
+	return YCoor;
 }
 
 

@@ -4,10 +4,12 @@ Controlador::Controlador(Escenario *model, Drawer *view ){
 	this->model = model;
 	this->view = view;
 }
-void Controlador::handleEvents(bool* running, bool* reload, SDL_Event* event){
+void Controlador::handleEvents(bool* running, bool* reload){
 
-	while(SDL_PollEvent(event)){
-		handleEvent(event, running, reload);
+	SDL_Event event;
+
+	while(SDL_PollEvent(&event)){
+		handleEvent(&event, running, reload);
 	}
 }
 

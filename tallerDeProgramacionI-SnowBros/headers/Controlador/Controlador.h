@@ -12,7 +12,7 @@ public:
 	Controlador(Escenario *model, Drawer *view);
 	~Controlador(){};
 
-    void handleEvents(bool* running, bool* reload, SDL_Event* event);
+    void handleEvents(bool* running, bool* reload);
 
     void handleEvent(SDL_Event* evento,bool* quit, bool* reload);
 

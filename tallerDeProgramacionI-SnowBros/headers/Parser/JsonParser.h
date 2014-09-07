@@ -26,6 +26,7 @@ public:
 	//Metodos utilizados por el modelo
 	int getAltoUn();
 	int getAnchoUn();
+	b2BodyDef getPersonaje();
 	std::list<b2BodyDef> getObjetos();
 
 	//Metodos utilizados por la vista
@@ -35,15 +36,11 @@ public:
 
 private:
 
-	Json::Reader reader_;
-
-	Json::Value root_;
 	Json::Value alto_px_;
 	Json::Value ancho_px_;
 	Json::Value alto_un_;
 	Json::Value ancho_un_;
 	Json::Value imagen_fondo_;
-	Json::Value personaje_;
 	Json::Value x_;
 	Json::Value y_;
 	Json::Value objetosEscenario_;
@@ -56,12 +53,17 @@ private:
 	Json::Value masa_;
 	Json::Value estatico_;
 
+	//atributos
 	std::string jsonFile_;
+	b2BodyDef personaje_;
 	std::list<b2BodyDef> objetos_;
 
 	void setDefaultValues();
 	void setValuesFromFile();
 	void parseEscenario(Json::Value escenario);
+	void parsePersonaje(Json::Value personaje);
+	void parseObjetos(Json::Value objetos);
+	void parseObjeto(Json::Value objeto);
 
 };
 

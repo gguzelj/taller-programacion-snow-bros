@@ -19,10 +19,9 @@ int Game::onExecute(string jsonPath){
 		return 1; //Exit with error
 	}
 
-	SDL_Event event;
 	while(running_){
 		//Control all posible events
-		onEvent(&event);
+		onEvent();
 
 		//Update the model
 		onLoop();
@@ -43,22 +42,14 @@ bool Game::onInit(string jsonPath){
 
 	if (!(parser_ = new JsonParser(jsonPath))) return false;
 	if (!(model_ = new Escenario(parser_))) return false;
-	if (!(view_ = new Drawer(parser_))) return false; //La vista conoce al modelo ? No, se le pasa el modelo cuando se llama a updateView
+	if (!(view_ = new Drawer(parser_))) return false;
 	if (!(controller_ = new Controlador(model_, view_))) return false;
-	/*
-	 * Dentro de los constructores de la vista y el modelo deberian existir llamados a
-	 * metodos definidos en el parser, como por ejemplo:
-	 *
-	 * List<b2BodyDef> objetos = parser->getObjetos();
-	 * loop objetos into object
-	 * 		world->createBody();
-	 *
-	 */
+
 	return true;
 }
 
-void Game::onEvent(SDL_Event* event){
-	controller_->handleEvents(&running_, &reload_, event);
+void Game::onEvent(){
+	controller_->handleEvents(&running_, &reload_);
 }
 
 void Game::onLoop(){

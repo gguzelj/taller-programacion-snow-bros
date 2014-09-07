@@ -37,7 +37,7 @@ public:
 	/*
 	 * Controla los eventos realizados por el usuario mediante el eventHandler
 	 */
-	void onEvent(SDL_Event* event);
+	void onEvent();
 
 	/*
 	 * Maneja las actualizaciones en el modelo (Ej: La figura x se movio dos unidades a la derecha).

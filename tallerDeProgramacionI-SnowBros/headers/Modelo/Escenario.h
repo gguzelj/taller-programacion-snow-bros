@@ -5,6 +5,7 @@
 #include <Box2D/Box2D.h>
 #include "../Parser/JsonParser.h"
 #include "Objetos/Figuras/Figura.h"
+#include "Objetos/Personaje.h"
 
 class Escenario {
 public:

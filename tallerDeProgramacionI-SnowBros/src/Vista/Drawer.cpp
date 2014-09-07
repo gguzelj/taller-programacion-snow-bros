@@ -45,17 +45,17 @@ void Drawer::drawBackground(){
 }
 
 void Drawer::drawScenary(Escenario* model){
-	std::list<Figura> figuras = model->getFiguras();
-	for (auto figura : figuras){
+	std::list<Figura>* figuras = model->getFiguras();
+	for (auto figura : *figuras){
 		this->drawFigura(&figura);
 	}
 	this->drawCharacter();
 }
 
-//Dibuja un cuerpo estatico
+//Dibuja una figura
 void Drawer::drawFigura(Figura* figura){
 	//NOTA: cambiar esto por la forma actual. Vamos a tener que tener en cuenta a los circulos.
-	SDL_SetRenderDrawColor(this->renderer, 50, 50, 50, 255); //Color que se va a dibujar el contorno
+	SDL_SetRenderDrawColor(this->renderer, 50, 50, 50, 255); //Color que se va a dibujar el contorno. Esto hay que cambiarlo por el color del objeto
 	int ox = this->ancho_px/2;
 	int oy = this->alto_px/2;
 	float sc = 40.0;

@@ -4,11 +4,10 @@ Drawer::Drawer(JsonParser *parser){
 	this->renderer = nullptr;
 	this->window = nullptr;
 	this->image = nullptr;
-	this->imagePath = "";
 
 	//Utilizar parser para obtener las definciones necesarias para crear objetos
-	int ancho_px = parser->getAnchoPx();
-	int alto_px = parser->getAltoPx();
+	this->ancho_px = parser->getAnchoPx();
+	this->alto_px = parser->getAltoPx();
 	this->imagePath = "resources/" + parser->getImagenFondo();
 
 	cout<<"Ancho: "<<ancho_px<<" Alto: "<<alto_px<<" imagePath: "<<imagePath<<endl;
@@ -56,11 +55,11 @@ void Drawer::drawScenary(Escenario* model){
 //Dibuja un cuerpo estatico
 void Drawer::drawFigura(Figura* figura){
 	//NOTA: cambiar esto por la forma actual. Vamos a tener que tener en cuenta a los circulos.
-//	SDL_SetRenderDrawColor(this->renderer, 50, 50, 50, 255);
-//	int ox = 320;
-//	int oy = 400;
+//	SDL_SetRenderDrawColor(this->renderer, 50, 50, 50, 255); //Color que se va a dibujar el contorno
+//	int ox = this->ancho_px/2;
+//	int oy = this->alto_px/2;
 //	float sc = 40.0;
-//	//http://box2d.org/forum/viewtopic.php?f=3&t=1933
+
 //	for( b2Fixture *fixture = figura->GetFixtureList(); fixture; fixture = fixture->GetNext() ){
 //		if( fixture->GetType() == b2Shape::e_polygon ){
 //			b2PolygonShape *poly = (b2PolygonShape*)fixture->GetShape();
@@ -74,6 +73,9 @@ void Drawer::drawFigura(Figura* figura){
 //
 //				SDL_RenderDrawLine(this->renderer, sc * p0.x + ox, -sc * p0.y + oy , sc * p1.x + ox, -sc * p1.y + oy);
 //			}
+//		}
+//		else if( fixture->GetType() == b2Shape::e_circle ){
+//			 b2CircleShape* circleShape = (b2CircleShape*)fixture->GetShape();
 //		}
 //	}
 }

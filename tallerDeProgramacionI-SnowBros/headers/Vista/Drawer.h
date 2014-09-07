@@ -22,6 +22,8 @@ private:
 	SDL_Window *window;
 	SDL_Texture *image;
 	string imagePath;
+	int ancho_px;
+	int alto_px;
 
 	void runWindow(int ancho_px ,int alto_px ,string imagePath);
 

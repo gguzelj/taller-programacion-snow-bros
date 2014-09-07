@@ -2,6 +2,7 @@
 #define FIGURA_H_
 
 #include <Box2D/Box2D.h>
+#include <list>
 
 /*
  * Clase abstracta de la cual van a heredar todos los tipos de figuras (Rectangulo, Poligono, Circulo, Parelelogramo)
@@ -21,6 +22,7 @@ public:
 	virtual ~Figura(){
 		this->world->DestroyBody(this->body);
 	}
+	virtual std::list<b2Fixture> GetFixtureList() = 0;
 };
 
 #endif /* FIGURA_H_ */

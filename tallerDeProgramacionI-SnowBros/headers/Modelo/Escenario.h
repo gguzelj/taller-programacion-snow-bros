@@ -13,9 +13,13 @@ public:
 
         std::list<Figura>* getFiguras();
 
+        //Devuelve una instancia al personaje del juego
+        Personaje* getPersonaje();
+
 private:
 	b2World* world_;
 	std::list<Figura> figuras;
+	Personaje person;
 };
 
 #endif /* ESCENARIO_H_ */

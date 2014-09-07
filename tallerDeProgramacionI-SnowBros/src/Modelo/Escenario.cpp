@@ -7,6 +7,7 @@ Escenario::Escenario(JsonParser *parser) {
 
 	figuras = parser->getObjetos(); //getObjetos() deberia devolver lista de figuras en lugar de lista de b2Bodies
 
+	person = parser->getPersonaje(); //getPersonaje() deberia devolver un Personaje en lugar de un b2Body
 }
 
 Escenario::~Escenario() {
@@ -16,4 +17,8 @@ Escenario::~Escenario() {
 
 std::list<Figura>* Escenario::getFiguras(){
 	return &figuras;
+}
+
+Personaje* Escenario::getPersonaje(){
+	return &person;
 }

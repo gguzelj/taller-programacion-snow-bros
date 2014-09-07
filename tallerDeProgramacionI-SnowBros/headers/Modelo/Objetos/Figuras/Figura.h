@@ -20,7 +20,7 @@ protected:
 	b2Body* body;
 public:
 	virtual ~Figura(){
-		this->world->DestroyBody(this->body);
+//		this->world->DestroyBody(this->body);
 	}
 	b2Fixture* GetFixtureList();
 	b2Vec2 GetWorldPoint(const b2Vec2& localPoint);

@@ -55,29 +55,29 @@ void Drawer::drawScenary(Escenario* model){
 //Dibuja un cuerpo estatico
 void Drawer::drawFigura(Figura* figura){
 	//NOTA: cambiar esto por la forma actual. Vamos a tener que tener en cuenta a los circulos.
-//	SDL_SetRenderDrawColor(this->renderer, 50, 50, 50, 255); //Color que se va a dibujar el contorno
-//	int ox = this->ancho_px/2;
-//	int oy = this->alto_px/2;
-//	float sc = 40.0;
+	SDL_SetRenderDrawColor(this->renderer, 50, 50, 50, 255); //Color que se va a dibujar el contorno
+	int ox = this->ancho_px/2;
+	int oy = this->alto_px/2;
+	float sc = 40.0;
 
-//	for( b2Fixture *fixture = figura->GetFixtureList(); fixture; fixture = fixture->GetNext() ){
-//		if( fixture->GetType() == b2Shape::e_polygon ){
-//			b2PolygonShape *poly = (b2PolygonShape*)fixture->GetShape();
-//
-//			const int count = poly->GetVertexCount();
-//
-//			for( int i = 0; i < count; i++ ){
-//				int ind0 = (i + 1) % count ;
-//				b2Vec2 p0 = figura->GetWorldPoint(  poly->GetVertex( ind0 ) );
-//				b2Vec2 p1 = figura->GetWorldPoint(  poly->GetVertex(i) );
-//
-//				SDL_RenderDrawLine(this->renderer, sc * p0.x + ox, -sc * p0.y + oy , sc * p1.x + ox, -sc * p1.y + oy);
-//			}
-//		}
+	for( b2Fixture *fixture = figura->GetFixtureList(); fixture; fixture = fixture->GetNext() ){
+		if( fixture->GetType() == b2Shape::e_polygon ){
+			b2PolygonShape *poly = (b2PolygonShape*)fixture->GetShape();
+
+			const int count = poly->GetVertexCount();
+
+			for( int i = 0; i < count; i++ ){
+				int ind0 = (i + 1) % count ;
+				b2Vec2 p0 = figura->GetWorldPoint(  poly->GetVertex( ind0 ) );
+				b2Vec2 p1 = figura->GetWorldPoint(  poly->GetVertex(i) );
+
+				SDL_RenderDrawLine(this->renderer, sc * p0.x + ox, -sc * p0.y + oy , sc * p1.x + ox, -sc * p1.y + oy);
+			}
+		}
 //		else if( fixture->GetType() == b2Shape::e_circle ){
 //			 b2CircleShape* circleShape = (b2CircleShape*)fixture->GetShape();
 //		}
-//	}
+	}
 }
 
 void Drawer::drawCharacter(){}

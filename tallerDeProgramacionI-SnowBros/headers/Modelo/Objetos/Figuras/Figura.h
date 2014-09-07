@@ -22,7 +22,8 @@ public:
 	virtual ~Figura(){
 		this->world->DestroyBody(this->body);
 	}
-	virtual std::list<b2Fixture> GetFixtureList() = 0;
+	b2Fixture* GetFixtureList();
+	b2Vec2 GetWorldPoint(const b2Vec2& localPoint);
 };
 
 #endif /* FIGURA_H_ */

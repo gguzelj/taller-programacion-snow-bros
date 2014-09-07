@@ -11,10 +11,11 @@ public:
         Escenario(JsonParser *parser);
         virtual ~Escenario();
 
-        std::list<Figura> getFiguras();
+        std::list<Figura>* getFiguras();
 
 private:
 	b2World* world_;
+	std::list<Figura> figuras;
 };
 
 #endif /* ESCENARIO_H_ */

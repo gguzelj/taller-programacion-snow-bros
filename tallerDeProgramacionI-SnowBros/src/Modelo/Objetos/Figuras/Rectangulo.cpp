@@ -1,6 +1,8 @@
 #include "../../../../headers/Modelo/Objetos/Figuras/Rectangulo.h"
 
-Rectangulo::~Rectangulo(){}
+Rectangulo::~Rectangulo(){
+	this->world->DestroyBody(this->body);
+}
 
 Rectangulo::Rectangulo(int x, int y, int ancho, int alto, std::string color, int angulo, float masa, bool estatico, b2World* world){
 	this->x = x;
@@ -21,11 +23,11 @@ Rectangulo::Rectangulo(int x, int y, int ancho, int alto, std::string color, int
 	b2Body* body = this->world->CreateBody(&cuerpo);
 	this->body = body;
 
-	//definiendo ahora el fixture del personaje
+	//definiendo ahora el fixture del rectangulo
 	b2PolygonShape shape;
-	shape.SetAsBox(1,1);
+	shape.SetAsBox(ancho,alto);
 	b2FixtureDef fixture;					//creo el fixture
 	fixture.shape = &shape;					//le asigno la forma que determine antes
-	fixture.density = masa / (x * y);
+	fixture.density = masa / (ancho * alto);
 	body->CreateFixture(&fixture);
 }

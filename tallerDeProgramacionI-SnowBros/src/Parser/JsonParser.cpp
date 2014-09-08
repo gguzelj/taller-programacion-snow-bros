@@ -120,6 +120,10 @@ JsonParser::objeto_t* JsonParser::parseObjeto(Json::Value objeto){
 	return ob;
 }
 
+unsigned int JsonParser::getCantidadObjetos(){
+	return objetos_.size();
+}
+
 std::string JsonParser::getTipoObjeto(unsigned int index){
 	return objetos_[index]->tipo;
 }

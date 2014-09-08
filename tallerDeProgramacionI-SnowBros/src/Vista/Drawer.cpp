@@ -22,6 +22,8 @@ Drawer::Drawer(JsonParser *parser){
 	cout<<"masa Obj1: "<< parser->getMasaObjeto(0) <<endl;
 	cout<<"obj 1 estatico? "<< parser->esObjetoEstatico(0) <<endl;
 
+	cout<<"Cantidad de objetos en archivo? "<< parser->getCantidadObjetos()<<endl;
+
 	this->runWindow(ancho_px,alto_px,imagePath);
 }
 

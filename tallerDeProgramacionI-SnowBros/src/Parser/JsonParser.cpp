@@ -67,31 +67,22 @@ void JsonParser::setValuesFromFile() {
 }
 
 /**
- * Devolvemos la definicion de los objetos de juego
- */
-std::list<b2BodyDef> JsonParser::getObjetos() {
-	return objetos_;
-}
-
-/**
  * Parseamos la definicion del escenario
  */
 void JsonParser::parseEscenario(Json::Value escenario) {
-	alto_px_ = ParserValidator::valAltoPx(escenario.get(ALTO_PX, ALTO_PX_DEF));
-	ancho_px_ = ParserValidator::valAnchoPx(escenario.get(ANCHO_PX, ANCHO_PX_DEF));
-	alto_un_ = ParserValidator::valAltoUn(escenario.get(ALTO_UN, ALTO_UN_DEF));
-	ancho_un_ = ParserValidator::valAnchoUn(escenario.get(ANCHO_UN, ANCHO_UN_DEF));
-	imagen_fondo_ = ParserValidator::valImagenFondo(escenario.get(IMAGEN_FONDO, IMAGEN_FONDO_DEF));
+	escenario_.altoPx = ParserValidator::valAltoPx(escenario.get(ALTO_PX, ALTO_PX_DEF));
+	escenario_.anchoPx = ParserValidator::valAnchoPx(escenario.get(ANCHO_PX, ANCHO_PX_DEF));
+	escenario_.altoUn = ParserValidator::valAltoUn(escenario.get(ALTO_UN, ALTO_UN_DEF));
+	escenario_.anchoUn = ParserValidator::valAnchoUn(escenario.get(ANCHO_UN, ANCHO_UN_DEF));
+	escenario_.imagenFondo = ParserValidator::valImagenFondo(escenario.get(IMAGEN_FONDO, IMAGEN_FONDO_DEF));
 }
 
 /**
  * Parseamos la definicion del personaje
  */
 void JsonParser::parsePersonaje(Json::Value personaje) {
-	personaje_.type = b2_dynamicBody;
-	personaje_.angle = 0;
-	personaje_.position.Set(ParserValidator::valPersonajeCoorX((personaje.get(X_COOR,X_COOR_DEF)).asFloat()) ,
-							ParserValidator::valPersonajeCoorY((personaje.get(Y_COOR,Y_COOR_DEF)).asFloat()));
+	personaje_.x = ParserValidator::valPersonajeCoorX((personaje.get(X_COOR,X_COOR_DEF)).asFloat());
+	personaje_.y = ParserValidator::valPersonajeCoorY((personaje.get(Y_COOR,Y_COOR_DEF)).asFloat());
 }
 
 
@@ -100,62 +91,67 @@ void JsonParser::parsePersonaje(Json::Value personaje) {
  */
 void JsonParser::parseObjetos(Json::Value objetos) {
 
-	for(unsigned int index = 0; index < objetos.size(); index++)
-		parseObjeto( objetosEscenario_[index] );
+	objeto_t *obj;
+
+	//Alguno de los objetos puede estar mal definido, y no se deberia tener en cuenta
+	for(unsigned int index = 0; index < objetos.size(); index++){
+
+		obj = parseObjeto( objetos[index] );
+
+		if(obj != nullptr)
+			objetos_.push_back(obj);
+	}
 }
 
-/**
- * Parseamos la definicion del objeto
- */
-void JsonParser::parseObjeto(Json::Value objeto) {
+JsonParser::objeto_t* JsonParser::parseObjeto(Json::Value objeto){
 
-	b2BodyDef obj;
+	JsonParser::objeto_t *ob = new JsonParser::objeto_t();
 
-	obj.type = (objeto[ESTATICO].asBool())?b2_staticBody:b2_dynamicBody;
-	obj.angle = 0;
+	ob->tipo = objeto[TIPO].asString();
+	ob->x = objeto[X_COOR].asFloat();
+	ob->y = objeto[Y_COOR].asFloat();
+	ob->ancho = objeto[ANCHO].asInt();
+	ob->alto = objeto[ALTO].asInt();
+	ob->color = objeto[COLOR].asString();
+	ob->rot = objeto[ROT].asInt();
+	ob->masa = objeto[MASA].asInt();
+	ob->estatico = objeto[ESTATICO].asBool();
 
-	objetos_.push_back(obj);
-
+	return ob;
 }
 
-/**
- * Devolvemos el alto en pixeles
- */
-int JsonParser::getAltoPx() {
-	return alto_px_.asInt();
+std::string JsonParser::getTipoObjeto(unsigned int index){
+	return objetos_[index]->tipo;
 }
 
-/**
- * Devolvemos el ancho en pixeles
- */
-int JsonParser::getAnchoPx() {
-	return ancho_px_.asInt();
+float JsonParser::getCoorXObjeto(unsigned int index){
+	return objetos_[index]->x;
 }
 
-/**
- * Devolvemos el alto en unidades
- */
-int JsonParser::getAltoUn() {
-	return alto_un_.asInt();
+float JsonParser::getCoorYObjeto(unsigned int index){
+	return objetos_[index]->y;
 }
 
-/**
- * Devolvemos el ancho en unidades
- */
-int JsonParser::getAnchoUn() {
-	return ancho_un_.asInt();
+int JsonParser::getAnchoObjeto(unsigned int index){
+	return objetos_[index]->ancho;
 }
 
-/**
- * Devolvemos la definicion del personaje
- */
-b2BodyDef JsonParser::getPersonaje(){
-	return personaje_;
+int JsonParser::getAltoOBjeto(unsigned int index){
+	return objetos_[index]->alto;
 }
 
-/**
- * Devolvemos la imagen de fondo
- */
-std::string JsonParser::getImagenFondo() {
-	return imagen_fondo_.asString();
+std::string JsonParser::getColorObjeto(unsigned int index){
+	return objetos_[index]->color;
+}
+
+int	JsonParser::getRotObjeto(unsigned int index){
+	return objetos_[index]->rot;
+}
+
+int JsonParser::getMasaObjeto(unsigned int index){
+	return objetos_[index]->masa;
+}
+
+int JsonParser::esObjetoEstatico(unsigned int index){
+	return objetos_[index]->estatico;
 }

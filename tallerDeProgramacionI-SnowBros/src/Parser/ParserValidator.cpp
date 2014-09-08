@@ -1,28 +1,28 @@
 #include "../../headers/Parser/ParserValidator.h"
 
 //TODO Agregar errores en caso de que existan
-Json::Value ParserValidator::valAltoPx( Json::Value altoPx ){
+int ParserValidator::valAltoPx( Json::Value altoPx ){
 
 	if( altoPx.asInt() < 2048 && altoPx.asInt() > 200)
-		return altoPx;
+		return altoPx.asInt();
 
 	return ALTO_PX_DEF;
 }
 
-Json::Value ParserValidator::valAnchoPx( Json::Value anchoPx ){
-	return anchoPx;
+int ParserValidator::valAnchoPx( Json::Value anchoPx ){
+	return anchoPx.asInt();
 }
 
-Json::Value ParserValidator::valAltoUn( Json::Value altoUn ){
-	return altoUn;
+int ParserValidator::valAltoUn( Json::Value altoUn ){
+	return altoUn.asInt();
 }
 
-Json::Value ParserValidator::valAnchoUn( Json::Value anchoUn ){
-	return anchoUn;
+int ParserValidator::valAnchoUn( Json::Value anchoUn ){
+	return anchoUn.asInt();
 }
 
-Json::Value ParserValidator::valImagenFondo( Json::Value imagenFondo ){
-	return imagenFondo;
+std::string ParserValidator::valImagenFondo( Json::Value imagenFondo ){
+	return imagenFondo.asString();
 }
 
 float ParserValidator::valPersonajeCoorX(float XCoor){

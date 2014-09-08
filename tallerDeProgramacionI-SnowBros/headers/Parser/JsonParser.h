@@ -2,6 +2,7 @@
 #define JSONPARSER_H_
 
 #include <list>
+#include <vector>
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -17,53 +18,78 @@
 class JsonParser {
 
 public:
+
+	//Metodos
 	JsonParser();
 	JsonParser(std::string JsonFile);
 	virtual ~JsonParser();
 
 	void parse();
 
+	unsigned int getCantidadObjetos();
+
 	//Metodos utilizados por el modelo
-	int getAltoUn();
-	int getAnchoUn();
-	b2BodyDef getPersonaje();
-	std::list<b2BodyDef> getObjetos();
+	int 		getAltoUnEscenario(){ return escenario_.altoUn;};
+	int 		getAnchoUnEscenario(){ return escenario_.anchoUn;};
+	float 		getCoorXPersonaje(){ return personaje_.x;};
+	float 		getCoorYPersonaje(){ return personaje_.y;};
+	std::string getTipoObjeto(unsigned int index);
+	float 		getCoorXObjeto(unsigned int index);
+	float 		getCoorYObjeto(unsigned int index);
+	int 		getAnchoObjeto(unsigned int index);
+	int			getAltoOBjeto(unsigned int index);
+	std::string getColorObjeto(unsigned int index);
+	int 		getRotObjeto(unsigned int index);
+	int 		getMasaObjeto(unsigned int index);
+	int 		esObjetoEstatico(unsigned int index);
 
 	//Metodos utilizados por la vista
-	std::string getImagenFondo();
-	int getAltoPx();
-	int getAnchoPx();
+	std::string getImagenFondo(){ return escenario_.imagenFondo;};
+	int 		getAltoPx(){ return escenario_.altoPx;};
+	int 		getAnchoPx(){ return escenario_.anchoPx;};
 
 private:
 
-	Json::Value alto_px_;
-	Json::Value ancho_px_;
-	Json::Value alto_un_;
-	Json::Value ancho_un_;
-	Json::Value imagen_fondo_;
-	Json::Value x_;
-	Json::Value y_;
-	Json::Value objetosEscenario_;
-	Json::Value objeto_;
-	Json::Value tipo_;
-	Json::Value ancho_;
-	Json::Value alto_;
-	Json::Value color_;
-	Json::Value rot_;
-	Json::Value masa_;
-	Json::Value estatico_;
-
 	//atributos
 	std::string jsonFile_;
-	b2BodyDef personaje_;
-	std::list<b2BodyDef> objetos_;
 
+	struct {
+		int 		altoPx;
+		int 		anchoPx;
+		int 		altoUn;
+		int 		anchoUn;
+		std::string imagenFondo;
+	} escenario_;
+
+	struct {
+		float x;
+		float y;
+	} personaje_;
+
+
+	class objeto_t {
+	    public:
+			std::string tipo;
+			float 		x;
+			float 		y;
+			int 		ancho;
+			int 		alto;
+			std::string color;
+			int 		rot;
+			int 		masa;
+			bool 		estatico;
+	    };
+
+
+	std::vector<objeto_t*> objetos_;
+
+	//Metodos
 	void setDefaultValues();
 	void setValuesFromFile();
 	void parseEscenario(Json::Value escenario);
 	void parsePersonaje(Json::Value personaje);
 	void parseObjetos(Json::Value objetos);
-	void parseObjeto(Json::Value objeto);
+	objeto_t* parseObjeto(Json::Value objeto);
 
 };
 

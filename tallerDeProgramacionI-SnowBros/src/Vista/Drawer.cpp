@@ -12,6 +12,16 @@ Drawer::Drawer(JsonParser *parser){
 
 	cout<<"Ancho: "<<ancho_px<<" Alto: "<<alto_px<<" imagePath: "<<imagePath<<endl;
 
+	cout<<"tipo obj1: "<< parser->getTipoObjeto(0)<<endl;
+	cout<<"Coordenada x Obj1: "<< parser->getCoorXObjeto(0) <<endl;
+	cout<<"Coordenada y Obj1: "<< parser->getCoorYObjeto(0) <<endl;
+	cout<<"ancho obj1: "<< parser->getAnchoObjeto(0) <<endl;
+	cout<<"alto obj1: "<< parser->getAltoOBjeto(0) <<endl;
+	cout<<"Color Obj1: "<< parser->getColorObjeto(0) <<endl;
+	cout<<"Rotacion Obj1: "<< parser->getRotObjeto(0) <<endl;
+	cout<<"masa Obj1: "<< parser->getMasaObjeto(0) <<endl;
+	cout<<"obj 1 estatico? "<< parser->esObjetoEstatico(0) <<endl;
+
 	this->runWindow(ancho_px,alto_px,imagePath);
 }
 

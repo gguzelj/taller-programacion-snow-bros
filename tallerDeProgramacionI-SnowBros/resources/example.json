@@ -12,11 +12,11 @@
                        "x":5,
                        "y":90,
                        "ancho":2,
-                       "alto":1,
+                       "alto":17,
                        "color":"#00FF00",
                        "rot":45,
                        "masa":3,
-                       "estatico":false
+                       "estatico":true
                      },
                      {
                        "tipo":"poli",

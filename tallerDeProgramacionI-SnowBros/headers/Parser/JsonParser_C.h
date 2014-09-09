@@ -10,6 +10,7 @@
 #define PERSONAJE			"personaje"
 #define X_COOR				"x"
 #define Y_COOR				"y"
+#define ESCALA				"escala"
 #define OBJETOS				"objetos"
 #define TIPO				"tipo"
 #define ANCHO				"ancho"

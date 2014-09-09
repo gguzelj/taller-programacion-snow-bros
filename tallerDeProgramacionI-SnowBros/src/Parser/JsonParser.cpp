@@ -110,6 +110,7 @@ JsonParser::objeto_t* JsonParser::parseObjeto(Json::Value objeto){
 	ob->tipo = objeto[TIPO].asString();
 	ob->x = objeto[X_COOR].asFloat();
 	ob->y = objeto[Y_COOR].asFloat();
+	ob->escala = objeto[ESCALA].asFloat();
 	ob->ancho = objeto[ANCHO].asInt();
 	ob->alto = objeto[ALTO].asInt();
 	ob->color = objeto[COLOR].asString();
@@ -130,6 +131,10 @@ std::string JsonParser::getTipoObjeto(unsigned int index){
 
 float JsonParser::getCoorXObjeto(unsigned int index){
 	return objetos_[index]->x;
+}
+
+float JsonParser::getEscalaObjeto(unsigned int index){
+	return objetos_[index]->escala;
 }
 
 float JsonParser::getCoorYObjeto(unsigned int index){

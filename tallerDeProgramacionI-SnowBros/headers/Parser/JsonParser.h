@@ -36,6 +36,7 @@ public:
 	std::string getTipoObjeto(unsigned int index);
 	float 		getCoorXObjeto(unsigned int index);
 	float 		getCoorYObjeto(unsigned int index);
+	float		getEscalaObjeto(unsigned int index);
 	int 		getAnchoObjeto(unsigned int index);
 	int			getAltoObjeto(unsigned int index);
 	std::string getColorObjeto(unsigned int index);
@@ -72,6 +73,7 @@ private:
 			std::string tipo;
 			float 		x;
 			float 		y;
+			float		escala;
 			int 		ancho;
 			int 		alto;
 			std::string color;

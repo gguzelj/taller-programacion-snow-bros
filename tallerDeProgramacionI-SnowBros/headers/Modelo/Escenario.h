@@ -21,6 +21,8 @@ public:
         //Devuelve una instancia al personaje del juego
         Personaje* getPersonaje();
 
+        b2World* getWorld();
+
 private:
 	b2World* world_;
 	std::list<Figura*>* figuras_;

@@ -28,6 +28,8 @@ int Game::onExecute(string jsonPath){
 
 		//Update the view
 		onRender();
+
+		//SDL_Delay(1);
 	}
 
 	//cleaning up
@@ -53,9 +55,12 @@ void Game::onEvent(){
 }
 
 void Game::onLoop(){
-//Game step
-}
+	float32 timeStep = 1/60.0;      //the length of time passed to simulate (seconds)
+	int32 velocityIterations = 30;  //how strongly to correct velocity
+	int32 positionIterations = 15;   //how strongly to correct position}
 
+	model_->getWorld()->Step( timeStep, velocityIterations, positionIterations);
+}
 void Game::onRender(){
 	view_->updateView(model_);
 }

@@ -12,18 +12,6 @@ Drawer::Drawer(JsonParser *parser){
 
 	cout<<"Ancho: "<<ancho_px<<" Alto: "<<alto_px<<" imagePath: "<<imagePath<<endl;
 
-	cout<<"tipo obj1: "<< parser->getTipoObjeto(0)<< endl;
-	cout<<"Coordenada x Obj1: "<< parser->getCoorXObjeto(0) << endl;
-	cout<<"Coordenada y Obj1: "<< parser->getCoorYObjeto(0) << endl;
-	cout<<"ancho obj1: "<< parser->getAnchoObjeto(0) << endl;
-	cout<<"alto obj1: "<< parser->getAltoObjeto(0) << endl;
-	cout<<"Color Obj1: "<< parser->getColorObjeto(0) << endl;
-	cout<<"Rotacion Obj1: "<< parser->getRotObjeto(0) << endl;
-	cout<<"masa Obj1: "<< parser->getMasaObjeto(0) << endl;
-	cout<<"obj 1 estatico? "<< parser->esObjetoEstatico(0) << endl;
-
-	cout<<"Cantidad de objetos en archivo? "<< parser->getCantidadObjetos() << endl;
-
 	this->runWindow(ancho_px,alto_px,imagePath);
 }
 
@@ -38,7 +26,7 @@ Drawer::~Drawer(){
 void Drawer::updateView(Escenario* model){
 	this->clearScenary();
 	this->drawBackground();
-//	this->drawScenary(model);
+	this->drawScenary(model);
 	this->presentScenary();
 	SDL_Delay(100);
 }
@@ -53,7 +41,7 @@ void Drawer::clearScenary(){
 
 void Drawer::drawBackground(){
 	//Drawing the texture
-	SDL_RenderCopy(renderer, image, NULL, NULL); //Se pasa NULL para que ocupe todo el renderer
+	SDL_RenderCopy(renderer, image, NULL, NULL); //Se pasa NULL para que ocupe all el renderer
 }
 
 void Drawer::drawScenary(Escenario* model){
@@ -64,13 +52,33 @@ void Drawer::drawScenary(Escenario* model){
 	this->drawCharacter();
 }
 
+//Convierte un color representado a partir de una cadena de caracteres a su valor numerico red green blue.
+//la cadena debe ser del tipo "#02FF12"
+char* convertir_hex_a_rgb (std::string color){
+
+        char* resultado = (char*)malloc(3*sizeof(char));
+        const char *red = (color.substr(1,2)).c_str();
+        resultado[0] = strtol(red,NULL,16);
+
+
+        const char *green = (color.substr(3,2)).c_str();
+        resultado[1] =strtol(green,NULL,16);
+
+
+        const char *blue = (color.substr(5,2)).c_str();
+        resultado[2] =strtol(blue,NULL,16);
+
+        return resultado;
+}
+
 //Dibuja una figura
 void Drawer::drawFigura(Figura* figura){
 	//NOTA: cambiar esto por la forma actual. Vamos a tener que tener en cuenta a los circulos.
-	SDL_SetRenderDrawColor(this->renderer, 50, 50, 50, 255); //Color que se va a dibujar el contorno. Esto hay que cambiarlo por el color del objeto
+	char* rgb = convertir_hex_a_rgb(figura->getColor());
+	SDL_SetRenderDrawColor(this->renderer, rgb[0], rgb[1], rgb[2], 255); //Color que se va a dibujar el contorno. Esto hay que cambiarlo por el color del objeto
 	int ox = this->ancho_px/2;
 	int oy = this->alto_px/2;
-	float sc = 40.0;
+	float un_to_px = 40.0;
 
 	for( b2Fixture *fixture = figura->GetFixtureList(); fixture; fixture = fixture->GetNext() ){
 		if( fixture->GetType() == b2Shape::e_polygon ){
@@ -83,7 +91,7 @@ void Drawer::drawFigura(Figura* figura){
 				b2Vec2 p0 = figura->GetWorldPoint(  poly->GetVertex( ind0 ) );
 				b2Vec2 p1 = figura->GetWorldPoint(  poly->GetVertex(i) );
 
-				SDL_RenderDrawLine(this->renderer, sc * p0.x + ox, -sc * p0.y + oy , sc * p1.x + ox, -sc * p1.y + oy);
+				SDL_RenderDrawLine(this->renderer, un_to_px * p0.x + ox, -un_to_px * p0.y + oy , un_to_px* p1.x + ox, -un_to_px* p1.y + oy);
 			}
 		}
 //		else if( fixture->GetType() == b2Shape::e_circle ){
@@ -139,7 +147,6 @@ void Drawer::runWindow(int ancho_px ,int alto_px ,string imagePath){
 		throw;
 	}
 }
-
 
 SDL_Texture* Drawer::loadTexture(const std::string &file, SDL_Renderer *ren){
 	SDL_Texture *texture = IMG_LoadTexture(ren, file.c_str());

@@ -29,19 +29,19 @@ public:
 	unsigned int getCantidadObjetos();
 
 	//Metodos utilizados por el modelo
-	int 		getAltoUnEscenario(){ return escenario_.altoUn;};
-	int 		getAnchoUnEscenario(){ return escenario_.anchoUn;};
+	float 		getAltoUnEscenario(){ return escenario_.altoUn;};
+	float 		getAnchoUnEscenario(){ return escenario_.anchoUn;};
 	float 		getCoorXPersonaje(){ return personaje_.x;};
 	float 		getCoorYPersonaje(){ return personaje_.y;};
 	std::string getTipoObjeto(unsigned int index);
 	float 		getCoorXObjeto(unsigned int index);
 	float 		getCoorYObjeto(unsigned int index);
 	float		getEscalaObjeto(unsigned int index);
-	int 		getAnchoObjeto(unsigned int index);
-	int			getAltoObjeto(unsigned int index);
+	float 		getAnchoObjeto(unsigned int index);
+	float		getAltoObjeto(unsigned int index);
 	std::string getColorObjeto(unsigned int index);
 	int 		getRotObjeto(unsigned int index);
-	int 		getMasaObjeto(unsigned int index);
+	float 		getMasaObjeto(unsigned int index);
 	bool 		esObjetoEstatico(unsigned int index);
 
 	//Metodos utilizados por la vista
@@ -57,8 +57,8 @@ private:
 	struct {
 		int 		altoPx;
 		int 		anchoPx;
-		int 		altoUn;
-		int 		anchoUn;
+		float 		altoUn;
+		float 		anchoUn;
 		std::string imagenFondo;
 	} escenario_;
 

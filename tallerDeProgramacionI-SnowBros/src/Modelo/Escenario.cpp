@@ -45,6 +45,10 @@ Escenario::~Escenario() {
         delete person_;
 }
 
+b2World* Escenario::getWorld(){
+	return world_;
+}
+
 std::list<Figura*>* Escenario::getFiguras(){
         return figuras_;
 }

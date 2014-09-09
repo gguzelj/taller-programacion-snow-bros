@@ -111,12 +111,14 @@ JsonParser::objeto_t* JsonParser::parseObjeto(Json::Value objeto){
 	ob->x = objeto[X_COOR].asFloat();
 	ob->y = objeto[Y_COOR].asFloat();
 	ob->escala = objeto[ESCALA].asFloat();
-	ob->ancho = objeto[ANCHO].asInt();
-	ob->alto = objeto[ALTO].asInt();
+	ob->ancho = objeto[ANCHO].asFloat();
+	ob->alto = objeto[ALTO].asFloat();
 	ob->color = objeto[COLOR].asString();
 	ob->rot = objeto[ROT].asInt();
-	ob->masa = objeto[MASA].asInt();
-	ob->estatico = objeto[ESTATICO].asBool();
+	ob->masa = objeto[MASA].asFloat();
+	objeto[ESTATICO].asString() == "true" ? ob->estatico = true : ob->estatico = false;
+
+	std::cout << "Estatico? " << ob->estatico << std::endl;
 
 	return ob;
 }
@@ -141,11 +143,11 @@ float JsonParser::getCoorYObjeto(unsigned int index){
 	return objetos_[index]->y;
 }
 
-int JsonParser::getAnchoObjeto(unsigned int index){
+float JsonParser::getAnchoObjeto(unsigned int index){
 	return objetos_[index]->ancho;
 }
 
-int JsonParser::getAltoObjeto(unsigned int index){
+float JsonParser::getAltoObjeto(unsigned int index){
 	return objetos_[index]->alto;
 }
 
@@ -157,7 +159,7 @@ int	JsonParser::getRotObjeto(unsigned int index){
 	return objetos_[index]->rot;
 }
 
-int JsonParser::getMasaObjeto(unsigned int index){
+float JsonParser::getMasaObjeto(unsigned int index){
 	return objetos_[index]->masa;
 }
 

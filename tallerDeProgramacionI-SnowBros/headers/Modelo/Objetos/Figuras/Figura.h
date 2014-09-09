@@ -11,8 +11,8 @@
  */
 class Figura{
 protected:
-	int x;
-	int y;
+	float x;
+	float y;
 	std::string color;
 	int angulo;
 	float masa;
@@ -21,10 +21,17 @@ protected:
 	b2Body* body;
 public:
 	virtual ~Figura(){
-//		this->world->DestroyBody(this->body);
+		//this->world->DestroyBody(this->body);
 	}
 	b2Fixture* GetFixtureList();
 	b2Vec2 GetWorldPoint(const b2Vec2& localPoint);
+	std::string getColor();
+	float getX();
+	float getY();
+	int getAngulo();
+	float getMasa();
+	bool esEstatico();
+	b2Body* getb2Body();
 };
 
 #endif /* FIGURA_H_ */

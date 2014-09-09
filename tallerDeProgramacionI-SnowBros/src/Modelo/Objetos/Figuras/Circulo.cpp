@@ -1,13 +1,13 @@
 #include "../../../../headers/Modelo/Objetos/Figuras/Circulo.h"
 
-Circulo::Circulo(int posicionX, int posicionY, float radio, std::string color, int angulo, float masa, bool estatico, b2World* world){
-	this->x = posicionX;
-	this->y = posicionY;
-	this->radio = radio;
-	this->masa = masa;
-	this->angulo = angulo;
-	this->estatico = estatico;
-	this->color = color;
+Circulo::Circulo(JsonParser *parser, int index, b2World* world){
+	this->x = parser->getCoorXObjeto(index);
+	this->y = parser->getCoorYObjeto(index);
+	this->radio = radio; //Cambiar cuando el parser tenga el metodo getEscalaObjeto
+	this->masa = parser->getMasaObjeto(index);
+	this->angulo = parser->getRotObjeto(index);
+	this->estatico = parser->esObjetoEstatico(index);
+	this->color = parser->getColorObjeto(index);
 	this->world = world;
 
 	//Defino el body del circulo

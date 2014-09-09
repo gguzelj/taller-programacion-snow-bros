@@ -8,8 +8,8 @@ private:
 	float radio;
 public:
 	Circulo();
-	Circulo(int posicionX, int posicionY, float radio, std::string color, int angulo, float masa, bool estatico, b2World* world);
+	Circulo(JsonParser *parser, int index, b2World* world);
 	~Circulo();
 };
 
-#endif; /* CIRCULO_H_ */
+#endif /* CIRCULO_H_ */

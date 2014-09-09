@@ -8,7 +8,7 @@ private:
 	int ancho;
 	int alto;
 public:
-	Rectangulo(int x, int y, int ancho, int alto, std::string color, int angulo, float masa, bool estatico, b2World* world);
+	Rectangulo(JsonParser *parser, int index, b2World* world);
 	Rectangulo();
 	~Rectangulo();
 };

@@ -4,15 +4,15 @@ Rectangulo::~Rectangulo(){
 	this->world->DestroyBody(this->body);
 }
 
-Rectangulo::Rectangulo(int x, int y, int ancho, int alto, std::string color, int angulo, float masa, bool estatico, b2World* world){
-	this->x = x;
-	this->y = y;
-	this->alto = alto;
-	this->ancho = ancho;
-	this->masa = masa;
-	this->angulo = angulo;
-	this->estatico = estatico;
-	this->color = color;
+Rectangulo::Rectangulo(JsonParser *parser, int index, b2World* world){
+	this->x = parser->getCoorXObjeto(index);
+	this->y = parser->getCoorYObjeto(index);
+	this->alto = parser->getAltoObjeto(index);
+	this->ancho = parser->getAnchoObjeto(index);
+	this->masa = parser->getMasaObjeto(index);
+	this->angulo = parser->getRotObjeto(index);
+	this->estatico = parser->esObjetoEstatico(index);
+	this->color = parser->getColorObjeto(index);
 	this->world = world;
 
 	b2BodyDef cuerpo;

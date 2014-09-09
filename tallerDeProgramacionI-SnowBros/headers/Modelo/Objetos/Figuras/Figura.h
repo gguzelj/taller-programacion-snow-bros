@@ -3,6 +3,7 @@
 
 #include <Box2D/Box2D.h>
 #include <list>
+#include "../../../Parser/JsonParser.h"
 
 /*
  * Clase abstracta de la cual van a heredar todos los tipos de figuras (Rectangulo, Poligono, Circulo, Parelelogramo)

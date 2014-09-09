@@ -37,11 +37,11 @@ public:
 	float 		getCoorXObjeto(unsigned int index);
 	float 		getCoorYObjeto(unsigned int index);
 	int 		getAnchoObjeto(unsigned int index);
-	int			getAltoOBjeto(unsigned int index);
+	int			getAltoObjeto(unsigned int index);
 	std::string getColorObjeto(unsigned int index);
 	int 		getRotObjeto(unsigned int index);
 	int 		getMasaObjeto(unsigned int index);
-	int 		esObjetoEstatico(unsigned int index);
+	bool 		esObjetoEstatico(unsigned int index);
 
 	//Metodos utilizados por la vista
 	std::string getImagenFondo(){ return escenario_.imagenFondo;};

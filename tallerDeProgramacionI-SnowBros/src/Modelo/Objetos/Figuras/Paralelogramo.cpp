@@ -4,25 +4,27 @@ Paralelogramo::~Paralelogramo(){
 	this->world->DestroyBody(this->body);
 }
 
-Paralelogramo::Paralelogramo(int x, int y, int ancho, int alto, int inclinacion, bool inclinacionHaciaDerecha, std::string color, int angulo, float masa, bool esDinamico, b2World* world){
-	this->x = x;
-	this->y = y;
-	this->alto = alto;
-	this->ancho = ancho;
-	this->inclinacion = inclinacion;
-	this->masa = masa;
-	this->angulo = angulo;
-	this->estatico = estatico;
-	this->color = color;
+Paralelogramo::Paralelogramo(JsonParser *parser, int index, b2World* world){
+	this->x = parser->getCoorXObjeto(index);
+	this->y = parser->getCoorYObjeto(index);
+	this->alto = parser->getAltoObjeto(index);
+	this->ancho = parser->getAnchoObjeto(index);
+	this->masa = parser->getMasaObjeto(index);
+	this->angulo = parser->getRotObjeto(index);
+	this->estatico = parser->esObjetoEstatico(index);
+	this->color = parser->getColorObjeto(index);
 	this->world = world;
+	this->inclinacion = inclinacion;
 
 	b2BodyDef cuerpo;
-	esDinamico ? cuerpo.type = b2_dynamicBody : cuerpo.type = b2_staticBody;
+	estatico ? cuerpo.type = b2_staticBody : cuerpo.type = b2_dynamicBody;
 	cuerpo.angle = angulo;
 	cuerpo.position.Set(x,y);
 
 	b2Body* body = this->world->CreateBody(&cuerpo);
 	this->body = body;
+
+	bool inclinacionHaciaDerecha = true;
 
 	//definiendo ahora el fixture del paralelogramo
 	b2Vec2 vertices[4];

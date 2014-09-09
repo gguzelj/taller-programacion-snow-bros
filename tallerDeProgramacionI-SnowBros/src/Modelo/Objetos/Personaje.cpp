@@ -1,6 +1,6 @@
 #include "../../../headers/Modelo/Objetos/Personaje.h"
 
-Personaje::Personaje(){
+Personaje::Personaje(JsonParser *parser, b2World* world){
 
 	this->world = new b2World(b2Vec2(0, -9.8f)); //Nota: esto no se crea aca, se pasa por parametro. Lo dejo por ahora para que no tire warning
 

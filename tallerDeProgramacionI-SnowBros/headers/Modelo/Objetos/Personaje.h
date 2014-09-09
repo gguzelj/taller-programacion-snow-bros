@@ -10,7 +10,7 @@ class Personaje : public Figura{
 		b2Body* cuerpoDinamicoPersonaje;
 		int movimientoIzquierda, movimientoDerecha, movimientoNada, velocidadLimite, aceleracion, frenado;
 	public:
-		Personaje();
+		Personaje(JsonParser *parser, b2World* world);
 		~Personaje();	//Destructor del personaje
 		void Moverse(int); 			//Alguna clase controlador o algo, hasta tal vez un int segun que tipo de movimiento se eligio
 		void Saltar();

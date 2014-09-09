@@ -140,7 +140,7 @@ int JsonParser::getAnchoObjeto(unsigned int index){
 	return objetos_[index]->ancho;
 }
 
-int JsonParser::getAltoOBjeto(unsigned int index){
+int JsonParser::getAltoObjeto(unsigned int index){
 	return objetos_[index]->alto;
 }
 
@@ -156,6 +156,6 @@ int JsonParser::getMasaObjeto(unsigned int index){
 	return objetos_[index]->masa;
 }
 
-int JsonParser::esObjetoEstatico(unsigned int index){
+bool JsonParser::esObjetoEstatico(unsigned int index){
 	return objetos_[index]->estatico;
 }

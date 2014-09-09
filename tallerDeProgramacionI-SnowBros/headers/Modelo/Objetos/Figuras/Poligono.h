@@ -7,7 +7,7 @@ class Poligono : public Figura{
 private:
 	float escala;
 public:
-	Poligono(int x, int y, float escala, std::string color, int angulo, float masa, bool estatico);
+	Poligono(JsonParser *parser, int index, b2World* world);
 	Poligono();
 	~Poligono();
 };

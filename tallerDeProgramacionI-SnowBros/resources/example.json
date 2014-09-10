@@ -8,26 +8,26 @@
         "personaje": {"x": 100,"y":100},
         "objetos": [ 
                      {
-                       "tipo":"rect",
-                       "x":5,
-                       "y":90,
-                       "ancho":2,
-                       "alto":17,
+                       "tipo":"rectangulo",
+                       "x":1,
+                       "y":4,
+                       "ancho":8,
+                       "alto":1,
                        "color":"#00FF00",
-                       "rot":45,
+                       "rot":0,
                        "masa":3,
                        "estatico":true
                      },
                      {
-                       "tipo":"poli",
-                       "lados":3,
-                       "x":50,
-                       "y":50,
-                       "escala":3.5,
-                       "color":"#FF0000",
-                       "rot":90,
-                       "masa":1,
-                       "estatico":true
+                       "tipo":"rectangulo",
+                       "x":2,
+                       "y":8,
+                       "ancho":2,
+                       "alto":2,
+                       "color":"#00FF00",
+                       "rot":45,
+                       "masa":3,
+                       "estatico":false
                      }
                    ]
     }

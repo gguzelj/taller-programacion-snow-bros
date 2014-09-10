@@ -29,10 +29,10 @@ public:
 	unsigned int getCantidadObjetos();
 
 	//Metodos utilizados por el modelo
-	float 		getAltoUnEscenario(){ return escenario_.altoUn;};
-	float 		getAnchoUnEscenario(){ return escenario_.anchoUn;};
-	float 		getCoorXPersonaje(){ return personaje_.x;};
-	float 		getCoorYPersonaje(){ return personaje_.y;};
+	float 		getAltoUnEscenario(){ return escenario_->altoUn;};
+	float 		getAnchoUnEscenario(){ return escenario_->anchoUn;};
+	float 		getCoorXPersonaje(){ return personaje_->x;};
+	float 		getCoorYPersonaje(){ return personaje_->y;};
 	std::string getTipoObjeto(unsigned int index);
 	float 		getCoorXObjeto(unsigned int index);
 	float 		getCoorYObjeto(unsigned int index);
@@ -45,45 +45,17 @@ public:
 	bool 		esObjetoEstatico(unsigned int index);
 
 	//Metodos utilizados por la vista
-	std::string getImagenFondo(){ return escenario_.imagenFondo;};
-	int 		getAltoPx(){ return escenario_.altoPx;};
-	int 		getAnchoPx(){ return escenario_.anchoPx;};
+	std::string getImagenFondo(){ return escenario_->imagenFondo;};
+	int 		getAltoPx(){ return escenario_->altoPx;};
+	int 		getAnchoPx(){ return escenario_->anchoPx;};
 
 private:
 
 	//atributos
 	std::string jsonFile_;
-
-	struct {
-		int 		altoPx;
-		int 		anchoPx;
-		float 		altoUn;
-		float 		anchoUn;
-		std::string imagenFondo;
-	} escenario_;
-
-	struct {
-		float x;
-		float y;
-	} personaje_;
-
-
-	class objeto_t {
-	    public:
-			std::string tipo;
-			float 		x;
-			float 		y;
-			float		escala;
-			int 		ancho;
-			int 		alto;
-			std::string color;
-			int 		rot;
-			int 		masa;
-			bool 		estatico;
-	    };
-
-
-	std::vector<objeto_t*> objetos_;
+	ParserValidator::escenario_t *escenario_;
+	ParserValidator::personaje_t *personaje_;
+	std::vector<ParserValidator::objeto_t*> objetos_;
 
 	//Metodos
 	void setDefaultValues();
@@ -91,7 +63,6 @@ private:
 	void parseEscenario(Json::Value escenario);
 	void parsePersonaje(Json::Value personaje);
 	void parseObjetos(Json::Value objetos);
-	objeto_t* parseObjeto(Json::Value objeto);
 
 };
 

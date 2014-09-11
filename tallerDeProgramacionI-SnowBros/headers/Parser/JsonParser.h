@@ -11,6 +11,7 @@
 #include <Box2D/Box2D.h>
 #include <json/json.h>
 
+#include "../Log/Log.h"
 #include "JsonParser_C.h"
 #include "ParserValidator.h"
 #include "FileReader.h"
@@ -20,11 +21,10 @@ class JsonParser {
 public:
 
 	//Metodos
-	JsonParser();
 	JsonParser(std::string JsonFile);
 	virtual ~JsonParser();
 
-	void parse();
+	bool parse();
 
 	unsigned int getCantidadObjetos();
 
@@ -53,13 +53,14 @@ private:
 
 	//atributos
 	std::string jsonFile_;
+	std::string path_;
 	ParserValidator::escenario_t *escenario_;
 	ParserValidator::personaje_t *personaje_;
 	std::vector<ParserValidator::objeto_t*> objetos_;
 
 	//Metodos
-	void setDefaultValues();
-	void setValuesFromFile();
+	bool setDefaultValues();
+	bool setValuesFromFile();
 	void parseEscenario(Json::Value escenario);
 	void parsePersonaje(Json::Value personaje);
 	void parseObjetos(Json::Value objetos);

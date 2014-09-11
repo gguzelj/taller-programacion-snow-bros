@@ -3,15 +3,10 @@
 /**
  * Constructor
  */
-JsonParser::JsonParser() {
-	escenario_ = nullptr;
-	return;
-}
-
 JsonParser::JsonParser(std::string path) {
 	escenario_ = nullptr;
-	jsonFile_ = FileReader::read(path);
-	this->parse();
+	personaje_ = nullptr;
+	path_ = path;
 }
 
 /**
@@ -23,29 +18,34 @@ JsonParser::~JsonParser() {
 /**
  * Realizamos el parseo del archivo
  */
-void JsonParser::parse() {
+bool JsonParser::parse() {
 
-	if (jsonFile_.empty())
-		this->setDefaultValues();
-	else
-		this->setValuesFromFile();
+	jsonFile_ = FileReader::read(path_);
 
-	return;
+	if (jsonFile_.empty()){
+		Log::instance()->append(PARSER_ERROR_OPEN_FILE,Log::WARNING);
+		return this->setDefaultValues();
+	} else {
+		return this->setValuesFromFile();
+	}
 }
 
 /**
  * En los casos donde no se haya seteado ningun archivo json, cargamos juego
  * con los valores por default
  */
-void JsonParser::setDefaultValues() {
-	//TODO Definir un juego default y guardar ese archivo
+bool JsonParser::setDefaultValues() {
+	Log::instance()->append(PARSER_INFO_DEFAULT_GAME,Log::INFO);
+	path_ = PATH_DEF;
+	jsonFile_ = FileReader::read(path_);
+	return this->setValuesFromFile();
 }
 
 /**
  * En los casos donde no se haya asignado un algun archivo json, cargamos los valores
  * del mismo
  */
-void JsonParser::setValuesFromFile() {
+bool JsonParser::setValuesFromFile() {
 
 	bool parsedSuccess;
 	Json::Reader reader;
@@ -55,18 +55,24 @@ void JsonParser::setValuesFromFile() {
 	parsedSuccess = reader.parse(jsonFile_, root, false);
 
 	if (not parsedSuccess) {
-		//TODO Agregar error
-		this->setDefaultValues();
-		return;
+		Log::instance()->append(PARSER_ERROR_INVALID_JSON + reader.getFormatedErrorMessages(),Log::ERROR);
+		if(path_ != PATH_DEF)
+			return this->setDefaultValues();
+		else
+			return true;
 	}
 
+	if(!root.isMember(ESCENARIO)){
+		Log::instance()->append(PARSER_ERROR_NO_ESCENARIO + path_,Log::ERROR);
+		return this->setDefaultValues();
+	}
 	escenario = root[ESCENARIO];
 
 	parseEscenario(escenario);
 	parsePersonaje(escenario[PERSONAJE]);
 	parseObjetos(escenario[OBJETOS]);
 
-	return;
+	return false;
 }
 
 /**

@@ -47,6 +47,7 @@ int Game::onExecute(string jsonPath){
 bool Game::onInit(string jsonPath){
 
 	if (!(parser_ = new JsonParser(jsonPath))) return false;
+	if (parser_->parse()) return false;
 	if (!(model_ = new Escenario(parser_))) return false;
 	if (!(view_ = new Drawer(parser_))) return false;
 	if (!(controller_ = new Controlador(model_, view_))) return false;

@@ -6,7 +6,7 @@
         "ancho-un":50,
         "imagen_fondo":"Everest.png",
         "personaje": {"x": 100,"y":100},
-        "objetos": [ 
+        "objetos": [
                      {
                        "tipo":"rectangulo",
                        "x":1,

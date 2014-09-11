@@ -29,7 +29,7 @@ Personaje::Personaje(JsonParser *parser, b2World* world){
 }
 Personaje::~Personaje(){
         //una posible destruccion del personaje
-        this->world->DestroyBody(this->cuerpoDinamicoPersonaje);
+//        this->world->DestroyBody(this->cuerpoDinamicoPersonaje); TIRA ERROR
         //no se si me estare olvidando de algun destructor
 }
 

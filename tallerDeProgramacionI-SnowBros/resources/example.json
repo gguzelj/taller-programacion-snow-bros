@@ -2,15 +2,15 @@
     "escenario": {
         "alto-px": 768,
         "ancho-px":1024,
-        "alto-un":100,
-        "ancho-un":50,
+        "alto-un":19.2,
+        "ancho-un":25.6,
         "imagen_fondo":"Everest.png",
         "personaje": {"x": 100,"y":100},
         "objetos": [
                      {
                        "tipo":"rectangulo",
                        "x":1,
-                       "y":4,
+                       "y":0,
                        "ancho":8,
                        "alto":1,
                        "color":"#00FF00",
@@ -20,12 +20,23 @@
                      },
                      {
                        "tipo":"rectangulo",
-                       "x":2,
+                       "x":3,
                        "y":8,
-                       "ancho":2,
+                       "ancho":1,
                        "alto":2,
+                       "color":"#00FFFF",
+                       "rot":0,
+                       "masa":3,
+                       "estatico":true
+                     },
+                     {
+                       "tipo":"poligono",
+                       "x":2,
+                       "y":3,
+					   "escala":2,
+					   "lados":3,
                        "color":"#00FF00",
-                       "rot":45,
+                       "rot":0,
                        "masa":3,
                        "estatico":false
                      }

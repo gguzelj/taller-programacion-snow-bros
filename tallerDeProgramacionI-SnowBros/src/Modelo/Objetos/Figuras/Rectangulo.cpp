@@ -32,3 +32,33 @@ Rectangulo::Rectangulo(JsonParser *parser, int index, b2World* world){
 	fixture.density = (float) masa / (alto*ancho);
 	body->CreateFixture(&fixture);
 }
+
+Rectangulo::Rectangulo(JsonParser *parser, b2World* world){
+	this->x = 0;
+	float factorDeAmplificacion = (4.0f/7.0f);
+	this->y = -factorDeAmplificacion * parser->getAltoUnEscenario();
+	std::cout<<y<<std::endl;
+	this->alto = 3;
+	this->ancho = parser->getAnchoUnEscenario();
+	this->masa = 1000;
+	this->angulo = 0;
+	this->estatico = true;
+	this->color = "#000000";
+	this->world = world;
+
+	b2BodyDef cuerpo;
+	cuerpo.type = b2_staticBody;
+	cuerpo.angle = angulo;
+	cuerpo.position.Set(x,y);
+
+	b2Body* body = this->world->CreateBody(&cuerpo);
+	this->body = body;
+
+	//definiendo ahora el fixture del rectangulo
+	b2PolygonShape shape;
+	shape.SetAsBox(ancho,alto);
+	b2FixtureDef fixture;					//creo el fixture
+	fixture.shape = &shape;					//le asigno la forma que determine antes
+	fixture.density = (float) masa / (alto*ancho);
+	body->CreateFixture(&fixture);
+}

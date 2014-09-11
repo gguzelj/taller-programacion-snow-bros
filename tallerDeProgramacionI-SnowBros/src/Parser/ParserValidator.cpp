@@ -260,10 +260,10 @@ float ParserValidator::valCoorXObjeto(Json::Value obj, escenario_t *esc, bool &e
 		coorX = obj[X_COOR].asDouble();
 	}
 
-	//Validaciones de la coordenada
-	if(	coorX < 0 || coorX > esc->anchoPx ){
-		error = true;
-	}
+//	//Validaciones de la coordenada
+//	if(	coorX < 0 || coorX > esc->anchoPx ){
+//		error = true;
+//	}
 
 	return (float) coorX;
 }
@@ -296,7 +296,7 @@ float ParserValidator::valCoorYObjeto(Json::Value obj, escenario_t *esc, bool &e
  */
 float ParserValidator::valEscalaObjeto(Json::Value obj, escenario_t *esc, std::string tipoObjeto, bool &error){
 
-	double escala;
+	float escala;
 
 	if(tipoObjeto != POLIGONO) return 0;
 
@@ -310,18 +310,34 @@ float ParserValidator::valEscalaObjeto(Json::Value obj, escenario_t *esc, std::s
 
 	//Validaciones de la coordenada
 	if(	escala < ESCALA_MIN || escala > ESCALA_MAX ){
+		//TODO agregar mensaje en el log
 		error = true;
 	}
 
 	return (float) escala;
 }
-
+/*
+ * Validamos los lados del objeto
+ */
 int ParserValidator::valLadosObjeto(Json::Value obj, escenario_t *esc, std::string tipoObjeto, bool &error){
 
 	int lados;
 
 	if(tipoObjeto != POLIGONO) return 0;
 
+	//Validamos que hay lados
+	if(! obj[LADOS].isInt()){
+		//TODO agregar mensaje en el log
+		error = true;
+	} else{
+		lados = obj.get(LADOS, -1).asInt();
+	}
+
+	//Validamos valores permitidos
+	if( lados < LADOS_MIN || lados > LADOS_MAX){
+		//TODO agregar mensaje en el log
+		error = true;
+	}
 	lados = obj.get(LADOS, -1).asInt();
 
 	return lados;
@@ -337,11 +353,11 @@ float ParserValidator::valAnchoObjeto(Json::Value obj, escenario_t *esc, std::st
 	if(tipoObjeto != RECTANGULO && tipoObjeto != PARALELOGRAMO) return 0;
 
 	//Validamos el ancho del objeto
-	if(! obj[ANCHO].isInt()){
+	if(! obj[ANCHO].isDouble()){
 		//TODO agregar mensaje en el log
 		error = true;
 	} else {
-		ancho = obj[ANCHO].asInt();
+		ancho = obj[ANCHO].asFloat();
 	}
 
 	//Validaciones del ancho del objeto
@@ -362,19 +378,43 @@ float ParserValidator::valAltoObjeto(Json::Value obj, escenario_t *esc, std::str
 	if(tipoObjeto != RECTANGULO && tipoObjeto != PARALELOGRAMO) return 0;
 
 	//Validamos el alto del objeto
-	if(! obj[ALTO].isInt()){
+	if(! obj[ALTO].isDouble()){
 		//TODO agregar mensaje en el log
 		error = true;
 	} else {
-		alto = obj[ALTO].asInt();
+		alto = obj[ALTO].asFloat();
 	}
 
-	//Validaciones de la altura del objeto
+	//Validamos valores permitidos
 	if(	alto < ALTO_MIN || alto > ALTO_MAX ){
 		error = true;
 	}
 
 	return alto;
+}
+
+/*
+ * Validamos la inclinacion (solo de paralelogramos)
+ */
+int ParserValidator::valInclinacionObjeto(Json::Value obj, escenario_t *esc, std::string tipoObjeto, bool &error){
+
+	int inclinacion;
+
+	if(tipoObjeto != PARALELOGRAMO) return 0;
+	if(! obj[INCLINACION].isInt()){
+		//TODO agregar mensaje en el log
+		error = true;
+	} else{
+		inclinacion = obj[INCLINACION].asInt();
+	}
+
+	//Validamos valores permitidos
+	if(inclinacion < INC_MIN){
+		//TODO agregar mensaje en el log
+		error = true;
+	}
+
+	return inclinacion;
 }
 
 /**

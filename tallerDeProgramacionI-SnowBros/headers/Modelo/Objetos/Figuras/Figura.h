@@ -3,7 +3,11 @@
 
 #include <Box2D/Box2D.h>
 #include <list>
+#include <math.h>
 #include "../../../Parser/JsonParser.h"
+
+#define DEGTORAD 0.0174532925199432957f
+#define RADTODEG 57.295779513082320876f
 
 /*
  * Clase abstracta de la cual van a heredar todos los tipos de figuras (Rectangulo, Poligono, Circulo, Parelelogramo)
@@ -14,7 +18,7 @@ protected:
 	float x;
 	float y;
 	std::string color;
-	int angulo;
+	float angulo;
 	float masa;
 	bool estatico;
 	b2World* world;

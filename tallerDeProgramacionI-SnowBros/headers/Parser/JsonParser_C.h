@@ -17,6 +17,7 @@
 #define TIPO				"tipo"
 #define ANCHO				"ancho"
 #define ALTO				"alto"
+#define INCLINACION			"inclinacion"
 #define COLOR				"color"
 #define ROT					"rot"
 #define MASA				"masa"
@@ -55,6 +56,9 @@
 #define	ANCHO_MIN			1
 #define	ALTO_MAX			100
 #define	ALTO_MIN			1
+#define LADOS_MIN			3
+#define LADOS_MAX			6
+#define INC_MIN				0
 #define	ROT_MIN				0
 #define	ROT_MAX				360
 #define	MASA_MIN			1

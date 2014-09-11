@@ -3,10 +3,10 @@
 Poligono::Poligono(JsonParser *parser, int index, b2World* world){
 	this->x = parser->getCoorXObjeto(index);
 	this->y = parser->getCoorYObjeto(index);
-	this->lados = parser->getLadosObjeto(index); // TODO implementar getLados
+	this->lados = parser->getLadosObjeto(index);
 	this->escala = parser->getEscalaObjeto(index);
 	this->masa = parser->getMasaObjeto(index);
-	this->angulo = parser->getRotObjeto(index);
+	this->angulo = parser->getRotObjeto(index) * DEGTORAD;
 	this->estatico = parser->esObjetoEstatico(index);
 	this->color = parser->getColorObjeto(index);
 	this->world = world;

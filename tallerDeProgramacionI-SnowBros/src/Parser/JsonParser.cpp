@@ -141,6 +141,10 @@ float JsonParser::getAltoObjeto(unsigned int index){
 	return objetos_[index]->alto;
 }
 
+int JsonParser::getInclinacionObjeto(unsigned int index){
+	return objetos_[index]->inclinacion;
+}
+
 std::string JsonParser::getColorObjeto(unsigned int index){
 	return objetos_[index]->color;
 }

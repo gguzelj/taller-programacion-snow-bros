@@ -40,6 +40,7 @@ public:
 	int			getLadosObjeto(unsigned int index);
 	float 		getAnchoObjeto(unsigned int index);
 	float		getAltoObjeto(unsigned int index);
+	int			getInclinacionObjeto(unsigned int index);
 	std::string getColorObjeto(unsigned int index);
 	int 		getRotObjeto(unsigned int index);
 	float 		getMasaObjeto(unsigned int index);

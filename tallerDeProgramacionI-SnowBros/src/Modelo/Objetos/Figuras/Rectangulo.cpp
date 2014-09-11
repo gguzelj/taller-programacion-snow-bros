@@ -42,7 +42,6 @@ Rectangulo::Rectangulo(JsonParser *parser, b2World* world){
 	this->x = 0;
 	float factorDeAmplificacion = (4.0f/7.0f);
 	this->y = -factorDeAmplificacion * parser->getAltoUnEscenario();
-	std::cout<<y<<std::endl;
 	this->alto = 3;
 	this->ancho = parser->getAnchoUnEscenario();
 	this->masa = 1000;

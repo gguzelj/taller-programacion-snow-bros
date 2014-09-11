@@ -8,13 +8,14 @@
 #include "Modelo/Escenario.h"
 #include "Vista/Drawer.h"
 #include "Parser/JsonParser.h"
+#include "Log/Log.h"
 
 using namespace std;
 
 class Game{
 public:
 	Game();
-	~Game(){};
+	~Game();
 
 	/*
 	 * Este es el metodo que se encarga de llevar a cabo el flujo del juego.

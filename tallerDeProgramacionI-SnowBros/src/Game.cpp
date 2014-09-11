@@ -13,6 +13,10 @@ Game::Game(){
 	parser_ = nullptr;
 }
 
+Game::~Game(){
+	Log::instance()->closeLog();
+}
+
 int Game::onExecute(string jsonPath){
 
 	if(onInit(jsonPath) == false){
@@ -66,6 +70,7 @@ void Game::onRender(){
 }
 
 void Game::onCleanup(){
+	Log::instance()->append("Reinicio de Juego",Log::INFO);
 	delete view_;
 	delete model_;
 	delete controller_;

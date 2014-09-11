@@ -11,8 +11,6 @@ Poligono::Poligono(JsonParser *parser, int index, b2World* world){
 	this->color = parser->getColorObjeto(index);
 	this->world = world;
 
-	std::cout << "Dentro de Poligono, estatico? " << estatico << std::endl;
-
 	b2BodyDef cuerpo;
 	estatico ? cuerpo.type = b2_staticBody : cuerpo.type = b2_dynamicBody;
 	cuerpo.angle = angulo;

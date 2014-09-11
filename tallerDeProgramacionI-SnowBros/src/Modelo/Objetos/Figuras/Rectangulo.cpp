@@ -15,8 +15,6 @@ Rectangulo::Rectangulo(JsonParser *parser, int index, b2World* world){
 	this->color = parser->getColorObjeto(index);
 	this->world = world;
 
-	std::cout << "Dentro de Rectangulo, estatico? " << estatico << std::endl;
-
 	b2BodyDef cuerpo;
 	estatico ? cuerpo.type = b2_staticBody : cuerpo.type = b2_dynamicBody;
 
@@ -31,6 +29,6 @@ Rectangulo::Rectangulo(JsonParser *parser, int index, b2World* world){
 	shape.SetAsBox(ancho,alto);
 	b2FixtureDef fixture;					//creo el fixture
 	fixture.shape = &shape;					//le asigno la forma que determine antes
-	fixture.density = masa / (ancho * alto);
+	fixture.density = 1;
 	body->CreateFixture(&fixture);
 }

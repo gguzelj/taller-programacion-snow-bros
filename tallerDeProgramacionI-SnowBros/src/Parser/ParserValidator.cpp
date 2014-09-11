@@ -49,8 +49,8 @@ ParserValidator::objeto_t* ParserValidator::validarObjeto(Json::Value obj, escen
 	objeto->y = valCoorYObjeto(obj, esc, existeError);
 	objeto->escala = valEscalaObjeto(obj, esc, objeto->tipo, existeError);
 	objeto->lados = valLadosObjeto(obj, esc, objeto->tipo, existeError);
-	objeto->ancho = valAnchoObjeto(obj, esc, existeError);
-	objeto->alto = valAltoObjeto(obj, esc, existeError);
+	objeto->ancho = valAnchoObjeto(obj, esc, objeto->tipo, existeError);
+	objeto->alto = valAltoObjeto(obj, esc, objeto->tipo, existeError);
 	objeto->color = valColorObjeto(obj, esc, existeError);
 	objeto->rot = valRotObjeto(obj, esc, existeError);
 	objeto->masa = valMasaObjeto(obj, esc, existeError);
@@ -330,9 +330,11 @@ int ParserValidator::valLadosObjeto(Json::Value obj, escenario_t *esc, std::stri
 /**
  * Validamos el ancho del objeto
  */
-int ParserValidator::valAnchoObjeto(Json::Value obj, escenario_t *esc, bool &error){
+float ParserValidator::valAnchoObjeto(Json::Value obj, escenario_t *esc, std::string tipoObjeto, bool &error){
 
 	double ancho;
+
+	if(tipoObjeto != RECTANGULO && tipoObjeto != PARALELOGRAMO) return 0;
 
 	//Validamos el ancho del objeto
 	if(! obj[ANCHO].isInt()){
@@ -353,9 +355,11 @@ int ParserValidator::valAnchoObjeto(Json::Value obj, escenario_t *esc, bool &err
 /**
  * Validamos el alto del objeto
  */
-int ParserValidator::valAltoObjeto(Json::Value obj, escenario_t *esc, bool &error){
+float ParserValidator::valAltoObjeto(Json::Value obj, escenario_t *esc, std::string tipoObjeto, bool &error){
 
 	double alto;
+
+	if(tipoObjeto != RECTANGULO && tipoObjeto != PARALELOGRAMO) return 0;
 
 	//Validamos el alto del objeto
 	if(! obj[ALTO].isInt()){

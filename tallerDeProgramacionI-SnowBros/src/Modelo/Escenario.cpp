@@ -7,8 +7,6 @@ Escenario::Escenario(JsonParser *parser) {
 
         figuras_ = new std::list<Figura*>;
 
-        std::cout << "Cant objetos: " << parser->getCantidadObjetos() << std::endl;
-
         // Create all the objects
         for(unsigned int index = 0; index < parser->getCantidadObjetos(); index++){
 			Figura* figura_i;
@@ -25,7 +23,6 @@ Escenario::Escenario(JsonParser *parser) {
 				figura_i = new Paralelogramo(parser,index, world_);
 
 			else if(parser->getTipoObjeto(index) == POLIGONO){
-				std::cout << "Poligono" << std::endl;
 				figura_i = new Poligono(parser,index, world_);}
 
 			else throw; //Esto para mi hay que cambiarlo. En vez de lanzar una excepcion, deberia seguir el flujo del programa ignorando

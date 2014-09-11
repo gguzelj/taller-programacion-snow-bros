@@ -28,7 +28,6 @@ void Drawer::updateView(Escenario* model){
 	this->drawBackground();
 	this->drawScenary(model);
 	this->presentScenary();
-	SDL_Delay(100);
 }
 
 // ########################### //
@@ -158,4 +157,3 @@ SDL_Texture* Drawer::loadTexture(const std::string &file, SDL_Renderer *ren){
 void Drawer::logSDLError(std::ostream &os, const std::string &msg){
 	os << msg << " error: " << SDL_GetError() << std::endl;
 }
-

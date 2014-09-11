@@ -3,7 +3,7 @@
 Personaje::Personaje(JsonParser *parser, b2World* world){
 
         this->stickiness = 0; //Lo inicializo en 0
-        this->world = new b2World(b2Vec2(0, -9.8f)); //Nota: esto no se crea aca, se pasa por parametro. Lo dejo por ahora para que no tire warning
+        this->world = world;
         this->velocidadLimite = 15.0f;
         this->aceleracion = 7.4f;
         this->frenado = 0.97;

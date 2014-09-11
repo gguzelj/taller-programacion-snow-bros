@@ -125,6 +125,10 @@ float JsonParser::getEscalaObjeto(unsigned int index){
 	return objetos_[index]->escala;
 }
 
+int JsonParser::getLadosObjeto(unsigned int index){
+	return objetos_[index]->lados;
+}
+
 float JsonParser::getCoorYObjeto(unsigned int index){
 	return objetos_[index]->y;
 }

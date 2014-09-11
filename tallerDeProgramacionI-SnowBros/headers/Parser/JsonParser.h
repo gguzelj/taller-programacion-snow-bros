@@ -37,6 +37,7 @@ public:
 	float 		getCoorXObjeto(unsigned int index);
 	float 		getCoorYObjeto(unsigned int index);
 	float		getEscalaObjeto(unsigned int index);
+	int			getLadosObjeto(unsigned int index);
 	float 		getAnchoObjeto(unsigned int index);
 	float		getAltoObjeto(unsigned int index);
 	std::string getColorObjeto(unsigned int index);

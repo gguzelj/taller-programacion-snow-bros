@@ -12,6 +12,7 @@
 #define X_COOR				"x"
 #define Y_COOR				"y"
 #define ESCALA				"escala"
+#define LADOS				"lados"
 #define OBJETOS				"objetos"
 #define TIPO				"tipo"
 #define ANCHO				"ancho"
@@ -29,12 +30,12 @@
 //Valores Default para el juego
 #define ALTO_PX_DEF			768
 #define ANCHO_PX_DEF		1024
-#define ALTO_UN_DEF			100
-#define ANCHO_UN_DEF		50
+#define ALTO_UN_DEF			19.2
+#define ANCHO_UN_DEF		25.6
 #define IMAGEN_FONDO_DEF	"Everest.png"
-#define X_COOR_DEF			100.0
-#define Y_COOR_DEF			100.0
-#define COLOR_DEF			"#00FF00"
+#define X_COOR_DEF			0
+#define Y_COOR_DEF			0
+#define COLOR_DEF			"#FFFFAA"
 #define	ROT_DEF				0
 #define	MASA_DEF			1
 #define PATH_DEF			"resources/example.json"

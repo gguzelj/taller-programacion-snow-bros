@@ -10,7 +10,7 @@ ParserValidator::escenario_t* ParserValidator::validarEscenario(Json::Value esc)
 	ParserValidator::escenario_t *escenario = new ParserValidator::escenario_t();
 
 	escenario->altoPx = valAltoPx(esc);
-	escenario->anchoPx = valAltoPx(esc);
+	escenario->anchoPx = valAnchoPx(esc);
 	escenario->altoUn = valAltoUn(esc);
 	escenario->anchoUn = valAnchoUn(esc);
 	escenario->imagenFondo = valImagenFondo(esc);
@@ -48,6 +48,7 @@ ParserValidator::objeto_t* ParserValidator::validarObjeto(Json::Value obj, escen
 	objeto->x = valCoorXObjeto(obj, esc, existeError);
 	objeto->y = valCoorYObjeto(obj, esc, existeError);
 	objeto->escala = valEscalaObjeto(obj, esc, objeto->tipo, existeError);
+	objeto->lados = valLadosObjeto(obj, esc, objeto->tipo, existeError);
 	objeto->ancho = valAnchoObjeto(obj, esc, existeError);
 	objeto->alto = valAltoObjeto(obj, esc, existeError);
 	objeto->color = valColorObjeto(obj, esc, existeError);
@@ -297,7 +298,7 @@ float ParserValidator::valEscalaObjeto(Json::Value obj, escenario_t *esc, std::s
 
 	double escala;
 
-	if(tipoObjeto == RECTANGULO) return 0;
+	if(tipoObjeto != POLIGONO) return 0;
 
 	//Validamos la escala del objeto
 	if(! obj[ESCALA].isDouble()){
@@ -313,6 +314,17 @@ float ParserValidator::valEscalaObjeto(Json::Value obj, escenario_t *esc, std::s
 	}
 
 	return (float) escala;
+}
+
+int ParserValidator::valLadosObjeto(Json::Value obj, escenario_t *esc, std::string tipoObjeto, bool &error){
+
+	int lados;
+
+	if(tipoObjeto != POLIGONO) return 0;
+
+	lados = obj.get(LADOS, -1).asInt();
+
+	return lados;
 }
 
 /**

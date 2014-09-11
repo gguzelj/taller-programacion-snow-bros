@@ -11,20 +11,25 @@ Escenario::Escenario(JsonParser *parser) {
         figura_i = new Rectangulo(parser, world_);
         figuras_->push_back(figura_i);
 
+        std::cout << parser->getCantidadObjetos() << std::endl;
+
         // Create all the objects
         for(unsigned int index = 0; index < parser->getCantidadObjetos(); index++){
 
         	if(parser->getTipoObjeto(index) == CIRCULO)
-				figura_i = new Circulo(parser,index, world_);
+				figura_i = new Circulo(parser, index, world_);
 
 			else if(parser->getTipoObjeto(index) == RECTANGULO)
-				figura_i = new Rectangulo(parser,index, world_);
+				figura_i = new Rectangulo(parser, index, world_);
 
 			else if(parser->getTipoObjeto(index) == PARALELOGRAMO)
-				figura_i = new Paralelogramo(parser,index, world_);
+				figura_i = new Paralelogramo(parser, index, world_);
 
-			else if(parser->getTipoObjeto(index) == POLIGONO){
-				figura_i = new Poligono(parser,index, world_);}
+			else if(parser->getTipoObjeto(index) == POLIGONO)
+				figura_i = new Poligono(parser, index, world_);
+
+			else if(parser->getTipoObjeto(index) == TRAPECIO)
+				figura_i = new Trapecio(parser, index, world_);
 
 			else throw; //Esto para mi hay que cambiarlo. En vez de lanzar una excepcion, deberia seguir el flujo del programa ignorando
 						//el error, pero guardandolo en el log de errores.

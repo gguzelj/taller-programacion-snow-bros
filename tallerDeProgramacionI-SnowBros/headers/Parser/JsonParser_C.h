@@ -18,6 +18,8 @@
 #define ANCHO				"ancho"
 #define ALTO				"alto"
 #define INCLINACION			"inclinacion"
+#define BASE_MAYOR			"base_mayor"
+#define BASE_MENOR			"base_menor"
 #define COLOR				"color"
 #define ROT					"rot"
 #define MASA				"masa"
@@ -27,6 +29,7 @@
 #define CIRCULO				"circulo"
 #define PARALELOGRAMO		"paralelogramo"
 #define POLIGONO			"poligono"
+#define TRAPECIO			"trapecio"
 
 //Valores Default para el juego
 #define ALTO_PX_DEF			768

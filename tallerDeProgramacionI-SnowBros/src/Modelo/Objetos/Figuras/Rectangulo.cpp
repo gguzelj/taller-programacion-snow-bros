@@ -3,7 +3,9 @@
 Rectangulo::~Rectangulo(){
 	this->world->DestroyBody(this->body);
 }
-
+/*
+ * ESte constructor se va a usar para todas las figuras rectangulo que vengan del json.
+ */
 Rectangulo::Rectangulo(JsonParser *parser, int index, b2World* world){
 	this->x = parser->getCoorXObjeto(index);
 	this->y = parser->getCoorYObjeto(index);
@@ -33,6 +35,9 @@ Rectangulo::Rectangulo(JsonParser *parser, int index, b2World* world){
 	body->CreateFixture(&fixture);
 }
 
+/*
+ * Este constructor se va a usar solamente para el piso
+ */
 Rectangulo::Rectangulo(JsonParser *parser, b2World* world){
 	this->x = 0;
 	float factorDeAmplificacion = (4.0f/7.0f);

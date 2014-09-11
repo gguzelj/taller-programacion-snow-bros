@@ -237,7 +237,8 @@ std::string ParserValidator::valTipoObjeto(Json::Value obj, escenario_t *esc, bo
 	}
 
 	if(	tipoObjeto != RECTANGULO && tipoObjeto != CIRCULO &&
-		tipoObjeto != PARALELOGRAMO && tipoObjeto != POLIGONO ){
+		tipoObjeto != PARALELOGRAMO && tipoObjeto != POLIGONO &&
+		tipoObjeto != TRAPECIO){
 		//TODO Agregar error
 		error = true;
 	}

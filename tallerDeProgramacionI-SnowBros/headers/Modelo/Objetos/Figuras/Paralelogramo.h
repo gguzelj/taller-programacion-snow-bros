@@ -1,13 +1,12 @@
 #ifndef PARALELOGRAMO_H_
 #define PARALELOGRAMO_H_
 
-#include <Box2D/Box2D.h>
 #include "Figura.h"
 
 class Paralelogramo : public Figura{
 private:
-	int ancho;
-	int alto;
+	float ancho;
+	float alto;
 	int inclinacion;
 public:
 	Paralelogramo(JsonParser *parser, int index, b2World* world);

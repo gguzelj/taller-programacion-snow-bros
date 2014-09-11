@@ -9,6 +9,7 @@
 #include "Objetos/Figuras/Paralelogramo.h"
 #include "Objetos/Figuras/Rectangulo.h"
 #include "Objetos/Figuras/Poligono.h"
+#include "Objetos/Figuras/Trapecio.h"
 #include "Objetos/Personaje.h"
 
 class Escenario {

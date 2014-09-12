@@ -2,18 +2,18 @@
 
 Muro::Muro(float ancho_esc, float alto_esc, int rot, b2World* world, int pos_x){
 	if(rot == 0){
-		this->y = -alto_esc/2;
+		this->y = - (3.0f/7.0f)*alto_esc;
 		this->ancho = ancho_esc/2;
 	}
 	else{
 		this->y = 0;
-		this->ancho = alto_esc/2;
+		this->ancho = ancho_esc/2;
 	}
 	this->x = pos_x;
 	this->alto = 0;
 	this->angulo = rot * DEGTORAD;
 	this->estatico = true;
-	this->color = "#000000";
+	this->color = "#111111";
 	this->world = world;
 
 	b2BodyDef cuerpo;

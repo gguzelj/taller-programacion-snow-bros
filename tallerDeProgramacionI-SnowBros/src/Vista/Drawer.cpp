@@ -77,23 +77,26 @@ char* convertir_hex_a_rgb (std::string color){
 void Drawer::drawFigura(Figura* figura){
 	//NOTA: cambiar esto por la forma actual. Vamos a tener que tener en cuenta a los circulos.
 	char* rgb = convertir_hex_a_rgb(figura->getColor());
-	SDL_SetRenderDrawColor(this->renderer, rgb[0], rgb[1], rgb[2], 255); //Color que se va a dibujar el contorno. Esto hay que cambiarlo por el color del objeto
 	int ox = this->ancho_px/2;
 	int oy = this->alto_px/2;
 
 	for( b2Fixture *fixture = figura->GetFixtureList(); fixture; fixture = fixture->GetNext() ){
 		if( fixture->GetType() == b2Shape::e_polygon ){
 			b2PolygonShape *poly = (b2PolygonShape*)fixture->GetShape();
-
 			const int count = poly->GetVertexCount();
+			Sint16* xCoordinatesOfVertexes = (Sint16*) malloc (count+1);
+			Sint16* yCoordinatesOfVertexes = (Sint16*) malloc (count+1);
 
-			for( int i = 0; i < count; i++ ){
-				int ind0 = (i + 1) % count ;
-				b2Vec2 p0 = figura->GetWorldPoint(  poly->GetVertex( ind0 ) );
-				b2Vec2 p1 = figura->GetWorldPoint(  poly->GetVertex(i) );
-
-				SDL_RenderDrawLine(this->renderer, un_to_px_x * p0.x + ox, -un_to_px_y * p0.y + oy , un_to_px_x* p1.x + ox, -un_to_px_y* p1.y + oy);
+			for(int i = 0; i < count ; i++){
+				b2Vec2 p1 = figura->GetWorldPoint(poly->GetVertex(i));
+				xCoordinatesOfVertexes[i] = (Sint16)(un_to_px_x * p1.x + ox);
+				yCoordinatesOfVertexes[i] = (Sint16)(-un_to_px_y * p1.y + oy);
 			}
+
+			filledPolygonRGBA(this->renderer, xCoordinatesOfVertexes, yCoordinatesOfVertexes, count, rgb[0], rgb[1], rgb[2], 255);
+
+			free(xCoordinatesOfVertexes);
+			free(yCoordinatesOfVertexes);
 		}
         else if( fixture->GetType() == b2Shape::e_circle ){
         	Circulo* circ = (Circulo*) figura;

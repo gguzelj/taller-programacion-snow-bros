@@ -11,8 +11,6 @@ Escenario::Escenario(JsonParser *parser) {
         figura_i = new Rectangulo(parser, world_);
         figuras_->push_back(figura_i);
 
-        std::cout << parser->getCantidadObjetos() << std::endl;
-
         // Create all the objects
         for(unsigned int index = 0; index < parser->getCantidadObjetos(); index++){
 

@@ -8,6 +8,7 @@
 #include <sstream>
 #include <fstream>
 #include <streambuf>
+#include "../Log/Log.h"
 
 /**
  * Clase encargada de hacer validaciones para el json
@@ -19,36 +20,35 @@ public:
 	public:
 		int altoPx;
 		int anchoPx;
-		float altoUn;
-		float anchoUn;
+		double altoUn;
+		double anchoUn;
 		std::string imagenFondo;
 	};
 
 	class personaje_t{
 	public:
-		float x;
-		float y;
+		double x;
+		double y;
 	};
 
 	class objeto_t {
 	public:
 		std::string tipo;
-		float x;
-		float y;
-		float escala;
+		double x;
+		double y;
+		double escala;
 		int lados;
-		float ancho;
-		float alto;
-		int inclinacion;
+		int ancho;
+		int alto;
 		std::string color;
 		int rot;
 		int masa;
 		bool estatico;
 	};
 
-	static escenario_t* validarEscenario(Json::Value esc);
-	static personaje_t* validarPersonaje(Json::Value per, escenario_t *esc);
-	static objeto_t* validarObjeto(Json::Value obj, escenario_t *esc);
+	static bool validarEscenario(escenario_t* &escenario, Json::Value esc);
+	static bool validarPersonaje(personaje_t* &personaje, Json::Value per, escenario_t *esc);
+	static bool validarObjeto(objeto_t* &objeto, Json::Value obj, escenario_t *esc);
 
 private:
 
@@ -60,22 +60,22 @@ private:
 	static std::string valImagenFondo(Json::Value esc);
 
 	//Validaciones en el personaje
-	static float valPersonajeCoorX(Json::Value per, escenario_t *esc);
-	static float valPersonajeCoorY(Json::Value per, escenario_t *esc);
+	static bool valPersonajeCoorX(Json::Value per, double &x, escenario_t *esc);
+	static bool valPersonajeCoorY(Json::Value per, double &y, escenario_t *esc);
 
 	//Validaciones de los objetos
-	static std::string valTipoObjeto(Json::Value obj, escenario_t *esc, bool &error);
-	static float valCoorXObjeto(Json::Value obj, escenario_t *esc, bool &error);
-	static float valCoorYObjeto(Json::Value obj, escenario_t *esc, bool &error);
-	static float valEscalaObjeto(Json::Value obj, escenario_t *esc, std::string tipoObjeto, bool &error);
-	static int valLadosObjeto(Json::Value obj, escenario_t *esc, std::string tipoObjeto, bool &error);
-	static float valAnchoObjeto(Json::Value obj, escenario_t *esc, std::string tipoObjeto, bool &error);
-	static float valAltoObjeto(Json::Value obj, escenario_t *esc, std::string tipoObjeto, bool &error);
-	static int valInclinacionObjeto(Json::Value obj, escenario_t *esc, std::string tipoObjeto, bool &error);
-	static std::string valColorObjeto(Json::Value obj, escenario_t *esc, bool &error);
-	static int valRotObjeto(Json::Value obj, escenario_t *esc, bool &error);
-	static int valMasaObjeto(Json::Value obj, escenario_t *esc, bool &error);
-	static bool valEstaticoObjeto(Json::Value obj, escenario_t *esc, bool &error);
+	static bool valTipoObjeto(Json::Value obj, std::string &tipo);
+	static bool valCoorXObjeto(Json::Value obj, double &x, escenario_t *esc);
+	static bool valCoorYObjeto(Json::Value obj, double &y, escenario_t *esc);
+	static bool valEscalaObjeto(Json::Value obj, double &escala);
+	static bool valLadosObjeto(Json::Value obj, int &lados);
+	static bool valAnchoObjeto(Json::Value obj, int &ancho);
+	static bool valAltoObjeto(Json::Value obj, int &alto);
+	static bool valEstaticoObjeto(Json::Value obj, bool &estatico);
+
+	static std::string valColorObjeto(Json::Value obj);
+	static int valRotObjeto(Json::Value obj);
+	static int valMasaObjeto(Json::Value obj);
 
 };
 

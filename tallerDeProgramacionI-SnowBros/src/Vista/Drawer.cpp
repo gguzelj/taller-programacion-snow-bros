@@ -10,8 +10,6 @@ Drawer::Drawer(JsonParser *parser){
 	this->alto_px = parser->getAltoPx();
 	this->imagePath = "resources/" + parser->getImagenFondo();
 
-	cout<<"Ancho: "<<ancho_px<<" Alto: "<<alto_px<<" imagePath: "<<imagePath<<endl;
-
 	this->runWindow(ancho_px,alto_px,imagePath);
 }
 

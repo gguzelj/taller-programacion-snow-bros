@@ -5,17 +5,19 @@
  * encontrar algun error en algun atributo, se lo modifica con un
  * valor valido (de ser posible)
  */
-ParserValidator::escenario_t* ParserValidator::validarEscenario(Json::Value esc){
+bool ParserValidator::validarEscenario(escenario_t* &escenario, Json::Value esc){
 
-	ParserValidator::escenario_t *escenario = new ParserValidator::escenario_t();
+	escenario = new ParserValidator::escenario_t();
 
+	//Los siguientes son campos no obligatorios. En caso de que exista algun error
+	//sera reemplazado ese valor por uno default, y se guardara registro en el log
 	escenario->altoPx = valAltoPx(esc);
 	escenario->anchoPx = valAnchoPx(esc);
 	escenario->altoUn = valAltoUn(esc);
 	escenario->anchoUn = valAnchoUn(esc);
 	escenario->imagenFondo = valImagenFondo(esc);
 
-	return escenario;
+	return false;
 }
 
 /**
@@ -23,14 +25,16 @@ ParserValidator::escenario_t* ParserValidator::validarEscenario(Json::Value esc)
  * encontrar algun error en algun atributo, se lo modifica con un
  * valor valido (de ser posible)
  */
-ParserValidator::personaje_t* ParserValidator::validarPersonaje(Json::Value per, escenario_t *esc){
+bool ParserValidator::validarPersonaje(personaje_t* &personaje, Json::Value per, escenario_t *esc){
 
-	ParserValidator::personaje_t *personaje = new ParserValidator::personaje_t();
+	personaje = new ParserValidator::personaje_t();
 
-	personaje->x = valPersonajeCoorX(per, esc);
-	personaje->y = valPersonajeCoorY(per, esc);
+	//Los siguientes campos son obligatorios para el personaje. En caso de que alguno
+	//de estos valores sea incorrecto, se setea un nuevo juego por default
+	if(valPersonajeCoorX(per, personaje->x, esc)) return true;
+	if(valPersonajeCoorY(per, personaje->y, esc)) return true;
 
-	return personaje;
+	return false;
 }
 
 /**
@@ -39,29 +43,28 @@ ParserValidator::personaje_t* ParserValidator::validarPersonaje(Json::Value per,
  * modifica con un valor valido (de ser posible). En otro caso
  * se devuelve un false
  */
-ParserValidator::objeto_t* ParserValidator::validarObjeto(Json::Value obj, escenario_t *esc){
+bool ParserValidator::validarObjeto(objeto_t* &objeto, Json::Value obj, escenario_t *esc){
 
-	ParserValidator::objeto_t *objeto = new ParserValidator::objeto_t();
-	bool existeError = false;
+	objeto = new ParserValidator::objeto_t();
 
-	objeto->tipo = valTipoObjeto(obj, esc, existeError);
-	objeto->x = valCoorXObjeto(obj, esc, existeError);
-	objeto->y = valCoorYObjeto(obj, esc, existeError);
-	objeto->escala = valEscalaObjeto(obj, esc, objeto->tipo, existeError);
-	objeto->lados = valLadosObjeto(obj, esc, objeto->tipo, existeError);
-	objeto->ancho = valAnchoObjeto(obj, esc, objeto->tipo, existeError);
-	objeto->alto = valAltoObjeto(obj, esc, objeto->tipo, existeError);
-	objeto->color = valColorObjeto(obj, esc, existeError);
-	objeto->rot = valRotObjeto(obj, esc, existeError);
-	objeto->masa = valMasaObjeto(obj, esc, existeError);
-	objeto->estatico = valEstaticoObjeto(obj, esc, existeError);
+	//Los siguientes campos son obligatorios para el objeto. En caso de que alguno
+	//de estos valores sea incorrecto, se setea un nuevo juego por default
+	if(valTipoObjeto(obj, objeto->tipo)) return true;
+	if(valCoorXObjeto(obj, objeto->x, esc)) return true;
+	if(valCoorYObjeto(obj, objeto->y, esc)) return true;
+	if(valEscalaObjeto(obj, objeto->escala)) return true;
+	if(valLadosObjeto(obj, objeto->lados)) return true;
+	if(valAnchoObjeto(obj, objeto->ancho)) return true;
+	if(valAltoObjeto(obj, objeto->alto)) return true;
+	if(valEstaticoObjeto(obj, objeto->estatico)) return true;
 
-	if(existeError){
-		delete objeto;
-		return nullptr;
-	}
+	//Los siguientes son atributos no obligatorios en los objetos. En caso de que alguno
+	//este mal definido, se setea uno default
+	objeto->color = valColorObjeto(obj);
+	objeto->rot = valRotObjeto(obj);
+	objeto->masa = valMasaObjeto(obj);
 
-	return objeto;
+	return false;
 }
 
 
@@ -72,16 +75,21 @@ int ParserValidator::valAltoPx( Json::Value esc ){
 
 	int altoPx;
 
-	if(! esc[ALTO_PX].isInt()){
-		//TODO agregar mensaje en el log
-		altoPx = ALTO_PX_DEF;
-	} else {
-		altoPx = esc.get(ALTO_PX, ALTO_PX_DEF).asInt();
+	if(!esc.isMember(ALTO_PX)){
+		Log::instance()->append(PARSER_WARNING_ESC_ALTO_PX, Log::WARNING);
+		return ALTO_PX_DEF;
 	}
 
+	if(! esc[ALTO_PX].isNumeric()){
+		Log::instance()->append(PARSER_WARNING_ESC_ALTO_PX_NO_NUMBER, Log::WARNING);
+		return ALTO_PX_DEF;
+	}
+
+	altoPx = esc[ALTO_PX].asInt();
+
 	if( altoPx > ALTO_PX_MAX || altoPx < ALTO_PX_MIN ){
-		altoPx = ALTO_PX_DEF;
-		//TODO Agregar mensaje en el log
+		Log::instance()->append(PARSER_WARNING_ESC_ALTO_PX_FUERA_RANGO, Log::WARNING);
+		return ALTO_PX_DEF;
 	}
 
 	return altoPx;
@@ -94,16 +102,21 @@ int ParserValidator::valAnchoPx( Json::Value esc ){
 
 	int anchoPx;
 
-	if(! esc[ANCHO_PX].isInt()){
-		//TODO agregar mensaje en el log
-		anchoPx = ANCHO_PX_DEF;
-	} else {
-		anchoPx = esc.get(ANCHO_PX, ANCHO_PX_DEF).asInt();
+	if(!esc.isMember(ANCHO_PX)){
+		Log::instance()->append(PARSER_WARNING_ESC_ANCHO_PX, Log::WARNING);
+		return ANCHO_PX_DEF;
 	}
 
+	if(! esc[ANCHO_PX].isNumeric()){
+		Log::instance()->append(PARSER_WARNING_ESC_ANCHO_PX_NO_NUMBER, Log::WARNING);
+		return ANCHO_PX_DEF;
+	}
+
+	anchoPx = esc[ANCHO_PX].asInt();
+
 	if( anchoPx > ANCHO_PX_MAX || anchoPx < ANCHO_PX_MIN ){
-		anchoPx = ANCHO_PX_DEF;
-		//TODO Agregar mensaje en el log
+		Log::instance()->append(PARSER_WARNING_ESC_ANCHO_PX_FUERA_RANGO, Log::WARNING);
+		return ANCHO_PX_DEF;
 	}
 
 	return anchoPx;
@@ -116,16 +129,21 @@ int ParserValidator::valAltoUn( Json::Value esc ){
 
 	int altoUn;
 
-	if(! esc[ALTO_UN].isInt()){
-		//TODO agregar mensaje en el log
-		altoUn = ALTO_UN_DEF;
-	} else {
-		altoUn = esc.get(ALTO_UN, ALTO_UN_DEF).asInt();
+	if(!esc.isMember(ALTO_UN)){
+		Log::instance()->append(PARSER_WARNING_ESC_ALTO_UN, Log::WARNING);
+		return ALTO_UN_DEF;
 	}
 
+	if(! esc[ALTO_UN].isNumeric()){
+		Log::instance()->append(PARSER_WARNING_ESC_ALTO_UN_NO_NUMBER, Log::WARNING);
+		return ALTO_UN_DEF;
+	}
+
+	altoUn = esc[ALTO_UN].asInt();
+
 	if( altoUn > ALTO_UN_MAX || altoUn < ALTO_UN_MIN ){
-		altoUn = ALTO_UN_DEF;
-		//TODO Agregar mensaje en el log
+		Log::instance()->append(PARSER_WARNING_ESC_ALTO_UN_FUERA_RANGO, Log::WARNING);
+		return ALTO_UN_DEF;
 	}
 
 	return altoUn;
@@ -138,16 +156,21 @@ int ParserValidator::valAnchoUn( Json::Value esc ){
 
 	int anchoUn;
 
-	if(! esc[ANCHO_UN].isInt()){
-		//TODO agregar mensaje en el log
-		anchoUn = ANCHO_UN_DEF;
-	} else {
-		anchoUn = esc.get(ANCHO_UN, ANCHO_UN_DEF).asInt();
+	if(!esc.isMember(ANCHO_UN)){
+		Log::instance()->append(PARSER_WARNING_ESC_ANCHO_UN, Log::WARNING);
+		return ANCHO_UN_DEF;
 	}
 
+	if(! esc[ANCHO_UN].isNumeric()){
+		Log::instance()->append(PARSER_WARNING_ESC_ANCHO_UN_NO_NUMBER, Log::WARNING);
+		return ANCHO_UN_DEF;
+	}
+
+	anchoUn = esc[ANCHO_UN].asInt();
+
 	if( anchoUn > ANCHO_UN_MAX || anchoUn < ANCHO_UN_MIN ){
-		anchoUn = ANCHO_UN_DEF;
-		//TODO Agregar mensaje en el log
+		Log::instance()->append(PARSER_WARNING_ESC_ANCHO_UN_FUERA_RANGO, Log::WARNING);
+		return ANCHO_UN_DEF;
 	}
 
 	return anchoUn;
@@ -160,17 +183,22 @@ std::string ParserValidator::valImagenFondo( Json::Value esc ){
 
 	std::string imagenFondo;
 
-	if(! esc[IMAGEN_FONDO].isString()){
-		//TODO agregar mensaje en el log
-		imagenFondo = IMAGEN_FONDO_DEF;
-	} else {
-		imagenFondo = esc.get(IMAGEN_FONDO, IMAGEN_FONDO_DEF).asString();
+	if(!esc.isMember(IMAGEN_FONDO)){
+		Log::instance()->append(PARSER_WARNING_ESC_IMAGEN_FONDO, Log::WARNING);
+		return IMAGEN_FONDO_DEF;
 	}
+
+	if(! esc[IMAGEN_FONDO].isString()){
+		Log::instance()->append(PARSER_WARNING_ESC_IMAGEN_FONDO_NO_STRING, Log::WARNING);
+		return IMAGEN_FONDO_DEF;
+	}
+
+	imagenFondo = esc[IMAGEN_FONDO].asString();
 
 	std::ifstream file(imagenFondo);
 	if (!file.good()){
-		imagenFondo = IMAGEN_FONDO_DEF;
-		//TODO Agregar mensaje en el log
+		Log::instance()->append(PARSER_WARNING_ESC_IMAGEN_FONDO_NO_EXISTE, Log::WARNING);
+		return IMAGEN_FONDO_DEF;
 	}
 
 	return imagenFondo;
@@ -179,269 +207,317 @@ std::string ParserValidator::valImagenFondo( Json::Value esc ){
 /**
  * Validamos la coordenada X del personaje
  */
-float ParserValidator::valPersonajeCoorX(Json::Value per, escenario_t *esc){
+bool ParserValidator::valPersonajeCoorX(Json::Value per, double &x, escenario_t *esc){
 
-	double coorX;
-
-	//Validamos la coordenada X del personaje
-	if(! per[X_COOR].isDouble()){
-		//TODO agregar mensaje en el log
-		coorX = X_COOR_DEF;
-	} else {
-		coorX = per.get(X_COOR, X_COOR_DEF).asDouble();
+	if(!per.isMember(X_COOR)){
+		Log::instance()->append(PARSER_ERROR_PER_COOR_X, Log::ERROR);
+		return true;
 	}
 
-	//Validaciones del personaje
-	if(	coorX < 0 || coorX > esc->anchoPx ){
-		coorX = X_COOR_DEF;
+	if(!per[X_COOR].isNumeric()){
+		Log::instance()->append(PARSER_ERROR_PER_COOR_X_NO_NUMBER, Log::ERROR);
+		return true;
 	}
 
-	return (float) coorX;
+	x = per[X_COOR].asDouble();
+	double margen = esc->anchoUn / 2;
+
+	//Validamos que la coordenada X exista dentro del escenario del juego
+	if(	abs(x) > margen ){
+		Log::instance()->append(PARSER_ERROR_PER_COOR_X_FUERA_RANGO, Log::ERROR);
+		return true;
+	}
+
+	return false;
 }
 
 /**
  * Validamos la coordenada Y del personaje
  */
-float ParserValidator::valPersonajeCoorY(Json::Value per, escenario_t *esc){
+bool ParserValidator::valPersonajeCoorY(Json::Value per, double &y, escenario_t *esc){
 
-	double coorY;
-
-	//Validamos la coordenada X del personaje
-	if(! per[Y_COOR].isDouble()){
-		//TODO agregar mensaje en el log
-		coorY = Y_COOR_DEF;
-	} else {
-		coorY = per.get(Y_COOR, Y_COOR_DEF).asDouble();
+	if(!per.isMember(Y_COOR)){
+		Log::instance()->append(PARSER_ERROR_PER_COOR_Y, Log::ERROR);
+		return true;
 	}
 
-	//Validaciones del personaje
-	if(	coorY < 0 || coorY > esc->anchoPx ){
-		coorY = Y_COOR_DEF;
+	if(!per[Y_COOR].isNumeric()){
+		Log::instance()->append(PARSER_ERROR_PER_COOR_Y_NO_NUMBER, Log::ERROR);
+		return true;
 	}
 
-	return (float) coorY;
+	y = per[Y_COOR].asDouble();
+	double margen = esc->altoUn / 2;
+
+	//Validamos que la coordenada X exista dentro del escenario del juego
+	if(	abs(y) > margen ){
+		Log::instance()->append(PARSER_ERROR_PER_COOR_Y_FUERA_RANGO, Log::ERROR);
+		return true;
+	}
+
+	return false;
 }
 
 /**
  * Validaciones en el tipo de objeto
  */
-std::string ParserValidator::valTipoObjeto(Json::Value obj, escenario_t *esc, bool &error){
+bool ParserValidator::valTipoObjeto(Json::Value obj, std::string &tipo){
 
-	std::string tipoObjeto;
-
-	if(! obj[TIPO].isString()){
-		//TODO agregar mensaje en el log
-		error = true;
-	} else {
-		tipoObjeto = obj[TIPO].asString();
+	if(!obj.isMember(TIPO)){
+		Log::instance()->append(PARSER_ERROR_OBJ_TIPO, Log::ERROR);
+		return true;
 	}
 
-	if(	tipoObjeto != RECTANGULO && tipoObjeto != CIRCULO &&
-		tipoObjeto != PARALELOGRAMO && tipoObjeto != POLIGONO &&
-		tipoObjeto != TRAPECIO){
-		//TODO Agregar error
-		error = true;
+	if(!obj[TIPO].isString()){
+		Log::instance()->append(PARSER_ERROR_OBJ_TIPO_NO_STRING, Log::ERROR);
+		return true;
 	}
 
-	return tipoObjeto;
+	tipo = obj[TIPO].asString();
+
+	if(	tipo != RECTANGULO && tipo!= CIRCULO &&
+		tipo!= PARALELOGRAMO && tipo!= POLIGONO ){
+		Log::instance()->append(PARSER_ERROR_OBJ_TIPO_DESCONOCIDO, Log::ERROR);
+		return true;
+	}
+
+	return false;
 }
 
 /**
  * Validamos la coordenada X del objeto
  */
-float ParserValidator::valCoorXObjeto(Json::Value obj, escenario_t *esc, bool &error){
+bool ParserValidator::valCoorXObjeto(Json::Value obj, double &x, escenario_t *esc){
 
-	double coorX;
-
-	//Validamos la coordenada X del objeto
-	if(! obj[X_COOR].isDouble()){
-		//TODO agregar mensaje en el log
-		error = true;
-	} else {
-		coorX = obj[X_COOR].asDouble();
+	if(!obj.isMember(X_COOR)){
+		Log::instance()->append(PARSER_ERROR_OBJ_COOR_X, Log::ERROR);
+		return true;
 	}
 
-//	//Validaciones de la coordenada
-//	if(	coorX < 0 || coorX > esc->anchoPx ){
-//		error = true;
-//	}
+	if(!obj[X_COOR].isNumeric()){
+		Log::instance()->append(PARSER_ERROR_OBJ_COOR_X_NO_NUMBER, Log::ERROR);
+		return true;
+	}
 
-	return (float) coorX;
+	x = obj[X_COOR].asDouble();
+	double margen = esc->anchoUn / 2;
+
+	//Validamos que la coordenada X exista dentro del escenario del juego
+	if(	abs(x) > margen ){
+		Log::instance()->append(PARSER_ERROR_OBJ_COOR_X_FUERA_RANGO, Log::ERROR);
+		return true;
+	}
+
+	return false;
 }
 
 /**
  * Validamos la coordenada Y del objeto
  */
-float ParserValidator::valCoorYObjeto(Json::Value obj, escenario_t *esc, bool &error){
+bool ParserValidator::valCoorYObjeto(Json::Value obj, double &y, escenario_t *esc){
 
-	double coorY;
-
-	//Validamos la coordenada Y del objeto
-	if(! obj[Y_COOR].isDouble()){
-		//TODO agregar mensaje en el log
-		error = true;
-	} else {
-		coorY = obj[Y_COOR].asDouble();
+	if(!obj.isMember(Y_COOR)){
+		Log::instance()->append(PARSER_ERROR_OBJ_COOR_Y, Log::ERROR);
+		return true;
 	}
 
-	//Validaciones de la coordenada
-	//if(	coorY < 0 || coorY > esc->altoPx ){
-		//error = true;
-	//}
+	if(!obj[Y_COOR].isNumeric()){
+		Log::instance()->append(PARSER_ERROR_OBJ_COOR_Y_NO_NUMBER, Log::ERROR);
+		return true;
+	}
 
-	return (float) coorY;
+	y = obj[Y_COOR].asDouble();
+	double margen = esc->altoUn / 2;
+
+	//Validamos que la coordenada X exista dentro del escenario del juego
+	if(	abs(y) > margen ){
+		Log::instance()->append(PARSER_ERROR_OBJ_COOR_Y_FUERA_RANGO, Log::ERROR);
+		return true;
+	}
+
+	return false;
 }
 
 /**
  * Validamos la escala del objeto
+ * Para que valide correctamente ya se tendria que haber validado el tipo de objeto
  */
-float ParserValidator::valEscalaObjeto(Json::Value obj, escenario_t *esc, std::string tipoObjeto, bool &error){
+bool ParserValidator::valEscalaObjeto(Json::Value obj, double &escala){
 
-	float escala;
+	//Podemos leer este atributo porque ya sabemos que es valido
+	std::string tipoObjeto = obj[TIPO].asString();
 
-	if(tipoObjeto != POLIGONO) return 0;
+	//Los rectangulos y paralelogramos no tienen escala
+	if( tipoObjeto == RECTANGULO || tipoObjeto == PARALELOGRAMO ) return false;
 
-	//Validamos la escala del objeto
-	if(! obj[ESCALA].isDouble()){
-		//TODO agregar mensaje en el log
-		error = true;
-	} else {
-		escala = obj.get(ESCALA, -1).asDouble();
+	//En cualquier otro caso, es un atributo obligatorio
+	if(!obj.isMember(ESCALA)){
+		Log::instance()->append(PARSER_ERROR_OBJ_ESCALA, Log::ERROR);
+		return true;
 	}
 
-	//Validaciones de la coordenada
+	if(!obj[ESCALA].isNumeric()){
+		Log::instance()->append(PARSER_ERROR_OBJ_ESCALA_NO_NUMBER, Log::ERROR);
+		return true;
+	}
+
+	escala = obj[ESCALA].asDouble();
+
+	//Validamos si la escala existe entre el rango permitido
 	if(	escala < ESCALA_MIN || escala > ESCALA_MAX ){
-		//TODO agregar mensaje en el log
-		error = true;
+		Log::instance()->append(PARSER_ERROR_OBJ_ESCALA_FUERA_RANGO, Log::ERROR);
+		return true;
 	}
 
-	return (float) escala;
+	return false;
 }
-/*
- * Validamos los lados del objeto
+
+/**
+ * Validamos la cantidad de lados del objeto
  */
-int ParserValidator::valLadosObjeto(Json::Value obj, escenario_t *esc, std::string tipoObjeto, bool &error){
+bool ParserValidator::valLadosObjeto(Json::Value obj, int &lados){
 
-	int lados;
+	//Podemos leer este atributo porque ya sabemos que es valido
+	std::string tipoObjeto = obj[TIPO].asString();
 
-	if(tipoObjeto != POLIGONO) return 0;
+	//Los poligonos solo son los unicos que necesitan definir #lados
+	if( tipoObjeto != POLIGONO) return false;
 
-	//Validamos que hay lados
-	if(! obj[LADOS].isInt()){
-		//TODO agregar mensaje en el log
-		error = true;
-	} else{
-		lados = obj.get(LADOS, -1).asInt();
+	if(!obj.isMember(LADOS)){
+		Log::instance()->append(PARSER_ERROR_OBJ_LADOS, Log::ERROR);
+		return true;
 	}
 
-	//Validamos valores permitidos
-	if( lados < LADOS_MIN || lados > LADOS_MAX){
-		//TODO agregar mensaje en el log
-		error = true;
+	if(!obj[LADOS].isNumeric()){
+		Log::instance()->append(PARSER_ERROR_OBJ_LADOS_NO_NUMBER, Log::ERROR);
+		return true;
 	}
-	lados = obj.get(LADOS, -1).asInt();
 
-	return lados;
+	lados = obj[LADOS].asInt();
+
+	if(	lados < LADOS_MIN || lados > LADOS_MAX ){
+		Log::instance()->append(PARSER_ERROR_OBJ_LADOS_FUERA_RANGO, Log::ERROR);
+		return true;
+	}
+
+	return false;
 }
 
 /**
  * Validamos el ancho del objeto
  */
-float ParserValidator::valAnchoObjeto(Json::Value obj, escenario_t *esc, std::string tipoObjeto, bool &error){
+bool ParserValidator::valAnchoObjeto(Json::Value obj, int &ancho){
 
-	double ancho;
+	//Podemos leer este atributo porque ya sabemos que es valido
+	std::string tipoObjeto = obj[TIPO].asString();
 
-	if(tipoObjeto != RECTANGULO && tipoObjeto != PARALELOGRAMO) return 0;
+	//Los poligonos no necesitan ancho
+	if( tipoObjeto == POLIGONO) return false;
 
-	//Validamos el ancho del objeto
-	if(! obj[ANCHO].isDouble()){
-		//TODO agregar mensaje en el log
-		error = true;
-	} else {
-		ancho = obj[ANCHO].asFloat();
+	if(!obj.isMember(ANCHO)){
+		Log::instance()->append(PARSER_ERROR_OBJ_ANCHO, Log::ERROR);
+		return true;
 	}
 
-	//Validaciones del ancho del objeto
+	if(!obj[ANCHO].isNumeric()){
+		Log::instance()->append(PARSER_ERROR_OBJ_ANCHO_NO_NUMBER, Log::ERROR);
+		return true;
+	}
+
+	ancho = obj[ANCHO].asInt();
+
 	if(	ancho < ANCHO_MIN || ancho > ANCHO_MAX ){
-		error = true;
+		Log::instance()->append(PARSER_ERROR_OBJ_ANCHO_FUERA_RANGO, Log::ERROR);
+		return true;
 	}
 
-	return ancho;
+	return false;
 }
 
 /**
  * Validamos el alto del objeto
  */
-float ParserValidator::valAltoObjeto(Json::Value obj, escenario_t *esc, std::string tipoObjeto, bool &error){
+bool ParserValidator::valAltoObjeto(Json::Value obj, int &alto){
 
-	double alto;
+	//Podemos leer este atributo porque ya sabemos que es valido
+	std::string tipoObjeto = obj[TIPO].asString();
 
-	if(tipoObjeto != RECTANGULO && tipoObjeto != PARALELOGRAMO) return 0;
+	//Los poligonos no necesitan alto
+	if( tipoObjeto == POLIGONO) return false;
 
-	//Validamos el alto del objeto
-	if(! obj[ALTO].isDouble()){
-		//TODO agregar mensaje en el log
-		error = true;
-	} else {
-		alto = obj[ALTO].asFloat();
+	if(!obj.isMember(ALTO)){
+		Log::instance()->append(PARSER_ERROR_OBJ_ALTO, Log::ERROR);
+		return true;
 	}
 
-	//Validamos valores permitidos
+	if(!obj[ALTO].isNumeric()){
+		Log::instance()->append(PARSER_ERROR_OBJ_ALTO_NO_NUMBER, Log::ERROR);
+		return true;
+	}
+
+	alto = obj[ALTO].asInt();
+
 	if(	alto < ALTO_MIN || alto > ALTO_MAX ){
-		error = true;
+		Log::instance()->append(PARSER_ERROR_OBJ_ALTO_FUERA_RANGO, Log::ERROR);
+		return true;
 	}
 
-	return alto;
+	return false;
 }
 
-/*
- * Validamos la inclinacion (solo de paralelogramos)
+/**
+ * Validaciones en flag de estatico del objeto
  */
-int ParserValidator::valInclinacionObjeto(Json::Value obj, escenario_t *esc, std::string tipoObjeto, bool &error){
+bool ParserValidator::valEstaticoObjeto(Json::Value obj, bool &estatico){
 
-	int inclinacion;
-
-	if(tipoObjeto != PARALELOGRAMO) return 0;
-	if(! obj[INCLINACION].isInt()){
-		//TODO agregar mensaje en el log
-		error = true;
-	} else{
-		inclinacion = obj[INCLINACION].asInt();
+	if(!obj.isMember(ESTATICO)){
+		Log::instance()->append(PARSER_ERROR_OBJ_ESTATICO, Log::ERROR);
+		return true;
 	}
 
-	//Validamos valores permitidos
-	if(inclinacion < INC_MIN){
-		//TODO agregar mensaje en el log
-		error = true;
+	if(!obj[ESTATICO].isBool()){
+		Log::instance()->append(PARSER_ERROR_OBJ_ESTATICO_NO_BOOL, Log::ERROR);
+		return true;
 	}
 
-	return inclinacion;
+	estatico = obj[ESTATICO].asBool();
+
+	return false;
 }
 
 /**
  * Validamos el color del objeto
  */
-std::string ParserValidator::valColorObjeto(Json::Value obj, escenario_t *esc, bool &error){
+std::string ParserValidator::valColorObjeto(Json::Value obj){
 
 	std::string color;
 	int num;
 	unsigned int R,G,B;
 
-	//Validamos el color del objeto
-	if(obj[COLOR].isString())
-		color = obj[COLOR].asString();
-
-	if(color.size() >= 7 ){
-		  std::stringstream ss(color.substr(1,7));
-		  ss >> std::hex >> num;
-
-		  R = num / 0x10000;
-		  G = (num / 0x100) % 0x100;
-		  B = num % 0x100;
-
-	} else {
-		color = COLOR_DEF;
+	if(!obj.isMember(COLOR)){
+		Log::instance()->append(PARSER_WARNING_OBJ_COLOR, Log::WARNING);
+		return COLOR_DEF;
 	}
+
+	if(!obj[COLOR].isString()){
+		Log::instance()->append(PARSER_WARNING_OBJ_COLOR_NO_STRING, Log::WARNING);
+		return COLOR_DEF;
+	}
+
+	color = obj[COLOR].asString();
+
+	//Validamos que el color del objeto sea valido
+	if(color.size() != 7 ){
+		Log::instance()->append(PARSER_WARNING_OBJ_COLOR_DESCONOCIDO, Log::WARNING);
+		return COLOR_DEF;
+	}
+
+	std::stringstream ss(color.substr(1,7));
+	ss >> std::hex >> num;
+
+	R = num / 0x10000;
+	G = (num / 0x100) % 0x100;
+	B = num % 0x100;
 
 	if( ( R >= 0 && R <= 255 ) &&
 		( G >= 0 && G <= 255 ) &&
@@ -453,22 +529,32 @@ std::string ParserValidator::valColorObjeto(Json::Value obj, escenario_t *esc, b
 /**
  * Validamos la rotacion del objeto
  */
-int ParserValidator::valRotObjeto(Json::Value obj, escenario_t *esc, bool &error){
+int ParserValidator::valRotObjeto(Json::Value obj){
 
 	int rotacion;
 
-	//Validamos la rotacion del objeto
-	if(! obj[ROT].isInt()){
-		//TODO agregar mensaje en el log
-		error = true;
-	} else {
-		rotacion = obj[ROT].asInt();
+	//Podemos leer este atributo porque ya sabemos que es valido
+	std::string tipoObjeto = obj[TIPO].asString();
+
+	//Los circulo no tienen rotacion
+	if( tipoObjeto == CIRCULO) return false;
+
+	if(!obj.isMember(ROT)){
+		Log::instance()->append(PARSER_WARNING_OBJ_ROT, Log::WARNING);
+		return ROT_DEF;
 	}
+
+	if(!obj[ROT].isNumeric()){
+		Log::instance()->append(PARSER_WARNING_OBJ_ROT_NO_NUMBER, Log::WARNING);
+		return ROT_DEF;
+	}
+
+	rotacion = obj[ROT].asInt();
 
 	//Validaciones de la rotacion del objeto
 	if(	rotacion < ROT_MIN || rotacion > ROT_MAX ){
-		rotacion = ROT_DEF;
-		//TODO Agregar error
+		Log::instance()->append(PARSER_WARNING_OBJ_ROT_FUERA_RANGO, Log::WARNING);
+		return ROT_DEF;
 	}
 
 	return rotacion;
@@ -477,41 +563,27 @@ int ParserValidator::valRotObjeto(Json::Value obj, escenario_t *esc, bool &error
 /**
  * Validamos la masa del objeto
  */
-int ParserValidator::valMasaObjeto(Json::Value obj, escenario_t *esc, bool &error){
+int ParserValidator::valMasaObjeto(Json::Value obj){
 
 	int masa;
 
-	//Validamos la masa del objeto
-	if(! obj[MASA].isInt()){
-		//TODO agregar mensaje en el log
-		error = true;
-	} else {
-		masa = obj[MASA].asInt();
+	if(!obj.isMember(MASA)){
+		Log::instance()->append(PARSER_WARNING_OBJ_MASA, Log::WARNING);
+		return MASA_DEF;
 	}
+
+	if(!obj[MASA].isNumeric()){
+		Log::instance()->append(PARSER_WARNING_OBJ_MASA_NO_NUMBER, Log::WARNING);
+		return MASA_DEF;
+	}
+
+	masa = obj[MASA].asInt();
 
 	//Validaciones de la masa del objeto
 	if(	masa < MASA_MIN || masa > MASA_MAX ){
-		masa = MASA_DEF;
-		//TODO Agregar error
+		Log::instance()->append(PARSER_WARNING_OBJ_MASA_FUERA_RANGO, Log::WARNING);
+		return MASA_DEF;
 	}
 
 	return masa;
-}
-
-/**
- * Validaciones en flag de estatico del objeto
- */
-bool ParserValidator::valEstaticoObjeto(Json::Value obj, escenario_t *esc, bool &error){
-
-	int estatico;
-
-	//Validamos el flag estatico del objeto
-	if(! obj[ESTATICO].isBool()){
-		//TODO agregar mensaje en el log
-		error = true;
-	} else {
-		estatico = obj[ESTATICO].asBool();
-	}
-
-	return estatico;
 }

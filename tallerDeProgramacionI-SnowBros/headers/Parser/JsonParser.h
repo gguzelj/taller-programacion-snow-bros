@@ -40,7 +40,6 @@ public:
 	int			getLadosObjeto(unsigned int index);
 	float 		getAnchoObjeto(unsigned int index);
 	float		getAltoObjeto(unsigned int index);
-	int			getInclinacionObjeto(unsigned int index);
 	std::string getColorObjeto(unsigned int index);
 	int 		getRotObjeto(unsigned int index);
 	float 		getMasaObjeto(unsigned int index);
@@ -63,9 +62,9 @@ private:
 	//Metodos
 	bool setDefaultValues();
 	bool setValuesFromFile();
-	void parseEscenario(Json::Value escenario);
-	void parsePersonaje(Json::Value personaje);
-	void parseObjetos(Json::Value objetos);
+	bool parseEscenario(Json::Value root);
+	bool parsePersonaje(Json::Value root);
+	bool parseObjetos(Json::Value root);
 
 };
 

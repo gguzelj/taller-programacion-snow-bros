@@ -4,12 +4,12 @@
         "ancho-px":1024,
         "alto-un":19.2,
         "ancho-un":25.6,
-        "imagen_fondo":"Everest.png",
-        "personaje": {"x": 100,"y":100},
+        "imagen_fondo":"Everest.jpg",
+        "personaje": {"x": 0,"y":0},
         "objetos": [
                      {
                        "tipo":"rectangulo",
-                       "x":1,
+                       "x":1.00,
                        "y":0,
                        "ancho":8,
                        "alto":1,

@@ -25,6 +25,10 @@ private:
 	string imagePath;
 	int ancho_px;
 	int alto_px;
+	float alto_un;
+	float ancho_un;
+	float un_to_px_x;
+	float un_to_px_y;
 
 	void runWindow(int ancho_px ,int alto_px ,string imagePath);
 

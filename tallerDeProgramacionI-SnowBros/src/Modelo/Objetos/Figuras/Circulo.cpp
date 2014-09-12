@@ -3,7 +3,10 @@
 Circulo::Circulo(JsonParser *parser, int index, b2World* world){
 	this->x = parser->getCoorXObjeto(index);
 	this->y = parser->getCoorYObjeto(index);
-	this->radio = 1; //Cambiar cuando el parser tenga el metodo getEscalaObjeto
+
+	std::cout << "x: " << x << " y: " << y << std::endl;
+
+	this->radio = parser->getEscalaObjeto(index);
 	this->masa = parser->getMasaObjeto(index);
 	this->angulo = parser->getRotObjeto(index);
 	this->estatico = parser->esObjetoEstatico(index);
@@ -21,12 +24,15 @@ Circulo::Circulo(JsonParser *parser, int index, b2World* world){
 
 	//definiendo ahora el fixture del circulo
 	b2CircleShape circleShape;
-	circleShape.m_p.Set(x, y); 			//posicion en offset del cuerpoDeCirculo.position.Set(x,y);
 	circleShape.m_radius = radio;
 	b2FixtureDef fixture;				//creo el fixture
 	fixture.shape = &circleShape;		//le asigno la forma que determine antes
-	fixture.density = masa / (radio*radio*3.141596);
+	fixture.density = masa / (radio*radio*M_PI);
 	body->CreateFixture(&fixture);
+
+	b2Vec2 vec = this->body->GetPosition();
+
+	std::cout << "Real x: " << vec.x << " Real y: " << vec.y << std::endl;
 }
 
 Circulo::~Circulo(){

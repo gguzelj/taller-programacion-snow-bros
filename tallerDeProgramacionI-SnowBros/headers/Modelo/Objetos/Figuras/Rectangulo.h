@@ -5,8 +5,8 @@
 
 class Rectangulo : public Figura {
 private:
-	int ancho;
-	int alto;
+	float ancho;
+	float alto;
 public:
 	Rectangulo(JsonParser *parser, int index, b2World* world);
 

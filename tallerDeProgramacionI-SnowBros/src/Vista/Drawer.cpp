@@ -8,7 +8,12 @@ Drawer::Drawer(JsonParser *parser){
 	//Utilizar parser para obtener las definciones necesarias para crear objetos
 	this->ancho_px = parser->getAnchoPx();
 	this->alto_px = parser->getAltoPx();
+	this->alto_un = parser->getAltoUnEscenario();
+	this->ancho_un = parser->getAnchoUnEscenario();
 	this->imagePath = "resources/" + parser->getImagenFondo();
+
+	this->un_to_px_x = ancho_px/ancho_un;
+	this->un_to_px_y = alto_px/alto_un;
 
 	this->runWindow(ancho_px,alto_px,imagePath);
 }
@@ -75,7 +80,6 @@ void Drawer::drawFigura(Figura* figura){
 	SDL_SetRenderDrawColor(this->renderer, rgb[0], rgb[1], rgb[2], 255); //Color que se va a dibujar el contorno. Esto hay que cambiarlo por el color del objeto
 	int ox = this->ancho_px/2;
 	int oy = this->alto_px/2;
-	float un_to_px = 40.0;
 
 	for( b2Fixture *fixture = figura->GetFixtureList(); fixture; fixture = fixture->GetNext() ){
 		if( fixture->GetType() == b2Shape::e_polygon ){
@@ -88,13 +92,15 @@ void Drawer::drawFigura(Figura* figura){
 				b2Vec2 p0 = figura->GetWorldPoint(  poly->GetVertex( ind0 ) );
 				b2Vec2 p1 = figura->GetWorldPoint(  poly->GetVertex(i) );
 
-				SDL_RenderDrawLine(this->renderer, un_to_px * p0.x + ox, -un_to_px * p0.y + oy , un_to_px* p1.x + ox, -un_to_px* p1.y + oy);
+				SDL_RenderDrawLine(this->renderer, un_to_px_x * p0.x + ox, -un_to_px_y * p0.y + oy , un_to_px_x* p1.x + ox, -un_to_px_y* p1.y + oy);
 			}
 		}
         else if( fixture->GetType() == b2Shape::e_circle ){
-        	std::cout << "Llegue al circulo. x: " << figura->x * un_to_px + ox << " y: " << figura->y * un_to_px + oy << std::endl;
+        	std::cout << "Llegue al circulo. x: " << figura->x * un_to_px_x + ox << " y: " << figura->y * un_to_px_y + oy << std::endl;
         	std::cout << "Radio: " << ((Circulo*)figura)->getRadio() << std::endl;
-        	//filledCircleRGBA(this->renderer, figura->x * un_to_px + ox, figura->y * un_to_px + oy, ((Circulo*)figura)->getRadio() * un_to_px, 50, 50, 50, 255);
+        	filledEllipseRGBA(this->renderer, figura->x * un_to_px_x + ox, figura->y * -un_to_px_y + oy,
+        					 ((Circulo*)figura)->getRadio() * un_to_px_x, ((Circulo*)figura)->getRadio() * un_to_px_y,
+        					 rgb[0], rgb[1], rgb[2], 255);
         }
 	}
 }

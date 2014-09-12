@@ -38,13 +38,13 @@ void Log::append(std::string msg, LOG_TYPE logType) {
 
 	switch (logType) {
 	case INFO:
-		dataInfo_.append(timestamp() + ": " + msg);
+		dataInfo_.append(timestamp() + ": " + msg + "\n");
 		break;
 	case WARNING:
-		dataWarning_.append(timestamp() + ": " + msg);
+		dataWarning_.append(timestamp() + ": " + msg + "\n");
 		break;
 	case ERROR:
-		dataError_.append(timestamp() + ": " + msg);
+		dataError_.append(timestamp() + ": " + msg + "\n");
 		break;
 	}
 

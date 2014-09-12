@@ -27,7 +27,7 @@
                        "color":"#00FFFF",
                        "rot":0,
                        "masa":3,
-                       "estatico":true
+                       "estatico":false
                      },
                      {
                        "tipo":"poligono",
@@ -38,7 +38,7 @@
                        "color":"#00FF00",
                        "rot":0,
                        "masa":3,
-                       "estatico":false
+                       "estatico":true
                      }
                    ]
     }

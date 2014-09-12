@@ -19,11 +19,10 @@
                        "estatico":true
                      },
                      {
-                       "tipo":"rectangulo",
+                       "tipo":"circulo",
                        "x":3,
                        "y":8,
-                       "ancho":1,
-                       "alto":2,
+                       "escala":2,
                        "color":"#00FFFF",
                        "rot":0,
                        "masa":3,

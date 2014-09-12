@@ -125,9 +125,9 @@ int ParserValidator::valAnchoPx( Json::Value esc ){
 /**
  * Validaciones en el Alto en unidades
  */
-int ParserValidator::valAltoUn( Json::Value esc ){
+double ParserValidator::valAltoUn( Json::Value esc ){
 
-	int altoUn;
+	double altoUn;
 
 	if(!esc.isMember(ALTO_UN)){
 		Log::instance()->append(PARSER_WARNING_ESC_ALTO_UN, Log::WARNING);
@@ -152,9 +152,9 @@ int ParserValidator::valAltoUn( Json::Value esc ){
 /**
  * Validaciones en el ancho en unidades
  */
-int ParserValidator::valAnchoUn( Json::Value esc ){
+double ParserValidator::valAnchoUn( Json::Value esc ){
 
-	int anchoUn;
+	double anchoUn;
 
 	if(!esc.isMember(ANCHO_UN)){
 		Log::instance()->append(PARSER_WARNING_ESC_ANCHO_UN, Log::WARNING);
@@ -411,8 +411,8 @@ bool ParserValidator::valAnchoObjeto(Json::Value obj, int &ancho){
 	//Podemos leer este atributo porque ya sabemos que es valido
 	std::string tipoObjeto = obj[TIPO].asString();
 
-	//Los poligonos no necesitan ancho
-	if( tipoObjeto == POLIGONO) return false;
+	//Los poligonos y los circulos no necesitan ancho
+	if( tipoObjeto == POLIGONO || tipoObjeto == CIRCULO ) return false;
 
 	if(!obj.isMember(ANCHO)){
 		Log::instance()->append(PARSER_ERROR_OBJ_ANCHO, Log::ERROR);
@@ -442,8 +442,8 @@ bool ParserValidator::valAltoObjeto(Json::Value obj, int &alto){
 	//Podemos leer este atributo porque ya sabemos que es valido
 	std::string tipoObjeto = obj[TIPO].asString();
 
-	//Los poligonos no necesitan alto
-	if( tipoObjeto == POLIGONO) return false;
+	//Los poligonos y los circulos no necesitan alto
+	if( tipoObjeto == POLIGONO || tipoObjeto == CIRCULO ) return false;
 
 	if(!obj.isMember(ALTO)){
 		Log::instance()->append(PARSER_ERROR_OBJ_ALTO, Log::ERROR);

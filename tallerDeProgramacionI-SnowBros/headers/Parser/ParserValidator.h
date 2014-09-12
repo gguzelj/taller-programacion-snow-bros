@@ -55,8 +55,8 @@ private:
 	//Validaciones en el escenario
 	static int valAltoPx(Json::Value esc);
 	static int valAnchoPx(Json::Value esc);
-	static int valAltoUn(Json::Value esc);
-	static int valAnchoUn(Json::Value esc);
+	static double valAltoUn(Json::Value esc);
+	static double valAnchoUn(Json::Value esc);
 	static std::string valImagenFondo(Json::Value esc);
 
 	//Validaciones en el personaje

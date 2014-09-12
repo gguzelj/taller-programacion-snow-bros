@@ -3,9 +3,6 @@
 Circulo::Circulo(JsonParser *parser, int index, b2World* world){
 	this->x = parser->getCoorXObjeto(index);
 	this->y = parser->getCoorYObjeto(index);
-
-	std::cout << "x: " << x << " y: " << y << std::endl;
-
 	this->radio = parser->getEscalaObjeto(index);
 	this->masa = parser->getMasaObjeto(index);
 	this->angulo = parser->getRotObjeto(index);
@@ -31,8 +28,6 @@ Circulo::Circulo(JsonParser *parser, int index, b2World* world){
 	body->CreateFixture(&fixture);
 
 	b2Vec2 vec = this->body->GetPosition();
-
-	std::cout << "Real x: " << vec.x << " Real y: " << vec.y << std::endl;
 }
 
 Circulo::~Circulo(){
@@ -42,3 +37,15 @@ Circulo::~Circulo(){
 float Circulo::getRadio(){
 	return radio;
 }
+
+float Circulo::getCoordX(){
+	b2Vec2 vec = this->body->GetPosition();
+	return vec.x;
+}
+
+float Circulo::getCoordY(){
+	b2Vec2 vec = this->body->GetPosition();
+	return vec.y;
+}
+
+

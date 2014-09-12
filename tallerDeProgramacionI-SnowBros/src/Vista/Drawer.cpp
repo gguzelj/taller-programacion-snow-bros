@@ -96,10 +96,9 @@ void Drawer::drawFigura(Figura* figura){
 			}
 		}
         else if( fixture->GetType() == b2Shape::e_circle ){
-        	std::cout << "Llegue al circulo. x: " << figura->x * un_to_px_x + ox << " y: " << figura->y * un_to_px_y + oy << std::endl;
-        	std::cout << "Radio: " << ((Circulo*)figura)->getRadio() << std::endl;
-        	filledEllipseRGBA(this->renderer, figura->x * un_to_px_x + ox, figura->y * -un_to_px_y + oy,
-        					 ((Circulo*)figura)->getRadio() * un_to_px_x, ((Circulo*)figura)->getRadio() * un_to_px_y,
+        	Circulo* circ = (Circulo*) figura;
+        	filledEllipseRGBA(this->renderer, circ->getCoordX() * un_to_px_x + ox, circ->getCoordY() * -un_to_px_y + oy,
+        					 circ->getRadio() * un_to_px_x, circ->getRadio() * un_to_px_y,
         					 rgb[0], rgb[1], rgb[2], 255);
         }
 	}

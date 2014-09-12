@@ -139,7 +139,7 @@ int ParserValidator::valAltoUn( Json::Value esc ){
 		return ALTO_UN_DEF;
 	}
 
-	altoUn = esc[ALTO_UN].asInt();
+	altoUn = esc[ALTO_UN].asDouble();
 
 	if( altoUn > ALTO_UN_MAX || altoUn < ALTO_UN_MIN ){
 		Log::instance()->append(PARSER_WARNING_ESC_ALTO_UN_FUERA_RANGO, Log::WARNING);
@@ -166,7 +166,7 @@ int ParserValidator::valAnchoUn( Json::Value esc ){
 		return ANCHO_UN_DEF;
 	}
 
-	anchoUn = esc[ANCHO_UN].asInt();
+	anchoUn = esc[ANCHO_UN].asDouble();
 
 	if( anchoUn > ANCHO_UN_MAX || anchoUn < ANCHO_UN_MIN ){
 		Log::instance()->append(PARSER_WARNING_ESC_ANCHO_UN_FUERA_RANGO, Log::WARNING);

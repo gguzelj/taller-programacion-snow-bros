@@ -47,9 +47,9 @@
 #define ANCHO_PX_MAX		2048
 #define ANCHO_PX_MIN		200
 #define ANCHO_UN_MAX		2048
-#define ANCHO_UN_MIN		200
+#define ANCHO_UN_MIN		10
 #define ALTO_UN_MAX			2048
-#define ALTO_UN_MIN			200
+#define ALTO_UN_MIN			10
 #define	ESCALA_MAX			10
 #define	ESCALA_MIN			1
 #define	ANCHO_MAX			100

@@ -66,6 +66,8 @@ bool JsonParser::setValuesFromFile() {
 	if (parsePersonaje(root))return true;//this->setDefaultValues();
 	if (parseObjetos(root))return true;//this->setDefaultValues();
 
+	std::cout << escenario_->altoUn << std::endl;
+
 	return false;
 }
 

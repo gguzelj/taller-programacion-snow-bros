@@ -5,6 +5,7 @@
 #include <Box2D/Box2D.h>
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
+#include <SDL2/SDL2_gfxPrimitives.h>
 #include "../Parser/JsonParser.h"
 #include "../Modelo/Escenario.h"
 

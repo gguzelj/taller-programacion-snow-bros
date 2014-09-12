@@ -15,8 +15,6 @@
  */
 class Figura{
 protected:
-	float x;
-	float y;
 	std::string color;
 	float angulo;
 	float masa;
@@ -24,6 +22,8 @@ protected:
 	b2World* world;
 	b2Body* body;
 public:
+	float x;
+	float y;
 	virtual ~Figura(){
 		//this->world->DestroyBody(this->body);
 	}

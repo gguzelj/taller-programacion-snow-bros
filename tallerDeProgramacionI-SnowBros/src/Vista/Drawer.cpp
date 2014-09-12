@@ -93,9 +93,11 @@ void Drawer::drawFigura(Figura* figura){
 				SDL_RenderDrawLine(this->renderer, un_to_px * p0.x + ox, -un_to_px * p0.y + oy , un_to_px* p1.x + ox, -un_to_px* p1.y + oy);
 			}
 		}
-//		else if( fixture->GetType() == b2Shape::e_circle ){
-//			 b2CircleShape* circleShape = (b2CircleShape*)fixture->GetShape();
-//		}
+        else if( fixture->GetType() == b2Shape::e_circle ){
+        	std::cout << "Llegue al circulo. x: " << figura->x * un_to_px + ox << " y: " << figura->y * un_to_px + oy << std::endl;
+        	std::cout << "Radio: " << ((Circulo*)figura)->getRadio() << std::endl;
+        	filledCircleRGBA(this->renderer, figura->x * un_to_px + ox, figura->y * un_to_px + oy, ((Circulo*)figura)->getRadio() * un_to_px, 50, 50, 50, 255);
+        }
 	}
 }
 

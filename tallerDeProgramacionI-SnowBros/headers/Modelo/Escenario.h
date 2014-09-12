@@ -11,6 +11,7 @@
 #include "Objetos/Figuras/Poligono.h"
 #include "Objetos/Figuras/Trapecio.h"
 #include "Objetos/Personaje.h"
+#include "Objetos/Muro.h"
 
 class Escenario {
 public:
@@ -18,6 +19,8 @@ public:
         virtual ~Escenario();
 
         std::list<Figura*>* getFiguras();
+
+        std::list<Muro*>* getParedes();
 
         //Devuelve una instancia al personaje del juego
         Personaje* getPersonaje();
@@ -27,6 +30,7 @@ public:
 private:
 	b2World* world_;
 	std::list<Figura*>* figuras_;
+	std::list<Muro*>* muros_;
 	Personaje* person_;
 };
 

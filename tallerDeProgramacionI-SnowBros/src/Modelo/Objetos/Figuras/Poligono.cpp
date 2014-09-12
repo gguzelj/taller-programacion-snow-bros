@@ -29,6 +29,7 @@ Poligono::Poligono(JsonParser *parser, int index, b2World* world){
 	    float pointX = this->x + this->escala * sin(i * angle);
 	    float pointY = this->y + this->escala * cos(i * angle);
 	    vertices[i].Set(pointX,pointY);
+	    std::cout << "x: " << vertices[i].x << " y: " << vertices[i].y << std::endl;
 	}
 
 	b2PolygonShape shape;

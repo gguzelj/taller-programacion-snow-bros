@@ -31,8 +31,8 @@
 //Valores Default para el juego
 #define ALTO_PX_DEF			768
 #define ANCHO_PX_DEF		1024
-#define ALTO_UN_DEF			100
-#define ANCHO_UN_DEF		50
+#define ALTO_UN_DEF			19.2
+#define ANCHO_UN_DEF		25.6
 #define IMAGEN_FONDO_DEF	"Everest.jpg"
 #define X_COOR_DEF			100.0
 #define Y_COOR_DEF			100.0
@@ -62,6 +62,10 @@
 #define	MASA_MAX			36000
 #define LADOS_MIN			3
 #define LADOS_MAX			6
+
+//Conversion de unidades
+#define DEGTORAD 0.0174532925199432957f
+#define RADTODEG 57.295779513082320876f
 
 //Errores del parser
 #define PARSER_ERROR_OPEN_FILE				"Error Parser: Al tratar de abrir el archivo "

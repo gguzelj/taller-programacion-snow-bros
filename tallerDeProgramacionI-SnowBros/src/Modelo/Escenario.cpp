@@ -5,11 +5,19 @@ Escenario::Escenario(JsonParser *parser) {
         b2Vec2 gravity(0.0f, -10.0f);
         world_ = new b2World(gravity);
         figuras_ = new std::list<Figura*>;
+        muros_ = new std::list<Muro*>;
         Figura* figura_i;
+        Muro* muro_i;
 
         //Create the ground
-        figura_i = new Rectangulo(parser, world_);
-        figuras_->push_back(figura_i);
+        muro_i = new Muro(parser->getAnchoUnEscenario(), parser->getAltoUnEscenario(), 0, world_, 0);
+        muros_->push_back(muro_i);
+        //And walls
+        muro_i = new Muro(parser->getAnchoUnEscenario(), parser->getAltoUnEscenario(), 90, world_, parser->getAnchoUnEscenario()/2);
+        muros_->push_back(muro_i);
+        muro_i = new Muro(parser->getAnchoUnEscenario(), parser->getAltoUnEscenario(), 90, world_, -parser->getAnchoUnEscenario()/2);
+        muros_->push_back(muro_i);
+
 
         // Create all the objects
         for(unsigned int index = 0; index < parser->getCantidadObjetos(); index++){
@@ -36,7 +44,7 @@ Escenario::Escenario(JsonParser *parser) {
         }
 
         // Create the guy
-        person_ = new Personaje(parser, world_);
+        //person_ = new Personaje(parser, world_);
 }
 
 Escenario::~Escenario() {

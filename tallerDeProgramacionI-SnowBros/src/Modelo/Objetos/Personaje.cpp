@@ -12,7 +12,7 @@ Personaje::Personaje(JsonParser *parser, b2World* world){
         //definiendo el body del personaje
         b2BodyDef cuerpoDelPersonaje;
         cuerpoDelPersonaje.type = b2_dynamicBody;                       //El personaje sera un cuerpo dinamico
-        cuerpoDelPersonaje.angle = 0;                                           //Angulo 0 asi empieza recto
+        cuerpoDelPersonaje.angle = 0;                                  	//Angulo 0 asi empieza recto
         cuerpoDelPersonaje.position.Set(0,0);                           //donde queremos que empiece
 
         b2Body* cuerpoDinamicoDelPersonaje = this->world->CreateBody(&cuerpoDelPersonaje);
@@ -22,15 +22,14 @@ Personaje::Personaje(JsonParser *parser, b2World* world){
         b2PolygonShape formaDelPersonaje;                                       //esto va a ser si queremos que sea una caja...
         formaDelPersonaje.SetAsBox(1,1);                                        //...con las siguientes dimensiones
         b2FixtureDef fixtureDelPersonaje;                                       //creo el fixture
-        fixtureDelPersonaje.shape = &formaDelPersonaje;         //le asigno la forma que determine antes
+        fixtureDelPersonaje.shape = &formaDelPersonaje;        					//le asigno la forma que determine antes
         fixtureDelPersonaje.density = 1;                                        //una densidad cualquiera
         cuerpoDinamicoDelPersonaje->CreateFixture(&fixtureDelPersonaje);
 
 }
 Personaje::~Personaje(){
         //una posible destruccion del personaje
-//        this->world->DestroyBody(this->cuerpoDinamicoPersonaje); TIRA ERROR
-        //no se si me estare olvidando de algun destructor
+		//this->world->DestroyBody(this->cuerpoDinamicoPersonaje); TIRA ERROR, y porque no se esta creando todavia
 }
 
 void Personaje::Moverse(){

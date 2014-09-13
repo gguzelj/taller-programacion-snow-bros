@@ -26,8 +26,6 @@ Circulo::Circulo(JsonParser *parser, int index, b2World* world){
 	fixture.shape = &circleShape;		//le asigno la forma que determine antes
 	fixture.density = masa / (radio*radio*M_PI);
 	body->CreateFixture(&fixture);
-
-	b2Vec2 vec = this->body->GetPosition();
 }
 
 Circulo::~Circulo(){

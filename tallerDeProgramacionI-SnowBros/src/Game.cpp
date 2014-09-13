@@ -39,7 +39,10 @@ int Game::onExecute(string jsonPath){
 	//cleaning up
 	onCleanup();
 
-	if (reload_) return 2; //Reload the game
+	if (reload_){
+		Log::instance()->append("Reinicio de Juego",Log::INFO);
+		return 2; //Reload the game
+	}
 
 	return 0; //Exit with everything ok
 }
@@ -62,7 +65,7 @@ void Game::onEvent(){
 void Game::onLoop(){
 	float32 timeStep = 1/60.0;      //the length of time passed to simulate (seconds)
 	int32 velocityIterations = 20;   //how strongly to correct velocity
-	int32 positionIterations = 150;   //how strongly to correct position}
+	int32 positionIterations = 13;   //how strongly to correct position}
 
 	model_->getWorld()->Step( timeStep, velocityIterations, positionIterations);
 }
@@ -71,7 +74,6 @@ void Game::onRender(){
 }
 
 void Game::onCleanup(){
-	Log::instance()->append("Reinicio de Juego",Log::INFO);
 	delete view_;
 	delete model_;
 	delete controller_;

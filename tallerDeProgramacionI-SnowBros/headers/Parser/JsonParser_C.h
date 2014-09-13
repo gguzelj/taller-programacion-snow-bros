@@ -51,11 +51,11 @@
 #define ALTO_UN_MAX			2048
 #define ALTO_UN_MIN			10
 #define	ESCALA_MAX			10
-#define	ESCALA_MIN			1
-#define	ANCHO_MAX			100
-#define	ANCHO_MIN			1
-#define	ALTO_MAX			100
-#define	ALTO_MIN			1
+#define	ESCALA_MIN			0.1
+#define	ANCHO_MAX			10
+#define	ANCHO_MIN			0.1
+#define	ALTO_MAX			10
+#define	ALTO_MIN			0.1
 #define	ROT_MIN				0
 #define	ROT_MAX				360
 #define	MASA_MIN			1

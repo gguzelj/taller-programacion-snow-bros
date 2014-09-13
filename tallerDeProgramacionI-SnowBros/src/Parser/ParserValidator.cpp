@@ -275,8 +275,8 @@ bool ParserValidator::valTipoObjeto(Json::Value obj, std::string &tipo){
 
 	tipo = obj[TIPO].asString();
 
-	if(	tipo != RECTANGULO && tipo!= CIRCULO &&
-		tipo!= PARALELOGRAMO && tipo!= POLIGONO ){
+	if(	tipo != RECTANGULO && tipo != CIRCULO && tipo != PARALELOGRAMO
+		&& tipo != POLIGONO && tipo != TRAPECIO){
 		Log::instance()->append(PARSER_ERROR_OBJ_TIPO_DESCONOCIDO, Log::ERROR);
 		return true;
 	}
@@ -348,7 +348,9 @@ bool ParserValidator::valEscalaObjeto(Json::Value obj, double &escala){
 	std::string tipoObjeto = obj[TIPO].asString();
 
 	//Los rectangulos y paralelogramos no tienen escala
-	if( tipoObjeto == RECTANGULO || tipoObjeto == PARALELOGRAMO ) return false;
+	if( tipoObjeto == RECTANGULO ||
+		tipoObjeto == PARALELOGRAMO ||
+		tipoObjeto == TRAPECIO) return false;
 
 	//En cualquier otro caso, es un atributo obligatorio
 	if(!obj.isMember(ESCALA)){
@@ -380,7 +382,7 @@ bool ParserValidator::valLadosObjeto(Json::Value obj, int &lados){
 	//Podemos leer este atributo porque ya sabemos que es valido
 	std::string tipoObjeto = obj[TIPO].asString();
 
-	//Los poligonos solo son los unicos que necesitan definir #lados
+	//Los poligonos solo son los unicos que necesitan definir lados
 	if( tipoObjeto != POLIGONO) return false;
 
 	if(!obj.isMember(LADOS)){
@@ -406,13 +408,13 @@ bool ParserValidator::valLadosObjeto(Json::Value obj, int &lados){
 /**
  * Validamos el ancho del objeto
  */
-bool ParserValidator::valAnchoObjeto(Json::Value obj, int &ancho){
+bool ParserValidator::valAnchoObjeto(Json::Value obj, double &ancho){
 
 	//Podemos leer este atributo porque ya sabemos que es valido
 	std::string tipoObjeto = obj[TIPO].asString();
 
-	//Los poligonos y los circulos no necesitan ancho
-	if( tipoObjeto == POLIGONO || tipoObjeto == CIRCULO ) return false;
+	//Solo los rectangulos y paralelogramos tienen este atributo
+	if( tipoObjeto != RECTANGULO && tipoObjeto != PARALELOGRAMO) return false;
 
 	if(!obj.isMember(ANCHO)){
 		Log::instance()->append(PARSER_ERROR_OBJ_ANCHO, Log::ERROR);
@@ -424,7 +426,7 @@ bool ParserValidator::valAnchoObjeto(Json::Value obj, int &ancho){
 		return true;
 	}
 
-	ancho = obj[ANCHO].asInt();
+	ancho = obj[ANCHO].asDouble();
 
 	if(	ancho < ANCHO_MIN || ancho > ANCHO_MAX ){
 		Log::instance()->append(PARSER_ERROR_OBJ_ANCHO_FUERA_RANGO, Log::ERROR);
@@ -437,13 +439,13 @@ bool ParserValidator::valAnchoObjeto(Json::Value obj, int &ancho){
 /**
  * Validamos el alto del objeto
  */
-bool ParserValidator::valAltoObjeto(Json::Value obj, int &alto){
+bool ParserValidator::valAltoObjeto(Json::Value obj, double &alto){
 
 	//Podemos leer este atributo porque ya sabemos que es valido
 	std::string tipoObjeto = obj[TIPO].asString();
 
-	//Los poligonos y los circulos no necesitan alto
-	if( tipoObjeto == POLIGONO || tipoObjeto == CIRCULO ) return false;
+	//Solo los rectangulos y paralelogramos tienen este atributo
+	if( tipoObjeto != RECTANGULO && tipoObjeto != PARALELOGRAMO) return false;
 
 	if(!obj.isMember(ALTO)){
 		Log::instance()->append(PARSER_ERROR_OBJ_ALTO, Log::ERROR);
@@ -455,7 +457,7 @@ bool ParserValidator::valAltoObjeto(Json::Value obj, int &alto){
 		return true;
 	}
 
-	alto = obj[ALTO].asInt();
+	alto = obj[ALTO].asDouble();
 
 	if(	alto < ALTO_MIN || alto > ALTO_MAX ){
 		Log::instance()->append(PARSER_ERROR_OBJ_ALTO_FUERA_RANGO, Log::ERROR);

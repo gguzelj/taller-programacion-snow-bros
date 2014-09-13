@@ -84,8 +84,8 @@ void Drawer::drawFigura(Figura* figura){
 		if( fixture->GetType() == b2Shape::e_polygon ){
 			b2PolygonShape *poly = (b2PolygonShape*)fixture->GetShape();
 			const int count = poly->GetVertexCount();
-			Sint16* xCoordinatesOfVertexes = (Sint16*) malloc (count+1);
-			Sint16* yCoordinatesOfVertexes = (Sint16*) malloc (count+1);
+			Sint16* xCoordinatesOfVertexes = new Sint16 [count+1];
+			Sint16* yCoordinatesOfVertexes = new Sint16 [count+1];
 
 			for(int i = 0; i < count ; i++){
 				b2Vec2 p1 = figura->GetWorldPoint(poly->GetVertex(i));
@@ -95,8 +95,8 @@ void Drawer::drawFigura(Figura* figura){
 
 			filledPolygonRGBA(this->renderer, xCoordinatesOfVertexes, yCoordinatesOfVertexes, count, rgb[0], rgb[1], rgb[2], 255);
 
-			free(xCoordinatesOfVertexes);
-			free(yCoordinatesOfVertexes);
+			delete [] xCoordinatesOfVertexes;
+			delete [] yCoordinatesOfVertexes;
 		}
         else if( fixture->GetType() == b2Shape::e_circle ){
         	Circulo* circ = (Circulo*) figura;

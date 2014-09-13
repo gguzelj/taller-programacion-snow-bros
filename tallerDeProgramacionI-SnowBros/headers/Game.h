@@ -31,7 +31,7 @@ public:
 	 * el usuario, pasando los parametros necesarios al modelo y a la vista.
 	 *
 	 * Precondiciones: Debe recibir un archivo JSON.
-	 * Postcondiciones: Devuelve true si todo salio bien, false en caso contrario.
+	 * Postcondiciones: Devuelve true si salio bien, false en caso contrario.
 	 */
 	bool onInit(string jsonPath);
 
@@ -47,7 +47,7 @@ public:
 	void onLoop();
 
 	/*
-	 * Maneja todo aquello relacionado con lo que se tiene que dibujar en la pantalla, para luego mostrarlo.
+	 * Maneja aquello relacionado con lo que se tiene que dibujar en la pantalla, para luego mostrarlo.
 	 * Sería la parte de "Vista" del patron MVC
 	 */
 	void onRender();
@@ -61,9 +61,9 @@ private:
 	bool running_;
 	bool reload_;
 
+	Controlador *controller_;
 	Escenario *model_;
 	Drawer *view_;
-	Controlador *controller_;
 	JsonParser *parser_;
 
 };

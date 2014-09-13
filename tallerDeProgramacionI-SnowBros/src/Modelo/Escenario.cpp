@@ -48,7 +48,6 @@ Escenario::Escenario(JsonParser *parser) {
 }
 
 Escenario::~Escenario() {
-        delete world_;
         // Borrar cada uno de los objetos
         for (int i=0; figuras_->size();i++){
         	(figuras_->pop_back());
@@ -56,7 +55,9 @@ Escenario::~Escenario() {
 
         // Borrar la lista
         delete figuras_;
-        delete person_;
+        delete muros_;
+        //delete person_; todavia no estamos instanciando a la persona.
+        delete world_;
 }
 
 b2World* Escenario::getWorld(){

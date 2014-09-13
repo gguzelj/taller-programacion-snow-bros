@@ -38,8 +38,8 @@ public:
 		double y;
 		double escala;
 		int lados;
-		int ancho;
-		int alto;
+		double ancho;
+		double alto;
 		std::string color;
 		int rot;
 		int masa;
@@ -69,8 +69,8 @@ private:
 	static bool valCoorYObjeto(Json::Value obj, double &y, escenario_t *esc);
 	static bool valEscalaObjeto(Json::Value obj, double &escala);
 	static bool valLadosObjeto(Json::Value obj, int &lados);
-	static bool valAnchoObjeto(Json::Value obj, int &ancho);
-	static bool valAltoObjeto(Json::Value obj, int &alto);
+	static bool valAnchoObjeto(Json::Value obj, double &ancho);
+	static bool valAltoObjeto(Json::Value obj, double &alto);
 	static bool valEstaticoObjeto(Json::Value obj, bool &estatico);
 
 	static std::string valColorObjeto(Json::Value obj);

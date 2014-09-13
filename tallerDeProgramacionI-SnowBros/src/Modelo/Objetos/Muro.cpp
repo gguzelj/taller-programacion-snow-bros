@@ -2,12 +2,12 @@
 
 Muro::Muro(float ancho_esc, float alto_esc, int rot, b2World* world, int pos_x){
 	if(rot == 0){
-		this->y = - (3.0f/7.0f)*alto_esc;
+		this->y = -alto_esc/2;
 		this->ancho = ancho_esc/2;
 	}
 	else{
 		this->y = 0;
-		this->ancho = ancho_esc/2;
+		this->ancho = alto_esc/2;
 	}
 	this->x = pos_x;
 	this->alto = 0;
@@ -35,5 +35,5 @@ Muro::Muro(float ancho_esc, float alto_esc, int rot, b2World* world, int pos_x){
 }
 
 Muro::~Muro(){
-
+	this->world->DestroyBody(this->body);
 }

@@ -20,6 +20,8 @@
 #define COLOR				"color"
 #define ROT					"rot"
 #define INCLINACION			"inclinacion"
+#define BASE_MAYOR			"base_mayor"
+#define BASE_MENOR			"base_menor"
 #define MASA				"masa"
 #define ESTATICO			"estatico"
 
@@ -61,8 +63,12 @@
 #define	ROT_MAX				360
 #define INCLINACION_MIN		30
 #define INCLINACION_MAX		150
+#define BASE_MAYOR_MIN		0.2
+#define BASE_MAYOR_MAX		15
+#define	BASE_MENOR_MIN		0.1
+#define	BASE_MENOR_MAX		10
 #define	MASA_MIN			1
-#define	MASA_MAX			36000
+#define	MASA_MAX			3600
 #define LADOS_MIN			3
 #define LADOS_MAX			6
 

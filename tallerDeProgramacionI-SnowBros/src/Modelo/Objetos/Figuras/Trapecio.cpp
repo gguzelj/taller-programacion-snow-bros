@@ -7,7 +7,7 @@ Trapecio::~Trapecio(){
 Trapecio::Trapecio(JsonParser *parser, int index, b2World* world){
 	this->x = parser->getCoorXObjeto(index);
 	this->y = parser->getCoorYObjeto(index);
-	this->inclinacion = 30; //parser->getInclinacionObjeto(index); no me esta leyendo bien la inclinacion del parser.
+	this->inclinacion = parser->getInclinacionObjeto(index);
 	this->alto = parser->getAltoObjeto(index);
 	this->masa = parser->getMasaObjeto(index);
 	this->angulo = parser->getRotObjeto(index) * DEGTORAD;
@@ -15,17 +15,14 @@ Trapecio::Trapecio(JsonParser *parser, int index, b2World* world){
 	this->estatico = parser->esObjetoEstatico(index);
 	this->world = world;
 
-//	if(inclinacion < 90){
-//		this->base_inf = parser->getBaseMayorObjeto(index);
-//		this->base_sup = parser->getBaseMenorObjeto(index);
-//	} else{
-//		this->base_inf = parser->getBaseMenorObjeto(index);
-//		this->base_sup = parser->getBaseMayorObjeto(index);
-//
-//	}
+	if(inclinacion < 90){
+		this->base_sup = parser->getBaseMayorObjeto(index);
+		this->base_inf = parser->getBaseMenorObjeto(index);
+	} else{
+		this->base_sup = parser->getBaseMenorObjeto(index);
+		this->base_inf = parser->getBaseMayorObjeto(index);
 
-	this->base_inf = 3; //Por ahora
-	this->base_sup = 5;
+	}
 
 	b2BodyDef cuerpo;
 	estatico ? cuerpo.type = b2_staticBody : cuerpo.type = b2_dynamicBody;
@@ -38,15 +35,13 @@ Trapecio::Trapecio(JsonParser *parser, int index, b2World* world){
 	//Definiendo ahora el fixture del Trapecio
 
 	float mediana = (base_inf + base_sup) / 2;
-	float hip = alto / cos(inclinacion * DEGTORAD);
+	float hip = alto / sin(inclinacion * DEGTORAD);
 
 	b2Vec2 vertices[4];
-	//vertices[0].Set(x + mediana / 2 + cos((float)(180-inclinacion) * DEGTORAD) * hip / 2, y - alto / 2);	//Inf der
-	//vertices[1].Set(x + mediana / 2 - cos((float)(180-inclinacion) * DEGTORAD) * hip / 2, y + alto / 2);	//Sup der
-	vertices[0].Set(0, 0);
-	vertices[1].Set(1.5, 1.5);
-	vertices[2].Set(vertices[1].x - base_sup, vertices[1].y);											//Sup izq
-	vertices[3].Set(vertices[0].x - base_inf, vertices[0].y);											//Inf izq
+	vertices[0].Set( x + mediana / 2 + cos(inclinacion * DEGTORAD) * hip / 2, y + alto / 2);	//Superior der
+	vertices[1].Set( x + mediana / 2 - cos(inclinacion * DEGTORAD) * hip / 2, y - alto / 2);	//Inferior der
+	vertices[2].Set(vertices[0].x - base_sup, vertices[0].y);									//Superior izq
+	vertices[3].Set(vertices[1].x - base_inf, vertices[1].y);									//Inferior izq
 
 	b2PolygonShape shape;
 	shape.Set(vertices,4);

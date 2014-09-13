@@ -191,6 +191,14 @@ int JsonParser::getInclinacionObjeto(unsigned int index){
 	return objetos_[index]->inclinacion;
 }
 
+float JsonParser::getBaseMayorObjeto(unsigned int index){
+	return objetos_[index]->base_mayor;
+}
+
+float JsonParser::getBaseMenorObjeto(unsigned int index){
+	return objetos_[index]->base_menor;
+}
+
 float JsonParser::getMasaObjeto(unsigned int index) {
 	return objetos_[index]->masa;
 }

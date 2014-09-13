@@ -43,6 +43,8 @@ public:
 	std::string getColorObjeto(unsigned int index);
 	int 		getRotObjeto(unsigned int index);
 	int			getInclinacionObjeto(unsigned int index);
+	float		getBaseMayorObjeto(unsigned int index);
+	float		getBaseMenorObjeto(unsigned int index);
 	float 		getMasaObjeto(unsigned int index);
 	bool 		esObjetoEstatico(unsigned int index);
 

@@ -57,6 +57,7 @@ bool ParserValidator::validarObjeto(objeto_t* &objeto, Json::Value obj, escenari
 	if(valAnchoObjeto(obj, objeto->ancho)) return true;
 	if(valAltoObjeto(obj, objeto->alto)) return true;
 	if(valInclinacionObjeto(obj, objeto->inclinacion)) return true;
+	if(valBasesObjeto(obj, objeto->base_mayor, objeto->base_menor)) return true;
 	if(valEstaticoObjeto(obj, objeto->estatico)) return true;
 
 	//Los siguientes son atributos no obligatorios en los objetos. En caso de que alguno
@@ -348,7 +349,7 @@ bool ParserValidator::valEscalaObjeto(Json::Value obj, double &escala){
 	//Podemos leer este atributo porque ya sabemos que es valido
 	std::string tipoObjeto = obj[TIPO].asString();
 
-	//Los rectangulos y paralelogramos no tienen escala
+	//Los rectangulos, paralelogramos y trapecios no tienen escala
 	if( tipoObjeto == RECTANGULO ||
 		tipoObjeto == PARALELOGRAMO ||
 		tipoObjeto == TRAPECIO) return false;
@@ -445,8 +446,10 @@ bool ParserValidator::valAltoObjeto(Json::Value obj, double &alto){
 	//Podemos leer este atributo porque ya sabemos que es valido
 	std::string tipoObjeto = obj[TIPO].asString();
 
-	//Solo los rectangulos y paralelogramos tienen este atributo
-	if( tipoObjeto != RECTANGULO && tipoObjeto != PARALELOGRAMO) return false;
+	//Solo los rectangulos, paralelogramos y trapecios tienen este atributo.
+	if( tipoObjeto != RECTANGULO &&
+		tipoObjeto != PARALELOGRAMO &&
+		tipoObjeto != TRAPECIO) return false;
 
 	if(!obj.isMember(ALTO)){
 		Log::instance()->append(PARSER_ERROR_OBJ_ALTO, Log::ERROR);
@@ -480,10 +483,73 @@ bool ParserValidator::valInclinacionObjeto(Json::Value obj, int &inclinacion){
 	//Solo los trapecios y paralelogramos tienen este atributo
 	if( tipoObjeto != TRAPECIO && tipoObjeto != PARALELOGRAMO) return false;
 
+	if(!obj.isMember(INCLINACION)){
+		//TODO agregar el error
+		return true;
+	}
+
+	if(!obj[INCLINACION].isNumeric()){
+		//TODO agregar el error
+		return true;
+	}
+
 	inclinacion = obj[INCLINACION].asInt();
 
 	if(	inclinacion < INCLINACION_MIN || inclinacion > INCLINACION_MAX ){
-		//TODO agregar el error;
+		//TODO agregar el error
+		return true;
+	}
+
+	return false;
+
+}
+
+/**
+ * Validamos la base mayor y menor del paralelogramo.
+ */
+bool ParserValidator::valBasesObjeto(Json::Value obj, double &base_mayor, double &base_menor){
+
+	//Podemos leer este atributo porque ya sabemos que es valido
+	std::string tipoObjeto = obj[TIPO].asString();
+
+	//Solo los trapecios y paralelogramos tienen este atributo
+	if( tipoObjeto != TRAPECIO) return false;
+
+	if(!obj.isMember(BASE_MAYOR)){
+		//TODO agregar el error
+		return true;
+	}
+
+	if(!obj[BASE_MAYOR].isNumeric()){
+		//TODO agregar el error
+		return true;
+	}
+
+	if(!obj.isMember(BASE_MENOR)){
+		//TODO agregar el error
+		return true;
+	}
+
+	if(!obj[BASE_MENOR].isNumeric()){
+		//TODO agregar el error
+		return true;
+	}
+
+	base_mayor = obj[BASE_MAYOR].asDouble();
+	base_menor = obj[BASE_MENOR].asDouble();
+
+	if(	base_mayor < BASE_MAYOR_MIN || base_mayor > BASE_MAYOR_MAX ){
+		//TODO agregar el error
+		return true;
+	}
+
+	if(	base_menor < BASE_MENOR_MIN || base_menor > BASE_MENOR_MAX ){
+		//TODO agregar el error
+		return true;
+	}
+
+	if( base_menor >= base_mayor){
+		//TODO agregar el error
 		return true;
 	}
 

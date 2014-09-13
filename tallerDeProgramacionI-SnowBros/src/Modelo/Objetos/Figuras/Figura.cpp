@@ -12,3 +12,6 @@ std::string Figura::getColor(){
 	return color;
 }
 
+int Figura::getAngulo(){
+	return this->body->GetAngle();
+}

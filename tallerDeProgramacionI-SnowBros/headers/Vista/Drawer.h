@@ -8,6 +8,7 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include "../Parser/JsonParser.h"
 #include "../Modelo/Escenario.h"
+#include <cmath>
 
 using namespace std;
 

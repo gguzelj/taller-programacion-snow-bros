@@ -100,9 +100,14 @@ void Drawer::drawFigura(Figura* figura){
 		}
         else if( fixture->GetType() == b2Shape::e_circle ){
         	Circulo* circ = (Circulo*) figura;
-        	filledEllipseRGBA(this->renderer, circ->getCoordX() * un_to_px_x + ox, circ->getCoordY() * -un_to_px_y + oy,
+        	int centro_x=circ->getCoordX() * un_to_px_x + ox;
+        	int centro_y =circ->getCoordY() * -un_to_px_y + oy;
+        	filledEllipseRGBA(this->renderer, centro_x, centro_y,
         					 circ->getRadio() * un_to_px_x, circ->getRadio() * un_to_px_y,
         					 rgb[0], rgb[1], rgb[2], 255);
+        	int borde_x = ( circ->getRadio()* cos(circ->getAngulo())  * un_to_px_x) + centro_x;
+        	int borde_y = centro_y - ( circ->getRadio()* sin(circ->getAngulo())  * un_to_px_y);
+        	lineRGBA(renderer,centro_x,centro_y,borde_x,borde_y,255, 255, 255, 255);
         }
 	}
 }

@@ -11,13 +11,10 @@ Paralelogramo::Paralelogramo(JsonParser *parser, int index, b2World* world){
 	this->ancho = parser->getAnchoObjeto(index)*2;
 	this->masa = parser->getMasaObjeto(index);
 	this->angulo = parser->getRotObjeto(index) * DEGTORAD;
-	this->inclinacion = 45; //parser->getInclinacionObjeto(index); no me esta leyendo bien la inclinacion del parser.
+	this->inclinacion = parser->getInclinacionObjeto(index);
 	this->color = parser->getColorObjeto(index);
 	this->estatico = parser->esObjetoEstatico(index);
 	this->world = world;
-
-	std::cout << "Inclinacion: " << (float) (inclinacion)/180 << " pi" << std::endl;
-	std::cout << "Seno: " << sin((float)(inclinacion-90)/180*3.14159265) << std::endl;
 
 	b2BodyDef cuerpo;
 	estatico ? cuerpo.type = b2_staticBody : cuerpo.type = b2_dynamicBody;
@@ -29,18 +26,18 @@ Paralelogramo::Paralelogramo(JsonParser *parser, int index, b2World* world){
 
 	//Definiendo ahora el fixture del paralelogramo
 
-	float hip = alto / cos(inclinacion * DEGTORAD);
+	float hip = alto / sin(inclinacion * DEGTORAD);
 
 	b2Vec2 vertices[4];
-	vertices[0].Set( x + ancho/2 - sin((float)(inclinacion-90) * DEGTORAD) * hip / 2, y + alto/2);  	//Superior der
-	vertices[1].Set(vertices[0].x - ancho, vertices[0].y);												//Superior izq
-	vertices[2].Set( x - ancho/2 + sin((float)(inclinacion-90) * DEGTORAD) * hip / 2, y - alto/2);		//Inferior izq
-	vertices[3].Set(vertices[2].x + ancho, vertices[2].y);												//Inferior der
+	vertices[0].Set( x + ancho/2 + cos(inclinacion * DEGTORAD) * hip / 2, y + alto/2);  	//Superior der
+	vertices[1].Set(vertices[0].x - ancho, vertices[0].y);									//Superior izq
+	vertices[2].Set( x - ancho/2 - cos(inclinacion * DEGTORAD) * hip / 2, y - alto/2);		//Inferior izq
+	vertices[3].Set(vertices[2].x + ancho, vertices[2].y);									//Inferior der
 
 	b2PolygonShape shape;
 	shape.Set(vertices,4);
 	b2FixtureDef fixture;					//creo el fixture
 	fixture.shape = &shape;					//le asigno la forma que determine antes
-	fixture.density = (float) masa / (ancho * alto);
+	fixture.density = masa / (ancho * alto);
 	body->CreateFixture(&fixture);
 }

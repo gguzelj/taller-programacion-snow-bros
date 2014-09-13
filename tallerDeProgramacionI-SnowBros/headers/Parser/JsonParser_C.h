@@ -19,6 +19,7 @@
 #define LADOS				"lados"
 #define COLOR				"color"
 #define ROT					"rot"
+#define INCLINACION			"inclinacion"
 #define MASA				"masa"
 #define ESTATICO			"estatico"
 
@@ -58,6 +59,8 @@
 #define	ALTO_MIN			0.1
 #define	ROT_MIN				0
 #define	ROT_MAX				360
+#define INCLINACION_MIN		30
+#define INCLINACION_MAX		150
 #define	MASA_MIN			1
 #define	MASA_MAX			36000
 #define LADOS_MIN			3

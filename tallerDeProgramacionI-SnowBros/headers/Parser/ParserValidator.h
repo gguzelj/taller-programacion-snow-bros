@@ -42,6 +42,7 @@ public:
 		double alto;
 		std::string color;
 		int rot;
+		int inclinacion;
 		int masa;
 		bool estatico;
 	};
@@ -71,6 +72,7 @@ private:
 	static bool valLadosObjeto(Json::Value obj, int &lados);
 	static bool valAnchoObjeto(Json::Value obj, double &ancho);
 	static bool valAltoObjeto(Json::Value obj, double &alto);
+	static bool valInclinacionObjeto(Json::Value obj, int &inclinacion);
 	static bool valEstaticoObjeto(Json::Value obj, bool &estatico);
 
 	static std::string valColorObjeto(Json::Value obj);

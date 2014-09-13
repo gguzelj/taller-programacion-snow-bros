@@ -56,6 +56,7 @@ bool ParserValidator::validarObjeto(objeto_t* &objeto, Json::Value obj, escenari
 	if(valLadosObjeto(obj, objeto->lados)) return true;
 	if(valAnchoObjeto(obj, objeto->ancho)) return true;
 	if(valAltoObjeto(obj, objeto->alto)) return true;
+	if(valInclinacionObjeto(obj, objeto->inclinacion)) return true;
 	if(valEstaticoObjeto(obj, objeto->estatico)) return true;
 
 	//Los siguientes son atributos no obligatorios en los objetos. En caso de que alguno
@@ -468,6 +469,29 @@ bool ParserValidator::valAltoObjeto(Json::Value obj, double &alto){
 }
 
 /**
+ * Validamos la inclinacion del paralelogramo o trapecio
+ */
+
+bool ParserValidator::valInclinacionObjeto(Json::Value obj, int &inclinacion){
+
+	//Podemos leer este atributo porque ya sabemos que es valido
+	std::string tipoObjeto = obj[TIPO].asString();
+
+	//Solo los trapecios y paralelogramos tienen este atributo
+	if( tipoObjeto != TRAPECIO && tipoObjeto != PARALELOGRAMO) return false;
+
+	inclinacion = obj[INCLINACION].asInt();
+
+	if(	inclinacion < INCLINACION_MIN || inclinacion > INCLINACION_MAX ){
+		//TODO agregar el error;
+		return true;
+	}
+
+	return false;
+
+}
+
+/**
  * Validaciones en flag de estatico del objeto
  */
 bool ParserValidator::valEstaticoObjeto(Json::Value obj, bool &estatico){
@@ -539,7 +563,7 @@ int ParserValidator::valRotObjeto(Json::Value obj){
 	std::string tipoObjeto = obj[TIPO].asString();
 
 	//Los circulo no tienen rotacion
-	if( tipoObjeto == CIRCULO) return false;
+	if(tipoObjeto == CIRCULO) return false;
 
 	if(!obj.isMember(ROT)){
 		Log::instance()->append(PARSER_WARNING_OBJ_ROT, Log::WARNING);
@@ -561,6 +585,7 @@ int ParserValidator::valRotObjeto(Json::Value obj){
 
 	return rotacion;
 }
+
 
 /**
  * Validamos la masa del objeto

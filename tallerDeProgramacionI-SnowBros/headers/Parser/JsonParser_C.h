@@ -77,8 +77,7 @@
 #define RADTODEG 57.295779513082320876f
 
 //Errores del parser
-#define PARSER_ERROR_OPEN_FILE				"Error Parser: Al tratar de abrir el archivo "
-#define PARSER_ERROR_INVALID_JSON			"Error Parser: Al leer el archivo JSON "
+#define PARSER_ERROR_INVALID_JSON			"Error Parser: Al leer el archivo JSON: "
 #define PARSER_ERROR_NO_ESCENARIO			"Error Parser: El archivo JSON no contiene un escenario definido"
 #define PARSER_ERROR_NO_PERSONAJE			"Error Parser: El archivo JSON no contiene un personaje definido"
 #define PARSER_ERROR_NO_OBJETOS				"Error Parser: El archivo JSON no contiene objetos definidos"
@@ -115,7 +114,17 @@
 #define PARSER_ERROR_OBJ_LADOS				"Error Parser: Objeto - Falta definir cantidad de Lados"
 #define PARSER_ERROR_OBJ_LADOS_NO_NUMBER	"Error Parser: Objeto - Cantidad de Lados no es un numero"
 #define PARSER_ERROR_OBJ_LADOS_FUERA_RANGO	"Error Parser: Objeto - Cantidad de Lados fuera del rango permitido"
+#define PARSER_ERROR_OBJ_INCL				"Error Parser: Objeto - Falta definir la inclinacion"
+#define PARSER_ERROR_OBJ_INCL_NO_NUMBER		"Error Parser: Objeto - La inclinacion no es un numero"
+#define PARSER_ERROR_OBJ_INCL_FUERA_RANGO	"Error Parser: Objeto - La inclinacion esta fuera de rango"
+#define PARSER_ERROR_OBJ_BASE_MAYOR			"Error Parser: Objeto - Falta definir la base mayor"
+#define PARSER_ERROR_OBJ_BASE_MAYOR_NO_NUMBER	"Error Parser: Objeto - La base mayor no es un numero"
+#define PARSER_ERROR_OBJ_BASE_MAYOR_FUERA_RANGO	"Error Parser: Objeto - La base mayor esta fuera de rango"
+#define PARSER_ERROR_OBJ_BASE_MENOR				"Error Parser: Objeto - Falta definir la base menor"
+#define PARSER_ERROR_OBJ_BASE_MENOR_NO_NUMBER	"Error Parser: Objeto - La base menor no es un numero"
+#define PARSER_ERROR_OBJ_BASE_MENOR_FUERA_RANGO	"Error Parser: Objeto - La base menor esta fuera de rango"
 
+#define PARSER_WARNING_OPEN_FILE					"Adv. Parser: No se pudo abrir el archivo "
 #define PARSER_WARNING_ESC_ALTO_PX					"Adv. Parser: Escenario - Atributo alto-px sin definir. Se carga valor por default."
 #define PARSER_WARNING_ESC_ALTO_PX_NO_NUMBER		"Adv. Parser: Escenario - Atributo alto-px es un numero. Se carga valor por default."
 #define PARSER_WARNING_ESC_ALTO_PX_FUERA_RANGO		"Adv. Parser: Escenario - Atributo alto-px fuera de rango. Se carga valor por default."
@@ -140,8 +149,10 @@
 #define PARSER_WARNING_OBJ_MASA						"Adv. Parser: Objeto - La Masa no fue definida. Se carga valor por default."
 #define PARSER_WARNING_OBJ_MASA_NO_NUMBER			"Adv. Parser: Objeto - La Masa no es un numero. Se carga valor por default."
 #define PARSER_WARNING_OBJ_MASA_FUERA_RANGO			"Adv. Parser: Objeto - La Masa esta fuera del rango permitido. Se carga valor por default."
+#define PARSER_WARNING_OBJ_BASE_MAYOR_MENOR_MENOR	"Adv. Parser: Objeto - La base mayor del objeto es menor a la base menor. Se intercambian."
 
-#define PARSER_INFO_DEFAULT_GAME			"Se intenta cargar un escenario default"
+#define PARSER_INFO_START_PARSING			"Info Parser: Comenzamos a parsear el archivo "
+#define PARSER_INFO_DEFAULT_GAME			"Info Parser: Se intenta cargar un escenario default"
 
 
 #endif /* JSONPARSER_C_H_ */

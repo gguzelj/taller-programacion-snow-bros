@@ -20,10 +20,12 @@ JsonParser::~JsonParser() {
  */
 bool JsonParser::parse() {
 
+	Log::instance()->append(PARSER_INFO_START_PARSING + path_, Log::INFO);
+
 	jsonFile_ = FileReader::read(path_);
 
 	if (jsonFile_.empty()) {
-		Log::instance()->append(PARSER_ERROR_OPEN_FILE, Log::WARNING);
+		Log::instance()->append(PARSER_WARNING_OPEN_FILE + path_, Log::WARNING);
 		return this->setDefaultValues();
 	} else {
 		return this->setValuesFromFile();

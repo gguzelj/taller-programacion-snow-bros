@@ -21,14 +21,7 @@ public:
 
 private:
 
-	Log();
-	virtual ~Log();
-
 	static Log *log;
-
-	std::string dataError_;
-	std::string dataWarning_;
-	std::string dataInfo_;
 	std::string timestamp();
 };
 

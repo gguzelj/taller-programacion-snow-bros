@@ -4,7 +4,7 @@
         "ancho-px":1024,
         "alto-un":25.6,
         "ancho-un":34.15,
-        "imagen_fondo":"Everest.jpg",
+        "imagen_fondo":"resources/Everest.jpg",
         "personaje": {"x": 0,"y":0},
         "objetos": [
                      {

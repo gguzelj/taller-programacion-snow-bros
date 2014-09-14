@@ -198,7 +198,7 @@ std::string ParserValidator::valImagenFondo( Json::Value esc ){
 	imagenFondo = esc[IMAGEN_FONDO].asString();
 
 	std::ifstream file(imagenFondo);
-	if (!file.good()){
+	if(!file.good()){
 		Log::instance()->append(PARSER_WARNING_ESC_IMAGEN_FONDO_NO_EXISTE, Log::WARNING);
 		return IMAGEN_FONDO_DEF;
 	}
@@ -484,19 +484,19 @@ bool ParserValidator::valInclinacionObjeto(Json::Value obj, int &inclinacion){
 	if( tipoObjeto != TRAPECIO && tipoObjeto != PARALELOGRAMO) return false;
 
 	if(!obj.isMember(INCLINACION)){
-		//TODO agregar el error
+		Log::instance()->append(PARSER_ERROR_OBJ_INCL, Log::ERROR);
 		return true;
 	}
 
 	if(!obj[INCLINACION].isNumeric()){
-		//TODO agregar el error
+		Log::instance()->append(PARSER_ERROR_OBJ_INCL_NO_NUMBER, Log::ERROR);
 		return true;
 	}
 
 	inclinacion = obj[INCLINACION].asInt();
 
 	if(	inclinacion < INCLINACION_MIN || inclinacion > INCLINACION_MAX ){
-		//TODO agregar el error
+		Log::instance()->append(PARSER_ERROR_OBJ_INCL_FUERA_RANGO, Log::ERROR);
 		return true;
 	}
 
@@ -512,26 +512,26 @@ bool ParserValidator::valBasesObjeto(Json::Value obj, double &base_mayor, double
 	//Podemos leer este atributo porque ya sabemos que es valido
 	std::string tipoObjeto = obj[TIPO].asString();
 
-	//Solo los trapecios y paralelogramos tienen este atributo
+	//Solo los trapecios tienen este atributo
 	if( tipoObjeto != TRAPECIO) return false;
 
 	if(!obj.isMember(BASE_MAYOR)){
-		//TODO agregar el error
+		Log::instance()->append(PARSER_ERROR_OBJ_BASE_MAYOR, Log::ERROR);
 		return true;
 	}
 
 	if(!obj[BASE_MAYOR].isNumeric()){
-		//TODO agregar el error
+		Log::instance()->append(PARSER_ERROR_OBJ_BASE_MAYOR_NO_NUMBER, Log::ERROR);
 		return true;
 	}
 
 	if(!obj.isMember(BASE_MENOR)){
-		//TODO agregar el error
+		Log::instance()->append(PARSER_ERROR_OBJ_BASE_MENOR, Log::ERROR);
 		return true;
 	}
 
 	if(!obj[BASE_MENOR].isNumeric()){
-		//TODO agregar el error
+		Log::instance()->append(PARSER_ERROR_OBJ_BASE_MENOR_NO_NUMBER, Log::ERROR);
 		return true;
 	}
 
@@ -539,18 +539,19 @@ bool ParserValidator::valBasesObjeto(Json::Value obj, double &base_mayor, double
 	base_menor = obj[BASE_MENOR].asDouble();
 
 	if(	base_mayor < BASE_MAYOR_MIN || base_mayor > BASE_MAYOR_MAX ){
-		//TODO agregar el error
+		Log::instance()->append(PARSER_ERROR_OBJ_BASE_MAYOR_FUERA_RANGO, Log::ERROR);
 		return true;
 	}
 
 	if(	base_menor < BASE_MENOR_MIN || base_menor > BASE_MENOR_MAX ){
-		//TODO agregar el error
+		Log::instance()->append(PARSER_ERROR_OBJ_BASE_MENOR_FUERA_RANGO, Log::ERROR);
 		return true;
 	}
 
 	if( base_menor >= base_mayor){
-		//TODO agregar el error
-		return true;
+		Log::instance()->append(PARSER_WARNING_OBJ_BASE_MAYOR_MENOR_MENOR, Log::ERROR);
+		base_menor = obj[BASE_MAYOR].asDouble();
+		base_mayor = obj[BASE_MENOR].asDouble();
 	}
 
 	return false;

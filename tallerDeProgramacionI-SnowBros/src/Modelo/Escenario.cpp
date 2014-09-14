@@ -37,8 +37,7 @@ Escenario::Escenario(JsonParser *parser) {
 			else if(parser->getTipoObjeto(index) == TRAPECIO)
 				figura_i = new Trapecio(parser, index, world_);
 
-			else throw; //Esto para mi hay que cambiarlo. En vez de lanzar una excepcion, deberia seguir el flujo del programa ignorando
-						//el error, pero guardandolo en el log de errores.
+			else throw;
 
 			figuras_->push_back(figura_i);
         }

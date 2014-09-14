@@ -10,7 +10,7 @@ Drawer::Drawer(JsonParser *parser){
 	this->alto_px = parser->getAltoPx();
 	this->alto_un = parser->getAltoUnEscenario();
 	this->ancho_un = parser->getAnchoUnEscenario();
-	this->imagePath = "resources/" + parser->getImagenFondo();
+	this->imagePath = parser->getImagenFondo();
 
 	this->un_to_px_x = ancho_px/ancho_un;
 	this->un_to_px_y = alto_px/alto_un;

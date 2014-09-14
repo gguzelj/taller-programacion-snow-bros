@@ -105,8 +105,8 @@ void Drawer::drawFigura(Figura* figura){
         	filledEllipseRGBA(this->renderer, centro_x, centro_y,
         					 circ->getRadio() * un_to_px_x, circ->getRadio() * un_to_px_y,
         					 rgb[0], rgb[1], rgb[2], 255);
-        	int borde_x = ( circ->getRadio()* ( cos(circ->getAngulo()* 3.141592653589793 / 180.0)  * un_to_px_x)) + centro_x;
-        	int borde_y = centro_y - ( circ->getRadio()* (sin(circ->getAngulo()* 3.141592653589793 / 180.0)  * un_to_px_y));
+        	int borde_x = ( circ->getRadio()* ( cos(circ->getAngulo())  * un_to_px_x)) + centro_x;
+        	int borde_y = centro_y - ( circ->getRadio()* (sin(circ->getAngulo())  * un_to_px_y));
         	lineRGBA(renderer,centro_x,centro_y,borde_x,borde_y,255, 255, 255, 255);
         }
 	}

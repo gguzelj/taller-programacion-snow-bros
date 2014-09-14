@@ -29,7 +29,7 @@ public:
 	std::string getColor();
 	float getX();
 	float getY();
-	int getAngulo();
+	float getAngulo();
 	float getMasa();
 	bool esEstatico();
 	b2Body* getb2Body();

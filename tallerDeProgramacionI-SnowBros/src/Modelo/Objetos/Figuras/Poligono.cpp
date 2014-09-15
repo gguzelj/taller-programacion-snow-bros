@@ -18,7 +18,7 @@ Poligono::Poligono(JsonParser *parser, int index, b2World* world){
 	b2BodyDef cuerpo;
 	estatico ? cuerpo.type = b2_staticBody : cuerpo.type = b2_dynamicBody;
 	cuerpo.angle = angulo;
-	cuerpo.position.Set(x,y);
+	cuerpo.position.Set(0,0);
 
 	b2Body* body = this->world->CreateBody(&cuerpo);
 	this->body = body;
@@ -42,6 +42,7 @@ Poligono::Poligono(JsonParser *parser, int index, b2World* world){
 	fixture.shape = &shape;	//le asigno la forma que determine antes
 	float area = pow(this->escala,2) * numVertices * tan(M_PI/numVertices);
 	fixture.density = masa / area;
+	fixture.friction = 0.1f;
 	body->CreateFixture(&fixture);
 
 }

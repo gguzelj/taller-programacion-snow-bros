@@ -51,7 +51,7 @@ void Drawer::drawScenary(Escenario* model){
 	for (auto figura : *figuras){
 		this->drawFigura(figura);
 	}
-	this->drawCharacter();
+	//this->drawCharacter(model->getPersonaje());
 }
 
 //Convierte un color representado a partir de una cadena de caracteres a su valor numerico red green blue.
@@ -59,13 +59,12 @@ void Drawer::drawScenary(Escenario* model){
 char* convertir_hex_a_rgb (std::string color){
 
         char* resultado = (char*)malloc(3*sizeof(char));
+
         const char *red = (color.substr(1,2)).c_str();
         resultado[0] = strtol(red,NULL,16);
 
-
         const char *green = (color.substr(3,2)).c_str();
         resultado[1] =strtol(green,NULL,16);
-
 
         const char *blue = (color.substr(5,2)).c_str();
         resultado[2] =strtol(blue,NULL,16);
@@ -84,11 +83,61 @@ void Drawer::drawFigura(Figura* figura){
 		if( fixture->GetType() == b2Shape::e_polygon ){
 			b2PolygonShape *poly = (b2PolygonShape*)fixture->GetShape();
 			const int count = poly->GetVertexCount();
+			Sint16* xCoordOfVerts = new Sint16 [count+1];
+			Sint16* yCoordOfVerts = new Sint16 [count+1];
+
+			for(int i = 0; i < count ; i++){
+				b2Vec2 p1 = figura->GetWorldPoint(poly->GetVertex(i));
+				xCoordOfVerts[i] = (Sint16)((un_to_px_x) * (p1.x) + ox);
+				yCoordOfVerts[i] = (Sint16)(-un_to_px_y * p1.y + oy);
+			}
+			//Opcion de la tuerca.
+            if (typeid(*figura) == typeid(Circulo)){
+            	filledPolygonRGBA(this->renderer, xCoordOfVerts, yCoordOfVerts, count, (rgb[0]+120)%255, (rgb[1]+120)%255, (rgb[2]+120)%255, 255);
+                Circulo* circ = (Circulo*) figura;
+                int centro_x=circ->getCoordX() * un_to_px_x + ox;
+                int centro_y =circ->getCoordY() * -un_to_px_y + oy;
+                //Dibuja el "agujero" de la tuerca.
+                filledEllipseRGBA(this->renderer, centro_x, centro_y, circ->getRadio()/5 * un_to_px_x, circ->getRadio()/5 * un_to_px_y,
+								  rgb[0], rgb[1], rgb[2], 255);
+            }
+            else filledPolygonRGBA(this->renderer, xCoordOfVerts, yCoordOfVerts, count, rgb[0], rgb[1], rgb[2], 255);
+
+			delete [] xCoordOfVerts;
+			delete [] yCoordOfVerts;
+		}
+        else if( fixture->GetType() == b2Shape::e_circle ){
+			Circulo* circ = (Circulo*) figura;
+			int centro_x=circ->getCoordX() * un_to_px_x + ox;
+			int centro_y =circ->getCoordY() * -un_to_px_y + oy;
+			filledEllipseRGBA(this->renderer, centro_x, centro_y, circ->getRadio() * un_to_px_x, circ->getRadio() * un_to_px_y,
+							  rgb[0], rgb[1], rgb[2], 255);
+			//Opcion de dibujar el radio nomá
+			//Esta linea va a ser el radio que va a ir girando con el circulo
+			int borde_x = ( circ->getRadio()* cos(circ->getAngulo()) * un_to_px_x) + centro_x;
+			int borde_y = centro_y - ( circ->getRadio()* sin(circ->getAngulo()) * un_to_px_y);
+			lineRGBA(renderer,centro_x,centro_y,borde_x,borde_y,(rgb[0]+120)%255, (rgb[1]+120)%255,(rgb[2]+120)%255, 255);
+        }
+	}
+}
+
+/*
+ * Momentarily mientras buscamos el sprite.
+ */
+void Drawer::drawCharacter(Personaje* person){
+	char* rgb = convertir_hex_a_rgb("#0AAAFF");
+	int ox = this->ancho_px/2;
+	int oy = this->alto_px/2;
+
+	for( b2Fixture *fixture = person->GetFixtureList(); fixture; fixture = fixture->GetNext() ){
+		if( fixture->GetType() == b2Shape::e_polygon ){
+			b2PolygonShape *poly = (b2PolygonShape*)fixture->GetShape();
+			const int count = poly->GetVertexCount();
 			Sint16* xCoordinatesOfVertexes = new Sint16 [count+1];
 			Sint16* yCoordinatesOfVertexes = new Sint16 [count+1];
 
 			for(int i = 0; i < count ; i++){
-				b2Vec2 p1 = figura->GetWorldPoint(poly->GetVertex(i));
+				b2Vec2 p1 = person->GetWorldPoint(poly->GetVertex(i));
 				xCoordinatesOfVertexes[i] = (Sint16)(un_to_px_x * p1.x + ox);
 				yCoordinatesOfVertexes[i] = (Sint16)(-un_to_px_y * p1.y + oy);
 			}
@@ -98,21 +147,8 @@ void Drawer::drawFigura(Figura* figura){
 			delete [] xCoordinatesOfVertexes;
 			delete [] yCoordinatesOfVertexes;
 		}
-        else if( fixture->GetType() == b2Shape::e_circle ){
-        	Circulo* circ = (Circulo*) figura;
-        	int centro_x=circ->getCoordX() * un_to_px_x + ox;
-        	int centro_y =circ->getCoordY() * -un_to_px_y + oy;
-        	filledEllipseRGBA(this->renderer, centro_x, centro_y,
-        					 circ->getRadio() * un_to_px_x, circ->getRadio() * un_to_px_y,
-        					 rgb[0], rgb[1], rgb[2], 255);
-        	int borde_x = ( circ->getRadio()* ( cos(circ->getAngulo())  * un_to_px_x)) + centro_x;
-        	int borde_y = centro_y - ( circ->getRadio()* (sin(circ->getAngulo())  * un_to_px_y));
-        	lineRGBA(renderer,centro_x,centro_y,borde_x,borde_y,255, 255, 255, 255);
-        }
 	}
 }
-
-void Drawer::drawCharacter(){}
 
 void Drawer::presentScenary(){
 	SDL_RenderPresent(this->renderer);

@@ -64,8 +64,8 @@ void Game::onEvent(){
 
 void Game::onLoop(){
 	float32 timeStep = 1/60.0;      //the length of time passed to simulate (seconds)
-	int32 velocityIterations = 20;   //how strongly to correct velocity
-	int32 positionIterations = 13;   //how strongly to correct position}
+	int32 velocityIterations = 8;   //how strongly to correct velocity
+	int32 positionIterations = 3;   //how strongly to correct position}
 
 	model_->getWorld()->Step( timeStep, velocityIterations, positionIterations);
 }

@@ -28,16 +28,18 @@ void Controlador::handleEvent(SDL_Event* evento,bool* running, bool* reload){
 				case SDLK_ESCAPE:{
 					(*running) = false;
 				}
-/*				case SDLK_LEFT:{
-					model->getPersonaje()->moverAIzquierda();
+				case SDLK_LEFT:{
+					model->getPersonaje()->Keyboard('a');
+					model->getPersonaje()->Moverse();
 				}
 				case SDLK_RIGHT:{
-					model->getPersonaje()->moverADerecha();
+					model->getPersonaje()->Keyboard('d');
+					model->getPersonaje()->Moverse();
 				}
 				case SDLK_UP:{
-					model->getPersonaje()->saltar();
+					model->getPersonaje()->Keyboard('w');
 				}
-*/			}
+			}
 		}
    }
 }

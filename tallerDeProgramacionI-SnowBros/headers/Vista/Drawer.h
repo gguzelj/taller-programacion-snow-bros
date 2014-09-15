@@ -36,7 +36,7 @@ private:
 	void drawBackground();
 	void drawScenary(Escenario* model);
 	void drawFigura(Figura* figura);
-	void drawCharacter();
+	void drawCharacter(Personaje* person);
 	void presentScenary();
 	void clearScenary();
 

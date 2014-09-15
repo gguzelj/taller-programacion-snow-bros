@@ -5,13 +5,14 @@
 
 class Circulo : public Figura{
 private:
-	float radio;
+        float radio;
+        b2Body* bodyInterno;
 public:
-	Circulo(JsonParser *parser, int index, b2World* world);
-	~Circulo();
-	float getRadio();
-	float getCoordX();
-	float getCoordY();
+        Circulo(JsonParser *parser, int index, b2World* world);
+        ~Circulo();
+        float getRadio();
+        float getCoordX();
+        float getCoordY();
 };
 
 #endif /* CIRCULO_H_ */

@@ -8,7 +8,7 @@ int main(int argc, char* argv[]) {
 		Game* theGame = new Game();
 		std::string jsonPath = "resources/example.json";
 		output = theGame->onExecute(jsonPath);
-		//rdelete theGame;
+		//delete theGame;
 	}
 	while (output == 2); //Si la salida es 2, resetea
 

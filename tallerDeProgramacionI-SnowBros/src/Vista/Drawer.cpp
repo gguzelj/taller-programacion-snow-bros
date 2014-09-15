@@ -160,7 +160,7 @@ void Drawer::runWindow(int ancho_px ,int alto_px ,string imagePath){
     }
 	//Starting SDL2_IMAGE
 	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG){
-		logSDLError(std::cout, "IMG_Init");
+		logSDLError( "IMG_Init");
 		SDL_Quit();
 		throw;
 	}
@@ -168,7 +168,7 @@ void Drawer::runWindow(int ancho_px ,int alto_px ,string imagePath){
 	//Opening a window
 	window = SDL_CreateWindow("Snow Bros", SDL_WINDOWPOS_CENTERED , SDL_WINDOWPOS_CENTERED, ancho_px, alto_px, SDL_WINDOW_SHOWN);
 	if (window == nullptr){
-		logSDLError(std::cout, "Error al utilizar SDL_CreateWindow() window devolvio nullptr");
+		logSDLError( "Error al utilizar SDL_CreateWindow() window devolvio nullptr");
 		IMG_Quit();
 		SDL_Quit();
 		throw;
@@ -178,7 +178,7 @@ void Drawer::runWindow(int ancho_px ,int alto_px ,string imagePath){
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (renderer == nullptr){
 		SDL_DestroyWindow(window);
-		logSDLError(std::cout, "Error al utilizar SDL_CreateRenderer() renderer devolvio nullptr");
+		logSDLError( "Error al utilizar SDL_CreateRenderer() renderer devolvio nullptr");
 		IMG_Quit();
 		SDL_Quit();
 		throw;
@@ -199,10 +199,10 @@ void Drawer::runWindow(int ancho_px ,int alto_px ,string imagePath){
 SDL_Texture* Drawer::loadTexture(const std::string &file, SDL_Renderer *ren){
 	SDL_Texture *texture = IMG_LoadTexture(ren, file.c_str());
 	if (texture == nullptr){
-		logSDLError(std::cout, "Error al utilizar IMG_LoadTexture() texture devolvio nullptr");
+		logSDLError( "Error al utilizar IMG_LoadTexture() texture devolvio nullptr");
 	}
 	return texture;
 }
-void Drawer::logSDLError(std::ostream &os, const std::string &msg){
-	os << msg << " error: " << SDL_GetError() << std::endl;
+void Drawer::logSDLError(const std::string &msg){
+	Log::instance()->append(msg +" error: " + SDL_GetError(),Log::ERROR);
 }

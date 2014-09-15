@@ -41,7 +41,7 @@ private:
 	void clearScenary();
 
 	SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren);
-	void logSDLError(std::ostream &os, const std::string &msg);
+	void logSDLError( const std::string &msg);
 
 };
 

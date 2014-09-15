@@ -3,14 +3,13 @@
 
 int main(int argc, char* argv[]) {
 
-	int output = 2;
+	int output;
 	do{
 		Game* theGame = new Game();
-		std::string jsonPath = "resources/example.json";
-		output = theGame->onExecute(jsonPath);
+		output = theGame->onExecute(argc, argv);
 		//delete theGame;
 	}
-	while (output == 2); //Si la salida es 2, resetea
+	while (output == GAME_RELOAD);
 
     return 0;
 }

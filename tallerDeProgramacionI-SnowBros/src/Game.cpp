@@ -11,16 +11,19 @@ Game::Game(){
 	view_ = nullptr;
 	controller_ = nullptr;
 	parser_ = nullptr;
+	Log::instance()->append(GAME_INFO_NEW_GAME,Log::INFO);
 }
 
 Game::~Game(){
 	Log::instance()->closeLog();
 }
 
-int Game::onExecute(string jsonPath){
+int Game::onExecute(int argc, char* argv[]){
 
-	if(onInit(jsonPath) == false){
-		return 1; //Exit with error
+	validateParameters(argc,argv);
+
+	if(onInit(jsonPath_) == false){
+		return GAME_ERROR;
 	}
 
 	while(running_){
@@ -40,11 +43,11 @@ int Game::onExecute(string jsonPath){
 	onCleanup();
 
 	if (reload_){
-		Log::instance()->append("Reinicio de Juego",Log::INFO);
-		return 2; //Reload the game
+		Log::instance()->append(GAME_INFO_RELOAD,Log::INFO);
+		return GAME_RELOAD;
 	}
 
-	return 0; //Exit with everything ok
+	return GAME_OK;
 }
 
 bool Game::onInit(string jsonPath){
@@ -83,3 +86,28 @@ void Game::onCleanup(){
 // ########################## //
 // ##### Private methods #### //
 // ########################## //
+/**
+ * Validamos los parametros recibidos por consola. En caso de que el archivo JSON
+ * no exista, seteamos uno por default
+ */
+void Game::validateParameters(int argc, char* argv[]){
+
+	//Leemos el path del archivo json
+	if(argc >= 2) jsonPath_ = argv[1];
+
+	//Validamos cantidad de parametros. En caso de que no sean correctos, se
+	//comienza con un juego default
+	if(argc != 2){
+		Log::instance()->append(GAME_WARNING_CANT_PARAM,Log::WARNING);
+		jsonPath_ = GAME_JSON_DEF;
+	}
+
+	//Validamos que realmente exista el archivo json
+	std::ifstream file(jsonPath_);
+	if(!file.good()){
+		Log::instance()->append(GAME_WARNING_JSON_FILE, Log::WARNING);
+		jsonPath_ = GAME_JSON_DEF;
+	}
+
+	return;
+}

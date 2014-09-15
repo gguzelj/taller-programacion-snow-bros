@@ -10,6 +10,19 @@
 #include "Parser/JsonParser.h"
 #include "Log/Log.h"
 
+#define GAME_OK		0
+#define GAME_ERROR	1
+#define GAME_RELOAD 2
+
+#define GAME_JSON_DEF	"resources/example.json"
+
+#define GAME_WARNING_CANT_PARAM	"Adv. Game: La cantidad de parametros no es correcta. Se setea un archivo json default."
+#define GAME_WARNING_JSON_FILE	"Adv. Game: El archivo json indicado no existe. Se setea un archivo json default."
+
+#define GAME_INFO_NEW_GAME		"Info Game: Comienzo de nuevo Juego"
+#define GAME_INFO_RELOAD		"Info Game: Reinicio de Juego"
+
+
 using namespace std;
 
 class Game{
@@ -24,7 +37,7 @@ public:
 	 * 	1: Sale del juego con errores
 	 * 	2: Reiniciar juego
 	 */
-	int onExecute(string jsonPath);
+	int onExecute(int argc, char* argv[]);
 
 	/*
 	 * El dataHandler toma la responsabilidad de inicializar el modelo y la vista de acuerdo a los datos indicados por
@@ -65,6 +78,12 @@ private:
 	Escenario *model_;
 	Drawer *view_;
 	JsonParser *parser_;
+	std::string jsonPath_;
+
+	/**
+	 * Validamos los parametros recibidos por consola
+	 */
+	void validateParameters(int argc, char* argv[]);
 
 };
 

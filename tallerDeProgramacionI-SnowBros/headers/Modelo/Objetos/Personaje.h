@@ -43,28 +43,22 @@ class Personaje : public Figura{
 		b2Body* body;
 		Contacto contactos;
 		int contactosSensor;					//Una pequeña global para saber cuando se toca al sensor del personaje
-		int nombreDeLosContactos;
-		int movimientoIzquierda, movimientoDerecha, movimientoNada, velocidadLimite, aceleracion, frenado;
-		void Saltar(b2Vec2 VelocidadActual);
+		int velocidadLimite, aceleracion, frenado;
 		int stickiness;                 		//Para mostrar un poco de inercia
 		int duracionStickiness;
-		int tiempoEvitaSaltos;
-        enum movimientos {
-            Mov_Nada,
-            Mov_Izquierda,
-            Mov_Derecha,
-        };
-		movimientos movimientoActual;
-		movimientos movimientoAnterior; //Va a servir para no interrumpir el movimiento al momento del salto
+		bool estaSaltando;
 
 	public:
 		Personaje(JsonParser *parser, b2World* world);
 		~Personaje();   //Destructor del personaje
-		void Moverse(); //Alguna clase controlador o algo, hasta tal vez un int segun que tipo de movimiento se eligio
+
 		b2Vec2 Posicion();
-		void Keyboard(unsigned char key); //Deberia estar aca o en otro lado?
 		b2Fixture* GetFixtureList();
 		b2Vec2 GetWorldPoint(const b2Vec2& localPoint);
+
+		void moveLeft();
+		void moveRight();
+		void jump();
 
 };
 

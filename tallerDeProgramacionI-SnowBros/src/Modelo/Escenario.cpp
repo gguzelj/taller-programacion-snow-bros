@@ -50,7 +50,7 @@ Escenario::Escenario(JsonParser *parser) {
         }
 
         // Create the guy
-        //person_ = new Personaje(parser, world_);
+        person_ = new Personaje(parser, world_);
 }
 
 Escenario::~Escenario() {
@@ -62,7 +62,7 @@ Escenario::~Escenario() {
         // Borrar la lista
         delete figuras_;
         delete muros_;
-        //delete person_; todavia no estamos instanciando a la persona.
+        delete person_;
         delete world_;
 }
 

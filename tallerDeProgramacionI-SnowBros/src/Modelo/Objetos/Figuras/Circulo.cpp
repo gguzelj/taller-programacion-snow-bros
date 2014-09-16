@@ -28,29 +28,15 @@ Circulo::Circulo(JsonParser *parser, int index, b2World* world){
 		float pointY = this->radio/2 * cos(i * angle);
 		vertices[i].Set(pointX,pointY);
 	}
-	b2PolygonShape tuerca;
-	tuerca.Set(vertices,numVertices);
 	b2CircleShape circleShape;
 	circleShape.m_p.Set(0,0);
 	circleShape.m_radius = radio;
 
 	fixture1.shape = &circleShape;
 	fixture1.friction = 0.1f;
-	fixture2.shape = &tuerca;
-	this->bodyInterno = this->world->CreateBody(&cuerpoDeCirculo);
 	this->body = this->world->CreateBody(&cuerpoDeCirculo);
-	body->CreateFixture(&fixture2);
 	this->body->CreateFixture(&fixture1);
 
-	//Defino el revolute joint para que ambos bodies roten sobre un mismo cir
-	b2RevoluteJointDef revoluteJointDef;
-	revoluteJointDef.bodyA = this->body;
-	revoluteJointDef.bodyB = this->bodyInterno;
-	revoluteJointDef.collideConnected = false;
-	revoluteJointDef.localAnchorA.Set(0,0); //The center of the circle
-	revoluteJointDef.localAnchorB.Set(0,0); //The center of the polygon
-	revoluteJointDef.referenceAngle = 0; //The reference angle between the two bodies
-	this->world->CreateJoint(&revoluteJointDef);
 }
 
 Circulo::~Circulo(){

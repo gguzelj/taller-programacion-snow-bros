@@ -47,6 +47,7 @@ public:
 	float		getBaseMenorObjeto(unsigned int index);
 	float 		getMasaObjeto(unsigned int index);
 	bool 		esObjetoEstatico(unsigned int index);
+	std::string getObjectDefinition(unsigned int index);
 
 	//Metodos utilizados por la vista
 	std::string getImagenFondo(){ return escenario_->imagenFondo;};

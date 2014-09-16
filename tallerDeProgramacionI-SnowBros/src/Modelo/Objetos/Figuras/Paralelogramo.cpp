@@ -41,4 +41,5 @@ Paralelogramo::Paralelogramo(JsonParser *parser, int index, b2World* world){
 	fixture.density = masa / (ancho * alto);
 	fixture.friction = 0.1f;
 	body->CreateFixture(&fixture);
+
 }

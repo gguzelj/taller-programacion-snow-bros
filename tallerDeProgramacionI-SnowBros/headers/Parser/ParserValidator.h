@@ -47,6 +47,7 @@ public:
 		double base_menor;
 		int masa;
 		bool estatico;
+		Json::Value objectDefinition;
 	};
 
 	static bool validarEscenario(escenario_t* &escenario, Json::Value esc);

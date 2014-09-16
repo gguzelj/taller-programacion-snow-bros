@@ -8,6 +8,16 @@
         "personaje": {"x": 0,"y":0},
         "objetos": [
                      {
+                       "tipo":"circulo",
+                       "x":-13,
+                       "y":11,
+                       "escala":0.5,
+                       "color":"#1234AA",
+                       "rot":0,
+                       "masa":5,
+                       "estatico":false
+                     },
+                     {
                        "tipo":"rectangulo",
                        "x":-12,
                        "y":7,
@@ -29,16 +39,7 @@
                        "masa":3,
                        "estatico":true
                      },
-                     {
-                       "tipo":"circulo",
-                       "x":-13,
-                       "y":11,
-                       "escala":0.5,
-                       "color":"#1234AA",
-                       "rot":0,
-                       "masa":5,
-                       "estatico":false
-                     },
+
                      {
                        "tipo":"rectangulo",
                        "x":1,

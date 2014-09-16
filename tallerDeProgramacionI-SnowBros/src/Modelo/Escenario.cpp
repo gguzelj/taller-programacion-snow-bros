@@ -39,7 +39,14 @@ Escenario::Escenario(JsonParser *parser) {
 
 			else throw;
 
-			figuras_->push_back(figura_i);
+        	//Validamos si esta definicion del objeto no se superpone con alguna otra.
+        	//En ese caso, se elimina el objeto y se guarda en el log
+        	if(figura_i->validarOverlap()){
+
+        		Log::instance()->append(FIGURA_WARNING_OVERLAP + parser->getObjectDefinition(index),Log::WARNING);
+        	}else{
+        		figuras_->push_back(figura_i);
+        	}
         }
 
         // Create the guy

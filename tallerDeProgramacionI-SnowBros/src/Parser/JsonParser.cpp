@@ -52,7 +52,6 @@ bool JsonParser::setValuesFromFile() {
 	bool parsedSuccess;
 	Json::Reader reader;
 	Json::Value root;
-	Json::Value escenario;
 
 	parsedSuccess = reader.parse(jsonFile_, root, false);
 
@@ -136,10 +135,11 @@ bool JsonParser::parseObjetos(Json::Value root) {
 
 	//Alguno de los objetos puede estar mal definido, y no se deberia tener en cuenta
 	for (unsigned int index = 0; index < objetos.size(); index++) {
-		if(!ParserValidator::validarObjeto(obj, objetos[index], escenario_))
+		if(!ParserValidator::validarObjeto(obj, objetos[index], escenario_)){
+			obj->objectDefinition = objetos[index];
 			objetos_.push_back(obj);
+		}
 	}
-
 
 	if(objetos_.empty()){
 		Log::instance()->append(PARSER_ERROR_SIN_OBJETOS, Log::ERROR);
@@ -207,4 +207,8 @@ float JsonParser::getMasaObjeto(unsigned int index) {
 
 bool JsonParser::esObjetoEstatico(unsigned int index) {
 	return objetos_[index]->estatico;
+}
+
+std::string JsonParser::getObjectDefinition(unsigned int index){
+	return objetos_[index]->objectDefinition.toStyledString();
 }

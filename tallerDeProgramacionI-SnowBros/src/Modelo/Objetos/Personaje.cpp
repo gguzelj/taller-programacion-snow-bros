@@ -21,7 +21,7 @@ Personaje::Personaje(JsonParser *parser, b2World* world){
 
 	//definiendo ahora el fixture del personaje
 	b2PolygonShape formaDelPersonaje;						//esto va a ser si queremos que sea una caja...
-	formaDelPersonaje.SetAsBox(1,2);						//...con las siguientes dimensiones
+	formaDelPersonaje.SetAsBox(0.5,1);						//...con las siguientes dimensiones
 	b2FixtureDef fixtureDelPersonaje;						//creo el fixture
 	fixtureDelPersonaje.shape = &formaDelPersonaje;			//le asigno la forma que determine antes
 	fixtureDelPersonaje.density = 1;						//una densidad cualquiera
@@ -43,22 +43,32 @@ Personaje::~Personaje(){
 
 void Personaje::moveLeft(){
 //	if (!estaSaltando){
-		this->body->ApplyLinearImpulse(b2Vec2(-20,0),body->GetWorldCenter(),true);
+    	b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
+    	velocidadActual.x = -10.0f;
+    	this->body->SetLinearVelocity( velocidadActual );
 //	}
 }
 
 void Personaje::moveRight(){
 //	if (!estaSaltando){
-		this->body->ApplyLinearImpulse(b2Vec2(20,0),body->GetWorldCenter(),true);
+		b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
+		velocidadActual.x = 10.0f;
+		this->body->SetLinearVelocity( velocidadActual );
 //	}
 }
 
 void Personaje::jump(){
 //	  if (!estaSaltando){
-		 float potenciaDeSalto = this->body->GetMass() * 4;
+		 float potenciaDeSalto = this->body->GetMass() * 10;
 		 this->body->ApplyLinearImpulse( b2Vec2(0,potenciaDeSalto), this->body->GetWorldCenter(),true ); //Se podria cambiar el this->body->GetWorldCenter() por this->body->GetLocalCenter()
 		 this->estaSaltando = true;
 //	  }
+}
+
+void Personaje::stop(){
+	b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
+	velocidadActual.x = 0.0f;
+	this->body->SetLinearVelocity( velocidadActual );
 }
 
 b2Fixture* Personaje::GetFixtureList(){

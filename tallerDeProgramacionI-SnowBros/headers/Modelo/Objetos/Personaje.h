@@ -59,6 +59,7 @@ class Personaje : public Figura{
 		void moveLeft();
 		void moveRight();
 		void jump();
+		void stop();
 
 };
 

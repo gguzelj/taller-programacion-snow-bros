@@ -18,7 +18,7 @@ void Controlador::handleEvent(SDL_Event* evento,bool* running, bool* reload){
 		case SDL_QUIT:
 			(*running) = false;
 			break;
-		case SDL_KEYUP:{
+		case SDL_KEYDOWN:{
 			switch(evento->key.keysym.sym){
 				case TECLA_RESET:{
 					(*reload) = true;

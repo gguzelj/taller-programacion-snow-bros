@@ -41,9 +41,19 @@ void Controlador::handleEvent(SDL_Event* evento,bool* running, bool* reload){
 					model->getPersonaje()->jump();
 					break;
 				}
-				case SDLK_s:
+			}
+			break;
+		}
+		case SDL_KEYUP:{
+			switch(evento->key.keysym.sym){
+				case SDLK_LEFT:{
 					model->getPersonaje()->stop();
 					break;
+				}
+				case SDLK_RIGHT:{
+					model->getPersonaje()->stop();
+					break;
+				}
 			}
 		}
    }

@@ -6,7 +6,6 @@
 class Circulo : public Figura{
 private:
         float radio;
-        b2Body* bodyInterno;
 public:
         Circulo(JsonParser *parser, int index, b2World* world);
         ~Circulo();

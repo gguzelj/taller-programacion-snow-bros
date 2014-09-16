@@ -19,12 +19,9 @@ Rectangulo::Rectangulo(JsonParser *parser, int index, b2World* world){
 
 	b2BodyDef cuerpo;
 	estatico ? cuerpo.type = b2_staticBody : cuerpo.type = b2_dynamicBody;
-
 	cuerpo.angle = angulo;
 	cuerpo.position.Set(x,y);
-
-	b2Body* body = this->world->CreateBody(&cuerpo);
-	this->body = body;
+	this->body = this->world->CreateBody(&cuerpo);
 
 	//definiendo ahora el fixture del rectangulo
 	b2PolygonShape shape;

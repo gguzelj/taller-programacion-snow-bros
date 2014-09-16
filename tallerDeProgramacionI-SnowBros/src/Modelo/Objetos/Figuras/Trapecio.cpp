@@ -28,12 +28,9 @@ Trapecio::Trapecio(JsonParser *parser, int index, b2World* world){
 	estatico ? cuerpo.type = b2_staticBody : cuerpo.type = b2_dynamicBody;
 	cuerpo.angle = angulo;
 	cuerpo.position.Set(0,0);
-
-	b2Body* body = this->world->CreateBody(&cuerpo);
-	this->body = body;
+	this->body = this->world->CreateBody(&cuerpo);
 
 	//Definiendo ahora el fixture del Trapecio
-
 	float mediana = (base_inf + base_sup) / 2;
 	float hip = alto / sin(inclinacion * DEGTORAD);
 

@@ -19,9 +19,7 @@ Poligono::Poligono(JsonParser *parser, int index, b2World* world){
 	estatico ? cuerpo.type = b2_staticBody : cuerpo.type = b2_dynamicBody;
 	cuerpo.angle = angulo;
 	cuerpo.position.Set(0,0);
-
-	b2Body* body = this->world->CreateBody(&cuerpo);
-	this->body = body;
+	this->body = this->world->CreateBody(&cuerpo);
 
 	//definiendo ahora el fixture del poligono
 	b2Vec2 vertices[this->lados];
@@ -33,7 +31,6 @@ Poligono::Poligono(JsonParser *parser, int index, b2World* world){
 	    float pointX = this->x + this->escala * sin(i * angle);
 	    float pointY = this->y + this->escala * cos(i * angle);
 	    vertices[i].Set(pointX,pointY);
-	    std::cout << "x: " << vertices[i].x << " y: " << vertices[i].y << std::endl;
 	}
 
 	b2PolygonShape shape;

@@ -10,7 +10,7 @@ Circulo::Circulo(JsonParser *parser, int index, b2World* world){
 	this->color = parser->getColorObjeto(index);
 	this->world = world;
 
-	//Defino el body y fixture en comun
+	//Defino el body y fixture
 	b2BodyDef cuerpoDeCirculo;
 	estatico ? cuerpoDeCirculo.type = b2_staticBody : cuerpoDeCirculo.type = b2_dynamicBody; //veo que tipo le asigno dependiendo de que se pida
 	b2FixtureDef fixture1;                          //creo el fixture
@@ -19,15 +19,6 @@ Circulo::Circulo(JsonParser *parser, int index, b2World* world){
 	fixture2.density = 0.000000001;
 	cuerpoDeCirculo.position.Set(x,y);
 
-	//SHapes
-	int numVertices = 6;
-	b2Vec2 vertices[numVertices];
-	float angle = 2 * M_PI / numVertices;
-	for (int i = 0; i < numVertices; i++){
-		float pointX = this->radio/2 * sin(i * angle);
-		float pointY = this->radio/2 * cos(i * angle);
-		vertices[i].Set(pointX,pointY);
-	}
 	b2CircleShape circleShape;
 	circleShape.m_p.Set(0,0);
 	circleShape.m_radius = radio;

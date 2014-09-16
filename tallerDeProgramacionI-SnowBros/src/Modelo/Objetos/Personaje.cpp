@@ -18,10 +18,7 @@ Personaje::Personaje(JsonParser *parser, b2World* world){
 	cuerpoDelPersonaje.type = b2_dynamicBody;                       //El personaje sera un cuerpo dinamico
 	cuerpoDelPersonaje.angle = 0;                                   //Angulo 0 asi empieza recto
 	cuerpoDelPersonaje.position.Set(0,0);                           //donde queremos que empiece
-
-
-	b2Body* body = this->world->CreateBody(&cuerpoDelPersonaje);
-	this->body = body;
+	this->body = this->world->CreateBody(&cuerpoDelPersonaje);
 	this->body->SetFixedRotation(true);		//Evito que rote
 
 	//definiendo ahora el fixture del personaje

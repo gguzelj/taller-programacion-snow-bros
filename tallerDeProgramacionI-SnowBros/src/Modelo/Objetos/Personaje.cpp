@@ -2,14 +2,14 @@
 
 Personaje::Personaje(JsonParser *parser, b2World* world){
 	this->world = world;
-	this->velocidadLimite = 15.0f;
-	this->aceleracion = 2.4f;
+	this->aceleracion = 10.0f;
 	this->estaSaltando = false;
 	this->x = parser->getCoorXPersonaje();
 	this->y = parser->getCoorYPersonaje();
 
-	//	this->contactosSensor = 0;	//Inicio con 0, y cuando empiece tocando algo va a ir subiendo
-	world->SetContactListener(&contactos); 	//Logro sobrescribir el b2ContactListener
+	this->contactos = new Contacto(this);
+	this->world->SetContactListener(&contactos); 	//Logro sobrescribir el b2ContactListener
+	this->body->SetUserData(this);
 
 	//definiendo el body del personaje
 	b2BodyDef cuerpoDelPersonaje;
@@ -42,33 +42,41 @@ Personaje::~Personaje(){
 }
 
 void Personaje::moveLeft(){
-//	if (!estaSaltando){
+	if (!estaSaltando){
     	b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
-    	velocidadActual.x = -10.0f;
+    	velocidadActual.x = -aceleracion;
     	this->body->SetLinearVelocity( velocidadActual );
-//	}
+	}
 }
 
 void Personaje::moveRight(){
-//	if (!estaSaltando){
+	if (!estaSaltando){
 		b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
-		velocidadActual.x = 10.0f;
+		velocidadActual.x = aceleracion;
 		this->body->SetLinearVelocity( velocidadActual );
-//	}
+	}
 }
 
 void Personaje::jump(){
-//	  if (!estaSaltando){
+	  if (!estaSaltando){
 		 float potenciaDeSalto = this->body->GetMass() * 10;
 		 this->body->ApplyLinearImpulse( b2Vec2(0,potenciaDeSalto), this->body->GetWorldCenter(),true ); //Se podria cambiar el this->body->GetWorldCenter() por this->body->GetLocalCenter()
 		 this->estaSaltando = true;
-//	  }
+	  }
 }
 
 void Personaje::stop(){
 	b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
 	velocidadActual.x = 0.0f;
 	this->body->SetLinearVelocity( velocidadActual );
+}
+
+void Personaje::startContact(){
+	 this->estaSaltando = false;
+}
+
+void Personaje::endContact(){
+	 this->estaSaltando = true;
 }
 
 b2Fixture* Personaje::GetFixtureList(){
@@ -79,4 +87,3 @@ b2Fixture* Personaje::GetFixtureList(){
 b2Vec2 Personaje::GetWorldPoint(const b2Vec2& localPoint){
 	return body->GetWorldPoint(localPoint);
 }
-

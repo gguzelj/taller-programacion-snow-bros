@@ -14,9 +14,6 @@ class Personaje : public Figura{
 		int aceleracion;
 		bool estaSaltando;
 
-		void startContact();
-		void endContact();
-
 	public:
 		Personaje(JsonParser *parser, b2World* world);
 		~Personaje();   //Destructor del personaje
@@ -29,6 +26,9 @@ class Personaje : public Figura{
 		void moveRight();
 		void jump();
 		void stop();
+
+		void startContact();
+		void endContact();
 
 };
 

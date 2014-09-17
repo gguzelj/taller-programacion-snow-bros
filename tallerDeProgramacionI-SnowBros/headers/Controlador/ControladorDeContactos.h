@@ -13,7 +13,7 @@ class Contacto : public b2ContactListener{
     	//Check if fixture A of the collision is the guy.
         void* bodyUserData = contact->GetFixtureA()->GetUserData();
         if ( bodyUserData ){
-        	static_cast<Personaje*>bodyUserData->startContact();
+        	static_cast<Personaje*> bodyUserData->startContact();
         }
         //Check if fixture B of the collision is the guy.
         bodyUserData = contact->GetFixtureB()->GetUserData();

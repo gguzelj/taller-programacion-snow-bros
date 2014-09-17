@@ -27,7 +27,7 @@ Trapecio::Trapecio(JsonParser *parser, int index, b2World* world){
 	b2BodyDef cuerpo;
 	estatico ? cuerpo.type = b2_staticBody : cuerpo.type = b2_dynamicBody;
 	cuerpo.angle = angulo;
-	cuerpo.position.Set(0,0);
+	cuerpo.position.Set(x,y);
 	this->body = this->world->CreateBody(&cuerpo);
 
 	//Definiendo ahora el fixture del Trapecio
@@ -35,10 +35,10 @@ Trapecio::Trapecio(JsonParser *parser, int index, b2World* world){
 	float hip = alto / sin(inclinacion * DEGTORAD);
 
 	b2Vec2 vertices[4];
-	vertices[0].Set( x + mediana / 2 + cos(inclinacion * DEGTORAD) * hip / 2, y + alto / 2);	//Superior der
-	vertices[1].Set( x + mediana / 2 - cos(inclinacion * DEGTORAD) * hip / 2, y - alto / 2);	//Inferior der
-	vertices[2].Set(vertices[0].x - base_sup, vertices[0].y);									//Superior izq
-	vertices[3].Set(vertices[1].x - base_inf, vertices[1].y);									//Inferior izq
+	vertices[0].Set( mediana / 2 + cos(inclinacion * DEGTORAD) * hip / 2, alto / 2);	//Superior der
+	vertices[1].Set( mediana / 2 - cos(inclinacion * DEGTORAD) * hip / 2, -alto / 2);	//Inferior der
+	vertices[2].Set(vertices[0].x - base_sup, vertices[0].y);							//Superior izq
+	vertices[3].Set(vertices[1].x - base_inf, vertices[1].y);							//Inferior izq
 
 	b2PolygonShape shape;
 	shape.Set(vertices,4);

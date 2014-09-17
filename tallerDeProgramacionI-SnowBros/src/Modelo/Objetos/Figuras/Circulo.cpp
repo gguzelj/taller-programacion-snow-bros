@@ -24,7 +24,7 @@ Circulo::Circulo(JsonParser *parser, int index, b2World* world){
 	circleShape.m_radius = radio;
 
 	fixture1.shape = &circleShape;
-	fixture1.friction = 0.1f;
+	fixture1.friction = 0.9f;
 	this->body = this->world->CreateBody(&cuerpoDeCirculo);
 	this->body->CreateFixture(&fixture1);
 

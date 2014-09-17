@@ -18,7 +18,7 @@ Poligono::Poligono(JsonParser *parser, int index, b2World* world){
 	b2BodyDef cuerpo;
 	estatico ? cuerpo.type = b2_staticBody : cuerpo.type = b2_dynamicBody;
 	cuerpo.angle = angulo;
-	cuerpo.position.Set(0,0);
+	cuerpo.position.Set(x,y);
 	this->body = this->world->CreateBody(&cuerpo);
 
 	//definiendo ahora el fixture del poligono
@@ -28,8 +28,8 @@ Poligono::Poligono(JsonParser *parser, int index, b2World* world){
 	float angle = 2 * M_PI / numVertices;
 	for (int i = 0; i < numVertices; i++)
 	{
-	    float pointX = this->x + this->escala * sin(i * angle);
-	    float pointY = this->y + this->escala * cos(i * angle);
+	    float pointX = this->escala * sin(i * angle);
+	    float pointY = this->escala * cos(i * angle);
 	    vertices[i].Set(pointX,pointY);
 	}
 

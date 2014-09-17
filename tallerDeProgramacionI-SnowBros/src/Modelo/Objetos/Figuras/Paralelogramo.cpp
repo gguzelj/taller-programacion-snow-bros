@@ -19,17 +19,17 @@ Paralelogramo::Paralelogramo(JsonParser *parser, int index, b2World* world){
 	b2BodyDef cuerpo;
 	estatico ? cuerpo.type = b2_staticBody : cuerpo.type = b2_dynamicBody;
 	cuerpo.angle = angulo;
-	cuerpo.position.Set(0,0);
+	cuerpo.position.Set(x,y);
 	this->body = this->world->CreateBody(&cuerpo);
 
 	//Definiendo ahora el fixture del paralelogramo
 	float hip = alto / sin(inclinacion * DEGTORAD);
 
 	b2Vec2 vertices[4];
-	vertices[0].Set( x + ancho/2 + cos(inclinacion * DEGTORAD) * hip / 2, y + alto/2);  	//Superior der
-	vertices[1].Set(vertices[0].x - ancho, vertices[0].y);									//Superior izq
-	vertices[2].Set( x - ancho/2 - cos(inclinacion * DEGTORAD) * hip / 2, y - alto/2);		//Inferior izq
-	vertices[3].Set(vertices[2].x + ancho, vertices[2].y);									//Inferior der
+	vertices[0].Set( ancho / 2 + cos(inclinacion * DEGTORAD) * hip / 2, alto / 2);  //Superior der
+	vertices[1].Set( ancho / 2 - cos(inclinacion * DEGTORAD) * hip / 2, -alto / 2);	//Inferior der
+	vertices[2].Set(vertices[0].x - ancho, vertices[0].y);							//Superior izq
+	vertices[3].Set(vertices[1].x - ancho, vertices[1].y);							//Inferior izq
 
 	b2PolygonShape shape;
 	shape.Set(vertices,4);

@@ -60,7 +60,7 @@
 #define ANCHO_MIN               0.1
 #define ALTO_MAX                10
 #define ALTO_MIN                0.1
-#define ROT_MIN                 0
+#define ROT_MIN                 -360
 #define ROT_MAX                 360
 #define INCLINACION_MIN         30
 #define INCLINACION_MAX         150

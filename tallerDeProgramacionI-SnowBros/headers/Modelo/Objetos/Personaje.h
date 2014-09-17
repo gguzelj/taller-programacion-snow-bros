@@ -11,6 +11,7 @@ class Personaje : public Figura{
 		b2World* world;                         //Viene por parametro.
 		b2Body* body;
 		Contacto contactos;
+		int cantidadDeContactosActuales;
 		int aceleracion;
 		bool estaSaltando;
 

@@ -1,14 +1,18 @@
 #include "../../../headers/Modelo/Objetos/Personaje.h"
+#define GUY_ID 1
 
 Personaje::Personaje(JsonParser *parser, b2World* world){
+	//Parametros generales
 	this->world = world;
 	this->aceleracion = 10.0f;
 	this->estaSaltando = false;
 	this->x = parser->getCoorXPersonaje();
 	this->y = parser->getCoorYPersonaje();
 
-	this->contactos = new Contacto(this);
-	this->world->SetContactListener(&contactos); 	//Logro sobrescribir el b2ContactListener
+	//Parametros para controlar los contactos
+	this->cantidadDeContactosActuales = 0;
+	this->contactos.updateContacto(&cantidadDeContactosActuales);
+	this->world->SetContactListener(&contactos);
 	this->body->SetUserData(this);
 
 	//definiendo el body del personaje
@@ -27,13 +31,7 @@ Personaje::Personaje(JsonParser *parser, b2World* world){
 	fixtureDelPersonaje.density = 1;						//una densidad cualquiera
 	fixtureDelPersonaje.friction = 1;						//Le invento una friccion
 	body->CreateFixture(&fixtureDelPersonaje);
-/*
-	//sensor tiene que ir al final porque meti un sensor
-	formaDelPersonaje.SetAsBox(1, 2, b2Vec2(0,-3), 0);	//Le agrego otro fixture al personaje que va a servir como sensor, notar que esta muy relacionado con el tamaño del personaje, si se cambia cambiar esto tambien
-	fixtureDelPersonaje.isSensor = true;					//Notar que ahora el fixture nuevo es sensor
-	b2Fixture* fixtureDelSensor = body->CreateFixture(&fixtureDelPersonaje);
-	fixtureDelSensor->SetUserData( (void*)DE_PIES );		//Le digo que es el pie
-*/
+
 }
 
 Personaje::~Personaje(){
@@ -42,7 +40,7 @@ Personaje::~Personaje(){
 }
 
 void Personaje::moveLeft(){
-	if (!estaSaltando){
+	if (cantidadDeContactosActuales!=0){
     	b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
     	velocidadActual.x = -aceleracion;
     	this->body->SetLinearVelocity( velocidadActual );
@@ -50,7 +48,7 @@ void Personaje::moveLeft(){
 }
 
 void Personaje::moveRight(){
-	if (!estaSaltando){
+	if (cantidadDeContactosActuales!=0){
 		b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
 		velocidadActual.x = aceleracion;
 		this->body->SetLinearVelocity( velocidadActual );
@@ -58,17 +56,18 @@ void Personaje::moveRight(){
 }
 
 void Personaje::jump(){
-	  if (!estaSaltando){
+	  if (cantidadDeContactosActuales!=0){
 		 float potenciaDeSalto = this->body->GetMass() * 10;
 		 this->body->ApplyLinearImpulse( b2Vec2(0,potenciaDeSalto), this->body->GetWorldCenter(),true ); //Se podria cambiar el this->body->GetWorldCenter() por this->body->GetLocalCenter()
-		 this->estaSaltando = true;
 	  }
 }
 
 void Personaje::stop(){
-	b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
-	velocidadActual.x = 0.0f;
-	this->body->SetLinearVelocity( velocidadActual );
+	if (cantidadDeContactosActuales!=0){
+		b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
+		velocidadActual.x = 0.0f;
+		this->body->SetLinearVelocity( velocidadActual );
+	}
 }
 
 void Personaje::startContact(){

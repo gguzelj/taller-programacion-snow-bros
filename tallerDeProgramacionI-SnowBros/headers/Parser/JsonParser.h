@@ -10,6 +10,7 @@
 
 #include <Box2D/Box2D.h>
 #include <json/json.h>
+#include <json/features.h>
 
 #include "../Log/Log.h"
 #include "JsonParser_C.h"

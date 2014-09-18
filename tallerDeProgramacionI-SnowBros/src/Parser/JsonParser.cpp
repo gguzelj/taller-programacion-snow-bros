@@ -50,13 +50,13 @@ bool JsonParser::setDefaultValues() {
 bool JsonParser::setValuesFromFile() {
 
 	bool parsedSuccess;
-	Json::Reader reader;
+	Json::Reader *reader = new Json::Reader(Json::Features::strictMode());
 	Json::Value root;
 
-	parsedSuccess = reader.parse(jsonFile_, root, false);
+	parsedSuccess = reader->parse(jsonFile_, root, false);
 
 	if (not parsedSuccess) {
-		Log::instance()->append(PARSER_ERROR_INVALID_JSON + reader.getFormatedErrorMessages(),Log::ERROR);
+		Log::instance()->append(PARSER_ERROR_INVALID_JSON + reader->getFormatedErrorMessages(),Log::ERROR);
 		if (path_ != PATH_DEF)
 			return this->setDefaultValues();
 		else

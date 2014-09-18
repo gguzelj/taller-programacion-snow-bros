@@ -584,8 +584,6 @@ bool ParserValidator::valEstaticoObjeto(Json::Value obj, bool &estatico){
 std::string ParserValidator::valColorObjeto(Json::Value obj){
 
 	std::string color;
-	int num;
-	unsigned int R,G,B;
 
 	if(!obj.isMember(COLOR)){
 		Log::instance()->append(PARSER_WARNING_OBJ_COLOR + obj.toStyledString(), Log::WARNING);
@@ -605,18 +603,15 @@ std::string ParserValidator::valColorObjeto(Json::Value obj){
 		return COLOR_DEF;
 	}
 
-	std::stringstream ss(color.substr(1,7));
-	ss >> std::hex >> num;
 
-	R = num / 0x10000;
-	G = (num / 0x100) % 0x100;
-	B = num % 0x100;
+	std::string hex = color.substr(1,color.size() - 1);
 
-	if( ( R >= 0 && R <= 255 ) &&
-		( G >= 0 && G <= 255 ) &&
-		( B >= 0 && B <= 255 ) ) return color;
+	if(hex.find_first_not_of("0123456789abcdefABCDEF") != std::string::npos){
+		Log::instance()->append(PARSER_WARNING_OBJ_COLOR_DESCONOCIDO + obj.toStyledString(), Log::WARNING);
+		return COLOR_DEF;
+	}
 
-	return COLOR_DEF;
+	return color;
 }
 
 /**

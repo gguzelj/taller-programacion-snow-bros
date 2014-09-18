@@ -58,11 +58,9 @@ void Personaje::jump(){
 }
 
 void Personaje::stop(){
-	if (cantidadDeContactosActuales!=0){
 		b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
-		velocidadActual.x = 0.0f;
+		velocidadActual.x = velocidadActual.x * 0.17f;
 		this->body->SetLinearVelocity( velocidadActual );
-	}
 }
 
 b2Fixture* Personaje::GetFixtureList(){

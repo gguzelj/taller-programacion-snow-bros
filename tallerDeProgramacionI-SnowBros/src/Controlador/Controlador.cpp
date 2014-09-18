@@ -3,7 +3,7 @@
 Controlador::Controlador(Escenario *model, Drawer *view ){
 	this->model = model;
 	this->view = view;
-	presionando = 0;
+	presionando = false;
 }
 void Controlador::handleEvents(bool* running, bool* reload){
 
@@ -15,64 +15,79 @@ void Controlador::handleEvents(bool* running, bool* reload){
 }
 
 void Controlador::handleEvent(SDL_Event* evento,bool* running, bool* reload){
-	switch (evento->type){
-		case SDL_QUIT:
-			(*running) = false;
-			break;
-		case SDL_KEYDOWN:{
-			switch(evento->key.keysym.sym){
-				case SDLK_UP:{
-					model->getPersonaje()->jump();
+	if (presionando == true){
+		if (verdaderoSiDerechaFalsoSiIzquierda==false)
+		model->getPersonaje()->moveLeft();
+		else 	model->getPersonaje()->moveRight();
+	};
+		switch (evento->type){
+				case SDL_QUIT:
+					(*running) = false;
 					break;
-				}
-			}
-			if (presionando == 0){
 
-			switch(evento->key.keysym.sym){
-					case TECLA_RESET:{
-						(*reload) = true;
-						(*running) = false;
+					case SDL_KEYDOWN:{
+						switch(evento->key.keysym.sym){
+							case SDLK_UP:{
+								model->getPersonaje()->jump();
+								break;
+							}
+							case TECLA_RESET:{
+								(*reload) = true;
+								(*running) = false;
+								break;
+							}
+							case SDLK_ESCAPE:{
+								(*running) = false;
+								break;
+							}
+							case SDLK_LEFT:{
+								if (presionando == false){
+									presionando = true;
+									verdaderoSiDerechaFalsoSiIzquierda = false;
+									model->getPersonaje()->moveLeft();
+								};
+								break;
+							}
+							case SDLK_RIGHT:{
+								if (presionando == false){
+									presionando = true;
+									verdaderoSiDerechaFalsoSiIzquierda = true;
+									model->getPersonaje()->moveRight();
+								};
+								break;
+							}
+
+						}
 						break;
 					}
-					case SDLK_ESCAPE:{
-						(*running) = false;
-						break;
-					}
-					case SDLK_LEFT:{
+
+					if (presionando == true){
+						if (verdaderoSiDerechaFalsoSiIzquierda==false)
 						model->getPersonaje()->moveLeft();
-						presionando = 1;
-						movimientoTipo = 0;
-						break;
-					}
-					case SDLK_RIGHT:{
-						model->getPersonaje()->moveRight();
-						presionando = 1;
-						movimientoTipo = 1;
-						break;
-					}
-				}
-			}
-			else{
-				if (movimientoTipo==0)
-					model->getPersonaje()->moveLeft();
-				else 	model->getPersonaje()->moveRight();
-			}
-			break;
-		}
-		case SDL_KEYUP:{
-			switch(evento->key.keysym.sym){
-				case SDLK_LEFT:{
-					model->getPersonaje()->stop();
-					presionando = 0;
-					break;
-				}
-				case SDLK_RIGHT:{
-					model->getPersonaje()->stop();
-					presionando = 0;
-					break;
-				}
-			}
-		}
-   }
+						else 	model->getPersonaje()->moveRight();
+						case SDL_KEYUP:{
+							switch(evento->key.keysym.sym){
+								case SDLK_LEFT:{
+									if (verdaderoSiDerechaFalsoSiIzquierda == false){ //si va a derecha no lo dejo frenarse
+										model->getPersonaje()->stop();
+										presionando = false;
+									};
+									break;
+								}
+								case SDLK_RIGHT:{
+									if (verdaderoSiDerechaFalsoSiIzquierda == true){ //si va a izquierda no lo dejo frenarse
+										model->getPersonaje()->stop();
+										presionando = false;
+									};
+									break;
+								}
+							}
+						}
+					};
+	}
+		if (presionando == true){
+			if (verdaderoSiDerechaFalsoSiIzquierda==false)
+			model->getPersonaje()->moveLeft();
+			else 	model->getPersonaje()->moveRight();
+		};
 }
-

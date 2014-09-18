@@ -19,8 +19,8 @@ public:
 private:
     Escenario *model;
     Drawer *view;
-    int presionando;
-    int movimientoTipo;
+    bool presionando;
+    bool verdaderoSiDerechaFalsoSiIzquierda;
 
 };
 

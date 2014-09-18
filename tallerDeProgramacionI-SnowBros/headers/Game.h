@@ -16,11 +16,19 @@
 
 #define GAME_JSON_DEF	"resources/example.json"
 
-#define GAME_WARNING_CANT_PARAM	"Adv. Game: La cantidad de parametros no es correcta. Se setea un archivo json default."
-#define GAME_WARNING_JSON_FILE	"Adv. Game: El archivo json indicado no existe. Se setea un archivo json default."
+//MENSAJES
+//ERROR
+#define GAME_MSG_INIT_ERROR	"Game: Error al inicial el juego"
 
-#define GAME_INFO_NEW_GAME		"Info Game: Comienzo de nuevo Juego"
-#define GAME_INFO_RELOAD		"Info Game: Reinicio de Juego"
+//WARNING
+#define GAME_MSG_CANT_PARAM	"Game: La cantidad de parametros no es correcta. Se setea un archivo json default."
+#define GAME_MSG_JSON_FILE	"Game: El archivo json indicado no existe. Se setea un archivo json default."
+
+//INFO
+#define GAME_MSG_NEW_GAME	"Game: Comienzo de nuevo Juego"
+#define GAME_MSG_DELETE_GAME "Game: Borrando Juego"
+#define GAME_MSG_RELOAD		"Game: Reinicio de Juego"
+#define GAME_MSG_VAL_PAR	"Game: Validando parametros de entrada"
 
 
 using namespace std;

@@ -2,7 +2,7 @@
 #define FIGURA_H_
 
 
-#define FIGURA_WARNING_OVERLAP "Advertencia: El siguiente objeto se esta superponiendo con otros ya creados \n"
+#define FIGURA_WARNING_OVERLAP "El siguiente objeto se esta superponiendo con otros ya creados \n"
 #include <Box2D/Box2D.h>
 #include <Box2D/Collision/b2Collision.h>
 #include <list>

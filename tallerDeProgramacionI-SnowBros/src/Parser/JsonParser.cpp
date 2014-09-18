@@ -20,12 +20,12 @@ JsonParser::~JsonParser() {
  */
 bool JsonParser::parse() {
 
-	Log::instance()->append(PARSER_INFO_START_PARSING + path_, Log::INFO);
+	Log::instance()->append(PARSER_MSG_START_PARSING + path_, Log::INFO);
 
 	jsonFile_ = FileReader::read(path_);
 
 	if (jsonFile_.empty()) {
-		Log::instance()->append(PARSER_WARNING_OPEN_FILE + path_, Log::WARNING);
+		Log::instance()->append(PARSER_MSG_OPEN_FILE + path_, Log::WARNING);
 		return this->setDefaultValues();
 	} else {
 		return this->setValuesFromFile();
@@ -37,7 +37,7 @@ bool JsonParser::parse() {
  * con los valores por default
  */
 bool JsonParser::setDefaultValues() {
-	Log::instance()->append(PARSER_INFO_DEFAULT_GAME, Log::INFO);
+	Log::instance()->append(PARSER_MSG_DEFAULT_GAME, Log::INFO);
 	path_ = PATH_DEF;
 	jsonFile_ = FileReader::read(path_);
 	return this->setValuesFromFile();
@@ -56,7 +56,7 @@ bool JsonParser::setValuesFromFile() {
 	parsedSuccess = reader->parse(jsonFile_, root, false);
 
 	if (not parsedSuccess) {
-		Log::instance()->append(PARSER_ERROR_INVALID_JSON + reader->getFormatedErrorMessages(),Log::ERROR);
+		Log::instance()->append(PARSER_MSG_INVALID_JSON + reader->getFormatedErrorMessages(),Log::ERROR);
 		if (path_ != PATH_DEF)
 			return this->setDefaultValues();
 		else
@@ -76,14 +76,14 @@ bool JsonParser::setValuesFromFile() {
 bool JsonParser::parseEscenario(Json::Value root) {
 
 	if (!root.isMember(ESCENARIO)) {
-		Log::instance()->append(PARSER_ERROR_NO_ESCENARIO, Log::ERROR);
+		Log::instance()->append(PARSER_MSG_NO_ESCENARIO, Log::ERROR);
 		return true;
 	}
 
 	Json::Value escenario = root[ESCENARIO];
 
 	if(!escenario.isObject()){
-		Log::instance()->append(PARSER_ERROR_TIPO_ESCENARIO, Log::ERROR);
+		Log::instance()->append(PARSER_MSG_TIPO_ESCENARIO, Log::ERROR);
 		return true;
 	}
 
@@ -98,14 +98,14 @@ bool JsonParser::parsePersonaje(Json::Value root) {
 	Json::Value escenario = root[ESCENARIO];
 
 	if (!escenario.isMember(PERSONAJE)) {
-		Log::instance()->append(PARSER_ERROR_NO_PERSONAJE, Log::ERROR);
+		Log::instance()->append(PARSER_MSG_NO_PERSONAJE, Log::ERROR);
 		return true;
 	}
 
 	Json::Value personaje = escenario[PERSONAJE];
 
 	if (!personaje.isObject()) {
-		Log::instance()->append(PARSER_ERROR_TIPO_PERSONAJE, Log::ERROR);
+		Log::instance()->append(PARSER_MSG_TIPO_PERSONAJE, Log::ERROR);
 		return true;
 	}
 
@@ -122,14 +122,14 @@ bool JsonParser::parseObjetos(Json::Value root) {
 	Json::Value escenario = root[ESCENARIO];
 
 	if (!escenario.isMember(OBJETOS)) {
-		Log::instance()->append(PARSER_ERROR_NO_OBJETOS, Log::ERROR);
+		Log::instance()->append(PARSER_MSG_NO_OBJETOS, Log::ERROR);
 		return true;
 	}
 
 	objetos = escenario[OBJETOS];
 
 	if(!objetos.isArray()){
-		Log::instance()->append(PARSER_ERROR_TIPO_OBJETOS, Log::ERROR);
+		Log::instance()->append(PARSER_MSG_TIPO_OBJETOS, Log::ERROR);
 		return true;
 	}
 
@@ -142,7 +142,7 @@ bool JsonParser::parseObjetos(Json::Value root) {
 	}
 
 	if(objetos_.empty()){
-		Log::instance()->append(PARSER_ERROR_SIN_OBJETOS, Log::ERROR);
+		Log::instance()->append(PARSER_MSG_SIN_OBJETOS, Log::ERROR);
 		return true;
 	}
 

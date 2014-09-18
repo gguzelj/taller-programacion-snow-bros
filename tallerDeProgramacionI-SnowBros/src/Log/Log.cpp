@@ -21,19 +21,19 @@ void Log::append(std::string msg, LOG_TYPE logType) {
 	switch (logType) {
 	case INFO: {
 		std::ofstream outInfo(fileNameInfo, std::ios_base::app);
-		outInfo << timestamp() + ": " + msg + "\n";
+		outInfo << timestamp() + ": INFO " + msg + "\n";
 		outInfo.close();
 		break;
 	}
 	case WARNING: {
 		std::ofstream outWarning(fileNameWarning, std::ios_base::app);
-		outWarning << timestamp() + ": " + msg + "\n";
+		outWarning << timestamp() + ": WARNING " + msg + "\n";
 		outWarning.close();
 		break;
 	}
 	case ERROR: {
 		std::ofstream outError(fileNameError, std::ios_base::app);
-		outError << timestamp() + ": " + msg + "\n";
+		outError << timestamp() + ": ERROR " + msg + "\n";
 		outError.close();
 		break;
 	}

@@ -39,19 +39,15 @@ Personaje::~Personaje(){
 }
 
 void Personaje::moveLeft(){
-	if (cantidadDeContactosActuales!=0){
     	b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
     	velocidadActual.x = -aceleracion;
     	this->body->SetLinearVelocity( velocidadActual );
-	}
 }
 
 void Personaje::moveRight(){
-	if (cantidadDeContactosActuales!=0){
 		b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
 		velocidadActual.x = aceleracion;
 		this->body->SetLinearVelocity( velocidadActual );
-	}
 }
 
 void Personaje::jump(){

@@ -1,5 +1,4 @@
 #include "../../../headers/Modelo/Objetos/Personaje.h"
-#define GUY_ID 1
 
 Personaje::Personaje(JsonParser *parser, b2World* world){
 	//Parametros generales
@@ -10,10 +9,9 @@ Personaje::Personaje(JsonParser *parser, b2World* world){
 	this->y = parser->getCoorYPersonaje();
 
 	//Parametros para controlar los contactos
-	this->cantidadDeContactosActuales = 0;
+	this->cantidadDeContactosActuales = 0; //Comienza en el aire
 	this->contactos.updateContacto(&cantidadDeContactosActuales);
 	this->world->SetContactListener(&contactos);
-	this->body->SetUserData(this);
 
 	//definiendo el body del personaje
 	b2BodyDef cuerpoDelPersonaje;
@@ -30,7 +28,8 @@ Personaje::Personaje(JsonParser *parser, b2World* world){
 	fixtureDelPersonaje.shape = &formaDelPersonaje;			//le asigno la forma que determine antes
 	fixtureDelPersonaje.density = 1;						//una densidad cualquiera
 	fixtureDelPersonaje.friction = 1;						//Le invento una friccion
-	body->CreateFixture(&fixtureDelPersonaje);
+	b2Fixture* fixture = body->CreateFixture(&fixtureDelPersonaje);
+	fixture->SetUserData(this);
 
 }
 
@@ -68,14 +67,6 @@ void Personaje::stop(){
 		velocidadActual.x = 0.0f;
 		this->body->SetLinearVelocity( velocidadActual );
 	}
-}
-
-void Personaje::startContact(){
-	 this->estaSaltando = false;
-}
-
-void Personaje::endContact(){
-	 this->estaSaltando = true;
 }
 
 b2Fixture* Personaje::GetFixtureList(){

@@ -28,9 +28,6 @@ class Personaje : public Figura{
 		void jump();
 		void stop();
 
-		void startContact();
-		void endContact();
-
 };
 
 

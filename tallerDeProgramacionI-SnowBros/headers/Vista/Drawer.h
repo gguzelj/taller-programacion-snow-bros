@@ -30,6 +30,7 @@ private:
 	float ancho_un;
 	float un_to_px_x;
 	float un_to_px_y;
+	SDL_Texture* imagenPersonaje;
 
 	void runWindow(int ancho_px ,int alto_px ,string imagePath);
 

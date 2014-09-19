@@ -4,6 +4,10 @@
 #include <cstdint>
 #include "../Objetos/Figuras/Figura.h"
 #include "../../Controlador/ControladorDeContactos.h"
+#include "../Estados/Estados.h"
+
+#define MITAD_ANCHO_PERSONAJE 0.5f
+#define MITAD_ALTO_PERSONAJE 1
 
 class Personaje : public Figura{
 	private:
@@ -13,15 +17,30 @@ class Personaje : public Figura{
 		Contacto contactos;
 		int cantidadDeContactosActuales;
 		int aceleracion;
-		bool estaSaltando;
+		char orientacion;
 
 	public:
+		static JumpingState jumping;
+		static FallingState falling;
+		static WalkingState walking;
+		static StandByState standby;
+		PersonajeState* state;
+
 		Personaje(JsonParser *parser, b2World* world);
 		~Personaje();   //Destructor del personaje
 
 		b2Vec2 Posicion();
 		b2Fixture* GetFixtureList();
 		b2Vec2 GetWorldPoint(const b2Vec2& localPoint);
+
+		float getX();
+		float getY();
+		b2Vec2 getVelocity();
+		int getCantidadDeContactosActuales();
+		char getOrientacion();
+		void setOrientacion(char orientacion);
+
+		void handleInput(SDL_Keycode input,Uint32 input_type);
 
 		void moveLeft();
 		void moveRight();

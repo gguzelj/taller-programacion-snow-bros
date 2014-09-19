@@ -70,6 +70,12 @@ void Game::onLoop(){
 	int32 velocityIterations = 8;   //how strongly to correct velocity
 	int32 positionIterations = 3;   //how strongly to correct position}
 
+	//chequeo para cambiar el estado jumping a falling o el estado cuando cae de una plataforma
+	//esta implementado aca para que cambie cuando tiene que hacerlo
+	if(model_->getPersonaje()->getVelocity().y <= 0.0f && model_->getPersonaje()->getCantidadDeContactosActuales() == 0 ){
+		model_->getPersonaje()->state = &Personaje::falling;
+	}
+
 	model_->getWorld()->Step( timeStep, velocityIterations, positionIterations);
 }
 void Game::onRender(){

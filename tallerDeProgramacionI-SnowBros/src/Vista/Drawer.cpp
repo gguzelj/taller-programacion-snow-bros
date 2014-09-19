@@ -1,4 +1,5 @@
 #include "../../headers/Vista/Drawer.h"
+#include "../../headers/Vista/sprite.h"
 
 Drawer::Drawer(JsonParser *parser){
 	this->renderer = nullptr;
@@ -121,33 +122,41 @@ void Drawer::drawFigura(Figura* figura){
 	}
 }
 
-/*
- * Momentarily mientras buscamos el sprite.
- */
+
+
+int anchoPersonaje(float un_to_px_x){
+	return (MITAD_ANCHO_PERSONAJE*2) * un_to_px_x +15;
+}
+int altoPersonaje(float un_to_px_y){
+	return (MITAD_ALTO_PERSONAJE*2)* un_to_px_y;
+}
+
 void Drawer::drawCharacter(Personaje* person){
-	char* rgb = convertir_hex_a_rgb("#0AAAFF");
-	int ox = this->ancho_px/2;
-	int oy = this->alto_px/2;
+		int ox = this->ancho_px/2;
+		int oy = this->alto_px/2;
+		char codigo_estado = person->state->getCode();
+		char orientacion = person->getOrientacion();
+		SDL_Texture *textura = this->imagenPersonaje;
+		float pos_x = (person->getX())* (this->un_to_px_x)+ox;
+		float pos_y = person->getY()* -(this->un_to_px_y)+oy;
 
-	for( b2Fixture *fixture = person->GetFixtureList(); fixture; fixture = fixture->GetNext() ){
-		if( fixture->GetType() == b2Shape::e_polygon ){
-			b2PolygonShape *poly = (b2PolygonShape*)fixture->GetShape();
-			const int count = poly->GetVertexCount();
-			Sint16* xCoordinatesOfVertexes = new Sint16 [count+1];
-			Sint16* yCoordinatesOfVertexes = new Sint16 [count+1];
 
-			for(int i = 0; i < count ; i++){
-				b2Vec2 p1 = person->GetWorldPoint(poly->GetVertex(i));
-				xCoordinatesOfVertexes[i] = (Sint16)(un_to_px_x * p1.x + ox);
-				yCoordinatesOfVertexes[i] = (Sint16)(-un_to_px_y * p1.y + oy);
-			}
-
-			filledPolygonRGBA(this->renderer, xCoordinatesOfVertexes, yCoordinatesOfVertexes, count, rgb[0], rgb[1], rgb[2], 255);
-
-			delete [] xCoordinatesOfVertexes;
-			delete [] yCoordinatesOfVertexes;
+		switch(codigo_estado){
+			case JUMPING:
+				drawPersonajeSaltando(this->renderer,textura,orientacion,pos_x,pos_y,anchoPersonaje(un_to_px_x),altoPersonaje(un_to_px_y));
+				break;
+			case STANDBY:
+				drawPersonajeStandBy(renderer,textura,orientacion,pos_x,pos_y,anchoPersonaje(un_to_px_x),altoPersonaje(un_to_px_y));
+				break;
+			case WALKING:
+				drawPersonajeCaminando(renderer,textura,orientacion,pos_x,pos_y,anchoPersonaje(un_to_px_x),altoPersonaje(un_to_px_y));
+				break;
+			case FALLING:
+				drawPersonajeCayendo(renderer,textura,orientacion,pos_x,pos_y,anchoPersonaje(un_to_px_x),altoPersonaje(un_to_px_y));
+				break;
 		}
-	}
+
+
 }
 
 void Drawer::presentScenary(){
@@ -194,6 +203,17 @@ void Drawer::runWindow(int ancho_px ,int alto_px ,string imagePath){
 		SDL_Quit();
 		throw;
 	}
+	imagenPersonaje = this->loadTexture(SPRITE_PATH,this->renderer);
+	if (imagenPersonaje == nullptr){
+			SDL_DestroyTexture(image);
+			SDL_DestroyTexture(imagenPersonaje);
+			SDL_DestroyRenderer(renderer);
+			SDL_DestroyWindow(window);
+			IMG_Quit();
+			SDL_Quit();
+			throw;
+		}
+
 }
 
 SDL_Texture* Drawer::loadTexture(const std::string &file, SDL_Renderer *ren){

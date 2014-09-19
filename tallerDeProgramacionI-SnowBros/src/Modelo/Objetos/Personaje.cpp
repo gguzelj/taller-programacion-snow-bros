@@ -15,21 +15,30 @@ Personaje::Personaje(JsonParser *parser, b2World* world){
 
 	//definiendo el body del personaje
 	b2BodyDef cuerpoDelPersonaje;
-	cuerpoDelPersonaje.type = b2_dynamicBody;                       //El personaje sera un cuerpo dinamico
-	cuerpoDelPersonaje.angle = 0;                                   //Angulo 0 asi empieza recto
-	cuerpoDelPersonaje.position.Set(x,y);                           //donde queremos que empiece
-	this->body = this->world->CreateBody(&cuerpoDelPersonaje);
-	this->body->SetFixedRotation(true);		//Evito que rote
+	cuerpoDelPersonaje.type = b2_dynamicBody;
+	cuerpoDelPersonaje.angle = 0;
+	cuerpoDelPersonaje.position.Set(x,y);
+	cuerpoDelPersonaje.gravityScale = 4;
 
 	//definiendo ahora el fixture del personaje
-	b2PolygonShape formaDelPersonaje;						//esto va a ser si queremos que sea una caja...
-	formaDelPersonaje.SetAsBox(0.5,1);						//...con las siguientes dimensiones
+	float ancho = 0.5;
+	float alto = 1;
+	b2PolygonShape shapeDelPersonaje;						//esto va a ser si queremos que sea una caja...
+	shapeDelPersonaje.SetAsBox(ancho,alto);						//...con las siguientes dimensiones
 	b2FixtureDef fixtureDelPersonaje;						//creo el fixture
-	fixtureDelPersonaje.shape = &formaDelPersonaje;			//le asigno la forma que determine antes
+	fixtureDelPersonaje.shape = &shapeDelPersonaje;			//le asigno la forma que determine antes
 	fixtureDelPersonaje.density = 1;						//una densidad cualquiera
 	fixtureDelPersonaje.friction = 1;						//Le invento una friccion
+
+	this->body = this->world->CreateBody(&cuerpoDelPersonaje);
+	this->body->SetFixedRotation(true);		//Evito que rote
 	b2Fixture* fixture = body->CreateFixture(&fixtureDelPersonaje);
-	fixture->SetUserData(this);
+
+	//add foot sensor fixture beneath the main fixture
+	shapeDelPersonaje.SetAsBox(0.2f,0.2f,b2Vec2(0,-1),0);
+	fixtureDelPersonaje.isSensor = true;
+	b2Fixture* footSensorFixture = this->body->CreateFixture(&fixtureDelPersonaje);
+	footSensorFixture->SetUserData( (void*)ID_FOOT_SENSOR );
 
 }
 
@@ -52,7 +61,7 @@ void Personaje::moveRight(){
 
 void Personaje::jump(){
 	  if (cantidadDeContactosActuales!=0){
-		 float potenciaDeSalto = this->body->GetMass() * 10;
+		 float potenciaDeSalto = this->body->GetMass() * 18;
 		 this->body->ApplyLinearImpulse( b2Vec2(0,potenciaDeSalto), this->body->GetWorldCenter(),true ); //Se podria cambiar el this->body->GetWorldCenter() por this->body->GetLocalCenter()
 	  }
 }

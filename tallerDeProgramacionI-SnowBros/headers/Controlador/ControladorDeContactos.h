@@ -1,6 +1,8 @@
 #ifndef CONTROLADORDECONTACTOS_H_
 #define CONTROLADORDECONTACTOS_H_
 
+const int ID_FOOT_SENSOR = 3;
+
 // http://www.iforce2d.net/b2dtut/collision-callbacks
 // Se usan variables booleanas ya que solo nos interesa si toca el suelo
 class Contacto : public b2ContactListener{
@@ -16,21 +18,20 @@ public:
 	void BeginContact(b2Contact* contact) {
         void* fixtureUserData = contact->GetFixtureA()->GetUserData();
 
-        // Ya que solo tenemos un body con user data, si es distinto a null, entonces es el personaje
-        if (fixtureUserData )
+        if ((intptr_t)fixtureUserData == ID_FOOT_SENSOR)
            (*contactosSensor)++;
         fixtureUserData = contact->GetFixtureB()->GetUserData();
-	    if ( fixtureUserData )
+        if ((intptr_t)fixtureUserData == ID_FOOT_SENSOR)
 	       	(*contactosSensor)++;
 	    }
 
 	//Veo si el personaje dejo de estar en contacto con algo.
 	void EndContact(b2Contact* contact) {
 		void* fixtureUserData = contact->GetFixtureA()->GetUserData();
-		if ( fixtureUserData)
+		if ((intptr_t)fixtureUserData == ID_FOOT_SENSOR)
 			(*contactosSensor)--;
 		fixtureUserData = contact->GetFixtureB()->GetUserData();
-		if ( fixtureUserData )
+		if ((intptr_t)fixtureUserData == ID_FOOT_SENSOR)
 			(*contactosSensor)--;
     }
 };

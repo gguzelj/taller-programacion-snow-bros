@@ -15,7 +15,7 @@ Game::Game(){
 }
 
 Game::~Game(){
-	Log::instance()->closeLog();
+	//Log::instance()->closeLog();
 }
 
 int Game::onExecute(int argc, char* argv[]){

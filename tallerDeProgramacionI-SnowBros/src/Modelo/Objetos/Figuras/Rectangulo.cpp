@@ -29,7 +29,7 @@ Rectangulo::Rectangulo(JsonParser *parser, int index, b2World* world){
 	b2FixtureDef fixture;					//creo el fixture
 	fixture.shape = &shape;					//le asigno la forma que determine antes
 	fixture.density = (float) masa / (alto*ancho);
-	fixture.friction = 0.1f;
+	fixture.friction = 0.5f;
 	body->CreateFixture(&fixture);
 
 }

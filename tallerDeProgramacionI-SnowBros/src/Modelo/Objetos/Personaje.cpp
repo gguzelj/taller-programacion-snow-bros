@@ -35,7 +35,7 @@ Personaje::Personaje(JsonParser *parser, b2World* world){
 	b2Fixture* fixture = body->CreateFixture(&fixtureDelPersonaje);
 
 	//add foot sensor fixture beneath the main fixture
-	shapeDelPersonaje.SetAsBox(0.2f,0.2f,b2Vec2(x,y-alto),0);
+	shapeDelPersonaje.SetAsBox(ancho*9/10,alto/10,b2Vec2(0,-alto),0);
 	fixtureDelPersonaje.isSensor = true;
 	b2Fixture* footSensorFixture = this->body->CreateFixture(&fixtureDelPersonaje);
 	footSensorFixture->SetUserData( (void*)ID_FOOT_SENSOR );

@@ -5,7 +5,7 @@ Muro::Muro(float ancho_esc, float alto_esc, int rot, b2World* world, int pos_x){
 	if(rot == 0){
 		this->y = -alto_esc/2;
 		this->ancho = ancho_esc/2;
-		friction = 0.2f;
+		friction = 0.5f;
 	}
 	else{
 		this->y = 0;

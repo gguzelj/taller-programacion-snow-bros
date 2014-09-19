@@ -51,7 +51,7 @@ void Drawer::drawScenary(Escenario* model){
 	for (auto figura : *figuras){
 		this->drawFigura(figura);
 	}
-	//this->drawCharacter(model->getPersonaje());
+	this->drawCharacter(model->getPersonaje());
 }
 
 //Convierte un color representado a partir de una cadena de caracteres a su valor numerico red green blue.

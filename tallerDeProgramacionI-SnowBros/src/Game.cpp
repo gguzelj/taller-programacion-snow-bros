@@ -16,7 +16,7 @@ Game::Game(){
 
 Game::~Game(){
 	Log::instance()->append(GAME_MSG_DELETE_GAME,Log::INFO);
-	Log::instance()->closeLog();
+	//Log::instance()->closeLog();
 }
 
 int Game::onExecute(int argc, char* argv[]){

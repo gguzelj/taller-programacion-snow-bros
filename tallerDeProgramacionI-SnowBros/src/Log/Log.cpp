@@ -9,7 +9,8 @@ Log* Log::instance() {
 }
 
 void Log::closeLog() {
-	delete log;
+	if(log)
+		delete log;
 }
 
 void Log::append(std::string msg, LOG_TYPE logType) {

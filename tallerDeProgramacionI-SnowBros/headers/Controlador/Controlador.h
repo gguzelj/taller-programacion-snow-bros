@@ -19,6 +19,8 @@ public:
 private:
     Escenario *model;
     Drawer *view;
+    bool presionando;
+    bool verdaderoSiDerechaFalsoSiIzquierda;
 
 };
 

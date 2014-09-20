@@ -37,13 +37,13 @@
 #define ANCHO_PX_DEF            1024
 #define ALTO_UN_DEF             19.2
 #define ANCHO_UN_DEF            25.6
-#define IMAGEN_FONDO_DEF        "Everest.jpg"
+#define IMAGEN_FONDO_DEF        "resources/fondoMario.png"
 #define X_COOR_DEF              100.0
 #define Y_COOR_DEF              100.0
 #define COLOR_DEF               "#00FF00"
 #define ROT_DEF                 0
 #define MASA_DEF                1
-#define PATH_DEF				"resources/example.json"
+#define PATH_DEF				"resources/config.json"
 
 //Rangos de valores validos para el juego
 #define ALTO_PX_MAX				2048

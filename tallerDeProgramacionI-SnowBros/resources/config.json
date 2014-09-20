@@ -1,7 +1,7 @@
 {
     "escenario": {
-        "alto-px": 400,
-        "ancho-px":600,
+        "alto-px": 720,
+        "ancho-px":1024,
         "alto-un":25.6,
         "ancho-un":34.15,
         "imagen_fondo":"resources/Everest.jpg",

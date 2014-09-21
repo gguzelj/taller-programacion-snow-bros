@@ -11,6 +11,7 @@ bool ParserValidator::validarEscenario(escenario_t* &escenario, Json::Value esc)
 
 	//Los siguientes son campos no obligatorios. En caso de que exista algun error
 	//sera reemplazado ese valor por uno default, y se guardara registro en el log
+	escenario->gravedad = valGravedad(esc);
 	escenario->altoPx = valAltoPx(esc);
 	escenario->anchoPx = valAnchoPx(esc);
 	escenario->altoUn = valAltoUn(esc);
@@ -69,6 +70,23 @@ bool ParserValidator::validarObjeto(objeto_t* &objeto, Json::Value obj, escenari
 	return false;
 }
 
+/**
+ * Validaciones de la gravedad
+ */
+double ParserValidator::valGravedad( Json::Value esc ){
+
+	if(!esc.isMember(GRAVEDAD)){
+		Log::instance()->append(PARSER_MSG_ESC_GRAVEDAD, Log::WARNING);
+		return GRAVEDAD_DEF;
+	}
+
+	if(! esc[GRAVEDAD].isNumeric()){
+		Log::instance()->append(PARSER_MSG_ESC_GRAVEDAD_NO_NUMBER, Log::WARNING);
+		return GRAVEDAD_DEF;
+	}
+
+	return esc[GRAVEDAD].asDouble();
+}
 
 /**
  * Validaciones del alto en pixeles

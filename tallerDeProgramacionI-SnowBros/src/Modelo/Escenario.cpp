@@ -2,7 +2,7 @@
 
 Escenario::Escenario(JsonParser *parser) {
         // Define the gravity vector and then create an instance of b2world
-        b2Vec2 gravity(0.0f, -10.0f);
+        b2Vec2 gravity(0.0f, parser->getGravedad());
         world_ = new b2World(gravity);
         figuras_ = new std::list<Figura*>;
         muros_ = new std::list<Muro*>;

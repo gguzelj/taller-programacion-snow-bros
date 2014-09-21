@@ -30,6 +30,7 @@ public:
 	unsigned int getCantidadObjetos();
 
 	//Metodos utilizados por el modelo
+	float 		getGravedad(){ return escenario_->gravedad;};
 	float 		getAltoUnEscenario(){ return escenario_->altoUn;};
 	float 		getAnchoUnEscenario(){ return escenario_->anchoUn;};
 	float 		getCoorXPersonaje(){ return personaje_->x;};

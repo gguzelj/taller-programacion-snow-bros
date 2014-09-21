@@ -1,5 +1,6 @@
 {
     "escenario": {
+    	"gravedad" : -6,
         "alto-px": 720,
         "ancho-px":1024,
         "alto-un":25.6,

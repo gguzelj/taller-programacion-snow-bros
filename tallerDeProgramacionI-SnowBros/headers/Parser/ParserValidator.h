@@ -18,6 +18,7 @@ public:
 
 	class escenario_t {
 	public:
+		double gravedad;
 		int altoPx;
 		int anchoPx;
 		double altoUn;
@@ -57,6 +58,7 @@ public:
 private:
 
 	//Validaciones en el escenario
+	static double valGravedad(Json::Value esc);
 	static int valAltoPx(Json::Value esc);
 	static int valAnchoPx(Json::Value esc);
 	static double valAltoUn(Json::Value esc);

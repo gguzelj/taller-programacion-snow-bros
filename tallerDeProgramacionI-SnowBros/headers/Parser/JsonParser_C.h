@@ -4,6 +4,7 @@
 
 //Constantes para los atributos del json
 #define ESCENARIO              "escenario"
+#define GRAVEDAD 			   "gravedad"
 #define ALTO_PX                "alto-px"
 #define ANCHO_PX               "ancho-px"
 #define ALTO_UN                "alto-un"
@@ -33,6 +34,7 @@
 #define TRAPECIO               "trapecio"
 
 //Valores Default para el juego
+#define GRAVEDAD_DEF			-10.0f
 #define ALTO_PX_DEF             768
 #define ANCHO_PX_DEF            1024
 #define ALTO_UN_DEF             19.2
@@ -128,6 +130,8 @@
 
 //WARNING
 #define PARSER_MSG_OPEN_FILE                        "Parser: No se pudo abrir el archivo "
+#define PARSER_MSG_ESC_GRAVEDAD                     "Parser: Escenario - Atributo gravedad sin definir. Se carga valor por default."
+#define PARSER_MSG_ESC_GRAVEDAD_NO_NUMBER			"Parser: Escenario - Atributo gravedad es un numero. Se carga valor por default."
 #define PARSER_MSG_ESC_ALTO_PX                      "Parser: Escenario - Atributo alto-px sin definir. Se carga valor por default."
 #define PARSER_MSG_ESC_ALTO_PX_NO_NUMBER            "Parser: Escenario - Atributo alto-px es un numero. Se carga valor por default."
 #define PARSER_MSG_ESC_ALTO_PX_FUERA_RANGO          "Parser: Escenario - Atributo alto-px fuera de rango. Se carga valor por default."

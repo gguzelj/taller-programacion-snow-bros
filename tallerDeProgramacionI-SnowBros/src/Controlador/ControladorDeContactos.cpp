@@ -3,7 +3,7 @@
 #include "../../headers/Modelo/Estados/Estados.h"
 
 void cambiarEstadoAlAterrizar(Personaje* personaje){
-	if(Personaje::falling.movimientoLateral)
+	if(Personaje::walking.movimientoLateral == true)
 		personaje->state = &Personaje::walking;
 	else
 		personaje->state = &Personaje::standby;

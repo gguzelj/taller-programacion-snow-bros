@@ -34,7 +34,6 @@ public:
 	char getCode(){
 		return FALLING;
 	}
-	bool movimientoLateral;
 };
 
 class StandByState: public PersonajeState{
@@ -52,6 +51,9 @@ public:
 	char getCode(){
 		return WALKING;
 	}
+	void caminar(Personaje &personaje);
+
+	bool movimientoLateral;
 };
 
 

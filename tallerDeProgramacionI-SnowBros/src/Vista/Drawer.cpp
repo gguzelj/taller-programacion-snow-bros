@@ -5,6 +5,7 @@ Drawer::Drawer(JsonParser *parser){
 	this->renderer = nullptr;
 	this->window = nullptr;
 	this->image = nullptr;
+	this->imagenPersonaje = nullptr;
 
 	//Utilizar parser para obtener las definciones necesarias para crear objetos
 	this->ancho_px = parser->getAnchoPx();
@@ -21,6 +22,7 @@ Drawer::Drawer(JsonParser *parser){
 
 Drawer::~Drawer(){
 	SDL_DestroyTexture(image);
+	SDL_DestroyTexture(imagenPersonaje);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
@@ -156,62 +158,82 @@ void Drawer::presentScenary(){
 
 void Drawer::runWindow(int ancho_px ,int alto_px ,string imagePath){
 	if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-        throw;
+		logSDLError( "Error al inicializar SDL2. Verifique la instalacion de la libreria");
+        throw SDLError();
     }
 	//Starting SDL2_IMAGE
 	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG){
-		logSDLError( "IMG_Init");
-		SDL_Quit();
-		throw;
+		manageSDL2_imageError();
 	}
 
 	//Opening a window
 	window = SDL_CreateWindow("Snow Bros", SDL_WINDOWPOS_CENTERED , SDL_WINDOWPOS_CENTERED, ancho_px, alto_px, SDL_WINDOW_SHOWN);
 	if (window == nullptr){
-		logSDLError( "Error al utilizar SDL_CreateWindow() window devolvio nullptr");
-		IMG_Quit();
-		SDL_Quit();
-		throw;
+		manageCreateWindowError();
 	}
 
 	//Creating a renderer
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (renderer == nullptr){
-		SDL_DestroyWindow(window);
-		logSDLError( "Error al utilizar SDL_CreateRenderer() renderer devolvio nullptr");
-		IMG_Quit();
-		SDL_Quit();
-		throw;
+		manageCreateRendererError();
 	}
 
 	//Loading the image
 	image = this->loadTexture(this->imagePath, renderer);
 	if (image == nullptr){
-		SDL_DestroyTexture(image);
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		IMG_Quit();
-		SDL_Quit();
-		throw;
+		manageLoadBackgroundError();
 	}
+
 	imagenPersonaje = this->loadTexture(SPRITE_PATH,this->renderer);
 	if (imagenPersonaje == nullptr){
-			SDL_DestroyTexture(image);
-			SDL_DestroyTexture(imagenPersonaje);
-			SDL_DestroyRenderer(renderer);
-			SDL_DestroyWindow(window);
-			IMG_Quit();
-			SDL_Quit();
-			throw;
-		}
+		manageLoadCharacterError();
+	}
+}
 
+void Drawer::manageSDL2_imageError(){
+	logSDLError( "Error al inicializar SDL2_image");
+	SDL_Quit();
+	throw SDLError();
+}
+
+void Drawer::manageCreateWindowError(){
+	IMG_Quit();
+	SDL_Quit();
+	logSDLError( "Error al utilizar SDL_CreateWindow() window devolvio nullptr");
+	throw SDLError();
+}
+
+void Drawer::manageCreateRendererError(){
+	SDL_DestroyWindow(window);
+	IMG_Quit();
+	SDL_Quit();
+	logSDLError( "Error al utilizar SDL_CreateRenderer() renderer devolvio nullptr");
+	throw SDLError();
+}
+
+void Drawer::manageLoadBackgroundError(){
+	SDL_DestroyTexture(image);
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	IMG_Quit();
+	SDL_Quit();
+	logSDLError( "Error al utilizar IMG_LoadTexture. Verifique el path de la imagen.");
+	throw SDLError();
+}
+
+void Drawer::manageLoadCharacterError(){
+	SDL_DestroyTexture(image);
+	SDL_DestroyTexture(imagenPersonaje);
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	IMG_Quit();
+	SDL_Quit();
+	logSDLError( "Error al utilizar IMG_LoadTexture. Verifique el path de la imagen.");
+	throw SDLError();
 }
 
 SDL_Texture* Drawer::loadTexture(const std::string &file, SDL_Renderer *ren){
 	SDL_Texture *texture = IMG_LoadTexture(ren, file.c_str());
-	if (texture == nullptr){
-		logSDLError( "Error al utilizar IMG_LoadTexture() texture devolvio nullptr");
-	}
 	return texture;
 }
 void Drawer::logSDLError(const std::string &msg){

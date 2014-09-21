@@ -12,6 +12,7 @@
 #include "Objetos/Figuras/Trapecio.h"
 #include "Objetos/Personaje.h"
 #include "Objetos/Muro.h"
+#include "../Exceptions/ErrorTipoDeObjeto.h"
 
 class Escenario {
 public:

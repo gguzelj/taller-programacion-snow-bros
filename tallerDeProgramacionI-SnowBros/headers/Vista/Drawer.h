@@ -8,6 +8,7 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include "../Parser/JsonParser.h"
 #include "../Modelo/Escenario.h"
+#include "../Exceptions/SDLError.h"
 #include <cmath>
 
 using namespace std;
@@ -43,7 +44,11 @@ private:
 
 	SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren);
 	void logSDLError( const std::string &msg);
-
+	void manageSDL2_imageError();
+	void manageCreateWindowError();
+	void manageCreateRendererError();
+	void manageLoadBackgroundError();
+	void manageLoadCharacterError();
 };
 
 

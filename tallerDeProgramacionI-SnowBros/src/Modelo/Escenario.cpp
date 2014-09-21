@@ -37,7 +37,7 @@ Escenario::Escenario(JsonParser *parser) {
 			else if(parser->getTipoObjeto(index) == TRAPECIO)
 				figura_i = new Trapecio(parser, index, world_);
 
-			else throw;
+			else throw ErrorTipoDeObjeto();
 
         	//Validamos si esta definicion del objeto no se superpone con alguna otra.
         	//En ese caso, se elimina el objeto y se guarda en el log

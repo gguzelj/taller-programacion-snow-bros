@@ -38,7 +38,7 @@ Personaje::Personaje(JsonParser *parser, b2World* world){
 
 	this->body = this->world->CreateBody(&cuerpoDelPersonaje);
 	this->body->SetFixedRotation(true);		//Evito que rote
-	b2Fixture* fixture = body->CreateFixture(&fixtureDelPersonaje);
+	body->CreateFixture(&fixtureDelPersonaje);
 
 	//add foot sensor fixture beneath the main fixture
 	shapeDelPersonaje.SetAsBox(ancho*9/10,alto/10,b2Vec2(0,-alto),0);

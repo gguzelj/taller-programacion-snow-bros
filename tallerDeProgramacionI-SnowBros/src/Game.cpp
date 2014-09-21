@@ -54,15 +54,20 @@ int Game::onExecute(int argc, char* argv[]){
 
 bool Game::onInit(string jsonPath){
 
-	if (!(parser_ = new JsonParser(jsonPath))) return false;
-	if (parser_->parse()) return false;
-	if (!(model_ = new Escenario(parser_))) return false;
-	if (!(view_ = new Drawer(parser_))) return false;
-	if (!(controller_ = new Controlador(model_, view_))) return false;
+	try{
+		parser_ = new JsonParser(jsonPath);
+		if (parser_->parse()) return false;
+		model_ = new Escenario(parser_);
+		view_ = new Drawer(parser_);
+		controller_ = new Controlador(model_, view_);
 
-	return true;
+		return true;
+	}
+	catch(exception& e){
+		std::cout<<e.what()<<std::endl;
+		return false;
+	}
 }
-
 void Game::onEvent(){
 	controller_->handleEvents(&running_, &reload_);
 }

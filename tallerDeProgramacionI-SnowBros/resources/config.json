@@ -30,35 +30,12 @@
                      },
                      {
                        "tipo":"rectangulo",
-                       "x":-6,
-                       "y":4,
-                       "ancho":4,
-                       "alto":0.5,
-                       "color":"#0FFAA0",
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-
-                     {
-                       "tipo":"rectangulo",
                        "x":1,
                        "y":2,
                        "ancho":3,
                        "alto":0.5,
                        "color":"#0FFAA0",
                        "rot":45,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-7,
-                       "y":0,
-                       "ancho":7,
-                       "alto":0.5,
-                       "color":"#0FFAA0",
-                       "rot":0,
                        "masa":3,
                        "estatico":true
                      },
@@ -75,17 +52,6 @@
                      },
                      {
                        "tipo":"rectangulo",
-                       "x":-11,
-                       "y":-8,
-                       "ancho":4,
-                       "alto":0.5,
-                       "color":"#0FFAA0",
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
                        "x":-2.5,
                        "y":-9.3,
                        "ancho":5,
@@ -94,17 +60,6 @@
                        "rot":165,
                        "masa":3,
                        "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":12,
-                       "y":-10,
-                       "ancho":0.5,
-                       "alto":2,
-                       "color":"#FF0000",
-                       "rot":0,
-                       "masa":15,
-                       "estatico":false
                      }
                    ]
     }

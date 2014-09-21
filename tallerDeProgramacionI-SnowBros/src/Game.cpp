@@ -74,7 +74,10 @@ void Game::onLoop(){
 	//esta implementado aca para que cambie cuando tiene que hacerlo
 	if(model_->getPersonaje()->getVelocity().y <= 0.0f && model_->getPersonaje()->getCantidadDeContactosActuales() == 0 ){
 		model_->getPersonaje()->state = &Personaje::falling;
+	} else if (model_->getPersonaje()->getVelocity().y <= 0.0f && model_->getPersonaje()->state == &Personaje::jumping ){
+		model_->getPersonaje()->state = &Personaje::standby;
 	}
+
 	if(Personaje::walking.movimientoLateralDerecha || Personaje::walking.movimientoLateralIzquierda)
 		Personaje::walking.caminar(*(model_->getPersonaje()));
 

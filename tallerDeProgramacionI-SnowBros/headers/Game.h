@@ -14,7 +14,7 @@
 #define GAME_ERROR	1
 #define GAME_RELOAD 2
 
-#define GAME_JSON_DEF	"resources/example.json"
+#define GAME_JSON_DEF	"resources/config.json"
 
 //MENSAJES
 //ERROR

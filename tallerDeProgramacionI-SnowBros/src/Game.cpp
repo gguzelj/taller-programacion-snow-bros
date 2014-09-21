@@ -75,8 +75,13 @@ void Game::onLoop(){
 	if(model_->getPersonaje()->getVelocity().y <= 0.0f && model_->getPersonaje()->getCantidadDeContactosActuales() == 0 ){
 		model_->getPersonaje()->state = &Personaje::falling;
 	}
-	if(model_->getPersonaje()->state->getCode() == WALKING)
+	if(Personaje::walking.movimientoLateralDerecha || Personaje::walking.movimientoLateralIzquierda)
 		Personaje::walking.caminar(*(model_->getPersonaje()));
+
+	if(Personaje::jumping.debeSaltar && model_->getPersonaje()->state->getCode() != JUMPING && model_->getPersonaje()->state->getCode() != FALLING){
+		model_->getPersonaje()->jump();
+		model_->getPersonaje()->state = &Personaje::jumping;
+	}
 
 	model_->getWorld()->Step( timeStep, velocityIterations, positionIterations);
 }

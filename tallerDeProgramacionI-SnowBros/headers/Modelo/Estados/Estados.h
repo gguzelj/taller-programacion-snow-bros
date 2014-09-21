@@ -27,6 +27,7 @@ public:
 	char getCode(){
 		return JUMPING;
 	}
+	bool debeSaltar;
 };
 
 class FallingState: public OnAirState{

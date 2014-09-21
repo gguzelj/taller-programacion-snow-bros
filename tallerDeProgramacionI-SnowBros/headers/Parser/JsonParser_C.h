@@ -132,6 +132,7 @@
 #define PARSER_MSG_OPEN_FILE                        "Parser: No se pudo abrir el archivo "
 #define PARSER_MSG_ESC_GRAVEDAD                     "Parser: Escenario - Atributo gravedad sin definir. Se carga valor por default."
 #define PARSER_MSG_ESC_GRAVEDAD_NO_NUMBER			"Parser: Escenario - Atributo gravedad es un numero. Se carga valor por default."
+#define PARSER_MSG_ESC_GRAVEDAD_POSITIVA			"Parser: Escenario - Atributo gravedad debe ser un numero negativo. Se carga valor por default."
 #define PARSER_MSG_ESC_ALTO_PX                      "Parser: Escenario - Atributo alto-px sin definir. Se carga valor por default."
 #define PARSER_MSG_ESC_ALTO_PX_NO_NUMBER            "Parser: Escenario - Atributo alto-px es un numero. Se carga valor por default."
 #define PARSER_MSG_ESC_ALTO_PX_FUERA_RANGO          "Parser: Escenario - Atributo alto-px fuera de rango. Se carga valor por default."

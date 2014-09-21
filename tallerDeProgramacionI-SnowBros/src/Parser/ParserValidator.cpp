@@ -85,6 +85,11 @@ double ParserValidator::valGravedad( Json::Value esc ){
 		return GRAVEDAD_DEF;
 	}
 
+	if (esc[GRAVEDAD]>=0){
+		Log::instance()->append(PARSER_MSG_ESC_GRAVEDAD_POSITIVA, Log::WARNING);
+		return GRAVEDAD_DEF;
+	}
+
 	return esc[GRAVEDAD].asDouble();
 }
 

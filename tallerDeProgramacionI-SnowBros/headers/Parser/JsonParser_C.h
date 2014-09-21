@@ -46,13 +46,13 @@
 #define PATH_DEF				"resources/config.json"
 
 //Rangos de valores validos para el juego
-#define ALTO_PX_MAX				2048
+#define ALTO_PX_MAX				1050
 #define ALTO_PX_MIN             200
-#define ANCHO_PX_MAX            2048
+#define ANCHO_PX_MAX            1680
 #define ANCHO_PX_MIN            200
-#define ANCHO_UN_MAX            2048
+#define ANCHO_UN_MAX            168
 #define ANCHO_UN_MIN            10
-#define ALTO_UN_MAX             2048
+#define ALTO_UN_MAX             105
 #define ALTO_UN_MIN             10
 #define ESCALA_MAX              10
 #define ESCALA_MIN              0.1
@@ -62,8 +62,8 @@
 #define ALTO_MIN                0.1
 #define ROT_MIN                 -360
 #define ROT_MAX                 360
-#define INCLINACION_MIN         30
-#define INCLINACION_MAX         150
+#define INCLINACION_MIN         20
+#define INCLINACION_MAX         160
 #define BASE_MAYOR_MIN          0.2
 #define BASE_MAYOR_MAX          15
 #define BASE_MENOR_MIN          0.1

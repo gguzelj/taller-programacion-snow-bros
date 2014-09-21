@@ -9,8 +9,8 @@ Rectangulo::~Rectangulo(){
 Rectangulo::Rectangulo(JsonParser *parser, int index, b2World* world){
 	this->x = parser->getCoorXObjeto(index);
 	this->y = parser->getCoorYObjeto(index);
-	this->alto = parser->getAltoObjeto(index)*2;
-	this->ancho = parser->getAnchoObjeto(index)*2;
+	this->alto = parser->getAltoObjeto(index);
+	this->ancho = parser->getAnchoObjeto(index);
 	this->masa = parser->getMasaObjeto(index);
 	this->angulo = parser->getRotObjeto(index) * DEGTORAD;
 	this->estatico = parser->esObjetoEstatico(index);

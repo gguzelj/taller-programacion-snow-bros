@@ -7,8 +7,8 @@ Paralelogramo::~Paralelogramo(){
 Paralelogramo::Paralelogramo(JsonParser *parser, int index, b2World* world){
 	this->x = parser->getCoorXObjeto(index);
 	this->y = parser->getCoorYObjeto(index);
-	this->alto = parser->getAltoObjeto(index)*2;	//Para seguir con la onda del rectangulo
-	this->ancho = parser->getAnchoObjeto(index)*2;
+	this->alto = parser->getAltoObjeto(index);
+	this->ancho = parser->getAnchoObjeto(index);
 	this->masa = parser->getMasaObjeto(index);
 	this->angulo = parser->getRotObjeto(index) * DEGTORAD;
 	this->inclinacion = parser->getInclinacionObjeto(index);

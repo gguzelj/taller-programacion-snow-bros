@@ -92,17 +92,8 @@ void Drawer::drawFigura(Figura* figura){
 				xCoordOfVerts[i] = (Sint16)((un_to_px_x) * (p1.x) + ox);
 				yCoordOfVerts[i] = (Sint16)(-un_to_px_y * p1.y + oy);
 			}
-			//Opcion de la tuerca.
-            if (typeid(*figura) == typeid(Circulo)){
-            	filledPolygonRGBA(this->renderer, xCoordOfVerts, yCoordOfVerts, count, (rgb[0]+120)%255, (rgb[1]+120)%255, (rgb[2]+120)%255, 255);
-                Circulo* circ = (Circulo*) figura;
-                int centro_x=circ->getCoordX() * un_to_px_x + ox;
-                int centro_y =circ->getCoordY() * -un_to_px_y + oy;
-                //Dibuja el "agujero" de la tuerca.
-                filledEllipseRGBA(this->renderer, centro_x, centro_y, circ->getRadio()/5 * un_to_px_x, circ->getRadio()/5 * un_to_px_y,
-								  rgb[0], rgb[1], rgb[2], 255);
-            }
-            else filledPolygonRGBA(this->renderer, xCoordOfVerts, yCoordOfVerts, count, rgb[0], rgb[1], rgb[2], 255);
+
+			filledPolygonRGBA(this->renderer, xCoordOfVerts, yCoordOfVerts, count, rgb[0], rgb[1], rgb[2], 255);
 
 			delete [] xCoordOfVerts;
 			delete [] yCoordOfVerts;

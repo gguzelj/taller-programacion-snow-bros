@@ -37,6 +37,8 @@ int Game::onExecute(int argc, char* argv[]){
 
 		//Update the view
 		onRender();
+
+		SDL_Delay(1);
 	}
 
 	//cleaning up
@@ -66,9 +68,6 @@ void Game::onEvent(){
 }
 
 void Game::onLoop(){
-	float32 timeStep = 1/60.0;      //the length of time passed to simulate (seconds)
-	int32 velocityIterations = 8;   //how strongly to correct velocity
-	int32 positionIterations = 3;   //how strongly to correct position}
 
 	//chequeo para cambiar el estado jumping a falling o el estado cuando cae de una plataforma
 	//esta implementado aca para que cambie cuando tiene que hacerlo
@@ -86,7 +85,7 @@ void Game::onLoop(){
 		model_->getPersonaje()->state = &Personaje::jumping;
 	}
 
-	model_->getWorld()->Step( timeStep, velocityIterations, positionIterations);
+	model_->getWorld()->Step(timeStep, velocityIterations, positionIterations);
 }
 void Game::onRender(){
 	view_->updateView(model_);

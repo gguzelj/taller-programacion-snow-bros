@@ -10,11 +10,11 @@ class Log {
 public:
 
 	typedef enum {
-		INFO, WARNING, ERROR,
+		INFO = 0, WARNING, ERROR,
 	} LOG_TYPE;
 
     static Log *instance();
-
+    LOG_TYPE loggerLevel;
     void append(std::string msg, LOG_TYPE logType);
     void closeLog();
 
@@ -22,6 +22,8 @@ public:
 private:
 
 	static Log *log;
+	std::string logTypeToString(LOG_TYPE logType);
+	void printNewLogger();
 	std::string timestamp();
 };
 

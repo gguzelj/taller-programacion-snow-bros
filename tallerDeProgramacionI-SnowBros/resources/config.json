@@ -1,6 +1,5 @@
 {
     "escenario": {
-    	"gravedad" : -6,
         "alto-px": 720,
         "ancho-px":1024,
         "alto-un":25.6,
@@ -8,6 +7,16 @@
         "imagen_fondo":"resources/Everest.jpg",
         "personaje": {"x": 0,"y":0},
         "objetos": [
+                     {
+                       "tipo":"circulo",
+                       "x":-13,
+                       "y":11,
+                       "escala":0.5,
+                       "color":"#1234AA",
+                       "rot":0,
+                       "masa":5,
+                       "estatico":false
+                     },
                      {
                        "tipo":"circulo",
                        "x":-13,

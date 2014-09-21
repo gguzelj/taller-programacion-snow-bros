@@ -11,12 +11,18 @@ Game::Game(){
 	view_ = nullptr;
 	controller_ = nullptr;
 	parser_ = nullptr;
+
+	//Seteamos el nivel del logger:
+	//	-Si loggerLevel = INFO se loguean todos los mensajes
+	//	-Si loggerLevel = WARNING se loguean solo mensajes de WARNING y ERROR
+	//	-Si loggerLevel = ERROR se loguean solo mensajes del tipo ERROR
+	Log::instance()->loggerLevel = Log::INFO;
 	Log::instance()->append(GAME_MSG_NEW_GAME,Log::INFO);
 }
 
 Game::~Game(){
 	Log::instance()->append(GAME_MSG_DELETE_GAME,Log::INFO);
-	//Log::instance()->closeLog();
+	Log::instance()->closeLog();
 }
 
 int Game::onExecute(int argc, char* argv[]){

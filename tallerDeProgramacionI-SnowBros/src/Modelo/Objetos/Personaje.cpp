@@ -9,7 +9,8 @@ Personaje::Personaje(JsonParser *parser, b2World* world){
 	this->y = parser->getCoorYPersonaje();
 	this->state = &Personaje::standby;
 	this->setOrientacion(ORIENTACION_INICIAL);
-	this->walking.movimientoLateral = 0;
+	this->walking.movimientoLateralDerecha = false;
+	this->walking.movimientoLateralIzquierda = false;
 
 	//Parametros para controlar los contactos
 	this->contactos.setPersonaje(this);

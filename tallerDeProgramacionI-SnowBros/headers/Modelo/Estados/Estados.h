@@ -53,7 +53,8 @@ public:
 	}
 	void caminar(Personaje &personaje);
 
-	bool movimientoLateral;
+	bool movimientoLateralDerecha,
+	movimientoLateralIzquierda;
 };
 
 

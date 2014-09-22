@@ -40,6 +40,13 @@ Personaje::Personaje(JsonParser *parser, b2World* world){
 	this->body->SetFixedRotation(true);		//Evito que rote
 	body->CreateFixture(&fixtureDelPersonaje);
 
+	//Partes laterales para que se deslice por las paredes y no se pegue a ellas
+	shapeDelPersonaje.SetAsBox(0.4f, alto-0.1f, b2Vec2(-ancho/2,0),0);	//a la izquierda
+	fixtureDelPersonaje.friction = 0;		//Le invento de 0 para que no se pegue a las paredes
+	b2Fixture* paredIzquierda = this->body->CreateFixture(&fixtureDelPersonaje);
+	shapeDelPersonaje.SetAsBox(0.4f, alto-0.1f, b2Vec2(ancho/2,0),0);	//a la derecha
+	b2Fixture* paredDerecha = this->body->CreateFixture(&fixtureDelPersonaje);
+
 	//add foot sensor fixture beneath the main fixture
 	shapeDelPersonaje.SetAsBox(ancho*19.0f/20,alto/10,b2Vec2(0,-alto),0);
 	fixtureDelPersonaje.isSensor = true;
@@ -72,7 +79,7 @@ void Personaje::jump(){
 
 void Personaje::stop(){
 		b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
-		velocidadActual.x = velocidadActual.x * 0.17f;
+		velocidadActual.x = velocidadActual.x * 0;
 		this->body->SetLinearVelocity( velocidadActual );
 }
 

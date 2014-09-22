@@ -41,10 +41,10 @@ Personaje::Personaje(JsonParser *parser, b2World* world){
 	body->CreateFixture(&fixtureDelPersonaje);
 
 	//Partes laterales para que se deslice por las paredes y no se pegue a ellas
-	shapeDelPersonaje.SetAsBox(0.4f, alto-0.1f, b2Vec2(-ancho/2,0),0);	//a la izquierda
+	shapeDelPersonaje.SetAsBox(0.01f, alto-0.03f, b2Vec2(-ancho,0.03f),0);	//a la izquierda
 	fixtureDelPersonaje.friction = 0;		//Le invento de 0 para que no se pegue a las paredes
 	b2Fixture* paredIzquierda = this->body->CreateFixture(&fixtureDelPersonaje);
-	shapeDelPersonaje.SetAsBox(0.4f, alto-0.1f, b2Vec2(ancho/2,0),0);	//a la derecha
+	shapeDelPersonaje.SetAsBox(0.01f, alto-0.03f, b2Vec2(ancho,0.03f),0);	//a la derecha
 	b2Fixture* paredDerecha = this->body->CreateFixture(&fixtureDelPersonaje);
 
 	//add foot sensor fixture beneath the main fixture
@@ -73,7 +73,7 @@ void Personaje::moveRight(){
 }
 
 void Personaje::jump(){
-		 float potenciaDeSalto = this->body->GetMass() * 18;
+		 float potenciaDeSalto = this->body->GetMass() * 30;
 		 this->body->ApplyLinearImpulse( b2Vec2(0,potenciaDeSalto), this->body->GetWorldCenter(),true ); //Se podria cambiar el this->body->GetWorldCenter() por this->body->GetLocalCenter()
 }
 

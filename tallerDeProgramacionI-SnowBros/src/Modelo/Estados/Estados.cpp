@@ -129,6 +129,11 @@ void StandByState::handleInput(Personaje &personaje,SDL_Keycode input,Uint32 inp
                                         }
                         }
                 }
+                break;
+
+                case SDL_KEYUP:
+                	if(input == SDLK_UP)
+                	   Personaje::jumping.debeSaltar = false;
 
         }
 }
@@ -171,6 +176,8 @@ void WalkingState::handleInput(Personaje &personaje,SDL_Keycode input,Uint32 inp
 			break;
 
 		case SDL_KEYUP:
+			if(input == SDLK_UP)
+			      Personaje::jumping.debeSaltar = false;
 			detenerMovimientoHorizontal(&personaje,input);
 			if ( Personaje::walking.movimientoLateralDerecha == false && Personaje::walking.movimientoLateralIzquierda == false)
 				personaje.state = &Personaje::standby;

@@ -20,7 +20,7 @@
 #define POS_X_STANDBY 0
 #define POS_Y_STANDBY 10
 
-#define POS_X_CAYENDO 120
+#define POS_X_CAYENDO 112
 #define POS_Y_CAYENDO 10
 
 

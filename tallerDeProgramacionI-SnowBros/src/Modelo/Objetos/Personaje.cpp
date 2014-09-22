@@ -73,7 +73,7 @@ void Personaje::moveRight(){
 }
 
 void Personaje::jump(){
-		 float potenciaDeSalto = this->body->GetMass() * 30;
+		 float potenciaDeSalto = this->body->GetMass() * 18;
 		 this->body->ApplyLinearImpulse( b2Vec2(0,potenciaDeSalto), this->body->GetWorldCenter(),true ); //Se podria cambiar el this->body->GetWorldCenter() por this->body->GetLocalCenter()
 }
 

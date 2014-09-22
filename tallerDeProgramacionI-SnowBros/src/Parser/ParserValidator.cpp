@@ -26,16 +26,21 @@ bool ParserValidator::validarEscenario(escenario_t* &escenario, Json::Value esc)
  * encontrar algun error en algun atributo, se lo modifica con un
  * valor valido (de ser posible)
  */
-bool ParserValidator::validarPersonaje(personaje_t* &personaje, Json::Value per, escenario_t *esc){
+void ParserValidator::validarPersonaje(personaje_t* &personaje, Json::Value per, escenario_t *esc){
 
 	personaje = new ParserValidator::personaje_t();
 
 	//Los siguientes campos son obligatorios para el personaje. En caso de que alguno
 	//de estos valores sea incorrecto, se setea un nuevo juego por default
-	if(valPersonajeCoorX(per, personaje->x, esc)) return true;
-	if(valPersonajeCoorY(per, personaje->y, esc)) return true;
+	if(valPersonajeCoorX(per, personaje->x, esc)){
+		Log::instance()->append(" Se asignara una coordenada X por default",Log::INFO);
+		personaje->x = PERSONAJE_X_DEF;
+	}
+	if(valPersonajeCoorY(per, personaje->y, esc)){
+		Log::instance()->append(" Se asignara una coordenada Y por default",Log::INFO);
+		personaje->y = PERSONAJE_Y_DEF;
+	}
 
-	return false;
 }
 
 /**

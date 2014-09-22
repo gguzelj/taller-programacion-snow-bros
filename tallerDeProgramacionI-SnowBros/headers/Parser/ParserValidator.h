@@ -52,7 +52,7 @@ public:
 	};
 
 	static bool validarEscenario(escenario_t* &escenario, Json::Value esc);
-	static bool validarPersonaje(personaje_t* &personaje, Json::Value per, escenario_t *esc);
+	static void validarPersonaje(personaje_t* &personaje, Json::Value per, escenario_t *esc);
 	static bool validarObjeto(objeto_t* &objeto, Json::Value obj, escenario_t *esc);
 
 private:

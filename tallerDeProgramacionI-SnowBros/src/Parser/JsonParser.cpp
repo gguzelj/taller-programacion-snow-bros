@@ -109,7 +109,8 @@ bool JsonParser::parsePersonaje(Json::Value root) {
 		return true;
 	}
 
-	return ParserValidator::validarPersonaje(personaje_,personaje,escenario_);
+	ParserValidator::validarPersonaje(personaje_,personaje,escenario_);
+	return false;
 }
 
 /**

@@ -46,6 +46,8 @@
 #define ROT_DEF                 0
 #define MASA_DEF                1
 #define PATH_DEF				"resources/config.json"
+#define PERSONAJE_X_DEF			 0
+#define PERSONAJE_Y_DEF			 0
 
 //Rangos de valores validos para el juego
 #define ALTO_PX_MAX				1050

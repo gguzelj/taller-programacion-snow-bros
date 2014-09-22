@@ -139,6 +139,9 @@ bool JsonParser::parseObjetos(Json::Value root) {
 			obj->objectDefinition = objetos[index];
 			objetos_.push_back(obj);
 		}
+		else{
+			Log::instance()->append(" Por lo cual no sera tomado en cuenta al momento de crear el escenario.",Log::INFO);
+		}
 	}
 
 	if(objetos_.empty()){

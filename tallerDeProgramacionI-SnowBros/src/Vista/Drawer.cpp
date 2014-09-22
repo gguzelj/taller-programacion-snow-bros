@@ -118,10 +118,10 @@ void Drawer::drawFigura(Figura* figura){
 
 
 int anchoPersonaje(float un_to_px_x){
-	return (MITAD_ANCHO_PERSONAJE*2) * un_to_px_x +15;
+	return (MITAD_ANCHO_PERSONAJE*2) * un_to_px_x + 15 ;
 }
 int altoPersonaje(float un_to_px_y){
-	return (MITAD_ALTO_PERSONAJE*2)* un_to_px_y;
+	return ((MITAD_ALTO_PERSONAJE * 2) * un_to_px_y);
 }
 
 void Drawer::drawCharacter(Personaje* person){

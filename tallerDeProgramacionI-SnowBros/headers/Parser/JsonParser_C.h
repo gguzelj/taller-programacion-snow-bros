@@ -129,6 +129,10 @@
 #define PARSER_MSG_OBJ_BASE_MENOR             "Parser: Objeto - Falta definir la base menor \n"
 #define PARSER_MSG_OBJ_BASE_MENOR_NO_NUMBER   "Parser: Objeto - La base menor no es un numero \n"
 #define PARSER_MSG_OBJ_BASE_MENOR_FUERA_RANGO "Parser: Objeto - La base menor esta fuera de rango \n"
+#define PARSER_MSG_CARGA_PERSONAJE_DEF "Parser: Se procedera a cargar un personaje por default."
+#define PARSER_MSG_CARGA_COORD_X_DEF "Parser: Se asignara una coordenada X por default"
+#define PARSER_MSG_CARGA_COORD_Y_DEF "Parser: Se asignara una coordenada Y por default"
+
 
 //WARNING
 #define PARSER_MSG_OPEN_FILE                        "Parser: No se pudo abrir el archivo "

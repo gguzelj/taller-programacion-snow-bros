@@ -1,5 +1,7 @@
 #include "../../headers/Parser/JsonParser.h"
 
+
+
 /**
  * Constructor
  */
@@ -90,6 +92,14 @@ bool JsonParser::parseEscenario(Json::Value root) {
 	return ParserValidator::validarEscenario(escenario_, escenario);
 }
 
+
+void personajePorDefault(ParserValidator::personaje_t* &personaje){
+	Log::instance()->append(PARSER_MSG_CARGA_PERSONAJE_DEF , Log::ERROR);
+	personaje = new ParserValidator::personaje_t();
+	personaje->x = PERSONAJE_X_DEF;
+	personaje->y = PERSONAJE_Y_DEF;
+}
+
 /**
  * Parseamos la definicion del personaje
  */
@@ -98,15 +108,17 @@ bool JsonParser::parsePersonaje(Json::Value root) {
 	Json::Value escenario = root[ESCENARIO];
 
 	if (!escenario.isMember(PERSONAJE)) {
-		Log::instance()->append(PARSER_MSG_NO_PERSONAJE, Log::ERROR);
-		return true;
+		Log::instance()->append(PARSER_MSG_NO_PERSONAJE , Log::ERROR);
+		personajePorDefault(personaje_);
+		return false;
 	}
 
 	Json::Value personaje = escenario[PERSONAJE];
 
 	if (!personaje.isObject()) {
 		Log::instance()->append(PARSER_MSG_TIPO_PERSONAJE, Log::ERROR);
-		return true;
+		personajePorDefault(personaje_);
+		return false;
 	}
 
 	ParserValidator::validarPersonaje(personaje_,personaje,escenario_);

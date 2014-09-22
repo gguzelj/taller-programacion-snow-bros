@@ -33,11 +33,11 @@ void ParserValidator::validarPersonaje(personaje_t* &personaje, Json::Value per,
 	//Los siguientes campos son obligatorios para el personaje. En caso de que alguno
 	//de estos valores sea incorrecto, se setea un nuevo juego por default
 	if(valPersonajeCoorX(per, personaje->x, esc)){
-		Log::instance()->append(" Se asignara una coordenada X por default",Log::INFO);
+		Log::instance()->append(PARSER_MSG_CARGA_COORD_X_DEF,Log::ERROR);
 		personaje->x = PERSONAJE_X_DEF;
 	}
 	if(valPersonajeCoorY(per, personaje->y, esc)){
-		Log::instance()->append(" Se asignara una coordenada Y por default",Log::INFO);
+		Log::instance()->append(PARSER_MSG_CARGA_COORD_Y_DEF,Log::ERROR);
 		personaje->y = PERSONAJE_Y_DEF;
 	}
 

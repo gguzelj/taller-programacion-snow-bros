@@ -79,7 +79,7 @@ void Game::onEvent(){
 }
 
 void Game::onLoop(){
-
+	model_->getPersonaje()->decreaseJumpCooldown();
 	//chequeo para cambiar el estado jumping a falling o el estado cuando cae de una plataforma
 	//esta implementado aca para que cambie cuando tiene que hacerlo
 	if(model_->getPersonaje()->getVelocity().y <= 0.0f && model_->getPersonaje()->getCantidadDeContactosActuales() == 0 ){

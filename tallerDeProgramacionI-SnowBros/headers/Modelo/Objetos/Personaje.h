@@ -20,6 +20,7 @@ class Personaje : public Figura{
 		int cantidadDeContactosActuales;
 		int aceleracion;
 		char orientacion;
+		int jumpCooldown;
 
 	public:
 		static JumpingState jumping;
@@ -48,6 +49,8 @@ class Personaje : public Figura{
 		void moveRight();
 		void jump();
 		void stop();
+		void decreaseJumpCooldown();
+		int getJumpCooldown();
 
 };
 

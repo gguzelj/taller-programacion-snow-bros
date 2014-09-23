@@ -96,9 +96,11 @@ void OnAirState::handleInput(Personaje &personaje,SDL_Keycode input,Uint32 input
 
 
 void saltar(Personaje& personaje){
-	Personaje::jumping.debeSaltar = true;
-	personaje.state = &Personaje::jumping;
-	personaje.jump();
+	if (personaje.getJumpCooldown() <=0){
+		Personaje::jumping.debeSaltar = true;
+		personaje.state = &Personaje::jumping;
+		personaje.jump();
+	}
 }
 
 

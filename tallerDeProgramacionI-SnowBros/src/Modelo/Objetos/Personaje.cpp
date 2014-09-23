@@ -3,6 +3,7 @@
 
 Personaje::Personaje(JsonParser *parser, b2World* world){
 	//Parametros generales
+	this->jumpCooldown = 0;
 	this->world = world;
 	this->aceleracion = 10.0f;
 	this->x = parser->getCoorXPersonaje();
@@ -41,10 +42,10 @@ Personaje::Personaje(JsonParser *parser, b2World* world){
 	body->CreateFixture(&fixtureDelPersonaje);
 
 	//Partes laterales para que se deslice por las paredes y no se pegue a ellas
-	shapeDelPersonaje.SetAsBox(0.01f, alto-0.03f, b2Vec2(-ancho,0.03f),0);	//a la izquierda
-	fixtureDelPersonaje.friction = 0;		//Le invento de 0 para que no se pegue a las paredes
+	shapeDelPersonaje.SetAsBox(0.0000001f, alto-0.004f, b2Vec2(-ancho+0.00000005,0.0045f),0);	//a la izquierda
+	fixtureDelPersonaje.friction = 0.0019f;		//Le invento de 0 para que no se pegue a las paredes
 	b2Fixture* paredIzquierda = this->body->CreateFixture(&fixtureDelPersonaje);
-	shapeDelPersonaje.SetAsBox(0.01f, alto-0.03f, b2Vec2(ancho,0.03f),0);	//a la derecha
+	shapeDelPersonaje.SetAsBox(0.0000001f, alto-0.004f, b2Vec2(ancho-0.00000005,0.0045f),0);	//a la derecha
 	b2Fixture* paredDerecha = this->body->CreateFixture(&fixtureDelPersonaje);
 
 	//add foot sensor fixture beneath the main fixture
@@ -73,8 +74,15 @@ void Personaje::moveRight(){
 }
 
 void Personaje::jump(){
-		 float potenciaDeSalto = this->body->GetMass() * 18;
-		 this->body->ApplyLinearImpulse( b2Vec2(0,potenciaDeSalto), this->body->GetWorldCenter(),true ); //Se podria cambiar el this->body->GetWorldCenter() por this->body->GetLocalCenter()
+	if (this->jumpCooldown <= 0){
+		 this->jumpCooldown = 18;
+		 b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
+		 velocidadActual.y = 19.0f;
+		 this->body->SetLinearVelocity( velocidadActual );
+
+		 //float potenciaDeSalto = this->body->GetMass() * 18;
+		 //this->body->ApplyLinearImpulse( b2Vec2(0,potenciaDeSalto), this->body->GetWorldCenter(),true ); //Se podria cambiar el this->body->GetWorldCenter() por this->body->GetLocalCenter()
+	}
 }
 
 void Personaje::stop(){
@@ -121,4 +129,11 @@ float Personaje::getX(){
 
 float Personaje::getY(){
 	return (this->body->GetPosition().y);
+}
+void Personaje::decreaseJumpCooldown(){
+	if (this->jumpCooldown > 0)
+	this->jumpCooldown -= 1;
+}
+int Personaje::getJumpCooldown(){
+	return (this->jumpCooldown);
 }

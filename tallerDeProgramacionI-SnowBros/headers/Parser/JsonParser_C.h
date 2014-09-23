@@ -84,6 +84,10 @@
 //MENSAJES
 //ERROR
 #define PARSER_MSG_INVALID_JSON               "Parser: Al leer el archivo JSON: "
+#define PARSER_MSG_INVALID_DEF_JSON			  "Parser: El archivo JSON default no es consistente. Se detiene el juego."
+#define PARSER_MSG_COMIENZO_ESCENARIO		  "Parser: Analizando escenario"
+#define PARSER_MSG_COMIENZO_PERSONAJE		  "Parser: Analizando personaje"
+#define PARSER_MSG_COMIENZO_OBJETOS			  "Parser: Analizando objetos"
 #define PARSER_MSG_NO_ESCENARIO               "Parser: El archivo JSON no contiene un escenario definido"
 #define PARSER_MSG_NO_PERSONAJE               "Parser: El archivo JSON no contiene un personaje definido"
 #define PARSER_MSG_NO_OBJETOS                 "Parser: El archivo JSON no contiene objetos definidos"
@@ -168,6 +172,7 @@
 //INFO
 #define PARSER_MSG_START_PARSING					"Parser: Comenzamos a parsear el archivo "
 #define PARSER_MSG_DEFAULT_GAME						"Parser: Se intenta cargar un escenario default"
+#define PARSER_MSG_JSON_OK							"Parser: Archivo JSON OK!"
 
 
 #endif /* JSONPARSER_C_H_ */

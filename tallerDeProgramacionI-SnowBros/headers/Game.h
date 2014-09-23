@@ -14,7 +14,7 @@
 #define GAME_ERROR	1
 #define GAME_RELOAD 2
 
-#define GAME_JSON_DEF	"resources/config.json"
+#define GAME_JSON_DEF	"resources/default.json"
 
 //MENSAJES
 //ERROR
@@ -32,8 +32,8 @@
 
 
 const float32 timeStep = 1/60.0;       //the length of time passed to simulate (seconds)
-const int32 velocityIterations = 8;   //how strongly to correct velocity
-const int32 positionIterations = 3;   //how strongly to correct position}
+const int32 velocityIterations = 16;   //how strongly to correct velocity
+const int32 positionIterations = 6;   //how strongly to correct position}
 
 using namespace std;
 

@@ -61,7 +61,7 @@ void Drawer::drawScenary(Escenario* model){
 //la cadena debe ser del tipo "#02FF12"
 char* convertir_hex_a_rgb (std::string color){
 
-        char* resultado = (char*)malloc(3*sizeof(char));
+        char* resultado = new char[3];
 
         const char *red = (color.substr(1,2)).c_str();
         resultado[0] = strtol(red,NULL,16);
@@ -113,7 +113,7 @@ void Drawer::drawFigura(Figura* figura){
 			lineRGBA(renderer,centro_x,centro_y,borde_x,borde_y,(rgb[0]+120)%255, (rgb[1]+120)%255,(rgb[2]+120)%255, 255);
         }
 	}
-	free(rgb);
+	delete [] rgb;
 }
 
 

@@ -9,6 +9,9 @@ Escenario::Escenario(JsonParser *parser) {
         Figura* figura_i;
         Muro* muro_i;
 
+        // Create the guy
+        person_ = new Personaje(parser, world_);
+
         //Create the ground
         muro_i = new Muro(parser->getAnchoUnEscenario(), parser->getAltoUnEscenario(), 0, world_, 0);
         muros_->push_back(muro_i);
@@ -48,9 +51,6 @@ Escenario::Escenario(JsonParser *parser) {
         		figuras_->push_back(figura_i);
         	}
         }
-
-        // Create the guy
-        person_ = new Personaje(parser, world_);
 }
 
 Escenario::~Escenario() {

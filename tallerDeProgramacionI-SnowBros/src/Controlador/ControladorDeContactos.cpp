@@ -33,9 +33,16 @@ void Contacto::BeginContact(b2Contact* contact) {
 
 void Contacto::EndContact(b2Contact* contact) {
 	void* fixtureUserData = contact->GetFixtureA()->GetUserData();
-	if ((intptr_t)fixtureUserData == ID_FOOT_SENSOR)
+	if ((intptr_t)fixtureUserData == ID_FOOT_SENSOR){
 		(*contactosSensor)--;
+		if(*contactosSensor == 0 && personaje->state->getCode() != JUMPING)
+			personaje->state = &Personaje::falling;
+	}
+
 	fixtureUserData = contact->GetFixtureB()->GetUserData();
-	if ((intptr_t)fixtureUserData == ID_FOOT_SENSOR)
+	if ((intptr_t)fixtureUserData == ID_FOOT_SENSOR){
 		(*contactosSensor)--;
+		if(*contactosSensor == 0 && personaje->state->getCode() != JUMPING)
+			personaje->state = &Personaje::falling;
+	}
 }

@@ -12,7 +12,7 @@ Muro::Muro(float ancho_esc, float alto_esc, int rot, b2World* world, int pos_x){
 		this->ancho = alto_esc/2;
 	}
 	this->x = pos_x;
-	this->alto = 0;
+	this->alto = 0.4;
 	this->angulo = rot * DEGTORAD;
 	this->estatico = true;
 	this->color = "#111111";

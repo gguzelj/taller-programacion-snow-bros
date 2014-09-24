@@ -1,22 +1,12 @@
 {
     "escenario": {
         "alto-px": 720,
-        "ancho-px":1024,
-        "alto-un":25.6,
-        "ancho-un":34.15,
+        "ancho-px":1366,
+        "alto-un":24,
+        "ancho-un":45.53,
         "imagen_fondo":"resources/fondoMario.png",
         "personaje": {"x": 0,"y":0},
         "objetos": [
-                     {
-                       "tipo":"circulo",
-                       "x":-13,
-                       "y":11,
-                       "escala":0.5,
-                       "color":"#1234AA",
-                       "rot":0,
-                       "masa":5,
-                       "estatico":false
-                     },
                      {
                        "tipo":"circulo",
                        "x":-15,

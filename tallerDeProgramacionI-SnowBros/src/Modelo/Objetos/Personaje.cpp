@@ -9,7 +9,7 @@ Personaje::Personaje(JsonParser *parser, b2World* world){
 	this->x = parser->getCoorXPersonaje();
 	this->y = parser->getCoorYPersonaje();
 	this->state = &Personaje::standby;
-	this->setOrientacion(ORIENTACION_INICIAL);
+	this->orientacion = ORIENTACION_INICIAL;
 	this->walking.movimientoLateralDerecha = false;
 	this->walking.movimientoLateralIzquierda = false;
 
@@ -31,7 +31,7 @@ Personaje::Personaje(JsonParser *parser, b2World* world){
 	float ancho = MITAD_ANCHO_PERSONAJE;
 	float alto = MITAD_ALTO_PERSONAJE;
 	b2PolygonShape shapeDelPersonaje;						//esto va a ser si queremos que sea una caja...
-	shapeDelPersonaje.SetAsBox(ancho,alto);						//...con las siguientes dimensiones
+	shapeDelPersonaje.SetAsBox(ancho,alto);					//...con las siguientes dimensiones
 	b2FixtureDef fixtureDelPersonaje;						//creo el fixture
 	fixtureDelPersonaje.shape = &shapeDelPersonaje;			//le asigno la forma que determine antes
 	fixtureDelPersonaje.density = 1;						//una densidad cualquiera
@@ -57,7 +57,6 @@ Personaje::Personaje(JsonParser *parser, b2World* world){
 }
 
 Personaje::~Personaje(){
-	//una posible destruccion del personaje
 	this->world->DestroyBody(this->body);
 }
 

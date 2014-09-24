@@ -35,13 +35,11 @@
 
 //Valores Default para el juego
 #define GRAVEDAD_DEF			-10.0f
-#define ALTO_PX_DEF             768
+#define ALTO_PX_DEF             720
 #define ANCHO_PX_DEF            1024
-#define ALTO_UN_DEF             19.2
+#define ALTO_UN_DEF             18
 #define ANCHO_UN_DEF            25.6
 #define IMAGEN_FONDO_DEF        "resources/fondoMario.png"
-#define X_COOR_DEF              100.0
-#define Y_COOR_DEF              100.0
 #define COLOR_DEF               "#00FF00"
 #define ROT_DEF                 0
 #define MASA_DEF                1
@@ -50,30 +48,30 @@
 #define PERSONAJE_Y_DEF			 0
 
 //Rangos de valores validos para el juego
-#define ALTO_PX_MAX				1050
+#define ALTO_PX_MAX				720
 #define ALTO_PX_MIN             200
-#define ANCHO_PX_MAX            1680
+#define ANCHO_PX_MAX            1366
 #define ANCHO_PX_MIN            200
-#define ANCHO_UN_MAX            168
+#define ANCHO_UN_MAX            136
 #define ANCHO_UN_MIN            10
-#define ALTO_UN_MAX             105
+#define ALTO_UN_MAX             72
 #define ALTO_UN_MIN             10
 #define ESCALA_MAX              10
 #define ESCALA_MIN              0.1
-#define ANCHO_MAX               10
+#define ANCHO_MAX               20
 #define ANCHO_MIN               0.1
-#define ALTO_MAX                10
+#define ALTO_MAX                20
 #define ALTO_MIN                0.1
-#define ROT_MIN                 0
-#define ROT_MAX                 360
+#define ROT_MIN                 -359
+#define ROT_MAX                 359
 #define INCLINACION_MIN         20
 #define INCLINACION_MAX         160
 #define BASE_MAYOR_MIN          0.2
-#define BASE_MAYOR_MAX          15
+#define BASE_MAYOR_MAX          20
 #define BASE_MENOR_MIN          0.1
-#define BASE_MENOR_MAX          10
+#define BASE_MENOR_MAX          15
 #define MASA_MIN                1
-#define MASA_MAX                3600
+#define MASA_MAX                100
 #define LADOS_MIN               3
 #define LADOS_MAX               6
 
@@ -106,13 +104,13 @@
 #define PARSER_MSG_OBJ_TIPO_DESCONOCIDO       "Parser: Objeto - El Tipo de Objeto es desconocido \n"
 #define PARSER_MSG_OBJ_COOR_X                 "Parser: Objeto - Falta definir la coordenada X \n"
 #define PARSER_MSG_OBJ_COOR_X_NO_NUMBER       "Parser: Objeto - La coordenada X no es un numero \n"
-#define PARSER_MSG_OBJ_COOR_X_FUERA_RANGO	"Parser: Objeto - La coordenada X esta fuera del rango del escenario \n"
+#define PARSER_MSG_OBJ_COOR_X_FUERA_RANGO	  "Parser: Objeto - La coordenada X esta fuera del rango del escenario \n"
 #define PARSER_MSG_OBJ_COOR_Y                 "Parser: Objeto - Falta definir la coordenada Y \n"
 #define PARSER_MSG_OBJ_COOR_Y_NO_NUMBER       "Parser: Objeto - La coordenada Y no es un numero \n"
-#define PARSER_MSG_OBJ_COOR_Y_FUERA_RANGO 	"Parser: Objeto - La coordenada Y esta fuera del rango del escenario \n"
+#define PARSER_MSG_OBJ_COOR_Y_FUERA_RANGO 	  "Parser: Objeto - La coordenada Y esta fuera del rango del escenario \n"
 #define PARSER_MSG_OBJ_ESCALA                 "Parser: Objeto - Falta definir la Escala \n"
 #define PARSER_MSG_OBJ_ESCALA_NO_NUMBER       "Parser: Objeto - La Escala no es un numero \n"
-#define PARSER_MSG_OBJ_ESCALA_FUERA_RANGO		"Parser: Objeto - La Escala esta fuera del rango permitido \n"
+#define PARSER_MSG_OBJ_ESCALA_FUERA_RANGO     "Parser: Objeto - La Escala esta fuera del rango permitido \n"
 #define PARSER_MSG_OBJ_ANCHO                  "Parser: Objeto - Falta definir el Ancho \n"
 #define PARSER_MSG_OBJ_ANCHO_NO_NUMBER        "Parser: Objeto - El Ancho no es un numero \n"
 #define PARSER_MSG_OBJ_ANCHO_FUERA_RANGO      "Parser: Objeto - El Ancho esta fuera del rango permitido \n"
@@ -133,9 +131,9 @@
 #define PARSER_MSG_OBJ_BASE_MENOR             "Parser: Objeto - Falta definir la base menor \n"
 #define PARSER_MSG_OBJ_BASE_MENOR_NO_NUMBER   "Parser: Objeto - La base menor no es un numero \n"
 #define PARSER_MSG_OBJ_BASE_MENOR_FUERA_RANGO "Parser: Objeto - La base menor esta fuera de rango \n"
-#define PARSER_MSG_CARGA_PERSONAJE_DEF "Parser: Se procedera a cargar un personaje por default."
-#define PARSER_MSG_CARGA_COORD_X_DEF "Parser: Se asignara una coordenada X por default"
-#define PARSER_MSG_CARGA_COORD_Y_DEF "Parser: Se asignara una coordenada Y por default"
+#define PARSER_MSG_CARGA_PERSONAJE_DEF 		  "Parser: Se procedera a cargar un personaje por default."
+#define PARSER_MSG_CARGA_COORD_X_DEF 		  "Parser: Se asignara una coordenada X por default"
+#define PARSER_MSG_CARGA_COORD_Y_DEF 		  "Parser: Se asignara una coordenada Y por default"
 
 
 //WARNING

@@ -21,7 +21,7 @@
 #define GAME_MSG_INIT_ERROR	"Game: Error al inicial el juego"
 
 //WARNING
-#define GAME_MSG_CANT_PARAM	"Game: La cantidad de parametros no es correcta. Se setea un archivo json default."
+#define GAME_MSG_CANT_PARAM	"Game: La cantidad de parametros no es correcta."
 #define GAME_MSG_JSON_FILE	"Game: El archivo json indicado no existe. Se setea un archivo json default."
 
 //INFO
@@ -33,7 +33,7 @@
 
 const float32 timeStep = 1/60.0;       //the length of time passed to simulate (seconds)
 const int32 velocityIterations = 16;   //how strongly to correct velocity
-const int32 positionIterations = 6;   //how strongly to correct position}
+const int32 positionIterations = 6;    //how strongly to correct position}
 
 using namespace std;
 

@@ -253,7 +253,7 @@ bool ParserValidator::valPersonajeCoorX(Json::Value per, double &x, escenario_t 
 	double margen = esc->anchoUn / 2;
 
 	//Validamos que la coordenada X exista dentro del escenario del juego
-	if(	abs(x) > margen ){
+	if(	x > margen || x < -margen){
 		Log::instance()->append(PARSER_MSG_PER_COOR_X_FUERA_RANGO, Log::WARNING);
 		return true;
 	}
@@ -280,7 +280,7 @@ bool ParserValidator::valPersonajeCoorY(Json::Value per, double &y, escenario_t 
 	double margen = esc->altoUn / 2;
 
 	//Validamos que la coordenada X exista dentro del escenario del juego
-	if(	abs(y) > margen ){
+	if(	y > margen || y < -margen ){
 		Log::instance()->append(PARSER_MSG_PER_COOR_Y_FUERA_RANGO, Log::WARNING);
 		return true;
 	}
@@ -333,7 +333,7 @@ bool ParserValidator::valCoorXObjeto(Json::Value obj, double &x, escenario_t *es
 	double margen = esc->anchoUn / 2;
 
 	//Validamos que la coordenada X exista dentro del escenario del juego
-	if(	abs(x) > margen ){
+	if(	x > margen || x < -margen){
 		Log::instance()->append(PARSER_MSG_OBJ_COOR_X_FUERA_RANGO + obj.toStyledString(), Log::WARNING);
 		return true;
 	}
@@ -360,7 +360,7 @@ bool ParserValidator::valCoorYObjeto(Json::Value obj, double &y, escenario_t *es
 	double margen = esc->altoUn / 2;
 
 	//Validamos que la coordenada X exista dentro del escenario del juego
-	if(	abs(y) > margen ){
+	if(	y > margen || y < -margen){
 		Log::instance()->append(PARSER_MSG_OBJ_COOR_Y_FUERA_RANGO + obj.toStyledString(), Log::WARNING);
 		return true;
 	}

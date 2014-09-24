@@ -54,9 +54,9 @@ void Log::printNewLogger(){
 	std::ofstream out(fileName, std::ios_base::app);
 
 	out << "*&------------------------------------------------------------------------------------------------------*&\n";
-	out << "*&									Comienzo de nuevo juego												*&\n";
+	out << "*&                               Comienzo de nuevo juego                                                *&\n";
 	out << "*&------------------------------------------------------------------------------------------------------*&\n";
-	out << "*& Corrida correspondiente a la fecha: " + timestamp() + "											*&\n";
+	out << "*& Corrida correspondiente a la fecha: " + timestamp() + "                                         *&\n";
 	out << "*&------------------------------------------------------------------------------------------------------*&\n";
 	out.close();
 

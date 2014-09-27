@@ -18,6 +18,8 @@ class Personaje : public Figura{
 		b2Body* body;
 		Contacto contactos;
 		int cantidadDeContactosActuales;
+		int cantidadDeContactosIzquierda;
+		int cantidadDeContactosDerecha;
 		int aceleracion;
 		char orientacion;
 		int jumpCooldown;
@@ -51,6 +53,8 @@ class Personaje : public Figura{
 		void stop();
 		void decreaseJumpCooldown();
 		int getJumpCooldown();
+		void updateLeftContact(int);
+		void updateRightContact(int);
 
 };
 

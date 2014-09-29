@@ -16,9 +16,9 @@ Escenario::Escenario(JsonParser *parser) {
         muro_i = new Muro(parser->getAnchoUnEscenario(), parser->getAltoUnEscenario(), 0, world_, 0);
         muros_->push_back(muro_i);
         //And walls
-        muro_i = new Muro(parser->getAnchoUnEscenario(), parser->getAltoUnEscenario(), 90, world_, 0.5 *parser->getAnchoUnEscenario() + 0.5);
+        muro_i = new Muro(parser->getAnchoUnEscenario(), parser->getAltoUnEscenario(), 90, world_,-0.5 * parser->getAnchoUnEscenario());
         muros_->push_back(muro_i);
-        muro_i = new Muro(parser->getAnchoUnEscenario(), parser->getAltoUnEscenario(), 90, world_,-0.5 *parser->getAnchoUnEscenario() - 0.5);
+        muro_i = new Muro(parser->getAnchoUnEscenario(), parser->getAltoUnEscenario(), 90, world_, 0.5 *parser->getAnchoUnEscenario());
         muros_->push_back(muro_i);
 
 
@@ -59,7 +59,7 @@ Escenario::~Escenario() {
         	(figuras_->pop_back());
         }
 
-        // Borrar la lista
+        // Borrar las listas
         delete figuras_;
         delete muros_;
         delete person_;

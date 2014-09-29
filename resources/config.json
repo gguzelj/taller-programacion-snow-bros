@@ -1,10 +1,10 @@
 {
     "escenario": {
         "alto-px": 720,
-        "ancho-px":1366,
+        "ancho-px":1365,
         "alto-un":24,
         "gravedad":-10,
-        "ancho-un":45.53,
+        "ancho-un":45,
         "imagen_fondo":"resources/fondoMario.png",
         "personaje": {"x": 0,"y":0},
         "objetos": [
@@ -22,10 +22,10 @@
                        "tipo":"circulo",
                        "x":-15,
                        "y":11,
-                       "escala":0.5,
+                       "escala":1,
                        "color":"#0011AA",
                        "rot":0,
-                       "masa":5,
+                       "masa":100,
                        "estatico":false
                      },                    
                      {
@@ -60,7 +60,7 @@
                      },                                                                                 
                      {
                        "tipo":"circulo",
-                       "x":0,
+                       "x":1.5,
                        "y":11,
                        "escala":0.5,
                        "color":"#1234AA",
@@ -70,7 +70,7 @@
                      },
                      {
                        "tipo":"poligono",
-                       "lados":5,
+                       "lados":4,
                        "x":-4,
                        "y":-4,
                        "escala":0.9,
@@ -113,13 +113,13 @@
                        "rot":0,
                        "masa":5,
                        "estatico":false,
-                       "inclinacion":30
+                       "inclinacion":90
                      },                               
                      {
                        "tipo":"poligono",
                        "lados":6,
-                       "x":-10,
-                       "y":-10,
+                       "x":-12,
+                       "y":-5,
                        "escala":2,
                        "color":"#ff00DD",
                        "rot":0,
@@ -153,7 +153,7 @@
                        "tipo":"poligono",
                        "lados":3,
                        "x":10,
-                       "y":11,
+                       "y":7,
                        "escala":3,
                        "color":"#8899BC",
                        "rot":198,
@@ -207,7 +207,7 @@
                      {
                        "tipo":"rectangulo",
                        "x":-2.5,
-                       "y":-9.3,
+                       "y":-9,
                        "ancho":5,
                        "alto":0.5,
                        "color":"#0FFAA0",

@@ -64,23 +64,21 @@ void Personaje::moveLeft(){
     	b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
     	velocidadActual.x = -aceleracion;
     	this->body->SetLinearVelocity( velocidadActual );
+    	//this->body->ApplyForce(b2Vec2(-100,0), this->body->GetWorldCenter(), true);
 }
 
 void Personaje::moveRight(){
 		b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
 		velocidadActual.x = aceleracion;
 		this->body->SetLinearVelocity( velocidadActual );
+    	//this->body->ApplyForce(b2Vec2(100,0), this->body->GetWorldCenter(), true);
 }
 
 void Personaje::jump(){
 	if (this->jumpCooldown <= 0){
 		 this->jumpCooldown = 18;
-		 b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
-		 velocidadActual.y = 19.0f;
-		 this->body->SetLinearVelocity( velocidadActual );
-
-		 //float potenciaDeSalto = this->body->GetMass() * 18;
-		 //this->body->ApplyLinearImpulse( b2Vec2(0,potenciaDeSalto), this->body->GetWorldCenter(),true ); //Se podria cambiar el this->body->GetWorldCenter() por this->body->GetLocalCenter()
+		 float potenciaDeSalto = this->body->GetMass() * 18;
+		 this->body->ApplyLinearImpulse( b2Vec2(0,potenciaDeSalto), this->body->GetWorldCenter(),true ); //Se podria cambiar el this->body->GetWorldCenter() por this->body->GetLocalCenter()
 	}
 }
 

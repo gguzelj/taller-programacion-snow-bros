@@ -7,7 +7,7 @@
 #include "../Estados/Estados.h"
 
 #define MITAD_ANCHO_PERSONAJE 0.5f
-#define MITAD_ALTO_PERSONAJE 1
+#define MITAD_ALTO_PERSONAJE 0.85
 #define IZQUIERDA 'l'
 #define DERECHA 'r'
 

@@ -1,0 +1,70 @@
+{
+    "escenario": {
+        "alto-px": 720,
+        "ancho-px":1365,
+        "alto-un":24,
+        "ancho-un":45,
+        "gravedad":-10,
+        "imagen_fondo":"resources/fondoMario.png",
+        "personaje": {"x": 0,"y":0},
+        "objetos": [
+                     {
+                       "tipo":"circulo",
+                       "x":-13,
+                       "y":11,
+                       "escala":0.5,
+                       "color":"#1234AA",
+                       "rot":0,
+                       "masa":5,
+                       "estatico":false
+                     },
+                     {
+                       "tipo":"poligono",
+                       "lados":4,
+                       "x":-4,
+                       "y":-4,
+                       "escala":0.9,
+                       "color":"#8834AA",
+                       "rot":0,
+                       "masa":5,
+                       "estatico":false
+                     },                     
+                     {
+                       "tipo":"paralelogramo",
+                       "x":10,
+                       "y":10,
+                       "alto":0.9,
+                       "ancho":2,
+                       "color":"#00ff45",
+                       "rot":0,
+                       "masa":5,
+                       "estatico":false,
+                       "inclinacion":30
+                     },                
+                     {
+                       "tipo":"trapecio",
+                       "x":13,
+                       "y":10,
+                       "alto":0.9,
+                       "base_mayor":3,
+                       "base_menor":2,
+                       "color":"#00ff45",
+                       "rot":0,
+                       "masa":5,
+                       "estatico":false,
+                       "inclinacion":90
+                     },
+                     {
+                       "tipo":"rectangulo",
+                       "x":-2.5,
+                       "y":-9,
+                       "ancho":5,
+                       "alto":0.5,
+                       "color":"#0FFAA0",
+                       "rot":165,
+                       "masa":3,
+                       "estatico":true
+                     }
+                   ]
+    }
+}

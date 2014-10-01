@@ -4,19 +4,10 @@
         "ancho-px":1366,
         "alto-un":24,
         "ancho-un":45,
+        "gravedad":-10,
         "imagen_fondo":"resources/fondoMario.png",
         "personaje": {"x": 0,"y":0},
         "objetos": [
-                     {
-                       "tipo":"circulo",
-                       "x":-13,
-                       "y":11,
-                       "escala":0.5,
-                       "color":"#1234AA",
-                       "rot":0,
-                       "masa":5,
-                       "estatico":false
-                     },
                      {
                        "tipo":"circulo",
                        "x":-15,
@@ -53,16 +44,6 @@
                        "y":11,
                        "escala":0.5,
                        "color":"#12ff00",
-                       "rot":0,
-                       "masa":5,
-                       "estatico":false
-                     },                                                                                 
-                     {
-                       "tipo":"circulo",
-                       "x":0,
-                       "y":11,
-                       "escala":0.5,
-                       "color":"#1234AA",
                        "rot":0,
                        "masa":5,
                        "estatico":false
@@ -144,18 +125,6 @@
                        "escala":3,
                        "color":"#818203",
                        "rot":100,
-                       "masa":5,
-                       "estatico":true
-                     },
-                     
-                     {
-                       "tipo":"poligono",
-                       "lados":3,
-                       "x":10,
-                       "y":11,
-                       "escala":3,
-                       "color":"#8899BC",
-                       "rot":198,
                        "masa":5,
                        "estatico":true
                      },

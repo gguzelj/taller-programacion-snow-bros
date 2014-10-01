@@ -21,7 +21,7 @@ public:
 	/*
 	 * Para determinar si es el piso o una pared lateral, me fijo en la rotacion. Si es 0, es el piso. Si es 90, es una pared.
 	 */
-	Muro(float ancho_esc, float alto_esc, int rot, b2World* world, int pos_x);
+	Muro(float ancho_esc, float alto_esc, int rot, b2World* world, float pos_x);
 	~Muro();
 };
 

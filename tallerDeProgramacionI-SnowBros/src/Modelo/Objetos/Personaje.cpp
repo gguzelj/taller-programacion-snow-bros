@@ -50,13 +50,13 @@ Personaje::Personaje(JsonParser *parser, b2World* world){
 	shapeDelPersonaje.SetAsBox(0.0000001f, alto-0.004f, b2Vec2(ancho-0.00000005,0.0045f),0);	//a la derecha
 	b2Fixture* paredDerecha = this->body->CreateFixture(&fixtureDelPersonaje);
 
-	//add foot sensor fixture beneath the main fixture
+	//Foot sensor
 	shapeDelPersonaje.SetAsBox(ancho*19.0f/20,alto/10,b2Vec2(0,-alto),0);
 	fixtureDelPersonaje.isSensor = true;
 	b2Fixture* footSensorFixture = this->body->CreateFixture(&fixtureDelPersonaje);
 	footSensorFixture->SetUserData( (void*)ID_FOOT_SENSOR );
 
-	//sensor de izquierda y derecha
+	//Sensor de izquierda y derecha
 	shapeDelPersonaje.SetAsBox(0.0001f, alto-0.4f, b2Vec2(-ancho-0.9f,0.9f),0);
 	fixtureDelPersonaje.isSensor = true;
 	this->body->CreateFixture(&fixtureDelPersonaje);
@@ -91,12 +91,8 @@ void Personaje::moveRight(){
 void Personaje::jump(){
 	if (this->jumpCooldown <= 0){
 		 this->jumpCooldown = 18;
-		 b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
-		 velocidadActual.y = 19.0f;
-		 this->body->SetLinearVelocity( velocidadActual );
-
-		 //float potenciaDeSalto = this->body->GetMass() * 18;
-		 //this->body->ApplyLinearImpulse( b2Vec2(0,potenciaDeSalto), this->body->GetWorldCenter(),true ); //Se podria cambiar el this->body->GetWorldCenter() por this->body->GetLocalCenter()
+		 float potenciaDeSalto = this->body->GetMass() * 18;
+		 this->body->ApplyLinearImpulse( b2Vec2(0,potenciaDeSalto), this->body->GetWorldCenter(),true );
 	}
 }
 
@@ -145,19 +141,24 @@ float Personaje::getX(){
 float Personaje::getY(){
 	return (this->body->GetPosition().y);
 }
+
 void Personaje::decreaseJumpCooldown(){
 	if (this->jumpCooldown > 0)
 	this->jumpCooldown -= 1;
 }
+
 int Personaje::getJumpCooldown(){
 	return (this->jumpCooldown);
 }
+
 void Personaje::updateLeftContact(int numero){
 	this->cantidadDeContactosIzquierda = numero;
 }
+
 void Personaje::updateRightContact(int numero){
 	this->cantidadDeContactosDerecha = numero;
 }
+
 void Personaje::printContactosLR(){
 	printf("contactosLEFT %d\n", this->cantidadDeContactosIzquierda);
 	printf("contactosRIGHT %d\n", this->cantidadDeContactosDerecha);

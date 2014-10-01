@@ -1,11 +1,11 @@
 #include "../../../headers/Modelo/Objetos/Muro.h"
 
-Muro::Muro(float ancho_esc, float alto_esc, int rot, b2World* world, int pos_x){
-	float friction;
+Muro::Muro(float ancho_esc, float alto_esc, int rot, b2World* world, float pos_x){
+	float friction = 0;
 	if(rot == 0){
 		this->y = -alto_esc/2;
 		this->ancho = ancho_esc/2;
-		friction = 0.5f;
+		friction = 0.7f;
 	}
 	else{
 		this->y = 0;

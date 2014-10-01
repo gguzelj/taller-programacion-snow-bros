@@ -44,8 +44,6 @@ void Contacto::BeginContact(b2Contact* contact) {
 	fixture = contact->GetFixtureB();
 	switch ((intptr_t)fixture->GetUserData()){
 
-
-
 		case ID_FOOT_SENSOR:{
 			if((*contactosSensor) == 0){
 				  cambiarEstadoAlAterrizar(personaje);
@@ -89,8 +87,6 @@ void Contacto::EndContact(b2Contact* contact) {
 
 	fixture = contact->GetFixtureB();
     switch ((intptr_t)fixture->GetUserData()){
-
-
 
 		case ID_FOOT_SENSOR:{
 			(*contactosSensor)--;

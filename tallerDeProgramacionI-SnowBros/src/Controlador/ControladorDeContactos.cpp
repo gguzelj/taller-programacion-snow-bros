@@ -22,7 +22,6 @@ void Contacto::BeginContact(b2Contact* contact) {
 			break;
 		}
 
-
 		case ID_LEFT_WALL_SENSOR:{
 			if(fixture->GetBody()->GetType() == b2_staticBody){
 				 (*contactosLeftSensor)++;

@@ -95,7 +95,7 @@ void Game::onLoop(){
 		model_->getPersonaje()->jump();
 		model_->getPersonaje()->state = &Personaje::jumping;
 	}
-
+	model_->getPersonaje()->printContactosLR();
 	model_->getWorld()->Step(timeStep, velocityIterations, positionIterations);
 }
 void Game::onRender(){

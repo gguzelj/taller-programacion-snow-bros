@@ -15,7 +15,7 @@ void Contacto::BeginContact(b2Contact* contact) {
 	switch ((intptr_t)fixture->GetUserData()){
 
 		case ID_RIGHT_WALL_SENSOR:{
-			if(fixture->GetBody()->GetType() == b2_staticBody){
+			if(fixture->GetBody()->GetType() == b2_dynamicBody){
 				(*contactosRightSensor)++;
 				personaje->updateRightContact((*contactosRightSensor));
 			}
@@ -23,7 +23,7 @@ void Contacto::BeginContact(b2Contact* contact) {
 		}
 
 		case ID_LEFT_WALL_SENSOR:{
-			if(fixture->GetBody()->GetType() == b2_staticBody){
+			if(fixture->GetBody()->GetType() == b2_dynamicBody){
 				 (*contactosLeftSensor)++;
 				 personaje->updateLeftContact((*contactosLeftSensor));
 			}
@@ -43,19 +43,19 @@ void Contacto::BeginContact(b2Contact* contact) {
 	switch ((intptr_t)fixture->GetUserData()){
 
 		case ID_RIGHT_WALL_SENSOR:{
-			//if(fixture->GetBody()->GetType() == b2_staticBody){
+			if(fixture->GetBody()->GetType() == b2_dynamicBody){
 				 (*contactosRightSensor)++;
 				 personaje->updateRightContact((*contactosRightSensor));
-			//}
+			}
 			break;
 		}
 
 
 		case ID_LEFT_WALL_SENSOR:{
-			//(fixture->GetBody()->GetType() == b2_staticBody){
+			if(fixture->GetBody()->GetType() == b2_dynamicBody){
 				 (*contactosLeftSensor)++;
 				 personaje->updateLeftContact((*contactosLeftSensor));
-			//}
+			}
 			break;
 		}
 
@@ -75,18 +75,18 @@ void Contacto::EndContact(b2Contact* contact) {
     switch ((intptr_t)fixture->GetUserData()){
 
 		case ID_RIGHT_WALL_SENSOR:{
-			//if(fixture->GetBody()->GetType() == b2_staticBody){
+			if(fixture->GetBody()->GetType() == b2_dynamicBody){
 				 (*contactosRightSensor)--;
 				 personaje->updateRightContact((*contactosRightSensor));
-			//}
+			}
 			break;
 		}
 
 		case ID_LEFT_WALL_SENSOR:{
-			//if(fixture->GetBody()->GetType() == b2_staticBody){
+			if(fixture->GetBody()->GetType() == b2_dynamicBody){
 				 (*contactosLeftSensor)--;
 				 personaje->updateLeftContact((*contactosLeftSensor));
-			//}
+			}
 			break;
 		}
 
@@ -102,19 +102,19 @@ void Contacto::EndContact(b2Contact* contact) {
     switch ((intptr_t)fixture->GetUserData()){
 
 		case ID_RIGHT_WALL_SENSOR:{
-			//if(fixture->GetBody()->GetType() == b2_staticBody){
+			if(fixture->GetBody()->GetType() == b2_dynamicBody){
 				 (*contactosRightSensor)--;
 				 personaje->updateRightContact((*contactosRightSensor));
-			//}
+			}
 			break;
 		}
 
 
 		case ID_LEFT_WALL_SENSOR:{
-			//if(fixture->GetBody()->GetType() == b2_staticBody){
+			if(fixture->GetBody()->GetType() == b2_dynamicBody){
 				 (*contactosLeftSensor)--;
 				 personaje->updateLeftContact((*contactosLeftSensor));
-			//}
+			}
 			break;
 		}
 

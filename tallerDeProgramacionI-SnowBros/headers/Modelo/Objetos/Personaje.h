@@ -55,7 +55,7 @@ class Personaje : public Figura{
 		int getJumpCooldown();
 		void updateLeftContact(int);
 		void updateRightContact(int);
-
+		void printContactosLR();
 };
 
 

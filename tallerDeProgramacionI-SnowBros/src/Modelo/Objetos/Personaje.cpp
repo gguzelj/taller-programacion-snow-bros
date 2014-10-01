@@ -73,7 +73,7 @@ Personaje::~Personaje(){
 }
 
 void Personaje::moveLeft(){
-	if(this->cantidadDeContactosIzquierda <= 0){
+	if(this->cantidadDeContactosIzquierda == 0){
     	b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
     	velocidadActual.x = -aceleracion;
     	this->body->SetLinearVelocity( velocidadActual );
@@ -81,7 +81,7 @@ void Personaje::moveLeft(){
 }
 
 void Personaje::moveRight(){
-	if (this->cantidadDeContactosDerecha <= 0){
+	if (this->cantidadDeContactosDerecha == 0){
 		b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
 		velocidadActual.x = aceleracion;
 		this->body->SetLinearVelocity( velocidadActual );
@@ -157,4 +157,8 @@ void Personaje::updateLeftContact(int numero){
 }
 void Personaje::updateRightContact(int numero){
 	this->cantidadDeContactosDerecha = numero;
+}
+void Personaje::printContactosLR(){
+	printf("contactosLEFT %d\n", this->cantidadDeContactosIzquierda);
+	printf("contactosRIGHT %d\n", this->cantidadDeContactosDerecha);
 }

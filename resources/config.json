@@ -1,9 +1,9 @@
 {
     "escenario": {
         "alto-px": 720,
-        "ancho-px":1024,
-        "alto-un":25.6,
-        "ancho-un":34.15,
+        "ancho-px":1366,
+        "alto-un":24,
+        "ancho-un":45,
         "imagen_fondo":"resources/fondoMario.png",
         "personaje": {"x": 0,"y":0.5},
         "objetos": [

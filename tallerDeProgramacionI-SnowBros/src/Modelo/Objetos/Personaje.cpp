@@ -57,13 +57,13 @@ Personaje::Personaje(JsonParser *parser, b2World* world){
 	footSensorFixture->SetUserData( (void*)ID_FOOT_SENSOR );
 
 	//sensor de izquierda y derecha
-	shapeDelPersonaje.SetAsBox(0.0001f, alto-0.4f, b2Vec2(-ancho-0.9f,0.9f),0);	//a la izquierda
+	shapeDelPersonaje.SetAsBox(0.0001f, alto-0.4f, b2Vec2(-ancho-0.9f,0.9f),0);
 	fixtureDelPersonaje.isSensor = true;
-	b2Fixture* paredIzquierdaSensor = this->body->CreateFixture(&fixtureDelPersonaje);
+	this->body->CreateFixture(&fixtureDelPersonaje);
 	paredIzquierda->SetUserData((void*)ID_LEFT_WALL_SENSOR);
-	shapeDelPersonaje.SetAsBox(0.0001f, alto-0.4f, b2Vec2(ancho+0.9f,0.9f),0);	//a la derecha
+	shapeDelPersonaje.SetAsBox(0.0001f, alto-0.4f, b2Vec2(ancho+0.9f,0.9f),0);
 	fixtureDelPersonaje.isSensor = true;
-	b2Fixture* paredDerechaSensor = this->body->CreateFixture(&fixtureDelPersonaje);
+	this->body->CreateFixture(&fixtureDelPersonaje);
 	paredDerecha->SetUserData((void*)ID_RIGHT_WALL_SENSOR);
 
 }

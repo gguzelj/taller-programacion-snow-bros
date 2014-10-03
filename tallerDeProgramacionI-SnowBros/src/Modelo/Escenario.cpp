@@ -16,9 +16,9 @@ Escenario::Escenario(JsonParser *parser) {
         muro_i = new Muro(parser->getAnchoUnEscenario(), parser->getAltoUnEscenario(), 0, world_, 0);
         muros_->push_back(muro_i);
         //And walls
-        muro_i = new Muro(parser->getAnchoUnEscenario(), parser->getAltoUnEscenario(), 90, world_,-0.5 * parser->getAnchoUnEscenario());
+        muro_i = new Muro(parser->getAnchoUnEscenario(), parser->getAltoUnEscenario(), 90, world_, 0.5 * parser->getAnchoUnEscenario());
         muros_->push_back(muro_i);
-        muro_i = new Muro(parser->getAnchoUnEscenario(), parser->getAltoUnEscenario(), 90, world_, 0.5 *parser->getAnchoUnEscenario());
+        muro_i = new Muro(parser->getAnchoUnEscenario(), parser->getAltoUnEscenario(), 90, world_, -0.5 *parser->getAnchoUnEscenario());
         muros_->push_back(muro_i);
 
 

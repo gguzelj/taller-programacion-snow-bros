@@ -16,7 +16,9 @@ Personaje::Personaje(JsonParser *parser, b2World* world){
 	//Parametros para controlar los contactos
 	this->contactos.setPersonaje(this);
 	this->cantidadDeContactosActuales = 0; //Comienza en el aire
-	this->contactos.updateContacto(&cantidadDeContactosActuales);
+	this->cantidadDeContactosIzquierda = 0;
+	this->cantidadDeContactosDerecha = 0;
+	this->contactos.updateContacto(&cantidadDeContactosActuales,&cantidadDeContactosIzquierda,&cantidadDeContactosDerecha);
 	this->world->SetContactListener(&contactos);
 
 
@@ -48,11 +50,21 @@ Personaje::Personaje(JsonParser *parser, b2World* world){
 	shapeDelPersonaje.SetAsBox(0.0000001f, alto-0.004f, b2Vec2(ancho-0.00000005,0.0045f),0);	//a la derecha
 	b2Fixture* paredDerecha = this->body->CreateFixture(&fixtureDelPersonaje);
 
-	//add foot sensor fixture beneath the main fixture
+	//Foot sensor
 	shapeDelPersonaje.SetAsBox(ancho*19.0f/20,alto/10,b2Vec2(0,-alto),0);
 	fixtureDelPersonaje.isSensor = true;
 	b2Fixture* footSensorFixture = this->body->CreateFixture(&fixtureDelPersonaje);
 	footSensorFixture->SetUserData( (void*)ID_FOOT_SENSOR );
+
+	//Sensor de izquierda y derecha
+	shapeDelPersonaje.SetAsBox(0.0001f, alto-0.4f, b2Vec2(-ancho-0.9f,0.9f),0);
+	fixtureDelPersonaje.isSensor = true;
+	this->body->CreateFixture(&fixtureDelPersonaje);
+	paredIzquierda->SetUserData((void*)ID_LEFT_WALL_SENSOR);
+	shapeDelPersonaje.SetAsBox(0.0001f, alto-0.4f, b2Vec2(ancho+0.9f,0.9f),0);
+	fixtureDelPersonaje.isSensor = true;
+	this->body->CreateFixture(&fixtureDelPersonaje);
+	paredDerecha->SetUserData((void*)ID_RIGHT_WALL_SENSOR);
 
 }
 
@@ -61,24 +73,38 @@ Personaje::~Personaje(){
 }
 
 void Personaje::moveLeft(){
+	if(this->cantidadDeContactosIzquierda == 0){
     	b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
     	velocidadActual.x = -aceleracion;
     	this->body->SetLinearVelocity( velocidadActual );
+<<<<<<< HEAD
     	//this->body->ApplyForce(b2Vec2(-100,0), this->body->GetWorldCenter(), true);
+=======
+	};
+>>>>>>> refs/remotes/origin/movimientoDePersonaje
 }
 
 void Personaje::moveRight(){
+	if (this->cantidadDeContactosDerecha == 0){
 		b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
 		velocidadActual.x = aceleracion;
 		this->body->SetLinearVelocity( velocidadActual );
+<<<<<<< HEAD
     	//this->body->ApplyForce(b2Vec2(100,0), this->body->GetWorldCenter(), true);
+=======
+	};
+>>>>>>> refs/remotes/origin/movimientoDePersonaje
 }
 
 void Personaje::jump(){
 	if (this->jumpCooldown <= 0){
 		 this->jumpCooldown = 18;
 		 float potenciaDeSalto = this->body->GetMass() * 18;
+<<<<<<< HEAD
 		 this->body->ApplyLinearImpulse( b2Vec2(0,potenciaDeSalto), this->body->GetWorldCenter(),true ); //Se podria cambiar el this->body->GetWorldCenter() por this->body->GetLocalCenter()
+=======
+		 this->body->ApplyLinearImpulse( b2Vec2(0,potenciaDeSalto), this->body->GetWorldCenter(),true );
+>>>>>>> refs/remotes/origin/movimientoDePersonaje
 	}
 }
 
@@ -127,10 +153,25 @@ float Personaje::getX(){
 float Personaje::getY(){
 	return (this->body->GetPosition().y);
 }
+
 void Personaje::decreaseJumpCooldown(){
 	if (this->jumpCooldown > 0)
 	this->jumpCooldown -= 1;
 }
+
 int Personaje::getJumpCooldown(){
 	return (this->jumpCooldown);
+}
+
+void Personaje::updateLeftContact(int numero){
+	this->cantidadDeContactosIzquierda = numero;
+}
+
+void Personaje::updateRightContact(int numero){
+	this->cantidadDeContactosDerecha = numero;
+}
+
+void Personaje::printContactosLR(){
+	printf("contactosLEFT %d\n", this->cantidadDeContactosIzquierda);
+	printf("contactosRIGHT %d\n", this->cantidadDeContactosDerecha);
 }

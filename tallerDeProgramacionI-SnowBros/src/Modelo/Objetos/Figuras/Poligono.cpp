@@ -39,7 +39,7 @@ Poligono::Poligono(JsonParser *parser, int index, b2World* world){
 	fixture.shape = &shape;	//le asigno la forma que determine antes
 	float area = pow(this->escala,2) * numVertices * tan(M_PI/numVertices);
 	fixture.density = masa / area;
-	fixture.friction = 1.0f;
+	fixture.friction = 0.7f;
 	body->CreateFixture(&fixture);
 
 }

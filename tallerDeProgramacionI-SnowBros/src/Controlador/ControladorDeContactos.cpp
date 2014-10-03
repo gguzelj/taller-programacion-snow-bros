@@ -11,38 +11,88 @@ void cambiarEstadoAlAterrizar(Personaje* personaje){
 
 
 void Contacto::BeginContact(b2Contact* contact) {
-        void* fixtureUserData = contact->GetFixtureA()->GetUserData();
+	b2Fixture* fixture = contact->GetFixtureA();
+	b2Fixture* fixtureAux = contact->GetFixtureB();
 
+	switch ((intptr_t)fixture->GetUserData()){
 
-        if ((intptr_t)fixtureUserData == ID_FOOT_SENSOR){
-        	if((*contactosSensor) == 0){
-        	      cambiarEstadoAlAterrizar(personaje);
-        	 }
-        	 (*contactosSensor)++;
-        }
+		case ID_RIGHT_WALL_SENSOR:{
+			if(fixture->GetBody()->GetType() == b2_dynamicBody && fixtureAux->GetBody()->GetType() == b2_staticBody){
+				(*contactosRightSensor)++;
+				personaje->updateRightContact((*contactosRightSensor));
+			}
+			break;
+		}
 
-        fixtureUserData = contact->GetFixtureB()->GetUserData();
-        if ((intptr_t)fixtureUserData == ID_FOOT_SENSOR){
-        	if((*contactosSensor) == 0){
-        	      cambiarEstadoAlAterrizar(personaje);
-        	}
-        	(*contactosSensor)++;
-        }
+		case ID_LEFT_WALL_SENSOR:{
+			if(fixture->GetBody()->GetType() == b2_dynamicBody && fixtureAux->GetBody()->GetType() == b2_staticBody){
+				 (*contactosLeftSensor)++;
+				 personaje->updateLeftContact((*contactosLeftSensor));
+			}
+			break;
+		}
+
+		case ID_FOOT_SENSOR:{
+			if((*contactosSensor) == 0){
+				  cambiarEstadoAlAterrizar(personaje);
+			 }
+			 (*contactosSensor)++;
+			 break;
+		}
+	}
+
+	fixture = contact->GetFixtureB();
+	switch ((intptr_t)fixture->GetUserData()){
+
+		case ID_FOOT_SENSOR:{
+			if((*contactosSensor) == 0){
+				  cambiarEstadoAlAterrizar(personaje);
+			 }
+			 (*contactosSensor)++;
+			 break;
+		}
+	}
 }
 
 
 void Contacto::EndContact(b2Contact* contact) {
-	void* fixtureUserData = contact->GetFixtureA()->GetUserData();
-	if ((intptr_t)fixtureUserData == ID_FOOT_SENSOR){
-		(*contactosSensor)--;
-		if(*contactosSensor == 0 && personaje->state->getCode() != JUMPING)
-			personaje->state = &Personaje::falling;
+	b2Fixture* fixture = contact->GetFixtureA();
+	b2Fixture* fixtureAux = contact->GetFixtureB();
+
+    switch ((intptr_t)fixture->GetUserData()){
+
+		case ID_RIGHT_WALL_SENSOR:{
+			if(fixture->GetBody()->GetType() == b2_dynamicBody && fixtureAux->GetBody()->GetType() == b2_staticBody){
+				 (*contactosRightSensor)--;
+				 personaje->updateRightContact((*contactosRightSensor));
+			}
+			break;
+		}
+
+		case ID_LEFT_WALL_SENSOR:{
+			if(fixture->GetBody()->GetType() == b2_dynamicBody && fixtureAux->GetBody()->GetType() == b2_staticBody){
+				 (*contactosLeftSensor)--;
+				 personaje->updateLeftContact((*contactosLeftSensor));
+			}
+			break;
+		}
+
+		case ID_FOOT_SENSOR:{
+			(*contactosSensor)--;
+			if(*contactosSensor == 0 && personaje->state->getCode() != JUMPING)
+				personaje->state = &Personaje::falling;
+			break;
+		}
 	}
 
-	fixtureUserData = contact->GetFixtureB()->GetUserData();
-	if ((intptr_t)fixtureUserData == ID_FOOT_SENSOR){
-		(*contactosSensor)--;
-		if(*contactosSensor == 0 && personaje->state->getCode() != JUMPING)
-			personaje->state = &Personaje::falling;
+	fixture = contact->GetFixtureB();
+    switch ((intptr_t)fixture->GetUserData()){
+
+		case ID_FOOT_SENSOR:{
+			(*contactosSensor)--;
+			if(*contactosSensor == 0 && personaje->state->getCode() != JUMPING)
+				personaje->state = &Personaje::falling;
+			break;
+		}
 	}
 }

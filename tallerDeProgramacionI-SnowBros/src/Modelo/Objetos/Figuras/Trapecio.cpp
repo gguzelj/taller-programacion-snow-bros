@@ -45,7 +45,7 @@ Trapecio::Trapecio(JsonParser *parser, int index, b2World* world){
 	b2FixtureDef fixture;					//creo el fixture
 	fixture.shape = &shape;					//le asigno la forma que determine antes
 	fixture.density = (float) masa / ((base_inf+base_sup)/2 * alto);
-	fixture.friction = 1.0f;
+	fixture.friction = 0.7f;
 	body->CreateFixture(&fixture);
 
 }

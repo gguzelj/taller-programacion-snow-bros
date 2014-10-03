@@ -13,29 +13,27 @@ void Controlador::handleEvents(bool* running, bool* reload){
 }
 
 void Controlador::handleEvent(SDL_Event* evento,bool* running, bool* reload){
+	//logica de manejo de eventos del personaje
+	model->getPersonaje()->handleInput(evento->key.keysym.sym,evento->type);
 
-		//logica de manejo de eventos del personaje
-		model->getPersonaje()->handleInput(evento->key.keysym.sym,evento->type);
+	switch (evento->type){
+		case SDL_QUIT:
+			(*running) = false;
+			break;
 
-		switch (evento->type){
-				case SDL_QUIT:
+		case SDL_KEYDOWN:{
+			switch(evento->key.keysym.sym){
+				case TECLA_RESET:{
+					(*reload) = true;
 					(*running) = false;
 					break;
-
-				case SDL_KEYDOWN:{
-						switch(evento->key.keysym.sym){
-
-							case TECLA_RESET:{
-								(*reload) = true;
-								(*running) = false;
-								break;
-							}
-							case SDLK_ESCAPE:{
-								(*running) = false;
-								break;
-							}
-						}
-						break;
 				}
+				case SDLK_ESCAPE:{
+					(*running) = false;
+					break;
+				}
+			}
+			break;
+		}
 	}
 }

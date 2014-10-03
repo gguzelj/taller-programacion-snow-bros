@@ -1,31 +1,21 @@
 {
     "escenario": {
         "alto-px": 720,
-        "ancho-px":1365,
+        "ancho-px":1366,
         "alto-un":24,
-        "gravedad":-10,
         "ancho-un":45,
+        "gravedad":-10,
         "imagen_fondo":"resources/fondoMario.png",
         "personaje": {"x": 0,"y":0},
         "objetos": [
                      {
                        "tipo":"circulo",
-                       "x":-13,
-                       "y":11,
-                       "escala":0.5,
-                       "color":"#1234AA",
-                       "rot":0,
-                       "masa":5,
-                       "estatico":false
-                     },
-                     {
-                       "tipo":"circulo",
                        "x":-15,
                        "y":11,
-                       "escala":1,
+                       "escala":0.5,
                        "color":"#0011AA",
                        "rot":0,
-                       "masa":100,
+                       "masa":5,
                        "estatico":false
                      },                    
                      {
@@ -57,20 +47,10 @@
                        "rot":0,
                        "masa":5,
                        "estatico":false
-                     },                                                                                 
-                     {
-                       "tipo":"circulo",
-                       "x":1.5,
-                       "y":11,
-                       "escala":0.5,
-                       "color":"#1234AA",
-                       "rot":0,
-                       "masa":5,
-                       "estatico":false
                      },
                      {
                        "tipo":"poligono",
-                       "lados":4,
+                       "lados":5,
                        "x":-4,
                        "y":-4,
                        "escala":0.9,
@@ -81,7 +61,7 @@
                      },
                      {
                        "tipo":"poligono",
-                       "lados":6,
+                       "lados":5,
                        "x":0,
                        "y":-4,
                        "escala":0.9,
@@ -113,16 +93,16 @@
                        "rot":0,
                        "masa":5,
                        "estatico":false,
-                       "inclinacion":90
+                       "inclinacion":30
                      },                               
                      {
                        "tipo":"poligono",
                        "lados":6,
-                       "x":-12,
-                       "y":-5,
+                       "x":-10,
+                       "y":-10,
                        "escala":2,
                        "color":"#ff00DD",
-                       "rot":0,
+                       "rot":30,
                        "masa":5,
                        "estatico":true
                      },
@@ -148,18 +128,6 @@
                        "masa":5,
                        "estatico":true
                      },
-                     
-                     {
-                       "tipo":"poligono",
-                       "lados":3,
-                       "x":10,
-                       "y":7,
-                       "escala":3,
-                       "color":"#8899BC",
-                       "rot":198,
-                       "masa":5,
-                       "estatico":true
-                     },
                      {
                        "tipo":"poligono",
                        "lados":6,
@@ -173,12 +141,12 @@
                      },
                      {
                        "tipo":"rectangulo",
-                       "x":12,
-                       "y":-7,
+                       "x":-12,
+                       "y":7,
                        "ancho":4,
                        "alto":0.5,
                        "color":"#0FFAA0",
-                       "rot":0,
+                       "rot":135,
                        "masa":3,
                        "estatico":true
                      },
@@ -207,7 +175,7 @@
                      {
                        "tipo":"rectangulo",
                        "x":-2.5,
-                       "y":-9,
+                       "y":-9.3,
                        "ancho":5,
                        "alto":0.5,
                        "color":"#0FFAA0",

@@ -74,6 +74,7 @@ bool Game::onInit(string jsonPath){
 		return false;
 	}
 }
+
 void Game::onEvent(){
 	controller_->handleEvents(&running_, &reload_);
 }
@@ -95,9 +96,9 @@ void Game::onLoop(){
 		model_->getPersonaje()->jump();
 		model_->getPersonaje()->state = &Personaje::jumping;
 	}
-
 	model_->getWorld()->Step(timeStep, velocityIterations, positionIterations);
 }
+
 void Game::onRender(){
 	view_->updateView(model_);
 }

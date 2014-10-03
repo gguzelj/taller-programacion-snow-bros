@@ -77,11 +77,7 @@ void Personaje::moveLeft(){
     	b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
     	velocidadActual.x = -aceleracion;
     	this->body->SetLinearVelocity( velocidadActual );
-<<<<<<< HEAD
-    	//this->body->ApplyForce(b2Vec2(-100,0), this->body->GetWorldCenter(), true);
-=======
 	};
->>>>>>> refs/remotes/origin/movimientoDePersonaje
 }
 
 void Personaje::moveRight(){
@@ -89,23 +85,15 @@ void Personaje::moveRight(){
 		b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
 		velocidadActual.x = aceleracion;
 		this->body->SetLinearVelocity( velocidadActual );
-<<<<<<< HEAD
-    	//this->body->ApplyForce(b2Vec2(100,0), this->body->GetWorldCenter(), true);
-=======
 	};
->>>>>>> refs/remotes/origin/movimientoDePersonaje
 }
 
 void Personaje::jump(){
 	if (this->jumpCooldown <= 0){
 		 this->jumpCooldown = 18;
 		 float potenciaDeSalto = this->body->GetMass() * 18;
-<<<<<<< HEAD
-		 this->body->ApplyLinearImpulse( b2Vec2(0,potenciaDeSalto), this->body->GetWorldCenter(),true ); //Se podria cambiar el this->body->GetWorldCenter() por this->body->GetLocalCenter()
-=======
 		 this->body->ApplyLinearImpulse( b2Vec2(0,potenciaDeSalto), this->body->GetWorldCenter(),true );
->>>>>>> refs/remotes/origin/movimientoDePersonaje
-	}
+	};
 }
 
 void Personaje::stop(){

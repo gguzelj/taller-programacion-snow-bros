@@ -32,6 +32,14 @@ void Controlador::handleEvent(SDL_Event* evento,bool* running, bool* reload){
 					(*running) = false;
 					break;
 				}
+				case SDLK_1:{
+					view->zoomIn();
+					break;
+				}
+				case SDLK_2:{
+					view->zoomOut();
+					break;
+				}
 			}
 			break;
 		}

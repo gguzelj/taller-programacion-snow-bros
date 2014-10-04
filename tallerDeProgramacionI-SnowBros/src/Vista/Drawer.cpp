@@ -1,11 +1,55 @@
 #include "../../headers/Vista/Drawer.h"
 #include "../../headers/Vista/sprite.h"
 
+/**
+* Draw an SDL_Texture to an SDL_Renderer at some destination rect
+* taking a clip of the texture if desired
+* @param tex The source texture we want to draw
+* @param ren The renderer we want to draw to
+* @param dst The destination rectangle to render the texture to
+* @param clip The sub-section of the texture to draw (clipping rect)
+*		default of nullptr draws the entire texture
+*/
+void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, SDL_Rect dst,
+	SDL_Rect *clip = nullptr)
+{
+	SDL_RenderCopy(ren, tex, clip, &dst);
+}
+/**
+* Draw an SDL_Texture to an SDL_Renderer at position x, y, preserving
+* the texture's width and height and taking a clip of the texture if desired
+* If a clip is passed, the clip's width and height will be used instead of
+*	the texture's
+* @param tex The source texture we want to draw
+* @param ren The renderer we want to draw to
+* @param x The x coordinate to draw to
+* @param y The y coordinate to draw to
+* @param clip The sub-section of the texture to draw (clipping rect)
+*		default of nullptr draws the entire texture
+*/
+void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y,
+	SDL_Rect *clip = nullptr)
+{
+	SDL_Rect dst;
+	dst.x = x;
+	dst.y = y;
+	if (clip != nullptr){
+		dst.w = clip->w;
+		dst.h = clip->h;
+	}
+	else {
+		SDL_QueryTexture(tex, NULL, NULL, &dst.w, &dst.h);
+	}
+	renderTexture(tex, ren, dst, clip);
+}
+
+
 Drawer::Drawer(JsonParser *parser){
 	this->renderer = nullptr;
 	this->window = nullptr;
 	this->image = nullptr;
 	this->imagenPersonaje = nullptr;
+	this->surfaceBackground = nullptr;
 
 	//Utilizar parser para obtener las definciones necesarias para crear objetos
 	this->ancho_px = parser->getAnchoPx();
@@ -13,9 +57,10 @@ Drawer::Drawer(JsonParser *parser){
 	this->alto_un = parser->getAltoUnEscenario();
 	this->ancho_un = parser->getAnchoUnEscenario();
 	this->imagePath = parser->getImagenFondo();
+	this->currentZoomFactor = 1.0;
 
-	this->un_to_px_x = ancho_px/ancho_un;
-	this->un_to_px_y = alto_px/alto_un;
+	this->un_to_px_x = this->un_to_px_x_inicial = (ancho_px/ancho_un)*currentZoomFactor;
+	this->un_to_px_y = this->un_to_px_y_inicial = (alto_px/alto_un)*currentZoomFactor;
 
 	this->runWindow(ancho_px,alto_px,imagePath);
 }
@@ -25,6 +70,7 @@ Drawer::~Drawer(){
 	SDL_DestroyTexture(imagenPersonaje);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
+	SDL_FreeSurface(surfaceBackground);
 	SDL_Quit();
 	IMG_Quit();
 }
@@ -45,8 +91,14 @@ void Drawer::clearScenary(){
 }
 
 void Drawer::drawBackground(){
+	SDL_Rect clip;
+	clip.x=0;	//Coord de origen de SDL2
+	clip.y=0;
+	clip.w=ancho_px;
+	clip.h=alto_px;
+	renderTexture(image,renderer,0,0,&clip);
 	//Drawing the texture
-	SDL_RenderCopy(renderer, image, NULL, NULL); //Se pasa NULL para que ocupe all el renderer
+//	SDL_RenderCopy(renderer, image, NULL, NULL); //Se pasa NULL para que ocupe all el renderer
 }
 
 void Drawer::drawScenary(Escenario* model){
@@ -180,10 +232,11 @@ void Drawer::runWindow(int ancho_px ,int alto_px ,string imagePath){
 	}
 
 	//Loading the image
-	image = this->loadTexture(this->imagePath, renderer);
+	image = this->loadTexture(this->imagePath,renderer);
 	if (image == nullptr){
 		manageLoadBackgroundError();
 	}
+	surfaceBackground = IMG_Load(this->imagePath.c_str()); //Si falla la carga de la imagen, se contempla en el manageLoadBackgroundError
 
 	imagenPersonaje = this->loadTexture(SPRITE_PATH,this->renderer);
 	if (imagenPersonaje == nullptr){
@@ -227,6 +280,7 @@ void Drawer::manageLoadCharacterError(){
 	SDL_DestroyTexture(imagenPersonaje);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
+	SDL_FreeSurface(surfaceBackground);
 	IMG_Quit();
 	SDL_Quit();
 	logSDLError( "Error al utilizar IMG_LoadTexture. Verifique el path de la imagen.");
@@ -239,4 +293,34 @@ SDL_Texture* Drawer::loadTexture(const std::string &file, SDL_Renderer *ren){
 }
 void Drawer::logSDLError(const std::string &msg){
 	Log::instance()->append(msg + SDL_GetError(),Log::ERROR);
+}
+
+void Drawer::zoomIn(){
+	currentZoomFactor += factor;
+	//Zoom in a la imagen de fondo
+	SDL_Surface* surfaceTemp = rotozoomSurface(surfaceBackground,rotation,currentZoomFactor,smoothing_off);
+	//Libero memoria del texture actual que se va a reemplazar
+	SDL_DestroyTexture(image);
+	image = SDL_CreateTextureFromSurface(renderer,surfaceTemp);
+	//Libero memoria del surface temporal
+	SDL_FreeSurface(surfaceTemp);
+
+	//Zoom in a la escala de las figuras
+	un_to_px_x = un_to_px_x_inicial * currentZoomFactor;
+	un_to_px_y = un_to_px_y_inicial * currentZoomFactor;
+}
+
+void Drawer::zoomOut(){
+	currentZoomFactor -= factor;
+	//Zoom out a la imagen de fondo
+	SDL_Surface* surfaceTemp = rotozoomSurface(surfaceBackground,rotation,currentZoomFactor,smoothing_off);
+	//Libero memoria del texture actual que se va a reemplazar
+	SDL_DestroyTexture(image);
+	image = SDL_CreateTextureFromSurface(renderer,surfaceTemp);
+	//Libero memoria del surface temporal
+	SDL_FreeSurface(surfaceTemp);
+
+	//Zoom out a la escala de las figuras
+	un_to_px_x =un_to_px_x_inicial * currentZoomFactor;
+	un_to_px_y =un_to_px_y_inicial * currentZoomFactor;
 }

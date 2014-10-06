@@ -1,5 +1,11 @@
 #include "../../headers/Vista/Drawer.h"
 #include "../../headers/Vista/sprite.h"
+#define COTA_INF_X -(ancho_px/5)/currentZoomFactor
+#define COTA_INF_Y -(alto_px/5)/currentZoomFactor
+#define COTA_SUP_X	(ancho_px/5)/currentZoomFactor
+#define COTA_SUP_Y	(alto_px/5)/currentZoomFactor
+#define FACTOR_DESPLAZAMIENTO 5
+
 
 /**
 * Draw an SDL_Texture to an SDL_Renderer at some destination rect
@@ -43,7 +49,6 @@ void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y,
 	renderTexture(tex, ren, dst, clip);
 }
 
-
 Drawer::Drawer(JsonParser *parser){
 	this->renderer = nullptr;
 	this->window = nullptr;
@@ -58,9 +63,10 @@ Drawer::Drawer(JsonParser *parser){
 	this->ancho_un = parser->getAnchoUnEscenario();
 	this->imagePath = parser->getImagenFondo();
 	this->currentZoomFactor = 1.0;
+	this->camera = {0,0,ancho_px,alto_px};
 
-	this->un_to_px_x = this->un_to_px_x_inicial = (ancho_px/ancho_un)*currentZoomFactor;
-	this->un_to_px_y = this->un_to_px_y_inicial = (alto_px/alto_un)*currentZoomFactor;
+	this->un_to_px_x = this->un_to_px_x_inicial = currentZoomFactor*(ancho_px/ancho_un);
+	this->un_to_px_y = this->un_to_px_y_inicial = currentZoomFactor*(alto_px/alto_un);
 
 	this->runWindow(ancho_px,alto_px,imagePath);
 }
@@ -90,19 +96,66 @@ void Drawer::clearScenary(){
 	SDL_RenderClear(this->renderer);
 }
 
+
+
+
 void Drawer::drawBackground(){
+	//este nos ayuda a terminar de acomodar las coordenadas con el zoom
 	SDL_Rect clip;
-	clip.x=0;	//Coord de origen de SDL2
-	clip.y=0;
+	clip.x=camera.x+(currentZoomFactor-1)*(ancho_px/2);	//Coord de origen de SDL2
+	clip.y=camera.y+(currentZoomFactor-1)*(alto_px/2);
 	clip.w=ancho_px;
 	clip.h=alto_px;
+
 	renderTexture(image,renderer,0,0,&clip);
 	//Drawing the texture
 //	SDL_RenderCopy(renderer, image, NULL, NULL); //Se pasa NULL para que ocupe all el renderer
 }
 
+
+float coord_relativa(float referencia,float coord){
+	return coord - referencia;
+}
+
+void Drawer::actualizarCamara(Personaje* personaje){
+
+	int ox = (this->ancho_px/2)/currentZoomFactor;
+	int oy = (this->alto_px/2)/currentZoomFactor;
+	float pos_x = (personaje->getX())* (this->un_to_px_x)+ox;
+	float pos_y = personaje->getY()* -(this->un_to_px_y)+oy;
+
+
+	float x_relativa = coord_relativa(camera.x  + (camera.w/2)/currentZoomFactor,pos_x);
+	float y_relativa = coord_relativa(camera.y + (camera.h/2)/currentZoomFactor,pos_y);
+
+	float limiteIzquierdo = - ((currentZoomFactor - 1 ) * ((float)ancho_px/2));
+	float limiteDerecho = (currentZoomFactor*ancho_px) - camera.w - (currentZoomFactor-1)*(ancho_px/2);
+	float limiteInferior = - (currentZoomFactor-1)*alto_px/2;
+	float limiteSuperior = (currentZoomFactor*alto_px) - camera.h - (currentZoomFactor-1)*(alto_px/2);
+
+	if(x_relativa <= COTA_INF_X){
+		if(camera.x > limiteIzquierdo )
+			camera.x -= FACTOR_DESPLAZAMIENTO;
+	}
+	else{
+		if(x_relativa >= COTA_SUP_X){
+			if( camera.x < limiteDerecho )
+				camera.x+=FACTOR_DESPLAZAMIENTO;
+		}
+	}
+	if(y_relativa <= COTA_INF_Y){
+		if(camera.y > limiteInferior )
+			camera.y -= FACTOR_DESPLAZAMIENTO;
+	}
+	else if(y_relativa >= COTA_SUP_Y){
+		if(camera.y < limiteSuperior )
+			camera.y += FACTOR_DESPLAZAMIENTO;
+	}
+}
+
 void Drawer::drawScenary(Escenario* model){
 	std::list<Figura*>* figuras = model->getFiguras();
+	actualizarCamara(model->getPersonaje());
 	for (auto figura : *figuras){
 		this->drawFigura(figura);
 	}
@@ -127,6 +180,8 @@ char* convertir_hex_a_rgb (std::string color){
         return resultado;
 }
 
+
+
 //Dibuja una figura
 void Drawer::drawFigura(Figura* figura){
 	//NOTA: cambiar esto por la forma actual. Vamos a tener que tener en cuenta a los circulos.
@@ -145,6 +200,9 @@ void Drawer::drawFigura(Figura* figura){
 				b2Vec2 p1 = figura->GetWorldPoint(poly->GetVertex(i));
 				xCoordOfVerts[i] = (Sint16)((un_to_px_x) * (p1.x) + ox);
 				yCoordOfVerts[i] = (Sint16)(-un_to_px_y * p1.y + oy);
+
+				xCoordOfVerts[i] = coord_relativa(camera.x,xCoordOfVerts[i]);
+				yCoordOfVerts[i] = coord_relativa(camera.y,yCoordOfVerts[i]);
 			}
 
 			filledPolygonRGBA(this->renderer, xCoordOfVerts, yCoordOfVerts, count, rgb[0], rgb[1], rgb[2], 255);
@@ -156,12 +214,25 @@ void Drawer::drawFigura(Figura* figura){
 			Circulo* circ = (Circulo*) figura;
 			int centro_x=circ->getCoordX() * un_to_px_x + ox;
 			int centro_y =circ->getCoordY() * -un_to_px_y + oy;
-			filledEllipseRGBA(this->renderer, centro_x, centro_y, circ->getRadio() * un_to_px_x, circ->getRadio() * un_to_px_y,
-							  rgb[0], rgb[1], rgb[2], 255);
+
 			//Opcion de dibujar el radio nomá
 			//Esta linea va a ser el radio que va a ir girando con el circulo
 			int borde_x = ( circ->getRadio()* cos(circ->getAngulo()) * un_to_px_x) + centro_x;
 			int borde_y = centro_y - ( circ->getRadio()* sin(circ->getAngulo()) * un_to_px_y);
+
+
+			//cambiando coordenadas por las relativas a la camara
+			centro_x = coord_relativa(camera.x,centro_x);
+			centro_y = coord_relativa(camera.y,centro_y);
+
+			filledEllipseRGBA(this->renderer, centro_x, centro_y, circ->getRadio() * un_to_px_x, circ->getRadio() * un_to_px_y,
+							  rgb[0], rgb[1], rgb[2], 255);
+
+
+			//cambiando coordenadas por las relativas a la camara
+			borde_x = coord_relativa(camera.x,borde_x);
+			borde_y = coord_relativa(camera.y,borde_y);
+
 			lineRGBA(renderer,centro_x,centro_y,borde_x,borde_y,(rgb[0]+120)%255, (rgb[1]+120)%255,(rgb[2]+120)%255, 255);
         }
 	}
@@ -185,7 +256,8 @@ void Drawer::drawCharacter(Personaje* person){
 		SDL_Texture *textura = this->imagenPersonaje;
 		float pos_x = (person->getX())* (this->un_to_px_x)+ox;
 		float pos_y = person->getY()* -(this->un_to_px_y)+oy;
-
+		pos_x = coord_relativa(camera.x,pos_x);
+		pos_y = coord_relativa(camera.y,pos_y);
 
 		switch(codigo_estado){
 			case JUMPING:

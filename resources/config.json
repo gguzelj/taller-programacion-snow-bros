@@ -1,7 +1,7 @@
 {
     "escenario": {
-        "alto-px": 720,
-        "ancho-px":1366,
+        "alto-px": 600,
+        "ancho-px":800,
         "alto-un":24,
         "ancho-un":45,
         "gravedad":-10,

@@ -18,6 +18,7 @@ const float factor = 0.005;
 const float rotation = 0.0;
 const int smoothing_off = 0;
 
+
 class Drawer{
 public:
 		Drawer(JsonParser *parser);
@@ -46,9 +47,11 @@ private:
 	float un_to_px_y_inicial;
 	float currentZoomFactor;
 	SDL_Texture* imagenPersonaje;
+	SDL_Rect camera;
 
 	void runWindow(int ancho_px ,int alto_px ,string imagePath);
 
+	void actualizarCamara(Personaje* personaje);
 	void drawBackground();
 	void drawScenary(Escenario* model);
 	void drawFigura(Figura* figura);

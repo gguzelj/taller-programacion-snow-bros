@@ -19,6 +19,7 @@ const float rotation = 0.0;
 const int smoothing_off = 0;
 
 
+
 class Drawer{
 public:
 		Drawer(JsonParser *parser);

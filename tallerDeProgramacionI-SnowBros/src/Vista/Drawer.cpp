@@ -6,6 +6,8 @@
 #define COTA_SUP_X	(ancho_px-ancho_px*(currentZoomFactor-1))/5
 #define COTA_SUP_Y	(alto_px-(alto_px)*(currentZoomFactor-1))/5
 */
+
+
 #define FACTOR_DESPLAZAMIENTO 6
 #define FACTOR_CONVERSION_UN_A_PX 32
 #define COTA_INF_X -(ancho_px )/5

@@ -7,6 +7,7 @@
 #include "SDL2/SDL_image.h"
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL2_rotozoom.h>
+#include <SDL2/SDL_ttf.h>
 #include "../Parser/JsonParser.h"
 #include "../Modelo/Escenario.h"
 #include "../Exceptions/SDLError.h"
@@ -37,6 +38,10 @@ private:
 	SDL_Window *window;
 	SDL_Texture *image;
 	SDL_Surface* surfaceBackground;
+	SDL_Surface* messageAboutPoints;
+	SDL_Surface* messageAboutLifes;
+	TTF_Font* fontToBeUsed;
+	string fontPath;
 	string imagePath;
 	int ancho_px;
 	int alto_px;
@@ -59,6 +64,7 @@ private:
 	void drawScenary(Escenario* model);
 	void drawFigura(Figura* figura);
 	void drawCharacter(Personaje* person);
+	void drawMessages();
 	void presentScenary();
 	void clearScenary();
 
@@ -69,6 +75,9 @@ private:
 	void manageCreateRendererError();
 	void manageLoadBackgroundError();
 	void manageLoadCharacterError();
+	void manageSDL_ttfError();
+	void manageSDL_ttfLoadFontError();
+	void manageDrawMessagesError();
 };
 
 

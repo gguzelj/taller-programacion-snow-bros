@@ -64,6 +64,10 @@ Drawer::Drawer(JsonParser *parser){
 	this->image = nullptr;
 	this->imagenPersonaje = nullptr;
 	this->surfaceBackground = nullptr;
+	this->messageAboutLifes = nullptr;
+	this->messageAboutPoints = nullptr;
+	this->fontToBeUsed = nullptr;
+	this->fontPath = "resources/leadcoat.ttf";
 
 	//Utilizar parser para obtener las definciones necesarias para crear objetos
 	this->ancho_px = parser->getAnchoPx();
@@ -87,6 +91,10 @@ Drawer::~Drawer(){
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_FreeSurface(surfaceBackground);
+	SDL_FreeSurface(messageAboutLifes);
+	SDL_FreeSurface(messageAboutPoints);
+	TTF_CloseFont(fontToBeUsed);
+	TTF_Quit();
 	SDL_Quit();
 	IMG_Quit();
 }
@@ -95,6 +103,7 @@ void Drawer::updateView(Escenario* model){
 	this->clearScenary();
 	this->drawBackground();
 	this->drawScenary(model);
+	this->drawMessages();
 	this->presentScenary();
 }
 
@@ -106,21 +115,36 @@ void Drawer::clearScenary(){
 	SDL_RenderClear(this->renderer);
 }
 
-
-
 void Drawer::drawBackground(){
-	//SDL_RenderCopy(renderer, image, NULL, &clip);
 	renderTexture(image,renderer,0,0,&camera);
-	//Drawing the texture
-	//SDL_RenderCopy(renderer, image, &camera, NULL); //Se pasa NULL para que ocupe all el renderer
 }
 
+void Drawer::drawMessages(){
+	SDL_Color textColor = { 255, 255, 255 };
+	this->messageAboutPoints = TTF_RenderText_Solid(fontToBeUsed,"1000 Puntos",textColor);
+	this->messageAboutLifes = TTF_RenderText_Solid(fontToBeUsed,"3 vidas ", textColor);
+
+	if ((messageAboutPoints == nullptr) || (messageAboutLifes == nullptr))
+		manageDrawMessagesError();
+
+	//Set the coordinates which we want to draw to
+	float coordXDelMensaje = ancho_px/2 - 1 * un_to_px_x_inicial;
+	float coordYDelMensaje = alto_px/2 - 8 * un_to_px_y_inicial;
+
+	//Render the first message
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer,messageAboutPoints);
+	renderTexture(texture,renderer,coordXDelMensaje,coordYDelMensaje);
+
+	//Render the other message
+	texture = SDL_CreateTextureFromSurface(renderer,messageAboutLifes);
+	coordXDelMensaje += 10 * un_to_px_x_inicial;
+	renderTexture(texture,renderer,coordXDelMensaje,coordYDelMensaje);
+	SDL_DestroyTexture(texture);
+}
 
 float coord_relativa(float referencia,float coord){
 	return coord - referencia;
 }
-
-
 
 void ajusteFueraDeLimite(SDL_Rect &rect,int limIzq,int limDer,int limInf,int limSup){
 		if(rect.y < limInf)
@@ -132,7 +156,6 @@ void ajusteFueraDeLimite(SDL_Rect &rect,int limIzq,int limDer,int limInf,int lim
 		if(rect.x > limDer)
 			rect.x = limDer;
 }
-
 
 void Drawer::actualizarCamara(Personaje* personaje){
 	float ancho_imagen = ancho_un *FACTOR_CONVERSION_UN_A_PX;
@@ -152,63 +175,45 @@ void Drawer::actualizarCamara(Personaje* personaje){
 	int limInfCamera = 0;
 	int limSupCamera = alto_imagen - camera.h;
 
-
 	int limiteIzquierdo = - (currentZoomFactor - 1 ) * ancho_imagen/2;
 	int limiteDerecho = ancho_imagen  - coordRel.w  + (currentZoomFactor-1)*(ancho_imagen/2);
 	int limiteInferior  = - ((currentZoomFactor-1) * alto_imagen/2);
 	int limiteSuperior = alto_imagen - coordRel.h + (currentZoomFactor-1)*(alto_imagen/2);
 
-
 	if(x_relativa <= COTA_INF_X){
-
 		if(camera.x > limIzqCamera )
 			camera.x -= FACTOR_DESPLAZAMIENTO/currentZoomFactor;
 
 		if(coordRel.x > limiteIzquierdo )
 			coordRel.x -= FACTOR_DESPLAZAMIENTO;
-
-
 	}
 	else{
 		if(x_relativa >= COTA_SUP_X){
-
 			if( camera.x < limDerCamera )
 				camera.x+=FACTOR_DESPLAZAMIENTO/currentZoomFactor;
 
 			if( coordRel.x < limiteDerecho )
 				coordRel.x+=FACTOR_DESPLAZAMIENTO;
-
-
 		}
 	}
 	if(y_relativa <= COTA_INF_Y){
-
 		if(camera.y > limInfCamera )
 			camera.y -= FACTOR_DESPLAZAMIENTO/currentZoomFactor;
 
-
 		if(coordRel.y > limiteInferior )
 			coordRel.y -= FACTOR_DESPLAZAMIENTO;
-
-
 	}
 	else if(y_relativa >= COTA_SUP_Y){
-
 		if(camera.y < limSupCamera )
 			camera.y += FACTOR_DESPLAZAMIENTO/currentZoomFactor;
 
 		if(coordRel.y < limiteSuperior )
 			coordRel.y += FACTOR_DESPLAZAMIENTO;
-
 	}
 
 	ajusteFueraDeLimite(camera, limIzqCamera, limDerCamera, limInfCamera, limSupCamera);
 	ajusteFueraDeLimite(coordRel, limiteIzquierdo, limiteDerecho, limiteInferior, limiteSuperior);
-
-
 }
-
-
 
 void Drawer::drawScenary(Escenario* model){
 	std::list<Figura*>* figuras = model->getFiguras();
@@ -237,8 +242,6 @@ char* convertir_hex_a_rgb (std::string color){
 
         return resultado;
 }
-
-
 
 //Dibuja una figura
 void Drawer::drawFigura(Figura* figura){
@@ -297,8 +300,6 @@ void Drawer::drawFigura(Figura* figura){
 	delete [] rgb;
 }
 
-
-
 int anchoPersonaje(float un_to_px_x){
 	return (MITAD_ANCHO_PERSONAJE*2) * un_to_px_x + 15 ;
 }
@@ -331,8 +332,6 @@ void Drawer::drawCharacter(Personaje* person){
 				drawPersonajeCayendo(renderer,textura,orientacion,pos_x,pos_y,anchoPersonaje(un_to_px_x),altoPersonaje(un_to_px_y));
 				break;
 		}
-
-
 }
 
 void Drawer::presentScenary(){
@@ -360,7 +359,6 @@ void Drawer::runWindow(int ancho_px ,int alto_px ,string imagePath){
 	if (renderer == nullptr){
 		manageCreateRendererError();
 	}
-
 	//Loading the image
 	image = this->loadTexture(this->imagePath,renderer);
 	if (image == nullptr){
@@ -371,6 +369,18 @@ void Drawer::runWindow(int ancho_px ,int alto_px ,string imagePath){
 	imagenPersonaje = this->loadTexture(SPRITE_PATH,this->renderer);
 	if (imagenPersonaje == nullptr){
 		manageLoadCharacterError();
+	}
+
+	//Initialize SDL_ttf
+	if( TTF_Init() == -1 )
+	{
+	    manageSDL_ttfError();
+	}
+
+	int sizeOfTheFont = 20;
+	fontToBeUsed = TTF_OpenFont(this->fontPath.c_str(),sizeOfTheFont);
+	if (fontToBeUsed == nullptr){
+		manageSDL_ttfLoadFontError();
 	}
 }
 
@@ -414,6 +424,43 @@ void Drawer::manageLoadCharacterError(){
 	IMG_Quit();
 	SDL_Quit();
 	logSDLError( "Error al utilizar IMG_LoadTexture. Verifique el path de la imagen.");
+	throw SDLError();
+}
+void Drawer::manageSDL_ttfError(){
+	SDL_DestroyTexture(image);
+	SDL_DestroyTexture(imagenPersonaje);
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	SDL_FreeSurface(surfaceBackground);
+	IMG_Quit();
+	SDL_Quit();
+	logSDLError( "Error al inicializar SDL_ttf");
+	throw SDLError();
+}
+
+void Drawer::manageSDL_ttfLoadFontError(){
+	SDL_DestroyTexture(image);
+	SDL_DestroyTexture(imagenPersonaje);
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	SDL_FreeSurface(surfaceBackground);
+	TTF_Quit();
+	IMG_Quit();
+	SDL_Quit();
+	logSDLError( "Error al cargar la fuente de SDL_ttf");
+	throw SDLError();
+}
+
+void Drawer::manageDrawMessagesError(){
+	SDL_DestroyTexture(image);
+	SDL_DestroyTexture(imagenPersonaje);
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	SDL_FreeSurface(surfaceBackground);
+	TTF_Quit();
+	IMG_Quit();
+	SDL_Quit();
+	logSDLError( "Error de SDL_ttf al cargar escribir mensajes en la pantalla");
 	throw SDLError();
 }
 

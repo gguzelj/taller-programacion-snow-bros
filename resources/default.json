@@ -4,8 +4,8 @@
         "ancho-px":800,
         "alto-un":32,
         "ancho-un":32,
-        "gravedad":-10,
         "imagen_fondo":"resources/mountains.png",
+        "gravedad":-10,
         "personaje": {"x": 0,"y":0},
         "objetos": [
                      {

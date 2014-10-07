@@ -2,10 +2,10 @@
     "escenario": {
         "alto-px": 600,
         "ancho-px":800,
-        "alto-un":24,
-        "ancho-un":45,
+        "alto-un":32,
+        "ancho-un":32,
         "gravedad":-10,
-        "imagen_fondo":"resources/fondoMario.png",
+        "imagen_fondo":"resources/mountains.png",
         "personaje": {"x": 9,"y":4},
         "objetos": [
                      {

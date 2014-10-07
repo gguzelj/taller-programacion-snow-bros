@@ -48,10 +48,12 @@ private:
 	float currentZoomFactor;
 	SDL_Texture* imagenPersonaje;
 	SDL_Rect camera;
+	SDL_Rect coordRel;
 
 	void runWindow(int ancho_px ,int alto_px ,string imagePath);
 
 	void actualizarCamara(Personaje* personaje);
+
 	void drawBackground();
 	void drawScenary(Escenario* model);
 	void drawFigura(Figura* figura);

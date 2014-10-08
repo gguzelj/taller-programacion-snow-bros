@@ -42,7 +42,7 @@ Drawer::Drawer(JsonParser *parser){
 	this->messageAboutLifes = nullptr;
 	this->messageAboutPoints = nullptr;
 	this->fontToBeUsed = nullptr;
-	this->fontPath = "resources/leadcoat.ttf";
+	this->fontPath = "resources/dailypla.ttf";
 
 	//Utilizar parser para obtener las definciones necesarias para crear objetos
 	this->ancho_px = parser->getAnchoPx();

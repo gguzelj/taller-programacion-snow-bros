@@ -43,6 +43,8 @@ private:
 	TTF_Font* fontToBeUsed;
 	string fontPath;
 	string imagePath;
+	string textureForPolygons;
+	string textureForEllipses;
 	int ancho_px;
 	int alto_px;
 	float alto_un;
@@ -55,6 +57,8 @@ private:
 	SDL_Texture* imagenPersonaje;
 	SDL_Rect camera;
 	SDL_Rect coordRel;
+	SDL_Surface* imagePolygon;
+	SDL_Surface* imageEllipse;
 
 	void runWindow(int ancho_px ,int alto_px ,string imagePath);
 

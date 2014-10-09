@@ -43,6 +43,11 @@ Drawer::Drawer(JsonParser *parser){
 	this->messageAboutPoints = nullptr;
 	this->fontToBeUsed = nullptr;
 	this->fontPath = "resources/dailypla.ttf";
+	this->textureForPolygons = "resources/texturaRoca.jpg";
+	this->textureForEllipses = "resources/texturaElipse.jpg";
+
+	imagePolygon = IMG_Load(textureForPolygons.c_str());
+//	imageEllipse = IMG_Load(textureForEllipses.c_str());
 
 	//Utilizar parser para obtener las definciones necesarias para crear objetos
 	this->ancho_px = parser->getAnchoPx();
@@ -58,6 +63,8 @@ Drawer::Drawer(JsonParser *parser){
 	this->un_to_px_y = this->un_to_px_y_inicial = currentZoomFactor*FACTOR_CONVERSION_UN_A_PX;
 
 	this->runWindow(ancho_px,alto_px,imagePath);
+
+//	if (imagePolygon == nullptr || imageEllipse == nullptr) throw;
 }
 
 Drawer::~Drawer(){
@@ -68,6 +75,8 @@ Drawer::~Drawer(){
 	SDL_FreeSurface(surfaceBackground);
 	SDL_FreeSurface(messageAboutLifes);
 	SDL_FreeSurface(messageAboutPoints);
+	SDL_FreeSurface(imageEllipse);
+	SDL_FreeSurface(imagePolygon);
 	TTF_CloseFont(fontToBeUsed);
 	TTF_Quit();
 	SDL_Quit();
@@ -192,7 +201,6 @@ void Drawer::actualizarCamara(Personaje* personaje){
 
 void Drawer::drawScenary(Escenario* model){
 	std::list<Figura*>* figuras = model->getFiguras();
-	//actualizarFondo(model->getPersonaje());
 	actualizarCamara(model->getPersonaje());
 	for (auto figura : *figuras){
 		this->drawFigura(figura);
@@ -220,7 +228,7 @@ char* convertir_hex_a_rgb (std::string color){
 
 //Dibuja una figura
 void Drawer::drawFigura(Figura* figura){
-	//NOTA: cambiar esto por la forma actual. Vamos a tener que tener en cuenta a los circulos.
+
 	char* rgb = convertir_hex_a_rgb(figura->getColor());
 	int ox = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX) /2;
 	int oy = (this->alto_un *FACTOR_CONVERSION_UN_A_PX) /2;
@@ -240,8 +248,7 @@ void Drawer::drawFigura(Figura* figura){
 				xCoordOfVerts[i] = (Sint16)coord_relativa(coordRel.x,xCoordOfVerts[i]);
 				yCoordOfVerts[i] = (Sint16)coord_relativa(coordRel.y,yCoordOfVerts[i]);
 			}
-
-			filledPolygonRGBA(this->renderer, xCoordOfVerts, yCoordOfVerts, count, rgb[0], rgb[1], rgb[2], 255);
+			texturedPolygon(renderer,xCoordOfVerts,yCoordOfVerts,count,imagePolygon,xCoordOfVerts[0],yCoordOfVerts[0]);
 
 			delete [] xCoordOfVerts;
 			delete [] yCoordOfVerts;

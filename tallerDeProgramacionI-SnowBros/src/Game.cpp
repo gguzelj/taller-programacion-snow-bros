@@ -66,7 +66,7 @@ bool Game::onInit(string jsonPath){
 		model_ = new Escenario(parser_);
 		view_ = new Drawer(parser_);
 		controller_ = new Controlador(model_, view_);
-
+		view_->inicializarCamara(model_->getPersonaje());
 		return true;
 	}
 	catch(exception& e){

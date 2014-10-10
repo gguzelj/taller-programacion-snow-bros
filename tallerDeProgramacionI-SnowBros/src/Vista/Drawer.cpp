@@ -42,9 +42,10 @@ Drawer::Drawer(JsonParser *parser){
 	this->messageAboutLifes = nullptr;
 	this->messageAboutPoints = nullptr;
 	this->fontToBeUsed = nullptr;
-	this->fontPath = "resources/dailypla.ttf";
+
 	this->textureForPolygons = "resources/texturaRoca.jpg";
 	this->textureForEllipses = "resources/texturaElipse.jpg";
+	this->fontPath = "resources/dailypla.ttf";
 
 	imagePolygon = IMG_Load(textureForPolygons.c_str());
 //	imageEllipse = IMG_Load(textureForEllipses.c_str());
@@ -117,12 +118,12 @@ void Drawer::drawMessages(){
 
 	//Render the first message
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer,messageAboutPoints);
-	renderTexture(texture,renderer,coordXDelMensaje,coordYDelMensaje);
+	renderTexture(texture,renderer,coordXDelMensaje,coordYDelMensaje );
 
 	//Render the other message
 	texture = SDL_CreateTextureFromSurface(renderer,messageAboutLifes);
 	coordXDelMensaje += 10 * un_to_px_x_inicial;
-	renderTexture(texture,renderer,coordXDelMensaje,coordYDelMensaje);
+	renderTexture(texture,renderer,coordXDelMensaje,coordYDelMensaje );
 	SDL_DestroyTexture(texture);
 }
 
@@ -140,6 +141,43 @@ void ajusteFueraDeLimite(SDL_Rect &rect,int limIzq,int limDer,int limInf,int lim
 		if(rect.x > limDer)
 			rect.x = limDer;
 }
+
+void Drawer::inicializarCamara(Personaje* personaje){
+	float ancho_imagen = ancho_un *FACTOR_CONVERSION_UN_A_PX;
+	float alto_imagen = alto_un *FACTOR_CONVERSION_UN_A_PX;
+
+	int ox = (ancho_imagen/2) ;
+	int oy = (alto_imagen/2);
+
+	float pos_x = (personaje->getX())* (this->un_to_px_x)  +ox;
+	float pos_y = personaje->getY()* -(this->un_to_px_y)+oy;
+
+	camera.x = pos_x - camera.w/2;
+	camera.y = pos_y - camera.h/2;
+
+	coordRel.x = camera.x;
+	coordRel.y = camera.y;
+
+
+	int limIzqCamera =0;
+	int limDerCamera = ancho_imagen  - camera.w;
+	int limInfCamera = 0;
+	int limSupCamera = alto_imagen - camera.h;
+
+	int limiteIzquierdo = - (currentZoomFactor - 1 ) * ancho_imagen/2;
+	int limiteDerecho = ancho_imagen  - coordRel.w  + (currentZoomFactor-1)*(ancho_imagen/2);
+	int limiteInferior  = - ((currentZoomFactor-1) * alto_imagen/2);
+	int limiteSuperior = alto_imagen - coordRel.h + (currentZoomFactor-1)*(alto_imagen/2);
+
+
+
+	ajusteFueraDeLimite(camera, limIzqCamera, limDerCamera, limInfCamera, limSupCamera);
+	ajusteFueraDeLimite(coordRel, limiteIzquierdo, limiteDerecho, limiteInferior, limiteSuperior);
+
+
+}
+
+
 
 void Drawer::actualizarCamara(Personaje* personaje){
 	float ancho_imagen = ancho_un *FACTOR_CONVERSION_UN_A_PX;
@@ -248,7 +286,8 @@ void Drawer::drawFigura(Figura* figura){
 				xCoordOfVerts[i] = (Sint16)coord_relativa(coordRel.x,xCoordOfVerts[i]);
 				yCoordOfVerts[i] = (Sint16)coord_relativa(coordRel.y,yCoordOfVerts[i]);
 			}
-			texturedPolygon(renderer,xCoordOfVerts,yCoordOfVerts,count,imagePolygon,xCoordOfVerts[0],yCoordOfVerts[0]);
+			polygonRGBA(renderer,xCoordOfVerts,yCoordOfVerts,count,23,23,23,255);
+			//texturedPolygon(renderer,xCoordOfVerts,yCoordOfVerts,count,imagePolygon,xCoordOfVerts[0],yCoordOfVerts[0]);
 
 			delete [] xCoordOfVerts;
 			delete [] yCoordOfVerts;
@@ -358,7 +397,6 @@ void Drawer::runWindow(int ancho_px ,int alto_px ,string imagePath){
 	{
 	    manageSDL_ttfError();
 	}
-
 	int sizeOfTheFont = 20;
 	fontToBeUsed = TTF_OpenFont(this->fontPath.c_str(),sizeOfTheFont);
 	if (fontToBeUsed == nullptr){
@@ -456,12 +494,21 @@ void Drawer::logSDLError(const std::string &msg){
 
 void Drawer::zoomIn(){
 	currentZoomFactor += factor;
+	int ancho_anterior= camera.w;
+	int alto_anterior = camera.h;
 	camera.h = alto_px/currentZoomFactor;
 	camera.w = ancho_px/currentZoomFactor;
+
+	int dif_ancho = abs(ancho_anterior - camera.w);
+	int dif_alto = abs(alto_anterior - camera.h);
+
+	camera.x += dif_ancho/2;
+	camera.y += dif_alto/2;
 
 	//Zoom in a la escala de las figuras
 	un_to_px_x = un_to_px_x_inicial * currentZoomFactor;
 	un_to_px_y = un_to_px_y_inicial * currentZoomFactor;
+	cout<< coordRel.x<<endl;
 }
 
 void Drawer::zoomOut(){
@@ -470,6 +517,13 @@ void Drawer::zoomOut(){
 	int alto_anterior = camera.h;
 	camera.h = alto_px/currentZoomFactor;
 	camera.w = ancho_px/currentZoomFactor;
+
+	int dif_ancho = abs(ancho_anterior - camera.w);
+	int dif_alto = abs(alto_anterior - camera.h);
+
+	camera.x -= dif_ancho/2;
+	camera.y -= dif_alto/2;
+
 
 	//Me fijo que no se expanda mas de lo que deberia
 	int proximo_x_maximo = ancho_un* FACTOR_CONVERSION_UN_A_PX - 2*camera.w + ancho_anterior ;
@@ -493,4 +547,5 @@ void Drawer::zoomOut(){
 
 	un_to_px_x =un_to_px_x_inicial * currentZoomFactor;
 	un_to_px_y =un_to_px_y_inicial * currentZoomFactor;
+	cout<< coordRel.x<<endl;
 }

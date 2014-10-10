@@ -27,7 +27,7 @@ public:
 		~Drawer();
 
 		void updateView(Escenario* model_);
-
+		void inicializarCamara(Personaje* personaje);
 		//Zooms in in a factor of 1.01x
 		void zoomIn();
 		//Zooms out in a factor of 0.99x

@@ -24,6 +24,7 @@ protected:
 	b2Body* body;
 
 public:
+	std::string type = "figura";
 	float x;
 	float y;
 	virtual ~Figura(){
@@ -33,6 +34,7 @@ public:
 	bool validarOverlap();
 	b2Fixture* GetFixtureList();
 	b2Vec2 GetWorldPoint(const b2Vec2& localPoint);
+	b2Vec2 GetCenter();
 	std::string getColor();
 	float getX();
 	float getY();

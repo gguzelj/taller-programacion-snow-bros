@@ -33,6 +33,27 @@ void Drawer::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y,
 	renderTexture(tex, ren, dst, clip);
 }
 
+//Cargar aca las imagenes de las figuras que faltan.
+bool Drawer::loadMedia()
+{
+	//Loading success flag
+	bool success = true;
+
+	//Load images
+	if(!rectangleTexture.loadFromFile(rectangleImage, renderer))
+	{
+		printf( "Failed to load fondito texture!\n" );
+		success = false;
+	}
+	if(!circleTexture.loadFromFile(circleImage, renderer))
+	{
+		printf( "Failed to load fondito texture!\n" );
+		success = false;
+	}
+
+	return success;
+}
+
 Drawer::Drawer(JsonParser *parser) {
 	this->renderer = nullptr;
 	this->window = nullptr;
@@ -47,7 +68,11 @@ Drawer::Drawer(JsonParser *parser) {
 	this->textureForEllipses = "resources/texturaElipse.jpg";
 	this->fontPath = "resources/dailypla.ttf";
 
-	imagePolygon = IMG_Load(textureForPolygons.c_str());
+	//Aca poner los path de las figuras que faltan. Ir a linea 475 para cargarlas.
+	this->rectangleImage = "resources/imageRectangle.png";
+	this->circleImage = "resources/imageCircle.png";
+
+//	imagePolygon = IMG_Load(textureForPolygons.c_str());
 //	imageEllipse = IMG_Load(textureForEllipses.c_str());
 
 //Utilizar parser para obtener las definciones necesarias para crear objetos
@@ -94,9 +119,45 @@ void Drawer::updateView(Escenario* model) {
 	this->presentScenary();
 }
 
+
+// ############################### //
+// ##### Auxiliray functions ##### //
+// ############################### //
+
+
+float coord_relativa(float referencia, float coord) {
+	return coord - referencia;
+}
+
+//Convierte un color representado a partir de una cadena de caracteres a su valor numerico red green blue.
+//la cadena debe ser del tipo "#02FF12"
+char* convertir_hex_a_rgb(std::string color) {
+
+	char* resultado = new char[3];
+
+	const char *red = (color.substr(1, 2)).c_str();
+	resultado[0] = strtol(red, NULL, 16);
+
+	const char *green = (color.substr(3, 2)).c_str();
+	resultado[1] = strtol(green, NULL, 16);
+
+	const char *blue = (color.substr(5, 2)).c_str();
+	resultado[2] = strtol(blue, NULL, 16);
+
+	return resultado;
+}
+
+int anchoPersonaje(float un_to_px_x) {
+	return (MITAD_ANCHO_PERSONAJE * 2) * un_to_px_x + 15;
+}
+int altoPersonaje(float un_to_px_y) {
+	return ((MITAD_ALTO_PERSONAJE * 2) * un_to_px_y);
+}
+
 // ########################### //
 // ##### Private methods ##### //
 // ########################### //
+
 
 void Drawer::clearScenary() {
 	SDL_RenderClear(this->renderer);
@@ -104,6 +165,142 @@ void Drawer::clearScenary() {
 
 void Drawer::drawBackground() {
 	renderTexture(image, renderer, 0, 0, &camera);
+}
+
+void Drawer::drawScenary(Escenario* model) {
+	std::list<Figura*>* figuras = model->getFiguras();
+	actualizarCamara(model->getPersonaje());
+	for (auto figura : *figuras) {
+		this->drawFigura(figura);
+	}
+	this->drawCharacter(model->getPersonaje());
+}
+
+
+//Dibuja una figura
+void Drawer::drawFigura(Figura* figura) {
+
+	char* rgb = convertir_hex_a_rgb(figura->getColor());
+	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
+	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);
+
+	int ox = (ancho_imagen / 2) + (currentZoomFactor - 1) * (ancho_imagen) / 2;
+	int oy = (alto_imagen / 2) + (currentZoomFactor - 1) * (alto_imagen) / 2;
+
+	b2Vec2 p = figura->GetCenter();
+
+	//New method
+	if (figura->type == "rectangulo"){
+	    Rectangulo* rect = static_cast<Rectangulo *> (figura);
+
+		float ancho = rect->getAncho();
+		float alto = rect->getAlto();
+
+		rectangleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-ancho/2) + ox),
+										  coord_relativa(coordRel.y, -un_to_px_y * (p.y+alto/2) + oy),
+										  ancho*un_to_px_x, alto*un_to_px_x,
+										  nullptr, rect->getAngulo()*-RADTODEG, nullptr);
+	}
+
+	if (figura->type == "circulo"){
+	    Circulo* circ = static_cast<Circulo *> (figura);
+	    float radio = circ->getRadio();
+
+	    circleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-radio) + ox),
+				 					   coord_relativa(coordRel.y, -un_to_px_y * (p.y+radio) + oy),
+				 					   2*radio*un_to_px_x, 2*radio*un_to_px_x,
+				 					   nullptr, circ->getAngulo()*-RADTODEG, nullptr);
+
+	}
+
+	//Old method lo deje para que se vean los dos por ahora. Luego borrar esto.
+	for (b2Fixture *fixture = figura->GetFixtureList(); fixture; fixture =
+			fixture->GetNext()) {
+		if (fixture->GetType() == b2Shape::e_polygon) {
+			b2PolygonShape *poly = (b2PolygonShape*) fixture->GetShape();
+			const int count = poly->GetVertexCount();
+			Sint16* xCoordOfVerts = new Sint16[count + 1];
+			Sint16* yCoordOfVerts = new Sint16[count + 1];
+
+			for (int i = 0; i < count; i++) {
+				b2Vec2 p1 = figura->GetWorldPoint(poly->GetVertex(i));
+				xCoordOfVerts[i] = (Sint16) ((un_to_px_x) * (p1.x) + ox);
+				yCoordOfVerts[i] = (Sint16) (-un_to_px_y * p1.y + oy);
+
+				xCoordOfVerts[i] = (Sint16) coord_relativa(coordRel.x, xCoordOfVerts[i]);
+				yCoordOfVerts[i] = (Sint16) coord_relativa(coordRel.y, yCoordOfVerts[i]);
+			}
+			polygonRGBA(renderer, xCoordOfVerts, yCoordOfVerts, count, rgb[0], rgb[1], rgb[2], 255);
+			//texturedPolygon(renderer,xCoordOfVerts,yCoordOfVerts,count,imagePolygon,xCoordOfVerts[0],yCoordOfVerts[0]);
+
+			delete[] xCoordOfVerts;
+			delete[] yCoordOfVerts;
+
+		} else if (fixture->GetType() == b2Shape::e_circle) {
+			Circulo* circ = (Circulo*) figura;
+			int centro_x = circ->getCoordX() * un_to_px_x + ox;
+			int centro_y = circ->getCoordY() * -un_to_px_y + oy;
+
+			//Opcion de dibujar el radio nomá
+			//Esta linea va a ser el radio que va a ir girando con el circulo
+			int borde_x = (circ->getRadio() * cos(circ->getAngulo())
+					* un_to_px_x) + centro_x;
+			int borde_y = centro_y
+					- (circ->getRadio() * sin(circ->getAngulo()) * un_to_px_y);
+
+			//cambiando coordenadas por las relativas a la camara
+			centro_x = coord_relativa(coordRel.x, centro_x);
+			centro_y = coord_relativa(coordRel.y, centro_y);
+
+			ellipseRGBA(this->renderer, centro_x, centro_y,
+					circ->getRadio() * un_to_px_x,
+					circ->getRadio() * un_to_px_y, rgb[0], rgb[1], rgb[2], 255);
+
+			//cambiando coordenadas por las relativas a la camara
+			borde_x = coord_relativa(coordRel.x, borde_x);
+			borde_y = coord_relativa(coordRel.y, borde_y);
+
+			lineRGBA(renderer, centro_x, centro_y, borde_x, borde_y,
+					(rgb[0] + 120) % 255, (rgb[1] + 120) % 255,
+					(rgb[2] + 120) % 255, 255);
+		}
+	}
+	delete[] rgb;
+}
+
+void Drawer::drawCharacter(Personaje* person) {
+	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
+	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);
+
+	int ox = (ancho_imagen / 2) + (currentZoomFactor - 1) * (ancho_imagen) / 2;
+	int oy = (alto_imagen / 2) + (currentZoomFactor - 1) * (alto_imagen) / 2;
+
+	char codigo_estado = person->state->getCode();
+	char orientacion = person->getOrientacion();
+	SDL_Texture *textura = this->imagenPersonaje;
+	float pos_x = (person->getX()) * (this->un_to_px_x) + ox;
+	float pos_y = (person->getY()) * -(this->un_to_px_y) + oy;
+	pos_x = coord_relativa(coordRel.x, pos_x);
+	pos_y = coord_relativa(coordRel.y, pos_y);
+
+	switch (codigo_estado) {
+	case JUMPING:
+		drawPersonajeSaltando(this->renderer, textura, orientacion, pos_x,
+				pos_y, anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
+		break;
+	case STANDBY:
+		drawPersonajeStandBy(renderer, textura, orientacion, pos_x, pos_y,
+				anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
+		break;
+	case WALKING:
+		drawPersonajeCaminando(renderer, textura, orientacion, pos_x, pos_y,
+				anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
+		break;
+	case FALLING:
+		drawPersonajeCayendo(renderer, textura, orientacion, pos_x, pos_y,
+				anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
+		break;
+	}
 }
 
 void Drawer::drawMessages() {
@@ -132,8 +329,8 @@ void Drawer::drawMessages() {
 	SDL_DestroyTexture(texture);
 }
 
-float coord_relativa(float referencia, float coord) {
-	return coord - referencia;
+void Drawer::presentScenary() {
+	SDL_RenderPresent(this->renderer);
 }
 
 void ajusteFueraDeLimite(SDL_Rect &rect, int limIzq, int limDer, int limInf,
@@ -235,145 +432,6 @@ void Drawer::actualizarCamara(Personaje* personaje) {
 			limiteInferior, limiteSuperior);
 }
 
-void Drawer::drawScenary(Escenario* model) {
-	std::list<Figura*>* figuras = model->getFiguras();
-	actualizarCamara(model->getPersonaje());
-	for (auto figura : *figuras) {
-		this->drawFigura(figura);
-	}
-	this->drawCharacter(model->getPersonaje());
-}
-
-//Convierte un color representado a partir de una cadena de caracteres a su valor numerico red green blue.
-//la cadena debe ser del tipo "#02FF12"
-char* convertir_hex_a_rgb(std::string color) {
-
-	char* resultado = new char[3];
-
-	const char *red = (color.substr(1, 2)).c_str();
-	resultado[0] = strtol(red, NULL, 16);
-
-	const char *green = (color.substr(3, 2)).c_str();
-	resultado[1] = strtol(green, NULL, 16);
-
-	const char *blue = (color.substr(5, 2)).c_str();
-	resultado[2] = strtol(blue, NULL, 16);
-
-	return resultado;
-}
-
-//Dibuja una figura
-void Drawer::drawFigura(Figura* figura) {
-
-	char* rgb = convertir_hex_a_rgb(figura->getColor());
-	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
-	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);
-
-	int ox = (ancho_imagen / 2) + (currentZoomFactor - 1) * (ancho_imagen) / 2;
-	int oy = (alto_imagen / 2) + (currentZoomFactor - 1) * (alto_imagen) / 2;
-
-	for (b2Fixture *fixture = figura->GetFixtureList(); fixture; fixture =
-			fixture->GetNext()) {
-		if (fixture->GetType() == b2Shape::e_polygon) {
-			b2PolygonShape *poly = (b2PolygonShape*) fixture->GetShape();
-			const int count = poly->GetVertexCount();
-			Sint16* xCoordOfVerts = new Sint16[count + 1];
-			Sint16* yCoordOfVerts = new Sint16[count + 1];
-
-			for (int i = 0; i < count; i++) {
-				b2Vec2 p1 = figura->GetWorldPoint(poly->GetVertex(i));
-				xCoordOfVerts[i] = (Sint16) ((un_to_px_x) * (p1.x) + ox);
-				yCoordOfVerts[i] = (Sint16) (-un_to_px_y * p1.y + oy);
-
-				xCoordOfVerts[i] = (Sint16) coord_relativa(coordRel.x,
-						xCoordOfVerts[i]);
-				yCoordOfVerts[i] = (Sint16) coord_relativa(coordRel.y,
-						yCoordOfVerts[i]);
-			}
-			polygonRGBA(renderer, xCoordOfVerts, yCoordOfVerts, count, 23, 23,
-					23, 255);
-			//texturedPolygon(renderer,xCoordOfVerts,yCoordOfVerts,count,imagePolygon,xCoordOfVerts[0],yCoordOfVerts[0]);
-
-			delete[] xCoordOfVerts;
-			delete[] yCoordOfVerts;
-		} else if (fixture->GetType() == b2Shape::e_circle) {
-			Circulo* circ = (Circulo*) figura;
-			int centro_x = circ->getCoordX() * un_to_px_x + ox;
-			int centro_y = circ->getCoordY() * -un_to_px_y + oy;
-
-			//Opcion de dibujar el radio nomá
-			//Esta linea va a ser el radio que va a ir girando con el circulo
-			int borde_x = (circ->getRadio() * cos(circ->getAngulo())
-					* un_to_px_x) + centro_x;
-			int borde_y = centro_y
-					- (circ->getRadio() * sin(circ->getAngulo()) * un_to_px_y);
-
-			//cambiando coordenadas por las relativas a la camara
-			centro_x = coord_relativa(coordRel.x, centro_x);
-			centro_y = coord_relativa(coordRel.y, centro_y);
-
-			filledEllipseRGBA(this->renderer, centro_x, centro_y,
-					circ->getRadio() * un_to_px_x,
-					circ->getRadio() * un_to_px_y, rgb[0], rgb[1], rgb[2], 255);
-
-			//cambiando coordenadas por las relativas a la camara
-			borde_x = coord_relativa(coordRel.x, borde_x);
-			borde_y = coord_relativa(coordRel.y, borde_y);
-
-			lineRGBA(renderer, centro_x, centro_y, borde_x, borde_y,
-					(rgb[0] + 120) % 255, (rgb[1] + 120) % 255,
-					(rgb[2] + 120) % 255, 255);
-		}
-	}
-	delete[] rgb;
-}
-
-int anchoPersonaje(float un_to_px_x) {
-	return (MITAD_ANCHO_PERSONAJE * 2) * un_to_px_x + 15;
-}
-int altoPersonaje(float un_to_px_y) {
-	return ((MITAD_ALTO_PERSONAJE * 2) * un_to_px_y);
-}
-
-void Drawer::drawCharacter(Personaje* person) {
-	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
-	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);
-
-	int ox = (ancho_imagen / 2) + (currentZoomFactor - 1) * (ancho_imagen) / 2;
-	int oy = (alto_imagen / 2) + (currentZoomFactor - 1) * (alto_imagen) / 2;
-
-	char codigo_estado = person->state->getCode();
-	char orientacion = person->getOrientacion();
-	SDL_Texture *textura = this->imagenPersonaje;
-	float pos_x = (person->getX()) * (this->un_to_px_x) + ox;
-	float pos_y = (person->getY()) * -(this->un_to_px_y) + oy;
-	pos_x = coord_relativa(coordRel.x, pos_x);
-	pos_y = coord_relativa(coordRel.y, pos_y);
-
-	switch (codigo_estado) {
-	case JUMPING:
-		drawPersonajeSaltando(this->renderer, textura, orientacion, pos_x,
-				pos_y, anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
-		break;
-	case STANDBY:
-		drawPersonajeStandBy(renderer, textura, orientacion, pos_x, pos_y,
-				anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
-		break;
-	case WALKING:
-		drawPersonajeCaminando(renderer, textura, orientacion, pos_x, pos_y,
-				anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
-		break;
-	case FALLING:
-		drawPersonajeCayendo(renderer, textura, orientacion, pos_x, pos_y,
-				anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
-		break;
-	}
-}
-
-void Drawer::presentScenary() {
-	SDL_RenderPresent(this->renderer);
-}
-
 void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
 		logSDLError(
@@ -393,8 +451,7 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 	}
 
 	//Creating a renderer
-	renderer = SDL_CreateRenderer(window, -1,
-			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (renderer == nullptr) {
 		manageCreateRendererError();
 	}
@@ -419,6 +476,9 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 	if (fontToBeUsed == nullptr) {
 		manageSDL_ttfLoadFontError();
 	}
+
+	//Aca se cargan las imagenes de las figuras.
+	loadMedia();
 }
 
 void Drawer::manageSDL2_imageError() {
@@ -570,8 +630,6 @@ void Drawer::zoomOut() {
 	}
 
 	//Zoom out a la escala de las figuras
-
 	un_to_px_x = un_to_px_x_inicial * currentZoomFactor;
 	un_to_px_y = un_to_px_y_inicial * currentZoomFactor;
-	cout << coordRel.x << endl;
 }

@@ -8,6 +8,10 @@ b2Vec2 Figura::GetWorldPoint(const b2Vec2& localPoint) {
 	return body->GetWorldPoint(localPoint);
 }
 
+b2Vec2 Figura::GetCenter(){
+	return body->GetWorldCenter();
+}
+
 std::string Figura::getColor() {
 	return color;
 }

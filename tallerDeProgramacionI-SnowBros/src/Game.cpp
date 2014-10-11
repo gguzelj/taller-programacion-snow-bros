@@ -44,7 +44,7 @@ int Game::onExecute(int argc, char* argv[]){
 		//Update the view
 		onRender();
 
-		SDL_Delay(1);
+		SDL_Delay(10);
 	}
 
 	//cleaning up

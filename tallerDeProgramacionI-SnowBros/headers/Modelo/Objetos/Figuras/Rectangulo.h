@@ -10,6 +10,8 @@ private:
 public:
 	Rectangulo(JsonParser *parser, int index, b2World* world);
 	~Rectangulo();
+	float getAncho();
+	float getAlto();
 };
 
 

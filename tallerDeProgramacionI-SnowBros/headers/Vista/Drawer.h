@@ -11,7 +11,9 @@
 #include "../Parser/JsonParser.h"
 #include "../Modelo/Escenario.h"
 #include "../Exceptions/SDLError.h"
+#include "LTexture.h"
 #include <cmath>
+#include <typeinfo>
 
 using namespace std;
 
@@ -23,15 +25,15 @@ const int smoothing_off = 0;
 
 class Drawer{
 public:
-		Drawer(JsonParser *parser);
-		~Drawer();
+	Drawer(JsonParser *parser);
+	~Drawer();
 
-		void updateView(Escenario* model_);
-		void inicializarCamara(Personaje* personaje);
-		//Zooms in in a factor of 1.01x
-		void zoomIn();
-		//Zooms out in a factor of 0.99x
-		void zoomOut();
+	void updateView(Escenario* model_);
+	void inicializarCamara(Personaje* personaje);
+	//Zooms in in a factor of 1.01x
+	void zoomIn();
+	//Zooms out in a factor of 0.99x
+	void zoomOut();
 
 private:
 	SDL_Renderer *renderer;
@@ -45,6 +47,8 @@ private:
 	string imagePath;
 	string textureForPolygons;
 	string textureForEllipses;
+	string rectangleImage;
+	string circleImage;
 	int ancho_px;
 	int alto_px;
 	float alto_un;
@@ -59,6 +63,11 @@ private:
 	SDL_Rect coordRel;
 	SDL_Surface* imagePolygon;
 	SDL_Surface* imageEllipse;
+	//Scene texture
+	LTexture rectangleTexture;
+	LTexture circleTexture;
+
+	bool loadMedia();
 
 	void runWindow(int ancho_px ,int alto_px ,string imagePath);
 

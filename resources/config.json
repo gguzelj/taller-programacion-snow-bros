@@ -2,16 +2,16 @@
     "escenario": {
         "alto-px": 600,
         "ancho-px":800,
-        "alto-un":32,
-        "ancho-un":32,
-        "imagen_fondo":"resources/mountains.png",
+        "alto-un":23,
+        "ancho-un":70,
+        "imagen_fondo":"resources/snowBackground.png",
         "gravedad":-10,
         "personaje": {"x": 9,"y":4},
         "objetos": [
                      {
                        "tipo":"rectangulo",
-                       "x":16,
-                       "y":2,
+                       "x":-5,
+                       "y":0,
                        "ancho":4,
                        "alto":1,
                        "color":"#D35CB1",
@@ -21,48 +21,14 @@
                      },
                      {
                        "tipo":"rectangulo",
-                       "x":9,
-                       "y":2,
-                       "ancho":6,
+                       "x":3,
+                       "y":7,
+                       "ancho":2,
                        "alto":1,
                        "color":"#D35CB1",
                        "rot":0,
                        "masa":3,
                        "estatico":true
-                     },                   
-                     {
-                       "tipo":"paralelogramo",
-                       "x":2.7,
-                       "y":-0.32,
-                       "alto":0.85,
-                       "ancho":8,
-                       "color":"#D35CB1",
-                       "rot":35,
-                       "masa":5,
-                       "inclinacion":55,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-4.61,
-                       "y":-2.6,
-                       "ancho":8,
-                       "alto":1,
-                       "color":"#D35CB1",
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-15,
-                       "y":-2.6,
-                       "ancho":5,
-                       "alto":1,
-                       "color":"#5BD39D",
-                       "rot":0,
-                       "masa":3,
-                       "estatico":false
                      },
                      {
                        "tipo":"circulo",
@@ -71,17 +37,6 @@
                        "escala":1,
                        "color":"#5BD39D",
                        "rot":0,
-                       "masa":5,
-                       "estatico":false
-                     },
-                     {
-                       "tipo":"poligono",
-                       "lados":6,
-                       "x":-15,
-                       "y":8,
-                       "escala":1.2,
-                       "color":"#5BD39D",
-                       "rot":30,
                        "masa":5,
                        "estatico":false
                      }

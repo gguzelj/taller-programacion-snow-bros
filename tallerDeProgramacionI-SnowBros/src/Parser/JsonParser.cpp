@@ -223,26 +223,13 @@ float JsonParser::getAltoObjeto(unsigned int index) {
 	return objetos_[index]->alto;
 }
 
-std::string JsonParser::getColorObjeto(unsigned int index) {
-	return objetos_[index]->color;
-}
-
 int JsonParser::getRotObjeto(unsigned int index) {
 	return objetos_[index]->rot;
 }
 
-int JsonParser::getInclinacionObjeto(unsigned int index){
-	return objetos_[index]->inclinacion;
+float JsonParser::getBaseObjeto(unsigned int index){
+	return objetos_[index]->base;
 }
-
-float JsonParser::getBaseMayorObjeto(unsigned int index){
-	return objetos_[index]->base_mayor;
-}
-
-float JsonParser::getBaseMenorObjeto(unsigned int index){
-	return objetos_[index]->base_menor;
-}
-
 float JsonParser::getMasaObjeto(unsigned int index) {
 	return objetos_[index]->masa;
 }

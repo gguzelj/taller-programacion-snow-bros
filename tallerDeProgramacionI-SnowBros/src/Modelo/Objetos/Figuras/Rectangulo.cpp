@@ -15,7 +15,7 @@ Rectangulo::Rectangulo(JsonParser *parser, int index, b2World* world){
 	this->masa = parser->getMasaObjeto(index);
 	this->angulo = parser->getRotObjeto(index) * DEGTORAD;
 	this->estatico = parser->esObjetoEstatico(index);
-	this->color = parser->getColorObjeto(index);
+	this->color = "#96d29d";
 	this->world = world;
 
 	b2BodyDef cuerpo;

@@ -42,11 +42,8 @@ public:
 	int			getLadosObjeto(unsigned int index);
 	float 		getAnchoObjeto(unsigned int index);
 	float		getAltoObjeto(unsigned int index);
-	std::string getColorObjeto(unsigned int index);
 	int 		getRotObjeto(unsigned int index);
-	int			getInclinacionObjeto(unsigned int index);
-	float		getBaseMayorObjeto(unsigned int index);
-	float		getBaseMenorObjeto(unsigned int index);
+	float		getBaseObjeto(unsigned int index);
 	float 		getMasaObjeto(unsigned int index);
 	bool 		esObjetoEstatico(unsigned int index);
 	std::string getObjectDefinition(unsigned int index);

@@ -19,11 +19,8 @@
 #define ANCHO                  "ancho"
 #define ALTO                   "alto"
 #define LADOS                  "lados"
-#define COLOR                  "color"
 #define ROT                    "rot"
-#define INCLINACION            "inclinacion"
-#define BASE_MAYOR             "base_mayor"
-#define BASE_MENOR             "base_menor"
+#define BASE           		   "base"
 #define MASA                   "masa"
 #define ESTATICO               "estatico"
 
@@ -64,12 +61,8 @@
 #define ALTO_MIN                0.1
 #define ROT_MIN                 -359
 #define ROT_MAX                 359
-#define INCLINACION_MIN         20
-#define INCLINACION_MAX         160
-#define BASE_MAYOR_MIN          0.2
-#define BASE_MAYOR_MAX          20
-#define BASE_MENOR_MIN          0.1
-#define BASE_MENOR_MAX          15
+#define BASE_MIN       		    0.2
+#define BASE_MAX       		    20
 #define MASA_MIN                1
 #define MASA_MAX                100
 #define LADOS_MIN               3
@@ -125,12 +118,9 @@
 #define PARSER_MSG_OBJ_INCL                   "Parser: Objeto - Falta definir la inclinacion \n"
 #define PARSER_MSG_OBJ_INCL_NO_NUMBER         "Parser: Objeto - La inclinacion no es un numero \n"
 #define PARSER_MSG_OBJ_INCL_FUERA_RANGO       "Parser: Objeto - La inclinacion esta fuera de rango \n"
-#define PARSER_MSG_OBJ_BASE_MAYOR             "Parser: Objeto - Falta definir la base mayor \n"
-#define PARSER_MSG_OBJ_BASE_MAYOR_NO_NUMBER   "Parser: Objeto - La base mayor no es un numero \n"
-#define PARSER_MSG_OBJ_BASE_MAYOR_FUERA_RANGO "Parser: Objeto - La base mayor esta fuera de rango \n"
-#define PARSER_MSG_OBJ_BASE_MENOR             "Parser: Objeto - Falta definir la base menor \n"
-#define PARSER_MSG_OBJ_BASE_MENOR_NO_NUMBER   "Parser: Objeto - La base menor no es un numero \n"
-#define PARSER_MSG_OBJ_BASE_MENOR_FUERA_RANGO "Parser: Objeto - La base menor esta fuera de rango \n"
+#define PARSER_MSG_OBJ_BASE		              "Parser: Objeto - Falta definir la base \n"
+#define PARSER_MSG_OBJ_BASE_NO_NUMBER		  "Parser: Objeto - La base no es un numero \n"
+#define PARSER_MSG_OBJ_BASE_FUERA_RANGO 	  "Parser: Objeto - La base esta fuera de rango \n"
 #define PARSER_MSG_CARGA_PERSONAJE_DEF 		  "Parser: Se procedera a cargar un personaje por default."
 #define PARSER_MSG_CARGA_COORD_X_DEF 		  "Parser: Se asignara una coordenada X por default"
 #define PARSER_MSG_CARGA_COORD_Y_DEF 		  "Parser: Se asignara una coordenada Y por default"
@@ -156,9 +146,6 @@
 #define PARSER_MSG_ESC_IMAGEN_FONDO                 "Parser: Escenario - Atributo imagen_fondo sin definir. Se carga valor por default."
 #define PARSER_MSG_ESC_IMAGEN_FONDO_NO_STRING       "Parser: Escenario - Atributo imagen_fondo es de un tipo distinto a string. Se carga valor por default."
 #define PARSER_MSG_ESC_IMAGEN_FONDO_NO_EXISTE       "Parser: Escenario - Atributo imagen_fondo no existe. Se carga valor por default."
-#define PARSER_MSG_OBJ_COLOR                        "Parser: Objeto - El Color no fue definido. Se carga valor por default. \n"
-#define PARSER_MSG_OBJ_COLOR_NO_STRING              "Parser: Objeto - El Color no es del tipo string. Se carga valor por default. \n"
-#define PARSER_MSG_OBJ_COLOR_DESCONOCIDO            "Parser: Objeto - Color desconocido. Se carga valor por default. \n"
 #define PARSER_MSG_OBJ_ROT                          "Parser: Objeto - La Rotacion no fue definida. Se carga valor por default. \n"
 #define PARSER_MSG_OBJ_ROT_NO_NUMBER                "Parser: Objeto - La Rotacion no es un numero. Se carga valor por default. \n"
 #define PARSER_MSG_OBJ_ROT_FUERA_RANGO              "Parser: Objeto - La Rotacion esta fuera del rango permitido. Se carga valor por default. \n"

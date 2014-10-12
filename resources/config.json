@@ -14,7 +14,6 @@
                        "y":0,
                        "ancho":4,
                        "alto":1,
-                       "color":"#D35CB1",
                        "rot":0,
                        "masa":3,
                        "estatico":true
@@ -25,8 +24,7 @@
                        "y":7,
                        "ancho":2,
                        "alto":1,
-                       "color":"#D35CB1",
-                       "rot":0,
+                       "rot":45,
                        "masa":3,
                        "estatico":true
                      },
@@ -35,7 +33,6 @@
                        "x":7,
                        "y":4,
                        "escala":1,
-                       "color":"#5BD39D",
                        "rot":0,
                        "masa":5,
                        "estatico":false
@@ -46,7 +43,6 @@
                        "y":4,
                        "lados":3,
                        "escala":1,
-                       "color":"#5BD39D",
                        "rot":0,
                        "masa":5,
                        "estatico":false
@@ -57,7 +53,6 @@
                        "y":0,
                        "lados":4,
                        "escala":1,
-                       "color":"#5BD39D",
                        "rot":0,
                        "masa":5,
                        "estatico":false
@@ -68,7 +63,6 @@
                        "y":0,
                        "lados":5,
                        "escala":1,
-                       "color":"#5BD39D",
                        "rot":0,
                        "masa":5,
                        "estatico":false
@@ -79,23 +73,19 @@
                        "y":0,
                        "lados":6,
                        "escala":1,
-                       "color":"#5BD39D",
                        "rot":0,
                        "masa":5,
                        "estatico":false
                      },
                      {
                        "tipo":"trapecio",
-                       "x":13,
-                       "y":4,
-                       "alto":2,
-                       "base_mayor":3.75,
-                       "base_menor":2.55,
-                       "color":"#00ff45",
-                       "rot":45,
+                       "x":16,
+                       "y":9,
+                       "alto":4,
+                       "base":5.10,
+                       "rot":0,
                        "masa":5,
-                       "estatico":false,
-                       "inclinacion":90
+                       "estatico":false
                      },                   
                      {
                        "tipo":"paralelogramo",
@@ -103,11 +93,9 @@
                        "y":0,
                        "alto":1,
                        "ancho":2,
-                       "color":"#00ff45",
                        "rot":0,
                        "masa":5,
-                       "estatico":false,
-                       "inclinacion":62
+                       "estatico":false
                      }
                    ]
     }

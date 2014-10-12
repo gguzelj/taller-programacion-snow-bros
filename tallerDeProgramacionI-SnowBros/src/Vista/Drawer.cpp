@@ -90,14 +90,14 @@ Drawer::Drawer(JsonParser *parser) {
 	//Paths
 	this->imagePath = parser->getImagenFondo();
 	this->fontPath = "resources/dailypla.ttf";
-	this->rectangleImage = "resources/imageRectangle.png";
-	this->circleImage = "resources/imageCircle.png";
-	this->triangleImagePath = "resources/triangle.png";
-	this->squareImagePath = "resources/cuadrado.png";
-	this->pentagonImagePath = "resources/pentagon.png";
-	this->hexagonImagePath = "resources/hexagon.png";
-	this->trapexImagePath = "resources/trapecio.png";
-	this->paralelogramImagePath = "resources/paralelogramo.png";
+	this->rectangleImage = "resources/textures/rectangle.png";
+	this->circleImage = "resources/textures/circle.png";
+	this->triangleImagePath = "resources/textures/triangle.png";
+	this->squareImagePath = "resources/textures/cuadrado.png";
+	this->pentagonImagePath = "resources/textures/pentagon.png";
+	this->hexagonImagePath = "resources/textures/hexagon.png";
+	this->trapexImagePath = "resources/textures/trapecio.png";
+	this->paralelogramImagePath = "resources/textures/paralelogramo.png";
 
 	this->ancho_px = parser->getAnchoPx();
 	this->alto_px = parser->getAltoPx();
@@ -253,17 +253,20 @@ void Drawer::drawFigura(Figura* figura) {
 					   nullptr, polygon->getAngulo()*-RADTODEG, nullptr);
 		}
 	}
+	//TODO arreglar como se muestra la imagen de trapecio
 	if(figura->type == "trapecio"){
 	    Trapecio* trap = static_cast<Trapecio *> (figura);
 
 		float ancho = trap->getBaseMayor();
+		float mediana = (ancho+ancho*0.68)/2;
 		float alto = trap->getAlto();
 
-		trapexTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-ancho*5/9) + ox),
+		trapexTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-ancho+mediana/2) + ox),
 										  coord_relativa(coordRel.y, -un_to_px_y * (p.y+alto/2) + oy),
-										  ancho*1.01*un_to_px_x, alto*un_to_px_y,
+										  ancho*un_to_px_x, alto*un_to_px_y,
 										  nullptr, trap->getAngulo()*-RADTODEG, nullptr);
 	}
+	//TODO arreglar como se muestra la imagen de paralelogramo
 	if(figura->type == "paralelogramo"){
 	    Paralelogramo* paralelogramo = static_cast<Paralelogramo *> (figura);
 

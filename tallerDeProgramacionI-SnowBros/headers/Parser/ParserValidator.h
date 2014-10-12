@@ -41,11 +41,8 @@ public:
 		int lados;
 		double ancho;
 		double alto;
-		std::string color;
 		int rot;
-		int inclinacion;
-		double base_mayor;
-		double base_menor;
+		double base;
 		int masa;
 		bool estatico;
 		Json::Value objectDefinition;
@@ -77,11 +74,8 @@ private:
 	static bool valLadosObjeto(Json::Value obj, int &lados);
 	static bool valAnchoObjeto(Json::Value obj, double &ancho);
 	static bool valAltoObjeto(Json::Value obj, double &alto);
-	static bool valInclinacionObjeto(Json::Value obj, int &inclinacion);
-	static bool valBasesObjeto(Json::Value obj, double &base_mayor, double &base_menor);
+	static bool valBaseObjeto(Json::Value obj, double &base);
 	static bool valEstaticoObjeto(Json::Value obj, bool &estatico);
-
-	static std::string valColorObjeto(Json::Value obj);
 	static int valRotObjeto(Json::Value obj);
 	static int valMasaObjeto(Json::Value obj);
 

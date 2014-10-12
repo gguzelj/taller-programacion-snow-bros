@@ -62,13 +62,11 @@ bool ParserValidator::validarObjeto(objeto_t* &objeto, Json::Value obj, escenari
 	if(valLadosObjeto(obj, objeto->lados)) return true;
 	if(valAnchoObjeto(obj, objeto->ancho)) return true;
 	if(valAltoObjeto(obj, objeto->alto)) return true;
-	if(valInclinacionObjeto(obj, objeto->inclinacion)) return true;
-	if(valBasesObjeto(obj, objeto->base_mayor, objeto->base_menor)) return true;
+	if(valBaseObjeto(obj, objeto->base)) return true;
 	if(valEstaticoObjeto(obj, objeto->estatico)) return true;
 
 	//Los siguientes son atributos no obligatorios en los objetos. En caso de que alguno
 	//este mal definido, se setea uno default
-	objeto->color = valColorObjeto(obj);
 	objeto->rot = valRotObjeto(obj);
 	objeto->masa = valMasaObjeto(obj);
 
@@ -500,42 +498,9 @@ bool ParserValidator::valAltoObjeto(Json::Value obj, double &alto){
 }
 
 /**
- * Validamos la inclinacion del paralelogramo o trapecio
- */
-
-bool ParserValidator::valInclinacionObjeto(Json::Value obj, int &inclinacion){
-
-	//Podemos leer este atributo porque ya sabemos que es valido
-	std::string tipoObjeto = obj[TIPO].asString();
-
-	//Solo los trapecios y paralelogramos tienen este atributo
-	if( tipoObjeto != TRAPECIO && tipoObjeto != PARALELOGRAMO) return false;
-
-	if(!obj.isMember(INCLINACION)){
-		Log::instance()->append(PARSER_MSG_OBJ_INCL + obj.toStyledString(), Log::WARNING);
-		return true;
-	}
-
-	if(!obj[INCLINACION].isNumeric()){
-		Log::instance()->append(PARSER_MSG_OBJ_INCL_NO_NUMBER + obj.toStyledString(), Log::WARNING);
-		return true;
-	}
-
-	inclinacion = obj[INCLINACION].asInt();
-
-	if(	inclinacion < INCLINACION_MIN || inclinacion > INCLINACION_MAX ){
-		Log::instance()->append(PARSER_MSG_OBJ_INCL_FUERA_RANGO + obj.toStyledString(), Log::WARNING);
-		return true;
-	}
-
-	return false;
-
-}
-
-/**
  * Validamos la base mayor y menor del paralelogramo.
  */
-bool ParserValidator::valBasesObjeto(Json::Value obj, double &base_mayor, double &base_menor){
+bool ParserValidator::valBaseObjeto(Json::Value obj, double &base){
 
 	//Podemos leer este atributo porque ya sabemos que es valido
 	std::string tipoObjeto = obj[TIPO].asString();
@@ -543,43 +508,21 @@ bool ParserValidator::valBasesObjeto(Json::Value obj, double &base_mayor, double
 	//Solo los trapecios tienen este atributo
 	if( tipoObjeto != TRAPECIO) return false;
 
-	if(!obj.isMember(BASE_MAYOR)){
-		Log::instance()->append(PARSER_MSG_OBJ_BASE_MAYOR + obj.toStyledString(), Log::WARNING);
+	if(!obj.isMember(BASE)){
+		Log::instance()->append(PARSER_MSG_OBJ_BASE + obj.toStyledString(), Log::WARNING);
 		return true;
 	}
 
-	if(!obj[BASE_MAYOR].isNumeric()){
-		Log::instance()->append(PARSER_MSG_OBJ_BASE_MAYOR_NO_NUMBER + obj.toStyledString(), Log::WARNING);
+	if(!obj[BASE].isNumeric()){
+		Log::instance()->append(PARSER_MSG_OBJ_BASE_NO_NUMBER + obj.toStyledString(), Log::WARNING);
 		return true;
 	}
 
-	if(!obj.isMember(BASE_MENOR)){
-		Log::instance()->append(PARSER_MSG_OBJ_BASE_MENOR + obj.toStyledString(), Log::WARNING);
+	base = obj[BASE].asDouble();
+
+	if(	base < BASE_MIN || base > BASE_MAX ){
+		Log::instance()->append(PARSER_MSG_OBJ_BASE_FUERA_RANGO + obj.toStyledString(), Log::WARNING);
 		return true;
-	}
-
-	if(!obj[BASE_MENOR].isNumeric()){
-		Log::instance()->append(PARSER_MSG_OBJ_BASE_MENOR_NO_NUMBER + obj.toStyledString(), Log::WARNING);
-		return true;
-	}
-
-	base_mayor = obj[BASE_MAYOR].asDouble();
-	base_menor = obj[BASE_MENOR].asDouble();
-
-	if(	base_mayor < BASE_MAYOR_MIN || base_mayor > BASE_MAYOR_MAX ){
-		Log::instance()->append(PARSER_MSG_OBJ_BASE_MAYOR_FUERA_RANGO + obj.toStyledString(), Log::WARNING);
-		return true;
-	}
-
-	if(	base_menor < BASE_MENOR_MIN || base_menor > BASE_MENOR_MAX ){
-		Log::instance()->append(PARSER_MSG_OBJ_BASE_MENOR_FUERA_RANGO + obj.toStyledString(), Log::WARNING);
-		return true;
-	}
-
-	if( base_menor >= base_mayor){
-		Log::instance()->append(PARSER_MSG_OBJ_BASE_MAYOR_MENOR_MENOR + obj.toStyledString(), Log::WARNING);
-		base_menor = obj[BASE_MAYOR].asDouble();
-		base_mayor = obj[BASE_MENOR].asDouble();
 	}
 
 	return false;
@@ -604,42 +547,6 @@ bool ParserValidator::valEstaticoObjeto(Json::Value obj, bool &estatico){
 	estatico = obj[ESTATICO].asBool();
 
 	return false;
-}
-
-/**
- * Validamos el color del objeto
- */
-std::string ParserValidator::valColorObjeto(Json::Value obj){
-
-	std::string color;
-
-	if(!obj.isMember(COLOR)){
-		Log::instance()->append(PARSER_MSG_OBJ_COLOR + obj.toStyledString(), Log::WARNING);
-		return COLOR_DEF;
-	}
-
-	if(!obj[COLOR].isString()){
-		Log::instance()->append(PARSER_MSG_OBJ_COLOR_NO_STRING + obj.toStyledString(), Log::WARNING);
-		return COLOR_DEF;
-	}
-
-	color = obj[COLOR].asString();
-
-	//Validamos que el color del objeto sea valido
-	if(color.size() != 7 ){
-		Log::instance()->append(PARSER_MSG_OBJ_COLOR_DESCONOCIDO + obj.toStyledString(), Log::WARNING);
-		return COLOR_DEF;
-	}
-
-
-	std::string hex = color.substr(1,color.size() - 1);
-
-	if(hex.find_first_not_of("0123456789abcdefABCDEF") != std::string::npos){
-		Log::instance()->append(PARSER_MSG_OBJ_COLOR_DESCONOCIDO + obj.toStyledString(), Log::WARNING);
-		return COLOR_DEF;
-	}
-
-	return color;
 }
 
 /**

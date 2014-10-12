@@ -3,9 +3,7 @@
 Paralelogramo::~Paralelogramo(){
 	this->world->DestroyBody(this->body);
 }
-// De acuerdo a lo que se hablo en clase, los atributos siguientes del paralelogramo van a ser por default: TODO
-// inclinacion y alto/ancho
-// EL usuario mediante el JSON va a poder establecer o bien el alto o bien el ancho del paralelogramo
+
 Paralelogramo::Paralelogramo(JsonParser *parser, int index, b2World* world){
 	this->type = "paralelogramo";
 	this->x = parser->getCoorXObjeto(index);
@@ -14,9 +12,8 @@ Paralelogramo::Paralelogramo(JsonParser *parser, int index, b2World* world){
 	this->ancho = parser->getAnchoObjeto(index);
 	this->masa = parser->getMasaObjeto(index);
 	this->angulo = parser->getRotObjeto(index) * DEGTORAD;
-//	this->inclinacion = parser->getInclinacionObjeto(index);
 	this->inclinacion = 62;
-	this->color = parser->getColorObjeto(index);
+	this->color = "#96d29d";
 	this->estatico = parser->esObjetoEstatico(index);
 	this->world = world;
 

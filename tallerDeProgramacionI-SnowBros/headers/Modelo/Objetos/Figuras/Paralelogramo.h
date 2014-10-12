@@ -11,6 +11,9 @@ private:
 public:
 	Paralelogramo(JsonParser *parser, int index, b2World* world);
 	~Paralelogramo();
+	float getAlto();
+	float getAncho();
+
 };
 
 

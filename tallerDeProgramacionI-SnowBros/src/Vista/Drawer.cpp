@@ -252,7 +252,6 @@ void Drawer::drawFigura(Figura* figura) {
 					   2*escala*sin(2*M_PI/6)*un_to_px_x, 2*escala*un_to_px_y,
 					   nullptr, polygon->getAngulo()*-RADTODEG, nullptr);
 		}
-
 	}
 	if(figura->type == "trapecio"){
 	    Trapecio* trap = static_cast<Trapecio *> (figura);
@@ -264,6 +263,17 @@ void Drawer::drawFigura(Figura* figura) {
 										  coord_relativa(coordRel.y, -un_to_px_y * (p.y+alto/2) + oy),
 										  ancho*1.01*un_to_px_x, alto*un_to_px_y,
 										  nullptr, trap->getAngulo()*-RADTODEG, nullptr);
+	}
+	if(figura->type == "paralelogramo"){
+	    Paralelogramo* paralelogramo = static_cast<Paralelogramo *> (figura);
+
+		float ancho = paralelogramo->getAncho();
+		float alto = paralelogramo->getAlto();
+
+		paralelogramTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-ancho*5/9) + ox),
+										  coord_relativa(coordRel.y, -un_to_px_y * (p.y+alto/2) + oy),
+										  ancho*1.2*un_to_px_x, alto*un_to_px_y,
+										  nullptr, paralelogramo->getAngulo()*-RADTODEG, nullptr);
 	}
 
 	char* rgb = convertir_hex_a_rgb(figura->getColor());

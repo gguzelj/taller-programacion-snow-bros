@@ -86,9 +86,9 @@
                      },
                      {
                        "tipo":"trapecio",
-                       "x":14,
+                       "x":13,
                        "y":4,
-                       "alto":6,
+                       "alto":2,
                        "base_mayor":3.75,
                        "base_menor":2.55,
                        "color":"#00ff45",
@@ -96,6 +96,18 @@
                        "masa":5,
                        "estatico":false,
                        "inclinacion":90
+                     },                   
+                     {
+                       "tipo":"paralelogramo",
+                       "x":17,
+                       "y":0,
+                       "alto":1,
+                       "ancho":2,
+                       "color":"#00ff45",
+                       "rot":0,
+                       "masa":5,
+                       "estatico":false,
+                       "inclinacion":62
                      }
                    ]
     }

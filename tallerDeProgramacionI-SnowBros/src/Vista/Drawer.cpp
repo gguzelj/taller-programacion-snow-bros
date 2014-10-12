@@ -64,6 +64,16 @@ bool Drawer::loadMedia()
 		printf( "Failed to load fondito texture!\n" );
 		success = false;
 	}
+	if(!trapexTexture.loadFromFile(trapexImagePath, renderer))
+	{
+		printf( "Failed to load fondito texture!\n" );
+		success = false;
+	}
+	if(!paralelogramTexture.loadFromFile(paralelogramImagePath, renderer))
+	{
+		printf( "Failed to load fondito texture!\n" );
+		success = false;
+	}
 
 	return success;
 }
@@ -86,6 +96,8 @@ Drawer::Drawer(JsonParser *parser) {
 	this->squareImagePath = "resources/cuadrado.png";
 	this->pentagonImagePath = "resources/pentagon.png";
 	this->hexagonImagePath = "resources/hexagon.png";
+	this->trapexImagePath = "resources/trapecio.png";
+	this->paralelogramImagePath = "resources/paralelogramo.png";
 
 	this->ancho_px = parser->getAnchoPx();
 	this->alto_px = parser->getAltoPx();
@@ -162,8 +174,6 @@ int altoPersonaje(float un_to_px_y) {
 // ########################### //
 // ##### Private methods ##### //
 // ########################### //
-
-
 void Drawer::clearScenary() {
 	SDL_RenderClear(this->renderer);
 }
@@ -180,7 +190,6 @@ void Drawer::drawScenary(Escenario* model) {
 	}
 	this->drawCharacter(model->getPersonaje());
 }
-
 
 //Dibuja una figura
 void Drawer::drawFigura(Figura* figura) {
@@ -216,16 +225,9 @@ void Drawer::drawFigura(Figura* figura) {
 
 	if (figura->type == "poligono"){
 		Poligono* polygon = static_cast<Poligono *> (figura);
-
 		float escala = polygon->getEscala();
 		int lados = polygon->getLados();
-/*		Este es el calculo que se utiliza para calcular los vertices de los poligonos
-		float angle = 2 * M_PI / lados;
-		for (int i = 0; i < numVertices; i++)
-		{
-		    float pointX = this->escala * sin(i * angle);
-		    float pointY = this->escala * cos(i * angle);
-		}*/
+
 		if(lados == 3){
 			triangleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala*sin(2*M_PI/3)) + ox),
 					   coord_relativa(coordRel.y, -un_to_px_y * (p.y+0.9*escala) + oy),
@@ -252,6 +254,18 @@ void Drawer::drawFigura(Figura* figura) {
 		}
 
 	}
+	if(figura->type == "trapecio"){
+	    Trapecio* trap = static_cast<Trapecio *> (figura);
+
+		float ancho = trap->getBaseMayor();
+		float alto = trap->getAlto();
+
+		trapexTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-ancho*5/9) + ox),
+										  coord_relativa(coordRel.y, -un_to_px_y * (p.y+alto/2) + oy),
+										  ancho*1.01*un_to_px_x, alto*un_to_px_y,
+										  nullptr, trap->getAngulo()*-RADTODEG, nullptr);
+	}
+
 	char* rgb = convertir_hex_a_rgb(figura->getColor());
     //Old method lo deje para que se vean los dos por ahora. Luego borrar esto.
     for (b2Fixture *fixture = figura->GetFixtureList(); fixture; fixture =

@@ -55,6 +55,8 @@ private:
 	LTexture squareTexture;
 	LTexture pentagonTexture;
 	LTexture hexagonTexture;
+	LTexture trapexTexture;
+	LTexture paralelogramTexture;
 
 	//Paths Attributes
 	string fontPath;
@@ -65,6 +67,8 @@ private:
 	string squareImagePath;
 	string pentagonImagePath;
 	string hexagonImagePath;
+	string trapexImagePath;
+	string paralelogramImagePath;
 
 	//General Attributes
 	int ancho_px;

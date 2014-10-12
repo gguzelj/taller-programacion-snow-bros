@@ -12,6 +12,8 @@ private:
 public:
 	Trapecio(JsonParser *parser, int index, b2World* world);
 	~Trapecio();
+	float getBaseMayor();
+	float getAlto();
 };
 
 #endif /* TRAPECIO_H_ */

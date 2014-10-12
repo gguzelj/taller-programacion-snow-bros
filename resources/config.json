@@ -83,6 +83,19 @@
                        "rot":0,
                        "masa":5,
                        "estatico":false
+                     },
+                     {
+                       "tipo":"trapecio",
+                       "x":14,
+                       "y":4,
+                       "alto":6,
+                       "base_mayor":3.75,
+                       "base_menor":2.55,
+                       "color":"#00ff45",
+                       "rot":45,
+                       "masa":5,
+                       "estatico":false,
+                       "inclinacion":90
                      }
                    ]
     }

@@ -3,11 +3,15 @@
 Trapecio::~Trapecio(){
 	this->world->DestroyBody(this->body);
 }
-
+// De acuerdo a lo que se hablo en clase, los atributos siguientes del trapecio van a ser por default: TODO
+// bases e inclinacion
+// Por json se podra tocar un factor para agrandar o achicar las bases del trapecio
 Trapecio::Trapecio(JsonParser *parser, int index, b2World* world){
+	this->type = "trapecio";
 	this->x = parser->getCoorXObjeto(index);
 	this->y = parser->getCoorYObjeto(index);
-	this->inclinacion = parser->getInclinacionObjeto(index);
+//	this->inclinacion = parser->getInclinacionObjeto(index);
+	this->inclinacion = 90;
 	this->alto = parser->getAltoObjeto(index);
 	this->masa = parser->getMasaObjeto(index);
 	this->angulo = parser->getRotObjeto(index) * DEGTORAD;
@@ -48,4 +52,15 @@ Trapecio::Trapecio(JsonParser *parser, int index, b2World* world){
 	fixture.friction = 0.7f;
 	body->CreateFixture(&fixture);
 
+}
+
+float Trapecio::getBaseMayor(){
+	if(inclinacion < 90)
+		return this->base_sup;
+	else
+		return this->base_inf;
+}
+
+float Trapecio::getAlto(){
+	return alto;
 }

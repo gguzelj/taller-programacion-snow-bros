@@ -225,11 +225,10 @@ void Drawer::drawFigura(Figura* figura) {
 		{
 		    float pointX = this->escala * sin(i * angle);
 		    float pointY = this->escala * cos(i * angle);
-		}
-*/
+		}*/
 		if(lados == 3){
 			triangleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala*sin(2*M_PI/3)) + ox),
-					   coord_relativa(coordRel.y, -un_to_px_y * (p.y+0.75) + oy),
+					   coord_relativa(coordRel.y, -un_to_px_y * (p.y+0.9*escala) + oy),
 					   2*escala*sin(2*M_PI/3)*un_to_px_x, escala*1.5*un_to_px_y,
 					   nullptr, polygon->getAngulo()*-RADTODEG, nullptr);
 		}
@@ -240,9 +239,9 @@ void Drawer::drawFigura(Figura* figura) {
 											  nullptr, polygon->getAngulo()*-RADTODEG, nullptr);
 		}
 		else if (lados == 5){
-			pentagonTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala*sin(2*M_PI/5)) + ox),
+			pentagonTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala*0.951057) + ox),
 					   coord_relativa(coordRel.y, -un_to_px_y * (p.y+escala*(1.809017/2)) + oy),
-					   2*escala*sin(2*M_PI/5)*un_to_px_x, 1.809017*escala*un_to_px_y,
+					   2*escala*0.951057*un_to_px_x, escala*1.809017*un_to_px_y,
 					   nullptr, polygon->getAngulo()*-RADTODEG, nullptr);
 		}
 		else{		// SI no entro en ningun if anterior, es un hexagono

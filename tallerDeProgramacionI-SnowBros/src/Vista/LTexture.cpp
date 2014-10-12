@@ -6,7 +6,9 @@ LTexture::LTexture()
 	mTexture = nullptr;
 }
 
-LTexture::~LTexture(){}
+LTexture::~LTexture(){
+	SDL_DestroyTexture(mTexture);
+}
 
 bool LTexture::loadFromFile( std::string path, SDL_Renderer* gRenderer )
 {

@@ -24,8 +24,6 @@
 #define POS_X_CAYENDO 112
 #define POS_Y_CAYENDO 10
 
-
-
 //orientacion l = izquierda ; r = derecha;
 void drawPersonajeCaminando(SDL_Renderer *renderer,SDL_Texture *texture,const char orientacion, int pos_x,int pos_y,int ancho,int alto){
 	//Get ticks te da el tiempo en milisegundo desde el arranque de la ejecucion.
@@ -78,19 +76,17 @@ void drawPersonajeStandBy(SDL_Renderer *renderer,SDL_Texture *texture,const char
 	SDL_Rect dstrect = { pos_x - (ancho/2), pos_y -( alto/2), ancho , alto};
 
 	switch (orientacion){
-	        	case 'l':{
-	        		SDL_RenderCopy(renderer,texture,&srcrect,&dstrect);
-	           		break;
-	        	}
-	        	case 'r':{
-	        		SDL_Point center = { pos_x , pos_y};
-        			SDL_RenderCopyEx(renderer,texture,&srcrect,&dstrect,0,&center,SDL_FLIP_HORIZONTAL);
-           			break;
-	        	}
+		case 'l':{
+			SDL_RenderCopy(renderer,texture,&srcrect,&dstrect);
+			break;
+		}
+		case 'r':{
+			SDL_Point center = { pos_x , pos_y};
+			SDL_RenderCopyEx(renderer,texture,&srcrect,&dstrect,0,&center,SDL_FLIP_HORIZONTAL);
+			break;
+		}
 	 }
 }
-
-
 
 void drawPersonajeCayendo(SDL_Renderer *renderer,SDL_Texture *texture,const char orientacion, int pos_x,int pos_y,int ancho,int alto){
 
@@ -99,15 +95,15 @@ void drawPersonajeCayendo(SDL_Renderer *renderer,SDL_Texture *texture,const char
 	SDL_Rect dstrect = { pos_x - (ancho/2), pos_y -( alto/2), ancho , alto};
 
 	switch (orientacion){
-		        	case 'l':{
-		        		SDL_RenderCopy(renderer,texture,&srcrect,&dstrect);
-		           		break;
-		        	}
-		        	case 'r':{
-		        		SDL_Point center = { pos_x , pos_y};
-	        			SDL_RenderCopyEx(renderer,texture,&srcrect,&dstrect,0,&center,SDL_FLIP_HORIZONTAL);
-	           			break;
-		        	}
-		 }
+		case 'l':{
+			SDL_RenderCopy(renderer,texture,&srcrect,&dstrect);
+			break;
+		}
+		case 'r':{
+			SDL_Point center = { pos_x , pos_y};
+			SDL_RenderCopyEx(renderer,texture,&srcrect,&dstrect,0,&center,SDL_FLIP_HORIZONTAL);
+			break;
+		}
+	}
 }
 

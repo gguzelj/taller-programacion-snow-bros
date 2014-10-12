@@ -1,11 +1,5 @@
 #include "../../headers/Vista/Drawer.h"
 #include "../../headers/Vista/sprite.h"
-/*
- #define COTA_INF_X -(ancho_px - (ancho_px*(currentZoomFactor-1)))/5
- #define COTA_INF_Y -(alto_px-(alto_px)*(currentZoomFactor-1))/5
- #define COTA_SUP_X	(ancho_px-ancho_px*(currentZoomFactor-1))/5
- #define COTA_SUP_Y	(alto_px-(alto_px)*(currentZoomFactor-1))/5
- */
 
 #define FACTOR_DESPLAZAMIENTO 5 *currentZoomFactor
 #define FACTOR_CONVERSION_UN_A_PX 32
@@ -50,6 +44,21 @@ bool Drawer::loadMedia()
 		printf( "Failed to load fondito texture!\n" );
 		success = false;
 	}
+	if(!triangleTexture.loadFromFile(triangleImagePath, renderer))
+	{
+		printf( "Failed to load fondito texture!\n" );
+		success = false;
+	}
+	if(!pentagonTexture.loadFromFile(pentagonImagePath, renderer))
+	{
+		printf( "Failed to load fondito texture!\n" );
+		success = false;
+	}
+	if(!hexagonTexture.loadFromFile(hexagonImagePath, renderer))
+	{
+		printf( "Failed to load fondito texture!\n" );
+		success = false;
+	}
 
 	return success;
 }
@@ -59,28 +68,23 @@ Drawer::Drawer(JsonParser *parser) {
 	this->window = nullptr;
 	this->image = nullptr;
 	this->imagenPersonaje = nullptr;
-	this->surfaceBackground = nullptr;
 	this->messageAboutLifes = nullptr;
 	this->messageAboutPoints = nullptr;
 	this->fontToBeUsed = nullptr;
 
-	this->textureForPolygons = "resources/texturaRoca.jpg";
-	this->textureForEllipses = "resources/texturaElipse.jpg";
+	//Paths
+	this->imagePath = parser->getImagenFondo();
 	this->fontPath = "resources/dailypla.ttf";
-
-	//Aca poner los path de las figuras que faltan. Ir a linea 475 para cargarlas.
 	this->rectangleImage = "resources/imageRectangle.png";
 	this->circleImage = "resources/imageCircle.png";
+	this->triangleImagePath = "resources/triangle.png";
+	this->pentagonImagePath = "resources/pentagon.png";
+	this->hexagonImagePath = "resources/hexagon.png";
 
-//	imagePolygon = IMG_Load(textureForPolygons.c_str());
-//	imageEllipse = IMG_Load(textureForEllipses.c_str());
-
-//Utilizar parser para obtener las definciones necesarias para crear objetos
 	this->ancho_px = parser->getAnchoPx();
 	this->alto_px = parser->getAltoPx();
 	this->alto_un = parser->getAltoUnEscenario();
 	this->ancho_un = parser->getAnchoUnEscenario();
-	this->imagePath = parser->getImagenFondo();
 	this->currentZoomFactor = 1.0;
 	this->camera = {0,0,ancho_px,alto_px};
 	this->coordRel = {0,0,ancho_px,alto_px};
@@ -91,8 +95,6 @@ Drawer::Drawer(JsonParser *parser) {
 			* FACTOR_CONVERSION_UN_A_PX;
 
 	this->runWindow(ancho_px, alto_px, imagePath);
-
-//	if (imagePolygon == nullptr || imageEllipse == nullptr) throw;
 }
 
 Drawer::~Drawer() {
@@ -100,11 +102,8 @@ Drawer::~Drawer() {
 	SDL_DestroyTexture(imagenPersonaje);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
-	SDL_FreeSurface(surfaceBackground);
 	SDL_FreeSurface(messageAboutLifes);
 	SDL_FreeSurface(messageAboutPoints);
-	SDL_FreeSurface(imageEllipse);
-	SDL_FreeSurface(imagePolygon);
 	TTF_CloseFont(fontToBeUsed);
 	TTF_Quit();
 	SDL_Quit();
@@ -179,8 +178,6 @@ void Drawer::drawScenary(Escenario* model) {
 
 //Dibuja una figura
 void Drawer::drawFigura(Figura* figura) {
-
-	char* rgb = convertir_hex_a_rgb(figura->getColor());
 	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
 	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);
 
@@ -189,7 +186,6 @@ void Drawer::drawFigura(Figura* figura) {
 
 	b2Vec2 p = figura->GetCenter();
 
-	//New method
 	if (figura->type == "rectangulo"){
 	    Rectangulo* rect = static_cast<Rectangulo *> (figura);
 
@@ -198,7 +194,7 @@ void Drawer::drawFigura(Figura* figura) {
 
 		rectangleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-ancho/2) + ox),
 										  coord_relativa(coordRel.y, -un_to_px_y * (p.y+alto/2) + oy),
-										  ancho*un_to_px_x, alto*un_to_px_x,
+										  ancho*un_to_px_x, alto*un_to_px_y,
 										  nullptr, rect->getAngulo()*-RADTODEG, nullptr);
 	}
 
@@ -208,64 +204,50 @@ void Drawer::drawFigura(Figura* figura) {
 
 	    circleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-radio) + ox),
 				 					   coord_relativa(coordRel.y, -un_to_px_y * (p.y+radio) + oy),
-				 					   2*radio*un_to_px_x, 2*radio*un_to_px_x,
+				 					   2*radio*un_to_px_x, 2*radio*un_to_px_y,
 				 					   nullptr, circ->getAngulo()*-RADTODEG, nullptr);
-
 	}
 
-	//Old method lo deje para que se vean los dos por ahora. Luego borrar esto.
-	for (b2Fixture *fixture = figura->GetFixtureList(); fixture; fixture =
-			fixture->GetNext()) {
-		if (fixture->GetType() == b2Shape::e_polygon) {
-			b2PolygonShape *poly = (b2PolygonShape*) fixture->GetShape();
-			const int count = poly->GetVertexCount();
-			Sint16* xCoordOfVerts = new Sint16[count + 1];
-			Sint16* yCoordOfVerts = new Sint16[count + 1];
+	if (figura->type == "poligono"){
+		Poligono* polygon = static_cast<Poligono *> (figura);
 
-			for (int i = 0; i < count; i++) {
-				b2Vec2 p1 = figura->GetWorldPoint(poly->GetVertex(i));
-				xCoordOfVerts[i] = (Sint16) ((un_to_px_x) * (p1.x) + ox);
-				yCoordOfVerts[i] = (Sint16) (-un_to_px_y * p1.y + oy);
-
-				xCoordOfVerts[i] = (Sint16) coord_relativa(coordRel.x, xCoordOfVerts[i]);
-				yCoordOfVerts[i] = (Sint16) coord_relativa(coordRel.y, yCoordOfVerts[i]);
-			}
-			polygonRGBA(renderer, xCoordOfVerts, yCoordOfVerts, count, rgb[0], rgb[1], rgb[2], 255);
-			//texturedPolygon(renderer,xCoordOfVerts,yCoordOfVerts,count,imagePolygon,xCoordOfVerts[0],yCoordOfVerts[0]);
-
-			delete[] xCoordOfVerts;
-			delete[] yCoordOfVerts;
-
-		} else if (fixture->GetType() == b2Shape::e_circle) {
-			Circulo* circ = (Circulo*) figura;
-			int centro_x = circ->getCoordX() * un_to_px_x + ox;
-			int centro_y = circ->getCoordY() * -un_to_px_y + oy;
-
-			//Opcion de dibujar el radio nomá
-			//Esta linea va a ser el radio que va a ir girando con el circulo
-			int borde_x = (circ->getRadio() * cos(circ->getAngulo())
-					* un_to_px_x) + centro_x;
-			int borde_y = centro_y
-					- (circ->getRadio() * sin(circ->getAngulo()) * un_to_px_y);
-
-			//cambiando coordenadas por las relativas a la camara
-			centro_x = coord_relativa(coordRel.x, centro_x);
-			centro_y = coord_relativa(coordRel.y, centro_y);
-
-			ellipseRGBA(this->renderer, centro_x, centro_y,
-					circ->getRadio() * un_to_px_x,
-					circ->getRadio() * un_to_px_y, rgb[0], rgb[1], rgb[2], 255);
-
-			//cambiando coordenadas por las relativas a la camara
-			borde_x = coord_relativa(coordRel.x, borde_x);
-			borde_y = coord_relativa(coordRel.y, borde_y);
-
-			lineRGBA(renderer, centro_x, centro_y, borde_x, borde_y,
-					(rgb[0] + 120) % 255, (rgb[1] + 120) % 255,
-					(rgb[2] + 120) % 255, 255);
+		float escala = polygon->getEscala();
+		int lados = polygon->getLados();
+/*		Este es el calculo que se utiliza para calcular los vertices de los poligonos
+		float angle = 2 * M_PI / lados;
+		for (int i = 0; i < numVertices; i++)
+		{
+		    float pointX = this->escala * sin(i * angle);
+		    float pointY = this->escala * cos(i * angle);
 		}
+*/
+		if(lados == 3){
+			float alto = (escala * 2)*(sqrt(3)/2);
+			triangleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala) + ox),
+					   coord_relativa(coordRel.y, -un_to_px_y * (p.y+alto/2) + oy),
+					   2*escala*un_to_px_x, alto*un_to_px_y,
+					   nullptr, polygon->getAngulo()*-RADTODEG, nullptr);
+		}
+		else if (lados == 4){
+			rectangleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala) + ox),
+											  coord_relativa(coordRel.y, -un_to_px_y * (p.y+escala) + oy),
+											  2*escala*un_to_px_x, 2*escala*un_to_px_x,
+											  nullptr, polygon->getAngulo()*-RADTODEG, nullptr);
+		}
+		else if (lados == 5){ //Hay que encontrar las relaciones del pentagono de ancho y alto
+			pentagonTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala) + ox),
+					   coord_relativa(coordRel.y, -un_to_px_y * (p.y+escala) + oy),
+					   2*escala*un_to_px_x, 2*escala*un_to_px_y,
+					   nullptr, polygon->getAngulo()*-RADTODEG, nullptr);
+		}
+		else{		// SI no entro en ningun if anterior, es un hexagono
+			hexagonTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala) + ox),
+					   coord_relativa(coordRel.y, -un_to_px_y * (p.y+escala) + oy),
+					   2*escala*un_to_px_x, 2*escala*un_to_px_y,
+					   nullptr, polygon->getAngulo()*-RADTODEG, nullptr);
+		}
+
 	}
-	delete[] rgb;
 }
 
 void Drawer::drawCharacter(Personaje* person) {
@@ -460,7 +442,6 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 	if (image == nullptr) {
 		manageLoadBackgroundError();
 	}
-	surfaceBackground = IMG_Load(this->imagePath.c_str()); //Si falla la carga de la imagen, se contempla en el manageLoadBackgroundError
 
 	imagenPersonaje = this->loadTexture(SPRITE_PATH, this->renderer);
 	if (imagenPersonaje == nullptr) {
@@ -519,7 +500,6 @@ void Drawer::manageLoadCharacterError() {
 	SDL_DestroyTexture(imagenPersonaje);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
-	SDL_FreeSurface(surfaceBackground);
 	IMG_Quit();
 	SDL_Quit();
 	logSDLError(
@@ -531,7 +511,6 @@ void Drawer::manageSDL_ttfError() {
 	SDL_DestroyTexture(imagenPersonaje);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
-	SDL_FreeSurface(surfaceBackground);
 	IMG_Quit();
 	SDL_Quit();
 	logSDLError("Error al inicializar SDL_ttf");
@@ -543,7 +522,6 @@ void Drawer::manageSDL_ttfLoadFontError() {
 	SDL_DestroyTexture(imagenPersonaje);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
-	SDL_FreeSurface(surfaceBackground);
 	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();
@@ -556,7 +534,6 @@ void Drawer::manageDrawMessagesError() {
 	SDL_DestroyTexture(imagenPersonaje);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
-	SDL_FreeSurface(surfaceBackground);
 	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();

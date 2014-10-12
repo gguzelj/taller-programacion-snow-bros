@@ -39,6 +39,50 @@
                        "rot":0,
                        "masa":5,
                        "estatico":false
+                     },
+                     {
+                       "tipo":"poligono",
+                       "x":-1,
+                       "y":4,
+                       "lados":3,
+                       "escala":1,
+                       "color":"#5BD39D",
+                       "rot":0,
+                       "masa":5,
+                       "estatico":false
+                     },
+                      {
+                       "tipo":"poligono",
+                       "x":4,
+                       "y":0,
+                       "lados":4,
+                       "escala":1,
+                       "color":"#5BD39D",
+                       "rot":0,
+                       "masa":5,
+                       "estatico":false
+                     },
+                     {
+                       "tipo":"poligono",
+                       "x":9,
+                       "y":0,
+                       "lados":5,
+                       "escala":1,
+                       "color":"#5BD39D",
+                       "rot":0,
+                       "masa":5,
+                       "estatico":false
+                     },
+                     {
+                       "tipo":"poligono",
+                       "x":7,
+                       "y":0,
+                       "lados":6,
+                       "escala":1,
+                       "color":"#5BD39D",
+                       "rot":0,
+                       "masa":5,
+                       "estatico":false
                      }
                    ]
     }

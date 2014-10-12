@@ -45,3 +45,10 @@ Poligono::Poligono(JsonParser *parser, int index, b2World* world){
 
 }
 
+int Poligono::getLados(){
+	return lados;
+}
+
+float Poligono::getEscala(){
+	return escala;
+}

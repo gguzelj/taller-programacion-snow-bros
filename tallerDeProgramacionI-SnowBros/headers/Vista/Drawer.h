@@ -36,19 +36,35 @@ public:
 	void zoomOut();
 
 private:
+
+	//SDL Attributes
 	SDL_Renderer *renderer;
 	SDL_Window *window;
 	SDL_Texture *image;
-	SDL_Surface* surfaceBackground;
+	SDL_Texture* imagenPersonaje;
 	SDL_Surface* messageAboutPoints;
 	SDL_Surface* messageAboutLifes;
+	SDL_Rect camera;
+	SDL_Rect coordRel;
 	TTF_Font* fontToBeUsed;
+
+	//Scene texture
+	LTexture rectangleTexture;
+	LTexture circleTexture;
+	LTexture triangleTexture;
+	LTexture pentagonTexture;
+	LTexture hexagonTexture;
+
+	//Paths Attributes
 	string fontPath;
 	string imagePath;
-	string textureForPolygons;
-	string textureForEllipses;
 	string rectangleImage;
 	string circleImage;
+	string triangleImagePath;
+	string pentagonImagePath;
+	string hexagonImagePath;
+
+	//General Attributes
 	int ancho_px;
 	int alto_px;
 	float alto_un;
@@ -58,21 +74,15 @@ private:
 	float un_to_px_x_inicial;
 	float un_to_px_y_inicial;
 	float currentZoomFactor;
-	SDL_Texture* imagenPersonaje;
-	SDL_Rect camera;
-	SDL_Rect coordRel;
-	SDL_Surface* imagePolygon;
-	SDL_Surface* imageEllipse;
-	//Scene texture
-	LTexture rectangleTexture;
-	LTexture circleTexture;
 
+	//Private Methods
+	//General purpose methods
 	bool loadMedia();
-
 	void runWindow(int ancho_px ,int alto_px ,string imagePath);
-
 	void actualizarCamara(Personaje* personaje);
+	SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren);
 
+	//Drawing methods
 	void drawBackground();
 	void drawScenary(Escenario* model);
 	void drawFigura(Figura* figura);
@@ -81,7 +91,7 @@ private:
 	void presentScenary();
 	void clearScenary();
 
-	SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren);
+	//Exception management methods
 	void logSDLError( const std::string &msg);
 	void manageSDL2_imageError();
 	void manageCreateWindowError();

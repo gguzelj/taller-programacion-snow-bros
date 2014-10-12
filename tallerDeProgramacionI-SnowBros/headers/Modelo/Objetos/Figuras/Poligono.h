@@ -12,6 +12,9 @@ public:
 	Poligono(JsonParser *parser, int index, b2World* world);
 	Poligono();
 	~Poligono();
+
+	int getLados();
+	float getEscala();
 };
 
 #endif /* POLIGONO_H_ */

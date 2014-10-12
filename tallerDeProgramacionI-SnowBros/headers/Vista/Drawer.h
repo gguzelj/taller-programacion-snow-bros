@@ -52,6 +52,7 @@ private:
 	LTexture rectangleTexture;
 	LTexture circleTexture;
 	LTexture triangleTexture;
+	LTexture squareTexture;
 	LTexture pentagonTexture;
 	LTexture hexagonTexture;
 
@@ -61,6 +62,7 @@ private:
 	string rectangleImage;
 	string circleImage;
 	string triangleImagePath;
+	string squareImagePath;
 	string pentagonImagePath;
 	string hexagonImagePath;
 

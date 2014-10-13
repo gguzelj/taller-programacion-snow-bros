@@ -229,9 +229,9 @@ void Drawer::drawFigura(Figura* figura) {
 		int lados = polygon->getLados();
 
 		if(lados == 3){
-			triangleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala*sin(2*M_PI/3)) + ox),
+			triangleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala) + ox),
 					   coord_relativa(coordRel.y, -un_to_px_y * (p.y+0.9*escala) + oy),
-					   2*escala*sin(2*M_PI/3)*un_to_px_x, escala*1.5*un_to_px_y,
+					   2*escala*un_to_px_x, escala*2*un_to_px_y,
 					   nullptr, polygon->getAngulo()*-RADTODEG, nullptr);
 		}
 		else if (lados == 4){
@@ -261,7 +261,7 @@ void Drawer::drawFigura(Figura* figura) {
 		float mediana = (ancho+ancho*0.68)/2;
 		float alto = trap->getAlto();
 
-		trapexTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-ancho+mediana/2) + ox),
+		trapexTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-ancho/2) + ox),
 										  coord_relativa(coordRel.y, -un_to_px_y * (p.y+alto/2) + oy),
 										  ancho*un_to_px_x, alto*un_to_px_y,
 										  nullptr, trap->getAngulo()*-RADTODEG, nullptr);

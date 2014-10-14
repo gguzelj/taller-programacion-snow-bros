@@ -229,9 +229,9 @@ void Drawer::drawFigura(Figura* figura) {
 		int lados = polygon->getLados();
 
 		if(lados == 3){
-			triangleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala) + ox),
-					   coord_relativa(coordRel.y, -un_to_px_y * (p.y+0.9*escala) + oy),
-					   2*escala*un_to_px_x, escala*2*un_to_px_y,
+			triangleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-0.866025*escala) + ox), //raiz de 3, dividido 2
+					   coord_relativa(coordRel.y, -un_to_px_y * (p.y+escala) + oy),
+					   1.732050808*escala*un_to_px_x, escala*3/2*un_to_px_y, //raiz de 3
 					   nullptr, polygon->getAngulo()*-RADTODEG, nullptr);
 		}
 		else if (lados == 4){
@@ -241,15 +241,15 @@ void Drawer::drawFigura(Figura* figura) {
 											  nullptr, polygon->getAngulo()*-RADTODEG, nullptr);
 		}
 		else if (lados == 5){
-			pentagonTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala*0.951057) + ox),
-					   coord_relativa(coordRel.y, -un_to_px_y * (p.y+escala*(1.809017/2)) + oy),
-					   2*escala*0.951057*un_to_px_x, escala*1.809017*un_to_px_y,
+			pentagonTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala*sin(M_PI/5)*(1+2*cos(72*DEGTORAD))) + ox),
+					   coord_relativa(coordRel.y, -un_to_px_y * (p.y+escala) + oy),
+					   (2*escala*sin(M_PI/5)*(1+2*cos(72*DEGTORAD)))*un_to_px_x, escala*(1+cos(M_PI/5))*un_to_px_y,
 					   nullptr, polygon->getAngulo()*-RADTODEG, nullptr);
 		}
 		else{		// SI no entro en ningun if anterior, es un hexagono
-			hexagonTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala*sin(2*M_PI/6)) + ox),
+			hexagonTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala*cos(M_PI/6)) + ox),
 					   coord_relativa(coordRel.y, -un_to_px_y * (p.y+escala) + oy),
-					   2*escala*sin(2*M_PI/6)*un_to_px_x, 2*escala*un_to_px_y,
+					   2*escala*cos(M_PI/6)*un_to_px_x, 2*escala*un_to_px_y,
 					   nullptr, polygon->getAngulo()*-RADTODEG, nullptr);
 		}
 	}
@@ -258,10 +258,10 @@ void Drawer::drawFigura(Figura* figura) {
 	    Trapecio* trap = static_cast<Trapecio *> (figura);
 
 		float ancho = trap->getBaseMayor();
-		float mediana = (ancho+ancho*0.68)/2;
+		float mediana = (ancho+ancho*0.68)/2; //ancho*0.68 = base_menor
 		float alto = trap->getAlto();
 
-		trapexTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-ancho/2) + ox),
+		trapexTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-ancho+mediana/2) + ox),
 										  coord_relativa(coordRel.y, -un_to_px_y * (p.y+alto/2) + oy),
 										  ancho*un_to_px_x, alto*un_to_px_y,
 										  nullptr, trap->getAngulo()*-RADTODEG, nullptr);
@@ -273,9 +273,9 @@ void Drawer::drawFigura(Figura* figura) {
 		float ancho = paralelogramo->getAncho();
 		float alto = paralelogramo->getAlto();
 
-		paralelogramTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-ancho*5/9) + ox),
+		paralelogramTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-ancho/2-alto/4) + ox),
 										  coord_relativa(coordRel.y, -un_to_px_y * (p.y+alto/2) + oy),
-										  ancho*1.2*un_to_px_x, alto*un_to_px_y,
+										  (ancho+alto/2)*un_to_px_x, alto*un_to_px_y,
 										  nullptr, paralelogramo->getAngulo()*-RADTODEG, nullptr);
 	}
 

@@ -12,7 +12,7 @@ Paralelogramo::Paralelogramo(JsonParser *parser, int index, b2World* world){
 	this->ancho = parser->getAnchoObjeto(index);
 	this->masa = parser->getMasaObjeto(index);
 	this->angulo = parser->getRotObjeto(index) * DEGTORAD;
-	this->inclinacion = 62;
+	this->inclinacion = 60;
 	this->color = "#96d29d";
 	this->estatico = parser->esObjetoEstatico(index);
 	this->world = world;

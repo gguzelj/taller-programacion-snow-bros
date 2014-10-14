@@ -39,10 +39,10 @@
                      },
                      {
                        "tipo":"poligono",
-                       "x":-1,
+                       "x":1,
                        "y":4,
                        "lados":3,
-                       "escala":1,
+                       "escala":2,
                        "rot":0,
                        "masa":5,
                        "estatico":false
@@ -82,7 +82,7 @@
                        "x":16,
                        "y":9,
                        "alto":4,
-                       "base":5.10,
+                       "base":7.50,
                        "rot":0,
                        "masa":5,
                        "estatico":false

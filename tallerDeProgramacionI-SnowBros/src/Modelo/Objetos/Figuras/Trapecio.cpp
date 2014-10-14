@@ -17,11 +17,11 @@ Trapecio::Trapecio(JsonParser *parser, int index, b2World* world){
 	this->world = world;
 
 	if(inclinacion < 90){
-		this->base_sup = parser->getBaseObjeto(index)*1.470588;
-		this->base_inf = parser->getBaseObjeto(index);
-	} else{
 		this->base_sup = parser->getBaseObjeto(index);
-		this->base_inf = parser->getBaseObjeto(index)*1.470588;
+		this->base_inf = parser->getBaseObjeto(index)*0.68;
+	} else{
+		this->base_sup = parser->getBaseObjeto(index)*0.68;
+		this->base_inf = parser->getBaseObjeto(index);
 
 	}
 

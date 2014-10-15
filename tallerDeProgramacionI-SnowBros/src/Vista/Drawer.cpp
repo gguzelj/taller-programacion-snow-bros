@@ -229,10 +229,14 @@ void Drawer::drawFigura(Figura* figura) {
 		int lados = polygon->getLados();
 
 		if(lados == 3){
+			SDL_Point centro;
+			centro.x = 1.732050808*escala*un_to_px_x/2;
+			centro.y = escala*3/2*un_to_px_y/1.5;
+
 			triangleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-0.866025*escala) + ox), //raiz de 3, dividido 2
 					   coord_relativa(coordRel.y, -un_to_px_y * (p.y+escala) + oy),
 					   1.732050808*escala*un_to_px_x, escala*3/2*un_to_px_y, //raiz de 3
-					   nullptr, polygon->getAngulo()*-RADTODEG, nullptr);
+					   nullptr, polygon->getAngulo()*-RADTODEG, &centro);
 		}
 		else if (lados == 4){
 			squareTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala) + ox),
@@ -241,10 +245,15 @@ void Drawer::drawFigura(Figura* figura) {
 											  nullptr, polygon->getAngulo()*-RADTODEG, nullptr);
 		}
 		else if (lados == 5){
+
+			SDL_Point centro;
+			centro.x = ((2*escala*sin(M_PI/5)*(1+2*cos(72*DEGTORAD)))*un_to_px_x)/2;
+			centro.y = ((2*escala*sin(M_PI/5)*(1+2*cos(72*DEGTORAD)))*un_to_px_y)/1.91;
+
 			pentagonTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala*sin(M_PI/5)*(1+2*cos(72*DEGTORAD))) + ox),
 					   coord_relativa(coordRel.y, -un_to_px_y * (p.y+escala) + oy),
 					   (2*escala*sin(M_PI/5)*(1+2*cos(72*DEGTORAD)))*un_to_px_x, escala*(1+cos(M_PI/5))*un_to_px_y,
-					   nullptr, polygon->getAngulo()*-RADTODEG, nullptr);
+					   nullptr, polygon->getAngulo()*-RADTODEG, &centro);
 		}
 		else{		// SI no entro en ningun if anterior, es un hexagono
 			hexagonTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala*cos(M_PI/6)) + ox),

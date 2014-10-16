@@ -23,10 +23,12 @@
 #include <sys/wait.h>
 #include <signal.h>
 
+#include "Log/Log.h"
+
 #include "threadsafe_queue.cpp"
 
-#define NO_ERROR 0
-#define ERROR 1
+#define SRV_NO_ERROR 0
+#define SRV_ERROR 1
 #define BACKLOG 10 // how many pending connections queue will hold
 #define MICROSECONDS 5000000
 #define COTA_ESPERA 10000
@@ -38,7 +40,7 @@ typedef struct punto{
 
 typedef struct receivedData{
 	std::string username;
-	SDL_Event event;
+	//SDL_Event event;
 } receivedData_t;
 
 typedef struct dataToSend{
@@ -51,11 +53,11 @@ typedef struct dataToSend{
 
 class Server {
 public:
-	Server(char *port);
+	Server();
 	virtual ~Server();
 
 	//Metodo para iniciar el servidor creando el socket y bindeandolo
-	int init();
+	int init(int argc, char *argv[]);
 
 	//Metodo que se encarga de la ejecucion del servidor
 	void run();
@@ -120,10 +122,21 @@ private:
 	void prepararEnvio();
 
 	/**
+	 * Metodo para crear el socket que va a utilizar el server
+	 * Devuelve 0 si no hubo error, 1 en otro caso
+	 */
+	int createSocket();
+
+	/**
 	 * Metodo para bindear el socket creado.
 	 * Devuelve 0 si no hubo error, 1 en otro caso
 	 */
 	int bindSocket();
+
+	/**
+	 * Metodo para Validar parametros con los que se ejecuta el server
+	 */
+	int validateParameters(int argc, char *argv[]);
 };
 
 #endif /* SERVER_H_ */

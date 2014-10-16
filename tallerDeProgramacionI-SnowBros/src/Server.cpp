@@ -1,12 +1,23 @@
 #include "../headers/Server.h"
 
-Server::Server(char *port) {
+/**
+ * Constructor del Server
+ */
+Server::Server() {
+
 	acceptNewClients_ = true;
 	running_ = false;
 	sockfd_ = 0;
-	port_ = atoi(port);
+	port_ = 0;
 
 	shared_rcv_queue_ = new Threadsafe_queue<receivedData_t*>();
+
+	//Seteamos el nivel del logger:
+	//      -Si loggerLevel = INFO se loguean todos los mensajes
+	//      -Si loggerLevel = WARNING se loguean solo mensajes de WARNING y ERROR
+	//      -Si loggerLevel = ERROR se loguean solo mensajes del tipo ERROR
+	Log::instance()->loggerLevel = Log::INFO;
+	Log::instance()->append("Creando SERVER!", Log::INFO);
 }
 
 Server::~Server() {
@@ -18,16 +29,45 @@ Server::~Server() {
 	close(sockfd_);
 }
 
-int Server::init() {
-	sockfd_ = socket(AF_INET, SOCK_STREAM, 0);	//With 0 as the protocol, the system chooses automagically the protocol
+/**
+ * Inicializamos el servidor
+ */
+int Server::init(int argc, char *argv[]) {
 
-	if (sockfd_ < 0) {
-		perror("ERROR opening socket");
-		return ERROR;
-	}
-	return bindSocket();
+	//Validamos los parametros con los que se ejecuto el server
+	if (validateParameters(argc, argv) == SRV_ERROR)
+		return SRV_ERROR;
+
+	//Creamos el socket
+	if (createSocket() == SRV_ERROR )
+		return SRV_ERROR;
+
+	//Bindeamos el socket
+	if (bindSocket() == SRV_ERROR )
+		return SRV_ERROR;
+
+	return SRV_NO_ERROR;
 }
 
+/**
+ * Metodo para crear el socket con el que va a trabajar el server
+ */
+int Server::createSocket(){
+
+	//With 0 as the protocol, the system chooses automagically the protocol
+	sockfd_ = socket(AF_INET, SOCK_STREAM, 0);
+
+	if (sockfd_ < 0) {
+		Log::instance()->append("Error al tratar de abrir el socket", Log::ERROR);
+		return SRV_ERROR;
+	}
+
+	return SRV_NO_ERROR;
+}
+
+/**
+ * Bindeamos el socket
+ */
 int Server::bindSocket() {
 	struct sockaddr_in serv_addr;
 
@@ -38,18 +78,21 @@ int Server::bindSocket() {
 	serv_addr.sin_port = htons(port_);
 
 	if (bind(sockfd_, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
+		Log::instance()->append("Error al tratar de bindear el socket", Log::ERROR);
 		close(sockfd_);
-		perror("ERROR on binding");
-		return ERROR;
+		return SRV_ERROR;
 	}
-	return NO_ERROR;
+	return SRV_NO_ERROR;
 }
 
-//Thread principal
+/**
+ * Thread Principal
+ */
 void Server::run() {
+
 	listen(sockfd_, BACKLOG);
 
-	std::cout<<"Listening" << std::endl;
+	std::cout << "Listening" << std::endl;
 
 	//Thread para inicializar las conexiones. Dentro se inicializan los threads para recepcion y envio. Mas info en el header
 	newConnectionsThread_ = std::thread(&Server::newConnectionsManager, this);
@@ -84,27 +127,35 @@ void Server::newConnectionsManager() {
 		sockets_.push_back(newsockfd);
 
 		//Lanza el thread para que el cliente pueda empezar a mandar eventos en forma paralela
-		rcv_threads_.push_back(std::thread(&Server::recibirDelCliente, newsockfd, shared_rcv_queue_));
+		rcv_threads_.push_back(
+				std::thread(&Server::recibirDelCliente, this, newsockfd,
+						shared_rcv_queue_));
 
 		//Crea la queue para el envio de datos del server al cliente y luego lanza el thread para que el server ya pueda mandarle info en forma paralela
-		Threadsafe_queue<dataToSend_t>* personal_queue = new Threadsafe_queue<dataToSend_t>();
+		Threadsafe_queue<dataToSend_t>* personal_queue = new Threadsafe_queue<
+				dataToSend_t>();
 		per_thread_snd_queues_.push_back(personal_queue);
-		snd_threads_.push_back(std::thread(&Server::enviarAlCliente,newsockfd,personal_queue));
+		snd_threads_.push_back(
+				std::thread(&Server::enviarAlCliente, this, newsockfd,
+						personal_queue));
 
 		//Aca habria que enviarle al nuevo cliente la lista de todas las cosas del juego (obj estaticos, dinamicos, personajes) TODO
 	}
 }
 
-void Server::recibirDelCliente(int sock, Threadsafe_queue<receivedData_t*>* shared_rcv_queue) {
-	while (true){
-		receivedData_t* data = (receivedData_t*)malloc(sizeof(receivedData_t));;
+void Server::recibirDelCliente(int sock,
+		Threadsafe_queue<receivedData_t*>* shared_rcv_queue) {
+	while (true) {
+		receivedData_t* data = (receivedData_t*) malloc(sizeof(receivedData_t));
+		;
 		int size = sizeof(receivedData_t);
 
 		if (recvall(sock, data, &size) <= 0) {
 			std::cout << "No pude recibir. Client disconnected from server";
 			throw;
 		}
-		std::cout << "Recibi un evento del cliente: " << data->username << std::endl;
+		std::cout << "Recibi un evento del cliente: " << data->username
+				<< std::endl;
 
 		// Al hacer push se notifica al step mediante una condition_variable que tiene data para procesar
 		shared_rcv_queue->push(data);
@@ -135,21 +186,22 @@ int Server::recvall(int s, receivedData_t *data, int *len) {
 	return n == -1 || n == 0 ? -1 : 0; 	// return -1 on failure, 0 on success
 }
 
-
-void Server::prepararEnvio(){
+void Server::prepararEnvio() {
 	dataToSend_t dataToBeSent;
 	//
 	// Crea el struct y lo adapta a lo que hay que mandar
 	//
 	// Inserta el dato a mandar en la cola de envios de cada thread
-	for (unsigned int i = 0; i < sockets_.size(); i++){
-		Threadsafe_queue<dataToSend_t>* personal_queue = per_thread_snd_queues_[i];
-		personal_queue->push(dataToBeSent); 		// Al hacer push se notifica al thread mediante una condition_variable que tiene data para enviar
+	for (unsigned int i = 0; i < sockets_.size(); i++) {
+		Threadsafe_queue<dataToSend_t>* personal_queue =
+				per_thread_snd_queues_[i];
+		personal_queue->push(dataToBeSent); // Al hacer push se notifica al thread mediante una condition_variable que tiene data para enviar
 	}
 }
 
-void Server::enviarAlCliente(int sock, Threadsafe_queue<dataToSend_t>* personal_queue){
-	while(true){
+void Server::enviarAlCliente(int sock,
+		Threadsafe_queue<dataToSend_t>* personal_queue) {
+	while (true) {
 		dataToSend_t dataToBeSent;
 		personal_queue->wait_and_pop(dataToBeSent);	//wait_and_pop va a esperar a que haya un elemento en la personal_queue para desencolar el mismo. De esta manera hay un sincronizmo y se ahorran recursos si no se usa dicha cola
 		int size = sizeof(dataToSend_t);
@@ -182,4 +234,27 @@ void Server::step() {
 	receivedData_t* event;
 	shared_rcv_queue_->wait_and_pop(event);
 	//process(data)
+}
+
+/**
+ * Validaciones de parametros.
+ * Por ahora solo se toma el nro de puerto. En caso de ser necesarias
+ * mas validaciones, modificamos este metodo
+ */
+int Server::validateParameters(int argc, char *argv[]) {
+
+	Log::instance()->append("Validamos Parametros", Log::INFO);
+
+	//Leemos el puerto
+	if (argc >= 2)
+		port_ = atoi(argv[1]);
+
+	//Validamos cantidad de parametros. En caso de que no sean correctos, se
+	//comienza con un juego default
+	if (argc != 2) {
+		Log::instance()->append("Cantidad de parametros incorrecta", Log::WARNING);
+		return SRV_ERROR;
+	}
+
+	return SRV_NO_ERROR;
 }

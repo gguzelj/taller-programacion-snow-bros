@@ -4,13 +4,11 @@
 
 int main(int argc, char *argv[]) {
 
-	if (argc < 2) {
-		std::cout << "ERROR, no port provided\n" << std::endl;
-		exit(1);
-	}
+	Server *server = new Server();
 
-	Server *server = new Server(argv[1]);
-	server->init();
+	if (server->init(argc, argv) == SRV_ERROR)
+		return SRV_ERROR;
+
 	server->run();
 
 	delete server;

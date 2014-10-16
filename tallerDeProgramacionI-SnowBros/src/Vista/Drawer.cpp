@@ -234,15 +234,15 @@ void Drawer::drawFigura(Figura* figura) {
 			centro.y = escala*3/2*un_to_px_y/1.5;
 
 			triangleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-0.866025*escala) + ox), //raiz de 3, dividido 2
-					   coord_relativa(coordRel.y, -un_to_px_y * (p.y+escala) + oy),
-					   1.732050808*escala*un_to_px_x, escala*3/2*un_to_px_y, //raiz de 3
-					   nullptr, polygon->getAngulo()*-RADTODEG, &centro);
+										     coord_relativa(coordRel.y, -un_to_px_y * (p.y+escala) + oy),
+										     1.732050808*escala*un_to_px_x, escala*3/2*un_to_px_y, //raiz de 3
+										     nullptr, polygon->getAngulo()*-RADTODEG, &centro);
 		}
 		else if (lados == 4){
 			squareTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala) + ox),
-											  coord_relativa(coordRel.y, -un_to_px_y * (p.y+escala) + oy),
-											  2*escala*un_to_px_x, 2*escala*un_to_px_x,
-											  nullptr, polygon->getAngulo()*-RADTODEG, nullptr);
+										   coord_relativa(coordRel.y, -un_to_px_y * (p.y+escala) + oy),
+										   2*escala*un_to_px_x, 2*escala*un_to_px_x,
+										   nullptr, polygon->getAngulo()*-RADTODEG, nullptr);
 		}
 		else if (lados == 5){
 
@@ -251,15 +251,15 @@ void Drawer::drawFigura(Figura* figura) {
 			centro.y = ((2*escala*sin(M_PI/5)*(1+2*cos(72*DEGTORAD)))*un_to_px_y)/1.91;
 
 			pentagonTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala*sin(M_PI/5)*(1+2*cos(72*DEGTORAD))) + ox),
-					   coord_relativa(coordRel.y, -un_to_px_y * (p.y+escala) + oy),
-					   (2*escala*sin(M_PI/5)*(1+2*cos(72*DEGTORAD)))*un_to_px_x, escala*(1+cos(M_PI/5))*un_to_px_y,
-					   nullptr, polygon->getAngulo()*-RADTODEG, &centro);
+										     coord_relativa(coordRel.y, -un_to_px_y * (p.y+escala) + oy),
+										     (2*escala*sin(M_PI/5)*(1+2*cos(72*DEGTORAD)))*un_to_px_x, escala*(1+cos(M_PI/5))*un_to_px_y,
+										     nullptr, polygon->getAngulo()*-RADTODEG, &centro);
 		}
 		else{		// SI no entro en ningun if anterior, es un hexagono
 			hexagonTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala*cos(M_PI/6)) + ox),
-					   coord_relativa(coordRel.y, -un_to_px_y * (p.y+escala) + oy),
-					   2*escala*cos(M_PI/6)*un_to_px_x, 2*escala*un_to_px_y,
-					   nullptr, polygon->getAngulo()*-RADTODEG, nullptr);
+											coord_relativa(coordRel.y, -un_to_px_y * (p.y+escala) + oy),
+											2*escala*cos(M_PI/6)*un_to_px_x, 2*escala*un_to_px_y,
+											nullptr, polygon->getAngulo()*-RADTODEG, nullptr);
 		}
 	}
 	//TODO arreglar como se muestra la imagen de trapecio
@@ -271,9 +271,9 @@ void Drawer::drawFigura(Figura* figura) {
 		float alto = trap->getAlto();
 
 		trapexTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-ancho+mediana/2) + ox),
-										  coord_relativa(coordRel.y, -un_to_px_y * (p.y+alto/2) + oy),
-										  ancho*un_to_px_x, alto*un_to_px_y,
-										  nullptr, trap->getAngulo()*-RADTODEG, nullptr);
+									   coord_relativa(coordRel.y, -un_to_px_y * (p.y+alto/2) + oy),
+									   ancho*un_to_px_x, alto*un_to_px_y,
+									   nullptr, trap->getAngulo()*-RADTODEG, nullptr);
 	}
 	//TODO arreglar como se muestra la imagen de paralelogramo
 	if(figura->type == "paralelogramo"){
@@ -283,63 +283,60 @@ void Drawer::drawFigura(Figura* figura) {
 		float alto = paralelogramo->getAlto();
 
 		paralelogramTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-ancho/2-alto/4) + ox),
-										  coord_relativa(coordRel.y, -un_to_px_y * (p.y+alto/2) + oy),
-										  (ancho+alto/2)*un_to_px_x, alto*un_to_px_y,
-										  nullptr, paralelogramo->getAngulo()*-RADTODEG, nullptr);
+								   	   	     coord_relativa(coordRel.y, -un_to_px_y * (p.y+alto/2) + oy),
+								   	   	     (ancho+alto/2)*un_to_px_x, alto*un_to_px_y,
+								   	   	     nullptr, paralelogramo->getAngulo()*-RADTODEG, nullptr);
 	}
 
-	char* rgb = convertir_hex_a_rgb(figura->getColor());
+	char* rgb = convertir_hex_a_rgb("#96d29d");
     //Old method lo deje para que se vean los dos por ahora. Luego borrar esto.
-    for (b2Fixture *fixture = figura->GetFixtureList(); fixture; fixture =
-                    fixture->GetNext()) {
-            if (fixture->GetType() == b2Shape::e_polygon) {
-                    b2PolygonShape *poly = (b2PolygonShape*) fixture->GetShape();
-                    const int count = poly->GetVertexCount();
-                    Sint16* xCoordOfVerts = new Sint16[count + 1];
-                    Sint16* yCoordOfVerts = new Sint16[count + 1];
+    for (b2Fixture *fixture = figura->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
+		if (fixture->GetType() == b2Shape::e_polygon) {
+			b2PolygonShape *poly = (b2PolygonShape*) fixture->GetShape();
+			const int count = poly->GetVertexCount();
+			Sint16* xCoordOfVerts = new Sint16[count + 1];
+			Sint16* yCoordOfVerts = new Sint16[count + 1];
 
-                    for (int i = 0; i < count; i++) {
-                            b2Vec2 p1 = figura->GetWorldPoint(poly->GetVertex(i));
-                            xCoordOfVerts[i] = (Sint16) ((un_to_px_x) * (p1.x) + ox);
-                            yCoordOfVerts[i] = (Sint16) (-un_to_px_y * p1.y + oy);
+			for (int i = 0; i < count; i++) {
+				b2Vec2 p1 = figura->GetWorldPoint(poly->GetVertex(i));
+				xCoordOfVerts[i] = (Sint16) ((un_to_px_x) * (p1.x) + ox);
+				yCoordOfVerts[i] = (Sint16) (-un_to_px_y * p1.y + oy);
 
-                            xCoordOfVerts[i] = (Sint16) coord_relativa(coordRel.x, xCoordOfVerts[i]);
-                            yCoordOfVerts[i] = (Sint16) coord_relativa(coordRel.y, yCoordOfVerts[i]);
-                    }
-                    polygonRGBA(renderer, xCoordOfVerts, yCoordOfVerts, count, rgb[0], rgb[1], rgb[2], 255);
-                    //texturedPolygon(renderer,xCoordOfVerts,yCoordOfVerts,count,imagePolygon,xCoordOfVerts[0],yCoordOfVerts[0]);
+				xCoordOfVerts[i] = (Sint16) coord_relativa(coordRel.x, xCoordOfVerts[i]);
+				yCoordOfVerts[i] = (Sint16) coord_relativa(coordRel.y, yCoordOfVerts[i]);
+			}
+			polygonRGBA(renderer, xCoordOfVerts, yCoordOfVerts, count, rgb[0], rgb[1], rgb[2], 255);
+			//texturedPolygon(renderer,xCoordOfVerts,yCoordOfVerts,count,imagePolygon,xCoordOfVerts[0],yCoordOfVerts[0]);
 
-                    delete[] xCoordOfVerts;
-                    delete[] yCoordOfVerts;
+			delete[] xCoordOfVerts;
+			delete[] yCoordOfVerts;
 
-            } else if (fixture->GetType() == b2Shape::e_circle) {
-                    Circulo* circ = (Circulo*) figura;
-                    int centro_x = circ->getCoordX() * un_to_px_x + ox;
-                    int centro_y = circ->getCoordY() * -un_to_px_y + oy;
+		} else if (fixture->GetType() == b2Shape::e_circle) {
+			Circulo* circ = (Circulo*) figura;
+			int centro_x = circ->getCoordX() * un_to_px_x + ox;
+			int centro_y = circ->getCoordY() * -un_to_px_y + oy;
 
-                    //Opcion de dibujar el radio nomá
-                    //Esta linea va a ser el radio que va a ir girando con el circulo
-                    int borde_x = (circ->getRadio() * cos(circ->getAngulo())
-                                    * un_to_px_x) + centro_x;
-                    int borde_y = centro_y
-                                    - (circ->getRadio() * sin(circ->getAngulo()) * un_to_px_y);
+			//Opcion de dibujar el radio nomá
+			//Esta linea va a ser el radio que va a ir girando con el circulo
+			int borde_x = (circ->getRadio() * cos(circ->getAngulo())* un_to_px_x) + centro_x;
+			int borde_y = centro_y - (circ->getRadio() * sin(circ->getAngulo()) * un_to_px_y);
 
-                    //cambiando coordenadas por las relativas a la camara
-                    centro_x = coord_relativa(coordRel.x, centro_x);
-                    centro_y = coord_relativa(coordRel.y, centro_y);
+			//cambiando coordenadas por las relativas a la camara
+			centro_x = coord_relativa(coordRel.x, centro_x);
+			centro_y = coord_relativa(coordRel.y, centro_y);
 
-                    ellipseRGBA(this->renderer, centro_x, centro_y,
-                                    circ->getRadio() * un_to_px_x,
-                                    circ->getRadio() * un_to_px_y, rgb[0], rgb[1], rgb[2], 255);
+			ellipseRGBA(this->renderer, centro_x, centro_y,
+						circ->getRadio() * un_to_px_x,
+						circ->getRadio() * un_to_px_y, rgb[0], rgb[1], rgb[2], 255);
 
-                    //cambiando coordenadas por las relativas a la camara
-                    borde_x = coord_relativa(coordRel.x, borde_x);
-                    borde_y = coord_relativa(coordRel.y, borde_y);
+			//cambiando coordenadas por las relativas a la camara
+			borde_x = coord_relativa(coordRel.x, borde_x);
+			borde_y = coord_relativa(coordRel.y, borde_y);
 
-                    lineRGBA(renderer, centro_x, centro_y, borde_x, borde_y,
-                                    (rgb[0] + 120) % 255, (rgb[1] + 120) % 255,
-                                    (rgb[2] + 120) % 255, 255);
-            }
+			lineRGBA(renderer, centro_x, centro_y, borde_x, borde_y,
+					(rgb[0] + 120) % 255, (rgb[1] + 120) % 255,
+					(rgb[2] + 120) % 255, 255);
+		}
     }
     delete[] rgb;
 }
@@ -531,6 +528,7 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 	if (renderer == nullptr) {
 		manageCreateRendererError();
 	}
+	SDL_SetRenderDrawColor(renderer, 150, 210, 157, 255);
 	//Loading the image
 	image = this->loadTexture(this->imagePath, renderer);
 	if (image == nullptr) {

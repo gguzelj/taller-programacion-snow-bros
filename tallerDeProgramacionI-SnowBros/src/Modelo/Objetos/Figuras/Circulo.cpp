@@ -8,7 +8,6 @@ Circulo::Circulo(JsonParser *parser, int index, b2World* world){
 	this->masa = parser->getMasaObjeto(index);
 	this->angulo = parser->getRotObjeto(index);
 	this->estatico = parser->esObjetoEstatico(index);
-	this->color = "#96d29d";
 	this->world = world;
 
 	//Defino el body y fixture

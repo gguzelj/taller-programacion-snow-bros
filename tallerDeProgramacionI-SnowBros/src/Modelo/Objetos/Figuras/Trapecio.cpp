@@ -12,7 +12,6 @@ Trapecio::Trapecio(JsonParser *parser, int index, b2World* world){
 	this->alto = parser->getAltoObjeto(index);
 	this->masa = parser->getMasaObjeto(index);
 	this->angulo = parser->getRotObjeto(index) * DEGTORAD;
-	this->color = "#96d29d";
 	this->estatico = parser->esObjetoEstatico(index);
 	this->world = world;
 

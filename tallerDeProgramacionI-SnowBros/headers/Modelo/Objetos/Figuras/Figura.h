@@ -16,7 +16,6 @@
 class Figura{
 
 protected:
-	std::string color;
 	float angulo;
 	float masa;
 	bool estatico;
@@ -35,7 +34,6 @@ public:
 	b2Fixture* GetFixtureList();
 	b2Vec2 GetWorldPoint(const b2Vec2& localPoint);
 	b2Vec2 GetCenter();
-	std::string getColor();
 	float getX();
 	float getY();
 	float getAngulo();

@@ -12,10 +12,6 @@ b2Vec2 Figura::GetCenter(){
 	return body->GetWorldCenter();
 }
 
-std::string Figura::getColor() {
-	return color;
-}
-
 float Figura::getAngulo() {
 	return this->body->GetAngle();
 }

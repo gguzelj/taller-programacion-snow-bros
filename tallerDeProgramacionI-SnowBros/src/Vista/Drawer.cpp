@@ -350,11 +350,13 @@ void Drawer::drawCharacter(Personaje* person) {
 
 	char codigo_estado = person->state->getCode();
 	char orientacion = person->getOrientacion();
-	SDL_Texture *textura = this->imagenPersonaje;
+
 	float pos_x = (person->getX()) * (this->un_to_px_x) + ox;
 	float pos_y = (person->getY()) * -(this->un_to_px_y) + oy;
 	pos_x = coord_relativa(coordRel.x, pos_x);
 	pos_y = coord_relativa(coordRel.y, pos_y);
+
+	SDL_Texture *textura = this->imagenPersonaje;
 
 	switch (codigo_estado) {
 	case JUMPING:
@@ -377,7 +379,7 @@ void Drawer::drawCharacter(Personaje* person) {
 }
 
 void Drawer::drawMessages() {
-	SDL_Color textColor = { 255, 255, 255 };
+	SDL_Color textColor = { 0, 0, 0 };
 	this->messageAboutPoints = TTF_RenderText_Solid(fontToBeUsed, "1000 Puntos",
 			textColor);
 	this->messageAboutLifes = TTF_RenderText_Solid(fontToBeUsed, "3 vidas ",
@@ -391,8 +393,7 @@ void Drawer::drawMessages() {
 	float coordYDelMensaje = 1 * un_to_px_y_inicial; //Parte superior de la pantalla
 
 	//Render the first message
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer,
-			messageAboutPoints);
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, messageAboutPoints);
 	renderTexture(texture, renderer, coordXDelMensaje, coordYDelMensaje);
 
 	//Render the other message
@@ -528,7 +529,7 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 	if (renderer == nullptr) {
 		manageCreateRendererError();
 	}
-	SDL_SetRenderDrawColor(renderer, 150, 210, 157, 255);
+
 	//Loading the image
 	image = this->loadTexture(this->imagePath, renderer);
 	if (image == nullptr) {

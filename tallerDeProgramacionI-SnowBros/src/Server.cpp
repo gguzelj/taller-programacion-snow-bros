@@ -110,7 +110,7 @@ void Server::run() {
 		prepararEnvio();
 	}
 
-	std::cout << "Ha finalizado la ejecucion del programa." << std::endl;
+	Log::instance()->append("Fin del juego", Log::INFO);
 	return;
 }
 
@@ -125,22 +125,25 @@ void Server::newConnectionsManager() {
 	socklen_t clilen = sizeof(cli_addr);
 
 	while (acceptNewClients_) {
+
 		int newsockfd = accept(sockfd_, (struct sockaddr *) &cli_addr, &clilen);
+
 		if (newsockfd < 0) {
-			Log::instance()->append("Error al aceptar una nueva conexion",
-					Log::ERROR);
+			Log::instance()->append("Al aceptar nueva conexion", Log::ERROR);
 			continue;
-		}
+		} else
+			Log::instance()->append("Nuevo cliente conectado!", Log::INFO);
+
 		//Llamar a metodo sincronico para Autenticar el cliente aca TODO
 
-		Log::instance()->append("Nuevo cliente conectado!", Log::INFO);
+		//Aca habria que enviarle al nuevo cliente la lista de todas las
+		//cosas del juego (obj estaticos, dinamicos, personajes) TODO
 
 		sockets_.push_back(newsockfd);
 
 		//Lanza el thread para que el cliente pueda empezar a mandar eventos en forma paralela
 		rcv_threads_.push_back(
-				std::thread(&Server::recibirDelCliente, this, newsockfd,
-						shared_rcv_queue_));
+				std::thread(&Server::recibirDelCliente, this, newsockfd));
 
 		//Crea la queue para el envio de datos del server al cliente y luego lanza el thread
 		//para que el server ya pueda mandarle info en forma paralela
@@ -150,27 +153,31 @@ void Server::newConnectionsManager() {
 		snd_threads_.push_back(
 				std::thread(&Server::enviarAlCliente, this, newsockfd,
 						personal_queue));
-
-		//Aca habria que enviarle al nuevo cliente la lista de todas las cosas del juego (obj estaticos, dinamicos, personajes) TODO
 	}
 }
 
-void Server::recibirDelCliente(int sock,
-		Threadsafe_queue<receivedData_t*>* shared_rcv_queue) {
+/**
+ * Por cada cliente vamos a correr este metodo que se encarga de guardar
+ * los mensajes que recibe en la cola compartida
+ */
+void Server::recibirDelCliente(int sock) {
+
+	int size = sizeof(receivedData_t);
+
 	while (true) {
-		receivedData_t* data = (receivedData_t*) malloc(sizeof(receivedData_t));
-		;
-		int size = sizeof(receivedData_t);
+
+		receivedData_t* data = (receivedData_t*) malloc(size);
 
 		if (recvall(sock, data, &size) <= 0) {
 			std::cout << "No pude recibir. Client disconnected from server";
 			throw;
 		}
+
 		std::cout << "Recibi un evento del cliente: " << data->username
 				<< std::endl;
 
 		// Al hacer push se notifica al step mediante una condition_variable que tiene data para procesar
-		shared_rcv_queue->push(data);
+		shared_rcv_queue_->push(data);
 	}
 }
 
@@ -247,28 +254,7 @@ void Server::step() {
 	shared_rcv_queue_->wait_and_pop(event);
 	//process(data)
 
-	model_->getPersonaje()->decreaseJumpCooldown();
-	//chequeo para cambiar el estado jumping a falling o el estado cuando cae de una plataforma
-	//esta implementado aca para que cambie cuando tiene que hacerlo
-	if (model_->getPersonaje()->getVelocity().y <= 0.0f
-			&& model_->getPersonaje()->getCantidadDeContactosActuales() == 0) {
-		model_->getPersonaje()->state = &Personaje::falling;
-	} else if (model_->getPersonaje()->getVelocity().y <= 0.0f
-			&& model_->getPersonaje()->state == &Personaje::jumping) {
-		model_->getPersonaje()->state = &Personaje::standby;
-	}
-
-	if (Personaje::walking.movimientoLateralDerecha
-			|| Personaje::walking.movimientoLateralIzquierda)
-		Personaje::walking.caminar(*(model_->getPersonaje()));
-
-	if (Personaje::jumping.debeSaltar
-			&& model_->getPersonaje()->state->getCode() != JUMPING
-			&& model_->getPersonaje()->state->getCode() != FALLING) {
-		model_->getPersonaje()->jump();
-		model_->getPersonaje()->state = &Personaje::jumping;
-	}
-	model_->getWorld()->Step(timeStep, velocityIterations, positionIterations);
+	model_->step();
 }
 
 /**

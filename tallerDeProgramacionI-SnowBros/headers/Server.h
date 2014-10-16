@@ -69,10 +69,6 @@ public:
 
 private:
 
-	const float32 timeStep = 1/60.0;       //the length of time passed to simulate (seconds)
-	const int32 velocityIterations = 32;   //how strongly to correct velocity
-	const int32 positionIterations = 64;   //how strongly to correct position}
-
 	bool running_;
 	int port_;
 	int sockfd_;
@@ -108,7 +104,7 @@ private:
 	 * Metodo que se encarga de encolar los eventos enviados por el cliente en la shared_rcv_queue.
 	 * En caso de detectar que el cliente se desconecto, lanzamos excepcion
 	 */
-	void recibirDelCliente(int sock, Threadsafe_queue<receivedData_t*>* shared_rcv_queue);
+	void recibirDelCliente(int sock);
 	/*
 	 * Metodo de bajo nivel de sockets
 	 */

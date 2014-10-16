@@ -16,19 +16,26 @@
 
 class Escenario {
 public:
-        Escenario(JsonParser *parser);
-        virtual ~Escenario();
+	Escenario(JsonParser *parser);
+	virtual ~Escenario();
 
-        std::list<Figura*>* getFiguras();
+	std::list<Figura*>* getFiguras();
 
-        std::list<Muro*>* getParedes();
+	std::list<Muro*>* getParedes();
 
-        //Devuelve una instancia al personaje del juego
-        Personaje* getPersonaje();
+	//Devuelve una instancia al personaje del juego
+	Personaje* getPersonaje();
 
-        b2World* getWorld();
+	b2World* getWorld();
+
+	void step();
 
 private:
+
+	const float32 timeStep = 1 / 60.0; //the length of time passed to simulate (seconds)
+	const int32 velocityIterations = 32;   //how strongly to correct velocity
+	const int32 positionIterations = 64;   //how strongly to correct position}
+
 	b2World* world_;
 	std::list<Figura*>* figuras_;
 	std::list<Muro*>* muros_;

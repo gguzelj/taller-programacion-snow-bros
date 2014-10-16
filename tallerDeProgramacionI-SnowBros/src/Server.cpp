@@ -9,13 +9,11 @@ Server::Server() {
 	running_ = false;
 	sockfd_ = 0;
 	port_ = 0;
-
+	model_ = nullptr;
+	parser_ = nullptr;
+	jsonPath_ = "";
 	shared_rcv_queue_ = new Threadsafe_queue<receivedData_t*>();
 
-	//Seteamos el nivel del logger:
-	//      -Si loggerLevel = INFO se loguean todos los mensajes
-	//      -Si loggerLevel = WARNING se loguean solo mensajes de WARNING y ERROR
-	//      -Si loggerLevel = ERROR se loguean solo mensajes del tipo ERROR
 	Log::instance()->loggerLevel = Log::INFO;
 	Log::instance()->append("Creando SERVER!", Log::INFO);
 }
@@ -39,12 +37,19 @@ int Server::init(int argc, char *argv[]) {
 		return SRV_ERROR;
 
 	//Creamos el socket
-	if (createSocket() == SRV_ERROR )
+	if (createSocket() == SRV_ERROR)
 		return SRV_ERROR;
 
 	//Bindeamos el socket
-	if (bindSocket() == SRV_ERROR )
+	if (bindSocket() == SRV_ERROR)
 		return SRV_ERROR;
+
+	//Creamos el juego
+	parser_ = new JsonParser(jsonPath_);
+	if (parser_->parse())
+		return false;
+
+	model_ = new Escenario(parser_);
 
 	return SRV_NO_ERROR;
 }
@@ -52,13 +57,14 @@ int Server::init(int argc, char *argv[]) {
 /**
  * Metodo para crear el socket con el que va a trabajar el server
  */
-int Server::createSocket(){
+int Server::createSocket() {
 
 	//With 0 as the protocol, the system chooses automagically the protocol
 	sockfd_ = socket(AF_INET, SOCK_STREAM, 0);
 
 	if (sockfd_ < 0) {
-		Log::instance()->append("Error al tratar de abrir el socket", Log::ERROR);
+		Log::instance()->append("Error al tratar de abrir el socket",
+				Log::ERROR);
 		return SRV_ERROR;
 	}
 
@@ -78,7 +84,8 @@ int Server::bindSocket() {
 	serv_addr.sin_port = htons(port_);
 
 	if (bind(sockfd_, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
-		Log::instance()->append("Error al tratar de bindear el socket", Log::ERROR);
+		Log::instance()->append("Error al tratar de bindear el socket",
+				Log::ERROR);
 		close(sockfd_);
 		return SRV_ERROR;
 	}
@@ -92,9 +99,8 @@ void Server::run() {
 
 	listen(sockfd_, BACKLOG);
 
-	std::cout << "Listening" << std::endl;
-
-	//Thread para inicializar las conexiones. Dentro se inicializan los threads para recepcion y envio. Mas info en el header
+	//Thread para inicializar las conexiones.
+	//Dentro se inicializan los threads para recepcion y envio. Mas info en el header
 	newConnectionsThread_ = std::thread(&Server::newConnectionsManager, this);
 
 	running_ = true;
@@ -102,28 +108,33 @@ void Server::run() {
 		//La sincronizacion de threads se producira gracias a la shared_rcv_queue_ la cual permite ejecutar los eventos recibidos por orden de llegada
 		step();
 		prepararEnvio();
-		usleep(MICROSECONDS);
 	}
 
 	std::cout << "Ha finalizado la ejecucion del programa." << std::endl;
 	return;
 }
 
+/*
+ * Metodo que se encarga de inicializar una conexion con el cliente.
+ * Si el cliente es aceptado, lanza los threads de enviar y recibir datos, correspondientes al nuevo cliente.
+ * A su vez se guarda dicho socket en un vector de sockets.
+ * Este metodo ademas seria el encargado de autenticar a los clientes y mandarle la info inicial del juego
+ */
 void Server::newConnectionsManager() {
 	struct sockaddr_in cli_addr;
-	socklen_t clilen;
-
-	clilen = sizeof(cli_addr);
+	socklen_t clilen = sizeof(cli_addr);
 
 	while (acceptNewClients_) {
 		int newsockfd = accept(sockfd_, (struct sockaddr *) &cli_addr, &clilen);
 		if (newsockfd < 0) {
-			perror("ERROR on accept");
+			Log::instance()->append("Error al aceptar una nueva conexion",
+					Log::ERROR);
 			continue;
 		}
 		//Llamar a metodo sincronico para Autenticar el cliente aca TODO
 
-		std::cout << "A new client has connected." << std::endl;
+		Log::instance()->append("Nuevo cliente conectado!", Log::INFO);
+
 		sockets_.push_back(newsockfd);
 
 		//Lanza el thread para que el cliente pueda empezar a mandar eventos en forma paralela
@@ -131,7 +142,8 @@ void Server::newConnectionsManager() {
 				std::thread(&Server::recibirDelCliente, this, newsockfd,
 						shared_rcv_queue_));
 
-		//Crea la queue para el envio de datos del server al cliente y luego lanza el thread para que el server ya pueda mandarle info en forma paralela
+		//Crea la queue para el envio de datos del server al cliente y luego lanza el thread
+		//para que el server ya pueda mandarle info en forma paralela
 		Threadsafe_queue<dataToSend_t>* personal_queue = new Threadsafe_queue<
 				dataToSend_t>();
 		per_thread_snd_queues_.push_back(personal_queue);
@@ -234,6 +246,29 @@ void Server::step() {
 	receivedData_t* event;
 	shared_rcv_queue_->wait_and_pop(event);
 	//process(data)
+
+	model_->getPersonaje()->decreaseJumpCooldown();
+	//chequeo para cambiar el estado jumping a falling o el estado cuando cae de una plataforma
+	//esta implementado aca para que cambie cuando tiene que hacerlo
+	if (model_->getPersonaje()->getVelocity().y <= 0.0f
+			&& model_->getPersonaje()->getCantidadDeContactosActuales() == 0) {
+		model_->getPersonaje()->state = &Personaje::falling;
+	} else if (model_->getPersonaje()->getVelocity().y <= 0.0f
+			&& model_->getPersonaje()->state == &Personaje::jumping) {
+		model_->getPersonaje()->state = &Personaje::standby;
+	}
+
+	if (Personaje::walking.movimientoLateralDerecha
+			|| Personaje::walking.movimientoLateralIzquierda)
+		Personaje::walking.caminar(*(model_->getPersonaje()));
+
+	if (Personaje::jumping.debeSaltar
+			&& model_->getPersonaje()->state->getCode() != JUMPING
+			&& model_->getPersonaje()->state->getCode() != FALLING) {
+		model_->getPersonaje()->jump();
+		model_->getPersonaje()->state = &Personaje::jumping;
+	}
+	model_->getWorld()->Step(timeStep, velocityIterations, positionIterations);
 }
 
 /**
@@ -252,7 +287,8 @@ int Server::validateParameters(int argc, char *argv[]) {
 	//Validamos cantidad de parametros. En caso de que no sean correctos, se
 	//comienza con un juego default
 	if (argc != 2) {
-		Log::instance()->append("Cantidad de parametros incorrecta", Log::WARNING);
+		Log::instance()->append("Cantidad de parametros incorrecta",
+				Log::WARNING);
 		return SRV_ERROR;
 	}
 

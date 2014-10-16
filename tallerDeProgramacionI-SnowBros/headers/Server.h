@@ -23,6 +23,11 @@
 #include <sys/wait.h>
 #include <signal.h>
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <Box2D/Box2D.h>
+#include "Modelo/Escenario.h"
+#include "Parser/JsonParser.h"
 #include "Log/Log.h"
 
 #include "threadsafe_queue.cpp"
@@ -63,10 +68,19 @@ public:
 	void run();
 
 private:
+
+	const float32 timeStep = 1/60.0;       //the length of time passed to simulate (seconds)
+	const int32 velocityIterations = 32;   //how strongly to correct velocity
+	const int32 positionIterations = 64;   //how strongly to correct position}
+
 	bool running_;
 	int port_;
 	int sockfd_;
 	bool acceptNewClients_;
+
+	Escenario *model_;
+	JsonParser *parser_;
+	std::string jsonPath_;
 
 	std::thread newConnectionsThread_;
 

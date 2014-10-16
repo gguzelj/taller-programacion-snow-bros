@@ -1,15 +1,19 @@
-#include "../headers/Game.h"
 #include <iostream>
+#include "../headers/Server.h"
+#include <thread>
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
 
-	int output;
-	do{
-		Game* theGame = new Game();
-		output = theGame->onExecute(argc, argv);
-		delete theGame;
+	if (argc < 2) {
+		std::cout << "ERROR, no port provided\n" << std::endl;
+		exit(1);
 	}
-	while (output == GAME_RELOAD);
 
-    return 0;
+	Server *server = new Server(argv[1]);
+	server->init();
+	server->run();
+
+	delete server;
+
+	return 0;
 }

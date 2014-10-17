@@ -48,6 +48,27 @@ typedef struct receivedData{
 	//SDL_Event event;
 } receivedData_t;
 
+typedef struct firstConnectionDetails{
+	unsigned int cantObjDinamicos;
+	unsigned int cantObjEstaticos;
+} firstConnectionDetails_t;
+
+
+typedef struct objEstatico{
+	punto_t centro;
+	float ancho;
+	float alto;
+	float rotacion;
+} objEstatico_t;
+
+
+typedef struct objDinamico{
+	punto_t centro;
+	float ancho;
+	float alto;
+	float rotacion;
+} objDinamico_t;
+
 typedef struct dataToSend{
 	std::string object_id;
 	punto_t centro;
@@ -56,6 +77,22 @@ typedef struct dataToSend{
 	float rotacion;
 } dataToSend_t;
 
+
+
+
+
+typedef char conn_id[10];
+
+typedef struct connection{
+	bool activa;
+	conn_id id;
+	int socket;
+} connection_t;
+
+
+/**
+ * Clase Server
+ */
 class Server {
 public:
 	Server();
@@ -80,7 +117,7 @@ private:
 
 	std::thread newConnectionsThread_;
 
-	std::vector<int> sockets_;
+	std::vector<connection_t> connections_;
 	std::vector<std::thread> rcv_threads_;
 	std::vector<std::thread> snd_threads_;
 	Threadsafe_queue<receivedData_t*>* shared_rcv_queue_;
@@ -97,6 +134,17 @@ private:
 	 */
 	void newConnectionsManager();
 
+	/**
+	 * Metodo encargado de negociar la conexion con el cliente
+	 */
+	int acceptConnection (int newsockfd);
+
+	/**
+	 * Metodo utilizado para enviar por primera vez todos los datos del juego
+	 * a un nuevo cliente
+	 */
+	void enviarDatosJuego(int sockfd);
+
 	//////////////////////////////////
 	//Thread de recepcion de eventos//
 	//////////////////////////////////
@@ -108,7 +156,7 @@ private:
 	/*
 	 * Metodo de bajo nivel de sockets
 	 */
-	int recvall(int s, receivedData_t *data, int *len);
+	int recvall(int s, void* data, int* len);
 
 	///////////////////////////
 	//Thread de envio de info//

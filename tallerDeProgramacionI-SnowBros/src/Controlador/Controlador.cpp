@@ -3,15 +3,15 @@
 Controlador::Controlador(Drawer *view ){
 	this->view = view;
 }
-void Controlador::handleEvents(bool* running, bool* reload){
+void Controlador::handleEvents(bool* running, int *code, unsigned int *type){
 	SDL_Event event;
 
 	while(SDL_PollEvent(&event)){
-		handleEvent(&event, running, reload);
+		handleEvent(&event, running);
 	}
 }
 
-void Controlador::handleEvent(SDL_Event* evento,bool* running, bool* reload){
+void Controlador::handleEvent(SDL_Event* evento,bool* running){
 	//logica de manejo de eventos del personaje
 	//model->getPersonaje()->handleInput(evento->key.keysym.sym,evento->type);
 

@@ -8,9 +8,9 @@ public:
 	Controlador(Drawer *view);
 	~Controlador(){};
 
-    void handleEvents(bool* running);
+    void handleEvents(bool* running, int *code, unsigned int *type);
 
-    void handleEvent(SDL_Event* evento,bool* quit, bool* reload);
+    void handleEvent(SDL_Event* evento,bool* quit);
 
 private:
     Drawer *view;

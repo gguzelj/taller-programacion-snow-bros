@@ -8,8 +8,6 @@ JumpingState Personaje::jumping;
 WalkingState Personaje::walking;
 FallingState Personaje::falling;
 
-
-
 void cambiarOrientacionAlDejarDePresionarUnaTecla(Personaje &personaje){
 	switch(personaje.getOrientacion()){
 		case IZQUIERDA:
@@ -22,9 +20,6 @@ void cambiarOrientacionAlDejarDePresionarUnaTecla(Personaje &personaje){
 			break;
 	}
 }
-
-
-
 
 //devuelve true si se detuvo o false si no hizo nada
 bool detenerMovimientoHorizontal(Personaje* personaje,SDL_Keycode input){
@@ -55,8 +50,6 @@ bool detenerMovimientoHorizontal(Personaje* personaje,SDL_Keycode input){
         	}
         return false;
 }
-
-
 
 void OnAirState::handleInput(Personaje &personaje,SDL_Keycode input,Uint32 input_type){
 	switch(input_type){

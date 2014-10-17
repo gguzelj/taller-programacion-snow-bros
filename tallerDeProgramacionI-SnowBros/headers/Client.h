@@ -1,6 +1,14 @@
 #ifndef CLIENT_H_
 #define CLIENT_H_
 
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <sys/wait.h>
+#include <signal.h>
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "Controlador/Controlador.h"
@@ -28,6 +36,15 @@ const int32 positionIterations = 64;   //how strongly to correct position}
 
 using namespace std;
 
+typedef struct dataToSend{
+	int keycode_;		//TODO en realidad son Sint32 y Uint32 pero no me los toma, despues checkear.
+	unsigned int type_;
+} dataToSend_t;
+
+typedef struct receivedData{
+	//TODO ponerse de acuerdo en esto.
+}receivedData_t;
+
 class Client{
 public:
 	Client();
@@ -51,11 +68,21 @@ public:
 	 */
 	int run();
 
+private:
+	bool running_;
+
+	Controlador *controller_;
+	Drawer *view_;
+	std::string host;
+	int port;
+	std::string name;
 
 	/*
-	 * Controla los eventos realizados por el usuario mediante el eventHandler
+	 * Controla los eventos realizados por el usuario mediante un handleEvent. Recibe por parametro
+	 * punteros a los miembros de un dataToSend_t y los modifica segun el
+	 * evento activado por el usuario.
 	 */
-	void onEvent();
+	void onEvent(int *code, unsigned int *event);
 
 	/*
 	 * Maneja aquello relacionado con lo que se tiene que dibujar en la pantalla, para luego mostrarlo.
@@ -68,19 +95,31 @@ public:
 	 */
 	void onCleanup();
 
-private:
-	bool running_;
+	/*
+	 * Metodo en donde estara corriendo el thread que envia informacion al servidor.
+	 */
+	void enviarAlServer(int sock);
 
-	Controlador *controller_;
-	Drawer *view_;
-	std::string host;
-	int port;
-	std::string name;
+	/*
+	 * Metodo en donde estara corriendo el thread que recibe informacion del servidor.
+	 */
+	void recibirDelServer(int sock);
 
-	/**
+	/*
 	 * Validamos los parametros recibidos por consola
 	 */
 	bool validateParameters(int argc, char* argv[]);
+
+    /*
+     * Metodo de bajo nivel de sockets para recibir hasta una cierta
+     * cantidad de bytes determinada.
+     */
+	int recvall(int s, receivedData_t *data, int *len);
+    /*
+     * Metodo de bajo nivel de sockets para enviar hasta una cierta
+     * cantidad de bytes determinada.
+     */
+	int sendall(int s, dataToSend_t *data, int *len);
 
 };
 

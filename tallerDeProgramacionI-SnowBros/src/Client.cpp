@@ -10,7 +10,7 @@ Client::Client(){
 	//model_ = nullptr;
 	view_ = nullptr;
 	controller_ = nullptr;
-	port = nullptr;
+	port = 0;
 	host = nullptr;
 	name = nullptr;
 
@@ -29,9 +29,10 @@ Client::~Client(){
 
 int Client::run(){
 
+	//TODO crear el thread para enviar al server y el thread para recibir.
+
+	//Main thread
 	while(running_){
-		//Control all posible events
-		onEvent();
 
 		//Update the view
 		onRender();
@@ -64,8 +65,25 @@ bool Client::init(int argc, char* argv[]){
 	}
 }
 
-void Client::onEvent(){
-	controller_->handleEvents(&running_);
+void Client::enviarAlServer(int sock){
+
+	int size = sizeof(dataToSend_t);
+	dataToSend_t* data = (dataToSend_t*) malloc(size);
+
+	while(running_){
+		//Control all posible events
+		/* TODO Sudden realization. Se hacen varios SDL_PollEvent
+		 * al tomar los eventos. Osea que en cada step hay mas un evento simultaneo,
+		 * bah, puede haber mas de uno. Voy ahondar mas en el tema y ver si toman
+		 * hasta un limite (esto es lo que yo decia de que si tocas mas de una tecla
+		 * te toma las dos, pero me parece que tres ya no toma).
+		 */
+		onEvent(&(data->keycode_),&(data->type_));
+	}
+}
+
+void Client::onEvent(int *code, unsigned int *type){
+	controller_->handleEvents(&running_, code, type);
 }
 
 void Client::onRender(){
@@ -81,10 +99,7 @@ void Client::onCleanup(){
 // ########################## //
 // ##### Private methods #### //
 // ########################## //
-/**
- * Validamos los parametros recibidos por consola. En caso de que el archivo JSON
- * no exista, seteamos uno por default
- */
+
 bool Client::validateParameters(int argc, char* argv[]){
 
 	Log::instance()->append(CLIENT_MSG_VAL_PAR,Log::INFO);
@@ -106,4 +121,44 @@ bool Client::validateParameters(int argc, char* argv[]){
 	name = argv[3];
 
 	return true;
+}
+
+int Client::recvall(int s, receivedData_t *data, int *len) {
+
+        int total = 0;                  // how many bytes we've sent
+        int bytesleft = *len;   // how many we have left to send
+        int n;
+
+        receivedData_t* original = (receivedData_t*) malloc(sizeof(receivedData_t));
+        memcpy(original, data, sizeof(receivedData_t));
+
+        while (total < *len) {
+                n = recv(s, original + total, bytesleft, 0);
+                if (n == -1 || n == 0) {
+                        break;
+                }
+                total += n;
+                bytesleft -= n;
+        }
+
+        memcpy(data, original, sizeof(receivedData_t));
+        free(original);
+        *len = total;                                   // return number actually sent here
+        return n == -1 || n == 0 ? -1 : 0;      // return -1 on failure, 0 on success
+}
+
+int Client::sendall(int s, dataToSend_t *data, int *len) {
+        int total = 0;                  // how many bytes we've sent
+        int bytesleft = *len;   // how many we have left to send
+        int n;
+        while (total < *len) {
+                n = send(s, data + total, bytesleft, 0);
+                if (n == -1) {
+                        break;
+                }
+                total += n;
+                bytesleft -= n;
+        }
+        *len = total;                   // return number actually sent here
+        return n == -1 ? -1 : 0;                // return -1 on failure, 0 on success
 }

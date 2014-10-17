@@ -169,7 +169,7 @@ void Server::recibirDelCliente(int sock) {
 		receivedData_t* data = (receivedData_t*) malloc(size);
 
 		if (recvall(sock, data, &size) <= 0) {
-			std::cout << "No pude recibir. Client disconnected from server";
+			std::cout << "No pudo recibir. Client disconnected from server";
 			throw;
 		}
 
@@ -219,7 +219,7 @@ void Server::prepararEnvio() {
 }
 
 void Server::enviarAlCliente(int sock,
-		Threadsafe_queue<dataToSend_t>* personal_queue) {
+	Threadsafe_queue<dataToSend_t>* personal_queue) {
 	while (true) {
 		dataToSend_t dataToBeSent;
 		personal_queue->wait_and_pop(dataToBeSent);	//wait_and_pop va a esperar a que haya un elemento en la personal_queue para desencolar el mismo. De esta manera hay un sincronizmo y se ahorran recursos si no se usa dicha cola
@@ -266,17 +266,17 @@ int Server::validateParameters(int argc, char *argv[]) {
 
 	Log::instance()->append("Validamos Parametros", Log::INFO);
 
-	//Leemos el puerto
-	if (argc >= 2)
-		port_ = atoi(argv[1]);
-
 	//Validamos cantidad de parametros. En caso de que no sean correctos, se
 	//comienza con un juego default
-	if (argc != 2) {
-		Log::instance()->append("Cantidad de parametros incorrecta",
-				Log::WARNING);
+	if (argc != 3) {
+		Log::instance()->append("Cantidad de parametros incorrecta", Log::WARNING);
 		return SRV_ERROR;
 	}
+
+	port_ = atoi(argv[2]);
+	if(port_ == 0) return SRV_ERROR;
+
+	jsonPath_ = argv[1];
 
 	return SRV_NO_ERROR;
 }

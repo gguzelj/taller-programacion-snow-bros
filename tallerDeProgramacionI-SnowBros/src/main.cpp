@@ -1,15 +1,18 @@
-#include "../headers/Game.h"
+#include "../headers/Client.h"
 #include <iostream>
 
 int main(int argc, char* argv[]) {
 
-	int output;
-	do{
-		Game* theGame = new Game();
-		output = theGame->onExecute(argc, argv);
-		delete theGame;
+	Client* client = new Client();
+
+	if(client->init(argc, argv) == CLIENT_ERROR){
+		delete client;
+		return CLIENT_ERROR;
 	}
-	while (output == GAME_RELOAD);
+
+	client->run();
+
+	delete client;
 
     return 0;
 }

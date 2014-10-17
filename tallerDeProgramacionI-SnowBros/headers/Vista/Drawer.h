@@ -25,7 +25,7 @@ const int smoothing_off = 0;
 
 class Drawer{
 public:
-	Drawer(JsonParser *parser);
+	Drawer();
 	~Drawer();
 
 	void updateView(Escenario* model_);

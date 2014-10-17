@@ -78,7 +78,7 @@ bool Drawer::loadMedia()
 	return success;
 }
 
-Drawer::Drawer(JsonParser *parser) {
+Drawer::Drawer() {
 	this->renderer = nullptr;
 	this->window = nullptr;
 	this->image = nullptr;
@@ -88,7 +88,7 @@ Drawer::Drawer(JsonParser *parser) {
 	this->fontToBeUsed = nullptr;
 
 	//Paths
-	this->imagePath = parser->getImagenFondo();
+	this->imagePath = "resources/snowBackground.png";
 	this->fontPath = "resources/dailypla.ttf";
 	this->rectangleImage = "resources/textures/rectangle.png";
 	this->circleImage = "resources/textures/circle.png";
@@ -99,10 +99,12 @@ Drawer::Drawer(JsonParser *parser) {
 	this->trapexImagePath = "resources/textures/trapecio.png";
 	this->paralelogramImagePath = "resources/textures/paralelogramo.png";
 
-	this->ancho_px = parser->getAnchoPx();
-	this->alto_px = parser->getAltoPx();
-	this->alto_un = parser->getAltoUnEscenario();
-	this->ancho_un = parser->getAnchoUnEscenario();
+	//Hardcodeo esto por ahora.
+	this->ancho_px = 1024;
+	this->alto_px = 720;
+	this->alto_un = 23;
+	this->ancho_un = 70;
+
 	this->currentZoomFactor = 1.0;
 	this->camera = {0,0,ancho_px,alto_px};
 	this->coordRel = {0,0,ancho_px,alto_px};

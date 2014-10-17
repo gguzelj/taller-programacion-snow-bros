@@ -59,41 +59,36 @@ bool detenerMovimientoHorizontal(Personaje* personaje,SDL_Keycode input){
 
 
 void OnAirState::handleInput(Personaje &personaje,SDL_Keycode input,Uint32 input_type){
-        switch(input_type){
-                case SDL_KEYDOWN:
+	switch(input_type){
+		case SDL_KEYDOWN:
+		switch(input){
+			case SDLK_LEFT:
+				if(!Personaje::walking.movimientoLateralDerecha){
+					personaje.moveLeft();
+					personaje.setOrientacion(IZQUIERDA);
+				}
+				Personaje::walking.movimientoLateralIzquierda = true;
+				break;
 
-                        switch(input){
-                                case SDLK_LEFT:
-                                		if(!Personaje::walking.movimientoLateralDerecha){
-                                			personaje.moveLeft();
-                                        	personaje.setOrientacion(IZQUIERDA);
-                                		}
-                                        Personaje::walking.movimientoLateralIzquierda = true;
-                                        break;
+			case SDLK_RIGHT:
+				if(!Personaje::walking.movimientoLateralIzquierda){
+					personaje.moveRight();
+					personaje.setOrientacion(DERECHA);
+				}
+				Personaje::walking.movimientoLateralDerecha = true;
+				break;
+		}
+		break;
 
-                                case SDLK_RIGHT:
-                                		if(!Personaje::walking.movimientoLateralIzquierda){
-                                			personaje.moveRight();
-                                        	personaje.setOrientacion(DERECHA);
-                                		}
-                                        Personaje::walking.movimientoLateralDerecha = true;
-                                        break;
-                        }
-                        break;
-
-
-                case SDL_KEYUP:
-                		if(input == SDLK_UP)
-                			Personaje::jumping.debeSaltar = false;
-                        detenerMovimientoHorizontal(&personaje,input);
-                        if(Personaje::walking.movimientoLateralIzquierda || Personaje::walking.movimientoLateralDerecha)
-                        	cambiarOrientacionAlDejarDePresionarUnaTecla(personaje);
-                         break;
-
-        }
-
+		case SDL_KEYUP:
+			if(input == SDLK_UP)
+				Personaje::jumping.debeSaltar = false;
+			detenerMovimientoHorizontal(&personaje,input);
+			if(Personaje::walking.movimientoLateralIzquierda || Personaje::walking.movimientoLateralDerecha)
+				cambiarOrientacionAlDejarDePresionarUnaTecla(personaje);
+			break;
+	}
 }
-
 
 void saltar(Personaje& personaje){
 	if (personaje.getJumpCooldown() <=0){
@@ -105,62 +100,56 @@ void saltar(Personaje& personaje){
 
 
 void StandByState::handleInput(Personaje &personaje,SDL_Keycode input,Uint32 input_type){
-        switch(input_type){
-                case SDL_KEYDOWN:{
-                        switch(input){
+	switch(input_type){
 
-                                        case SDLK_UP:{
-                                        		saltar(personaje);
-                                        		break;
-                                        }
+		case SDL_KEYDOWN:{
 
-                                        case SDLK_LEFT:{
-                                        		Personaje::walking.movimientoLateralIzquierda = true;
-                                                personaje.state = &Personaje::walking;
-                                                personaje.moveLeft();
-                                                personaje.setOrientacion(IZQUIERDA);
-                                                break;
-                                        }
+			switch(input){
+				case SDLK_UP:{
+					saltar(personaje);
+					break;
+				}
 
-                                        case SDLK_RIGHT:{
-                                        		Personaje::walking.movimientoLateralDerecha = true;
-                                                personaje.state = &Personaje::walking;
-                                                personaje.moveRight();
-                                                personaje.setOrientacion(DERECHA);
-                                                break;
-                                        }
-                        }
-                }
-                break;
+				case SDLK_LEFT:{
+					Personaje::walking.movimientoLateralIzquierda = true;
+					personaje.state = &Personaje::walking;
+					personaje.moveLeft();
+					personaje.setOrientacion(IZQUIERDA);
+					break;
+				}
 
-                case SDL_KEYUP:
-                	if(input == SDLK_UP)
-                	   Personaje::jumping.debeSaltar = false;
+				case SDLK_RIGHT:{
+					Personaje::walking.movimientoLateralDerecha = true;
+					personaje.state = &Personaje::walking;
+					personaje.moveRight();
+					personaje.setOrientacion(DERECHA);
+					break;
+				}
+			}
+		}
+		break;
 
-        }
+		case SDL_KEYUP:
+			if(input == SDLK_UP)
+			   Personaje::jumping.debeSaltar = false;
+	}
 }
 
 
 void WalkingState::caminar(Personaje &personaje){
-	 switch(personaje.getOrientacion()){
-	                        case IZQUIERDA:{
-	                                personaje.moveLeft();
-	                                break;
-	                        }
-	                        case DERECHA:{
-	                                personaje.moveRight();
-	                                break;
-	                        }
-	        }
+	switch(personaje.getOrientacion()){
+		case IZQUIERDA:{
+			personaje.moveLeft();
+			break;
+		}
+		case DERECHA:{
+			personaje.moveRight();
+			break;
+		}
+	}
 }
 
-
-
-
-
-
 void WalkingState::handleInput(Personaje &personaje,SDL_Keycode input,Uint32 input_type){
-
 	switch(input_type){
 		case SDL_KEYDOWN:
 			switch(input){

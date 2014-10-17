@@ -2,6 +2,7 @@
 #define ESCENARIO_H_
 
 #include <list>
+#include <vector>
 #include <Box2D/Box2D.h>
 #include "../Parser/JsonParser.h"
 #include "Objetos/Figuras/Figura.h"
@@ -13,6 +14,25 @@
 #include "Objetos/Personaje.h"
 #include "Objetos/Muro.h"
 #include "../Exceptions/ErrorTipoDeObjeto.h"
+
+typedef struct punto{
+	float x;
+	float y;
+} punto_t;
+
+typedef struct objEstatico{
+	punto_t centro;
+	float ancho;
+	float alto;
+	float rotacion;
+} objEstatico_t;
+
+typedef struct objDinamico{
+	punto_t centro;
+	float ancho;
+	float alto;
+	float rotacion;
+} objDinamico_t;
 
 class Escenario {
 public:
@@ -28,6 +48,11 @@ public:
 
 	b2World* getWorld();
 
+	unsigned int getCantObjDinamicos();
+	unsigned int getCantObjEstaticos();
+	objEstatico_t* getObjetosEstaticos();
+	objDinamico_t* getObjetosDinamicos();
+
 	void step();
 
 private:
@@ -38,6 +63,8 @@ private:
 
 	b2World* world_;
 	std::list<Figura*>* figuras_;
+	std::vector<Figura*>* figurasEstaticas_;
+	std::vector<Figura*>* figurasDinamicas_;
 	std::list<Muro*>* muros_;
 	Personaje* person_;
 };

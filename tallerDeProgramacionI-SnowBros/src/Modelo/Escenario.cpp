@@ -5,6 +5,8 @@ Escenario::Escenario(JsonParser *parser) {
 	b2Vec2 gravity(0.0f, parser->getGravedad());
 	world_ = new b2World(gravity);
 	figuras_ = new std::list<Figura*>;
+	figurasEstaticas_ = new std::vector<Figura*>;
+	figurasDinamicas_ = new std::vector<Figura*>;
 	muros_ = new std::list<Muro*>;
 	Figura* figura_i;
 	Muro* muro_i;
@@ -57,6 +59,11 @@ Escenario::Escenario(JsonParser *parser) {
 					Log::WARNING);
 		} else {
 			figuras_->push_back(figura_i);
+
+			if (parser->esObjetoEstatico(index))
+				figurasEstaticas_->push_back(figura_i);
+			else
+				figurasDinamicas_->push_back(figura_i);
 		}
 	}
 }
@@ -109,4 +116,62 @@ void Escenario::step() {
 		person_->state = &Personaje::jumping;
 	}
 	getWorld()->Step(timeStep, velocityIterations, positionIterations);
+}
+
+unsigned int Escenario::getCantObjDinamicos() {
+	return figurasDinamicas_->size();
+}
+
+unsigned int Escenario::getCantObjEstaticos() {
+	return figurasEstaticas_->size();
+}
+
+/**
+ * Devolvemos un vector con objetos Estaticos
+ */
+objEstatico_t* Escenario::getObjetosEstaticos() {
+
+	objEstatico_t* obj;
+	Figura* fig;
+	obj = (objEstatico*) malloc(
+			sizeof(objEstatico_t) * figurasEstaticas_->size());
+
+	for (unsigned int i = 0; i < figurasEstaticas_->size(); i++) {
+
+		fig = (*figurasEstaticas_)[i];
+
+		obj[i].alto = 9;
+		obj[i].ancho = 9;
+		obj[i].rotacion = fig->getAngulo();
+		obj[i].centro.x = fig->x;
+		obj[i].centro.y = fig->y;
+	}
+
+	return obj;
+
+}
+
+/**
+ * Devolvemos un vector con objetos dinamicos
+ */
+objDinamico_t* Escenario::getObjetosDinamicos() {
+
+	objDinamico_t* obj;
+	Figura* fig;
+	obj = (objDinamico*) malloc(
+			sizeof(objDinamico_t) * figurasDinamicas_->size());
+
+	for (unsigned int i = 0; i < figurasDinamicas_->size(); i++) {
+
+		fig = (*figurasEstaticas_)[i];
+
+		obj[i].alto = 9;
+		obj[i].ancho = 9;
+		obj[i].rotacion = fig->getAngulo();
+		obj[i].centro.x = fig->x;
+		obj[i].centro.y = fig->y;
+	}
+
+	return obj;
+
 }

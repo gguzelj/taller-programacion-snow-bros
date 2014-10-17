@@ -153,8 +153,9 @@ int Server::acceptConnection(int newsockfd) {
 	//Recibimos el id del cliente
 	size = sizeof(conn_id);
 	if (recvall(newsockfd, connection.id, &size) <= 0) {
-		std::cout << "No pudo recibir. Client disconnected from server";
-		throw;
+		Log::instance()->append("No se pudo leer el ID del cliente",
+				Log::ERROR);
+		return SRV_ERROR;
 	}
 
 	connection.activa = true;
@@ -183,7 +184,9 @@ int Server::acceptConnection(int newsockfd) {
 
 	//Si no encontramos lugar para guardar el nuevo cliente, lo informamos
 	if (!positionFound) {
-		//TODO
+		Log::instance()->append(
+				"Se alcanzo el limite de conexiones, cliente rechazado",
+				Log::ERROR);
 		return SRV_ERROR;
 	}
 
@@ -211,7 +214,26 @@ int Server::acceptConnection(int newsockfd) {
  * a un nuevo cliente
  */
 void Server::enviarDatosJuego(int sockfd) {
-	//TODO
+
+	int size;
+	firstConnectionDetails_t datos;
+
+	//El primer paso es enviar la cantidad de objetos creados en el juego
+	datos.cantObjDinamicos = model_->getCantObjDinamicos();
+	datos.cantObjEstaticos = model_->getCantObjEstaticos();
+
+	size = sizeof(datos);
+
+	if(sendall(sockfd, &datos, &size) <= 0){
+		// TODO ERORR;
+	}
+
+	//Una vez enviados la cantidad de objetos creados, enviamos los mismos
+	objEstatico_t *objetosEstaticos = model_->getObjetosEstaticos();
+	objDinamico_t *objetosDinamicos = model_->getObjetosDinamicos();
+
+
+
 }
 
 /**
@@ -266,7 +288,8 @@ void Server::prepararEnvio() {
 	for (unsigned int i = 0; i < connections_.size(); i++) {
 
 		//Ignoramos las conexiones que no estan activas
-		if(!connections_[i].activa) continue;
+		if (!connections_[i].activa)
+			continue;
 
 		Threadsafe_queue<dataToSend_t>* personal_queue =
 				per_thread_snd_queues_[i];
@@ -288,7 +311,7 @@ void Server::enviarAlCliente(int sock,
 	}
 }
 
-int Server::sendall(int s, dataToSend_t *data, int *len) {
+int Server::sendall(int s, void* data, int* len) {
 	int total = 0; 			// how many bytes we've sent
 	int bytesleft = *len; 	// how many we have left to send
 	int n;

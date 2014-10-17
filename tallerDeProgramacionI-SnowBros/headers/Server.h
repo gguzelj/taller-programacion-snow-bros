@@ -38,11 +38,6 @@
 #define MICROSECONDS 5000000
 #define COTA_ESPERA 10000
 
-typedef struct punto{
-	float x;
-	float y;
-} punto_t;
-
 typedef struct receivedData{
 	std::string username;
 	//SDL_Event event;
@@ -53,22 +48,6 @@ typedef struct firstConnectionDetails{
 	unsigned int cantObjEstaticos;
 } firstConnectionDetails_t;
 
-
-typedef struct objEstatico{
-	punto_t centro;
-	float ancho;
-	float alto;
-	float rotacion;
-} objEstatico_t;
-
-
-typedef struct objDinamico{
-	punto_t centro;
-	float ancho;
-	float alto;
-	float rotacion;
-} objDinamico_t;
-
 typedef struct dataToSend{
 	std::string object_id;
 	punto_t centro;
@@ -76,10 +55,6 @@ typedef struct dataToSend{
 	float alto;
 	float rotacion;
 } dataToSend_t;
-
-
-
-
 
 typedef char conn_id[10];
 
@@ -153,6 +128,7 @@ private:
 	 * En caso de detectar que el cliente se desconecto, lanzamos excepcion
 	 */
 	void recibirDelCliente(int sock);
+
 	/*
 	 * Metodo de bajo nivel de sockets
 	 */
@@ -162,11 +138,15 @@ private:
 	//Thread de envio de info//
 	///////////////////////////
 
-	//Metodo encargado de enviarle al cliente los datos del modelo, encolados en la personal_queue
+	/**
+	 * Metodo encargado de enviarle al cliente los datos del modelo, encolados en la personal_queue
+	 */
 	void enviarAlCliente(int sock, Threadsafe_queue<dataToSend_t>* personal_queue);
 
-	//Metodo de bajo nivel de sockets
-	int sendall(int s, dataToSend_t *data, int *len);
+	/*
+	 * Metodo de bajo nivel de sockets
+	 */
+	int sendall(int s, void* data, int* len);
 
 	////////////////////////////////////////////////////////////////////////////
 	//Thread principal. Se comunican con los otros threads mediante las queues//

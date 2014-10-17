@@ -14,6 +14,7 @@ public:
 
 private:
     Drawer *view;
+    bool toggleIzquierdaApretado, toggleDerechaApretado;
 };
 
 

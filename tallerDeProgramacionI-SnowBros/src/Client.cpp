@@ -34,6 +34,12 @@ int Client::run(){
 	//Main thread
 	while(running_){
 
+		//Habria que agregar el recibir del servidor que cosas cambiaron?
+
+
+		//Mientras este corriendo quiero enviarle mis imputs
+		//enviarAlServer(sock);	//que socket se le enviaria?
+
 		//Update the view
 		onRender();
 
@@ -41,7 +47,7 @@ int Client::run(){
 	}
 
 	//cleaning up
-	onCleanup();
+	onCleanup(); //barre que te barre
 
 	return CLIENT_OK;
 }
@@ -79,6 +85,7 @@ void Client::enviarAlServer(int sock){
 		 * te toma las dos, pero me parece que tres ya no toma).
 		 */
 		onEvent(&(data->keycode_),&(data->type_));
+		sendall(size,data, &size);	//el primer o el ultimo size esta mal, a menos que...
 	}
 }
 

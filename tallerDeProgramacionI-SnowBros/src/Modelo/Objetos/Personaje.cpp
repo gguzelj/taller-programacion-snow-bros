@@ -1,13 +1,14 @@
 #include "../../../headers/Modelo/Objetos/Personaje.h"
 #define ORIENTACION_INICIAL 'l'
 
-Personaje::Personaje(JsonParser *parser, b2World* world){
+Personaje::Personaje(float x, float y,char id[], b2World* world){
 	//Parametros generales
 	this->jumpCooldown = 0;
 	this->world = world;
 	this->aceleracion = 10.0f;
-	this->x = parser->getCoorXPersonaje();
-	this->y = parser->getCoorYPersonaje();
+	this->x = x;
+	this->y = y;
+	strcpy (this->id,id);
 	this->state = &Personaje::standby;
 	this->orientacion = ORIENTACION_INICIAL;
 	this->walking.movimientoLateralDerecha = false;

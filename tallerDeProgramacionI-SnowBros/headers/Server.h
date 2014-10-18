@@ -38,15 +38,15 @@
 #define MICROSECONDS 5000000
 #define COTA_ESPERA 10000
 
-typedef struct punto{
-	float x;
-	float y;
-} punto_t;
-
 typedef struct receivedData{
 	std::string username;
 	//SDL_Event event;
 } receivedData_t;
+
+typedef struct firstConnectionDetails{
+	unsigned int cantObjDinamicos;
+	unsigned int cantObjEstaticos;
+} firstConnectionDetails_t;
 
 typedef struct dataToSend{
 	std::string object_id;
@@ -56,6 +56,18 @@ typedef struct dataToSend{
 	float rotacion;
 } dataToSend_t;
 
+typedef char conn_id[10];
+
+typedef struct connection{
+	bool activa;
+	conn_id id;
+	int socket;
+} connection_t;
+
+
+/**
+ * Clase Server
+ */
 class Server {
 public:
 	Server();
@@ -80,7 +92,7 @@ private:
 
 	std::thread newConnectionsThread_;
 
-	std::vector<int> sockets_;
+	std::vector<connection_t> connections_;
 	std::vector<std::thread> rcv_threads_;
 	std::vector<std::thread> snd_threads_;
 	Threadsafe_queue<receivedData_t*>* shared_rcv_queue_;
@@ -97,6 +109,17 @@ private:
 	 */
 	void newConnectionsManager();
 
+	/**
+	 * Metodo encargado de negociar la conexion con el cliente
+	 */
+	int acceptConnection (int newsockfd);
+
+	/**
+	 * Metodo utilizado para enviar por primera vez todos los datos del juego
+	 * a un nuevo cliente
+	 */
+	void enviarDatosJuego(int sockfd);
+
 	//////////////////////////////////
 	//Thread de recepcion de eventos//
 	//////////////////////////////////
@@ -105,20 +128,25 @@ private:
 	 * En caso de detectar que el cliente se desconecto, lanzamos excepcion
 	 */
 	void recibirDelCliente(int sock);
+
 	/*
 	 * Metodo de bajo nivel de sockets
 	 */
-	int recvall(int s, receivedData_t *data, int *len);
+	int recvall(int s, void* data, int* len);
 
 	///////////////////////////
 	//Thread de envio de info//
 	///////////////////////////
 
-	//Metodo encargado de enviarle al cliente los datos del modelo, encolados en la personal_queue
+	/**
+	 * Metodo encargado de enviarle al cliente los datos del modelo, encolados en la personal_queue
+	 */
 	void enviarAlCliente(int sock, Threadsafe_queue<dataToSend_t>* personal_queue);
 
-	//Metodo de bajo nivel de sockets
-	int sendall(int s, dataToSend_t *data, int *len);
+	/*
+	 * Metodo de bajo nivel de sockets
+	 */
+	int sendall(int s, void* data, int* len);
 
 	////////////////////////////////////////////////////////////////////////////
 	//Thread principal. Se comunican con los otros threads mediante las queues//

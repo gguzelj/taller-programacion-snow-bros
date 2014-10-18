@@ -30,8 +30,9 @@ class Personaje : public Figura{
 		static WalkingState walking;
 		static StandByState standby;
 		PersonajeState* state;
+		char id[20];
 
-		Personaje(JsonParser *parser, b2World* world);
+		Personaje(float x, float y,char id[], b2World* world);
 		~Personaje();   //Destructor del personaje
 
 		b2Vec2 Posicion();

@@ -14,6 +14,25 @@
 #include "Objetos/Muro.h"
 #include "../Exceptions/ErrorTipoDeObjeto.h"
 
+typedef struct punto{
+	float x;
+	float y;
+} punto_t;
+
+typedef struct objEstatico{
+	punto_t centro;
+	float ancho;
+	float alto;
+	float rotacion;
+} objEstatico_t;
+
+typedef struct objDinamico{
+	punto_t centro;
+	float ancho;
+	float alto;
+	float rotacion;
+} objDinamico_t;
+
 class Escenario {
 public:
 	Escenario(JsonParser *parser);
@@ -24,9 +43,16 @@ public:
 	std::list<Muro*>* getParedes();
 
 	//Devuelve una instancia al personaje del juego
-	Personaje* getPersonaje();
+	std::list<Personaje*>* getPersonajes();
+
+	bool crearPersonaje(float x, float y,char id[]);
 
 	b2World* getWorld();
+
+	unsigned int getCantObjDinamicos();
+	unsigned int getCantObjEstaticos();
+	objEstatico_t* getObjetosEstaticos();
+	objDinamico_t* getObjetosDinamicos();
 
 	void step();
 
@@ -38,8 +64,10 @@ private:
 
 	b2World* world_;
 	std::list<Figura*>* figuras_;
+	std::vector<Figura*>* figurasEstaticas_;
+	std::vector<Figura*>* figurasDinamicas_;
 	std::list<Muro*>* muros_;
-	Personaje* person_;
+	std::list<Personaje*>* personajes_;
 };
 
 #endif /* ESCENARIO_H_ */

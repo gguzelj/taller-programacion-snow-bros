@@ -1,6 +1,3 @@
-#ifndef THREADSAFE_QUEUE_H_
-#define THREADSAFE_QUEUE_H_
-
 #include <queue>
 #include <memory>
 #include <mutex>
@@ -81,5 +78,3 @@ public:
                 return data_queue.empty();
         }
 };
-
-#endif /* THREADSAFE_QUEUE_H_ */

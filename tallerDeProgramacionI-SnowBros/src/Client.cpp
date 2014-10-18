@@ -14,6 +14,7 @@ Client::Client(){
 	host = nullptr;
 	name = nullptr;
 	sock = 0;
+    shared_rcv_queue_ = new Threadsafe_queue<receivedData_t*>();
 
 	//Seteamos el nivel del logger:
 	//	-Si loggerLevel = INFO se loguean todos los mensajes
@@ -136,6 +137,10 @@ void Client::enviarAlServer(){
 		onEvent(data);
 		sendall(sock,data, &size);
 	}
+}
+
+void Client::recibirDelServer(){
+
 }
 
 void Client::onEvent(dataToSend_t* data){

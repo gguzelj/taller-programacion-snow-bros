@@ -16,7 +16,7 @@
 #include "Controlador/Controlador.h"
 #include "Vista/Drawer.h"
 #include "Log/Log.h"
-#include "threadsafe_queue.h"
+#include "threadsafe_queue.cpp"
 
 #define CLIENT_OK		0
 #define CLIENT_ERROR	1
@@ -123,7 +123,7 @@ private:
 	/*
 	 * Metodo en donde estara corriendo el thread que recibe informacion del servidor.
 	 */
-	void recibirDelServer(int sock);
+	void recibirDelServer();
 
 	/*
 	 * Validamos los parametros recibidos por consola

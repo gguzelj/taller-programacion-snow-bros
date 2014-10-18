@@ -23,9 +23,11 @@
 
 //MENSAJES
 //ERROR
-#define CLIENT_MSG_INIT_ERROR			"Client: Error al inicial el juego"
+#define CLIENT_MSG_INIT_ERROR			"Client: Error al iniciar el juego"
 #define CLIENT_MSG_INVALID_PORT_ERROR 	"Client: El puerto no es correcto"
 #define CLIENT_MSG_CANT_PARAM			"Client: La cantidad de parametros no es correcta."
+#define CLIENT_MSG_ERROR_WHEN_RECEIVING	"Client: Error al utilizar recvall(), problemas en la conexion?"
+#define CLIENT_MSG_ERROR_WHEN_SENDING	"Client: Error al utilizar sendall(), problemas en el servidor?"
 
 //INFO
 #define CLIENT_MSG_NEW_CLIENT			"Client: Comienzo de nuevo Juego"
@@ -102,13 +104,13 @@ private:
 	 * punteros a los miembros de un dataToSend_t y los modifica segun el
 	 * evento activado por el usuario.
 	 */
-	void onEvent(dataToSend_t* data);
+	void onEvent(dataToSend_t* data,int socket,int* sizeOfdataToSend_t);
 
 	/*
 	 * Maneja aquello relacionado con lo que se tiene que dibujar en la pantalla, para luego mostrarlo.
 	 * Sería la parte de "Vista" del patron MVC
 	 */
-	void onRender();
+	void onRender(Escenario* escenario);
 
 	/*
 	 * Libera todos los recursos cargados en memoria

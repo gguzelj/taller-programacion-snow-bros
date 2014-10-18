@@ -1,6 +1,8 @@
 #ifndef CLIENT_H_
 #define CLIENT_H_
 
+#include <thread>
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -14,20 +16,21 @@
 #include "Controlador/Controlador.h"
 #include "Vista/Drawer.h"
 #include "Log/Log.h"
+#include "threadsafe_queue.h"
 
 #define CLIENT_OK		0
 #define CLIENT_ERROR	1
 
 //MENSAJES
 //ERROR
-#define CLIENT_MSG_INIT_ERROR	"Client: Error al inicial el juego"
-#define CLIENT_MSG_INVALID_PORT_ERROR "Client: El puerto no es correcto"
-#define CLIENT_MSG_CANT_PARAM	"Client: La cantidad de parametros no es correcta."
+#define CLIENT_MSG_INIT_ERROR			"Client: Error al inicial el juego"
+#define CLIENT_MSG_INVALID_PORT_ERROR 	"Client: El puerto no es correcto"
+#define CLIENT_MSG_CANT_PARAM			"Client: La cantidad de parametros no es correcta."
 
 //INFO
-#define CLIENT_MSG_NEW_CLIENT	"Client: Comienzo de nuevo Juego"
-#define CLIENT_MSG_DELETE_CLIENT "Client: Borrando Juego"
-#define CLIENT_MSG_VAL_PAR	"Client: Validando parametros de entrada"
+#define CLIENT_MSG_NEW_CLIENT			"Client: Comienzo de nuevo Juego"
+#define CLIENT_MSG_DELETE_CLIENT 		"Client: Borrando Juego"
+#define CLIENT_MSG_VAL_PAR				"Client: Validando parametros de entrada"
 
 
 const float32 timeStep = 1/60.0;       //the length of time passed to simulate (seconds)
@@ -66,11 +69,33 @@ public:
 private:
 	bool running_;
 
+	int port;
+	int sock;
+	const char* host;
+	char* name;
+
+	std::thread sendTh;
+	std::thread recvTh;
+
+    Threadsafe_queue<receivedData_t*>* shared_rcv_queue_;
+
 	Controlador *controller_;
 	Drawer *view_;
-	std::string host;
-	int port;
-	std::string name;
+
+	/**
+	 * Metodo para crear el socket con el que va a trabajar el server
+	 */
+	int createSocket();
+
+	/*
+	 * Metodo para iniciar la conexion con el servidor.
+	 */
+	int connectToServer();
+
+	/*
+	 * Metodo que manda el ID del cliente al servidor y recibe la informacion del mundo.
+	 */
+	int initialize();
 
 	/*
 	 * Controla los eventos realizados por el usuario mediante un handleEvent. Recibe por parametro
@@ -93,7 +118,7 @@ private:
 	/*
 	 * Metodo en donde estara corriendo el thread que envia informacion al servidor.
 	 */
-	void enviarAlServer(int sock);
+	void enviarAlServer();
 
 	/*
 	 * Metodo en donde estara corriendo el thread que recibe informacion del servidor.
@@ -109,12 +134,13 @@ private:
      * Metodo de bajo nivel de sockets para recibir hasta una cierta
      * cantidad de bytes determinada.
      */
-	int recvall(int s, receivedData_t *data, int *len);
+	int recvall(int s, void *data, int *len);
+
     /*
      * Metodo de bajo nivel de sockets para enviar hasta una cierta
      * cantidad de bytes determinada.
      */
-	int sendall(int s, dataToSend_t *data, int *len);
+	int sendall(int s, void *data, int *len);
 
 };
 

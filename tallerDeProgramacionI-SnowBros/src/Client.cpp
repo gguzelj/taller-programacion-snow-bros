@@ -13,6 +13,7 @@ Client::Client(){
 	port = 0;
 	host = nullptr;
 	name = nullptr;
+	sock = 0;
 
 	//Seteamos el nivel del logger:
 	//	-Si loggerLevel = INFO se loguean todos los mensajes
@@ -27,34 +28,15 @@ Client::~Client(){
 	Log::instance()->closeLog();
 }
 
-int Client::run(){
-
-	//TODO crear el thread para enviar al server y el thread para recibir.
-
-	//Main thread
-	while(running_){
-
-		//Habria que agregar el recibir del servidor que cosas cambiaron?
-
-
-		//Mientras este corriendo quiero enviarle mis imputs
-		//enviarAlServer(sock);	//que socket se le enviaria?
-
-		//Update the view
-		onRender();
-
-		SDL_Delay(5);
-	}
-
-	//cleaning up
-	onCleanup(); //barre que te barre
-
-	return CLIENT_OK;
-}
-
+/*
+ * Inicializamos el cliente
+ */
 bool Client::init(int argc, char* argv[]){
 
 	if(validateParameters(argc,argv) == CLIENT_ERROR)
+		return CLIENT_ERROR;
+
+	if(createSocket() == CLIENT_ERROR)
 		return CLIENT_ERROR;
 
 	try{
@@ -71,7 +53,80 @@ bool Client::init(int argc, char* argv[]){
 	}
 }
 
-void Client::enviarAlServer(int sock){
+int Client::run(){
+
+	if(connectToServer() == CLIENT_ERROR)
+		return CLIENT_ERROR;
+
+	initialize();
+	sendTh = std::thread(&Client::enviarAlServer, this);
+	recvTh = std::thread(&Client::recibirDelServer, this);
+
+	//Main thread
+	while(running_){
+
+		//Update the view
+		onRender();
+
+		SDL_Delay(1);
+	}
+
+	//cleaning up
+	onCleanup();
+
+	return CLIENT_OK;
+}
+
+// ########################## //
+// ##### Private methods #### //
+// ########################## //
+
+int Client::createSocket(){
+    sock = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock < 0){
+        return CLIENT_ERROR;
+	}
+    return CLIENT_OK;
+}
+
+int Client::connectToServer(){
+    struct sockaddr_in serv_addr;
+    struct hostent *server;
+
+    server = gethostbyname(host);
+    if (server == NULL) {
+        return CLIENT_ERROR;
+    }
+    bzero((char *) &serv_addr, sizeof(serv_addr));
+    serv_addr.sin_family = AF_INET;
+    bcopy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
+    serv_addr.sin_port = htons(port);
+    if (connect(sock,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0){
+        return CLIENT_ERROR;
+	}
+    return CLIENT_OK;
+}
+
+int Client::initialize(){
+
+	int sizeOfName = 20;
+	int entro;
+	int intSize = sizeof(int);
+
+	//Envio el nombre de cliente
+	sendall(sock, name, &sizeOfName);
+
+	//Recibo la aprobacion de si entro o no.
+	recvall(sock, &entro, &intSize);
+	if(!entro)
+		return CLIENT_ERROR;
+
+	//TODO recibir la informacion inicial del servidor.
+
+	return CLIENT_OK;
+}
+
+void Client::enviarAlServer(){
 
 	int size = sizeof(dataToSend_t);
 	dataToSend_t* data = (dataToSend_t*) malloc(size);
@@ -79,7 +134,7 @@ void Client::enviarAlServer(int sock){
 	while(running_){
 		//Control all posible events
 		onEvent(data);
-		sendall(size,data, &size);	//el primer o el ultimo size esta mal, a menos que...
+		sendall(sock,data, &size);
 	}
 }
 
@@ -96,10 +151,6 @@ void Client::onCleanup(){
 	delete view_;
 	delete controller_;
 }
-
-// ########################## //
-// ##### Private methods #### //
-// ########################## //
 
 bool Client::validateParameters(int argc, char* argv[]){
 
@@ -124,7 +175,7 @@ bool Client::validateParameters(int argc, char* argv[]){
 	return true;
 }
 
-int Client::recvall(int s, receivedData_t *data, int *len) {
+int Client::recvall(int s, void *data, int *len) {
 
         int total = 0;                  // how many bytes we've sent
         int bytesleft = *len;   // how many we have left to send
@@ -148,7 +199,7 @@ int Client::recvall(int s, receivedData_t *data, int *len) {
         return n == -1 || n == 0 ? -1 : 0;      // return -1 on failure, 0 on success
 }
 
-int Client::sendall(int s, dataToSend_t *data, int *len) {
+int Client::sendall(int s, void *data, int *len) {
         int total = 0;                  // how many bytes we've sent
         int bytesleft = *len;   // how many we have left to send
         int n;

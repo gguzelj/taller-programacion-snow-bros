@@ -115,6 +115,11 @@ private:
 	int acceptConnection (int newsockfd);
 
 	/**
+	 * Buscamos si existe lugar disponible para una nueva conexion
+	 */
+	bool searchPlaceForConnection(connection_t conn);
+
+	/**
 	 * Metodo utilizado para enviar por primera vez todos los datos del juego
 	 * a un nuevo cliente
 	 */

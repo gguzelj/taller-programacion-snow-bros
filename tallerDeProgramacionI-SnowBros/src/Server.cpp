@@ -18,6 +18,9 @@ Server::Server() {
 	Log::instance()->append("Creando SERVER!", Log::INFO);
 }
 
+/**
+ * Destructor del server
+ */
 Server::~Server() {
 	//Dejamos de aceptar nuevos clientes
 	acceptNewClients_ = false;
@@ -59,7 +62,6 @@ int Server::init(int argc, char *argv[]) {
  */
 int Server::createSocket() {
 
-	//With 0 as the protocol, the system chooses automagically the protocol
 	sockfd_ = socket(AF_INET, SOCK_STREAM, 0);
 
 	if (sockfd_ < 0) {
@@ -100,7 +102,7 @@ void Server::run() {
 	listen(sockfd_, BACKLOG);
 
 	//Thread para inicializar las conexiones.
-	//Dentro se inicializan los threads para recepcion y envio. Mas info en el header
+	//Dentro se inicializan los threads para recepcion y envio
 	newConnectionsThread_ = std::thread(&Server::newConnectionsManager, this);
 
 	running_ = true;
@@ -144,51 +146,27 @@ void Server::newConnectionsManager() {
  */
 int Server::acceptConnection(int newsockfd) {
 
-	int size;
-	bool positionFound = false;
+	std::string msg;
+	int size = sizeof(conn_id);
 	connection_t connection;
 
 	Log::instance()->append("Nuevo cliente conectado!", Log::INFO);
 
 	//Recibimos el id del cliente
-	size = sizeof(conn_id);
-	if (recvall(newsockfd, connection.id, &size) <= 0) {
-		Log::instance()->append("No se pudo leer el ID del cliente",
-				Log::ERROR);
+	if (recvall(newsockfd, &connection.id, &size) <= 0) {
+
+		msg = "No se pudo leer el ID del cliente";
+		Log::instance()->append(msg, Log::ERROR);
 		return SRV_ERROR;
+
 	}
 
 	connection.activa = true;
 	connection.socket = newsockfd;
 
-	//Validamos si hay lugar para agregar al usuario:
-	//Si la cantidad de conexiones es mayor o igual al limite, buscamos si
-	//existe algun usuario inactivo, y utilizamos ese lugar
-	if (connections_.size() >= BACKLOG) {
-
-		for (unsigned int index = 0; index < connections_.size(); index++) {
-
-			//TODO, falta validar si el usuario ya se conecto en otro momento
-
-			if (!connections_[index].activa) {
-				connections_[index] = connection;
-				positionFound = true;
-				break;
-			}
-
-		}
-	} else {
-		connections_.push_back(connection);
-		positionFound = true;
-	}
-
 	//Si no encontramos lugar para guardar el nuevo cliente, lo informamos
-	if (!positionFound) {
-		Log::instance()->append(
-				"Se alcanzo el limite de conexiones, cliente rechazado",
-				Log::ERROR);
+	if (!searchPlaceForConnection(connection))
 		return SRV_ERROR;
-	}
 
 	//Comenzamos un nuevo hilo para enviar la informacion del juego
 	std::thread(&Server::enviarDatosJuego, this, newsockfd);
@@ -210,6 +188,50 @@ int Server::acceptConnection(int newsockfd) {
 }
 
 /**
+ * Buscamos si existe lugar disponible para una nueva conexion:
+ * Si la cantidad de conexiones es mayor o igual al limite,
+ * buscamos si existe algun usuario inactivo, y utilizamos ese lugar
+ */
+bool Server::searchPlaceForConnection(connection_t conn) {
+
+	std::string msg;
+
+	//El primer paso consta en buscar alguna conexion con el mismo ID
+	for (unsigned int i = 0; i < connections_.size(); i++) {
+
+		//Si encontramos una conexion, la activamos
+		if (connections_[i].id == conn.id) {
+
+			msg = "Ya existe una conexion inactiva para el ID ";
+			msg += conn.id;
+			msg += ". Se reactiva";
+			Log::instance()->append(msg, Log::INFO);
+			connections_[i].activa = true;
+			return true;
+
+		}
+
+	}
+
+	//Validamos si existe lugar suficiente
+	if (connections_.size() < BACKLOG) {
+
+		msg = "Agregamos la nueva conexion ";
+		msg += conn.id;
+		Log::instance()->append(msg, Log::INFO);
+		connections_.push_back(conn);
+		return true;
+
+	}
+
+	msg = "No existe lugar disponible para la nueva conexion ";
+	msg += conn.id;
+	Log::instance()->append(msg, Log::WARNING);
+
+	return false;
+}
+
+/**
  * Metodo utilizado para enviar por primera vez todos los datos del juego
  * a un nuevo cliente
  */
@@ -218,21 +240,28 @@ void Server::enviarDatosJuego(int sockfd) {
 	int size;
 	firstConnectionDetails_t datos;
 
-	//El primer paso es enviar la cantidad de objetos creados en el juego
+//El primer paso es enviar la cantidad de objetos creados en el juego
 	datos.cantObjDinamicos = model_->getCantObjDinamicos();
 	datos.cantObjEstaticos = model_->getCantObjEstaticos();
 
 	size = sizeof(datos);
-
-	if(sendall(sockfd, &datos, &size) <= 0){
+	if (sendall(sockfd, &datos, &size) <= 0) {
 		// TODO ERORR;
 	}
 
-	//Una vez enviados la cantidad de objetos creados, enviamos los mismos
+//Enviamos la lista de objetos Estaticos
+	size = sizeof(objEstatico_t) * model_->getCantObjEstaticos();
 	objEstatico_t *objetosEstaticos = model_->getObjetosEstaticos();
+	if (sendall(sockfd, objetosEstaticos, &size) <= 0) {
+		// TODO ERORR;
+	}
+
+//Enviamos la lista de los objetos Dinamicos
+	size = sizeof(objDinamico_t) * model_->getCantObjDinamicos();
 	objDinamico_t *objetosDinamicos = model_->getObjetosDinamicos();
-
-
+	if (sendall(sockfd, objetosDinamicos, &size) <= 0) {
+		// TODO ERORR;
+	}
 
 }
 
@@ -281,10 +310,10 @@ int Server::recvall(int s, void *data, int *len) {
 
 void Server::prepararEnvio() {
 	dataToSend_t dataToBeSent;
-	//
-	// Crea el struct y lo adapta a lo que hay que mandar
-	//
-	// Inserta el dato a mandar en la cola de envios de cada thread
+//
+// Crea el struct y lo adapta a lo que hay que mandar
+//
+// Inserta el dato a mandar en la cola de envios de cada thread
 	for (unsigned int i = 0; i < connections_.size(); i++) {
 
 		//Ignoramos las conexiones que no estan activas
@@ -331,7 +360,7 @@ int Server::sendall(int s, void* data, int* len) {
 void Server::step() {
 	receivedData_t* event;
 	shared_rcv_queue_->wait_and_pop(event);
-	//process(data)
+//process(data)
 
 	model_->step();
 }
@@ -345,8 +374,8 @@ int Server::validateParameters(int argc, char *argv[]) {
 
 	Log::instance()->append("Validamos Parametros", Log::INFO);
 
-	//Validamos cantidad de parametros. En caso de que no sean correctos, se
-	//comienza con un juego default
+//Validamos cantidad de parametros. En caso de que no sean correctos, se
+//comienza con un juego default
 	if (argc != 3) {
 		Log::instance()->append("Cantidad de parametros incorrecta",
 				Log::WARNING);

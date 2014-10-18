@@ -13,10 +13,6 @@ Escenario::Escenario(JsonParser *parser) {
 	Muro* muro_i;
 
 
-	crearPersonaje(0,0,"nombre1");
-	crearPersonaje(10,10,"nombre2");
-
-
 	//Create the ground
 	muro_i = new Muro(parser->getAnchoUnEscenario(),
 			parser->getAltoUnEscenario(), 0, world_, 0);
@@ -62,10 +58,14 @@ Escenario::Escenario(JsonParser *parser) {
 					Log::WARNING);
 		} else {
 			figuras_->push_back(figura_i);
+
 			
 			if (parser->esObjetoEstatico(index))
 				figurasEstaticas_->push_back(figura_i);
-				
+
+
+			if (parser->esObjetoEstatico(index))
+				figurasEstaticas_->push_back(figura_i);
 			else
 				figurasDinamicas_->push_back(figura_i);
 		}
@@ -148,6 +148,7 @@ void Escenario::step() {
 		acomodarEstadoPersonaje(*iterador);
 		iterador++;
 	}
+
 	getWorld()->Step(timeStep, velocityIterations, positionIterations);
 
 }

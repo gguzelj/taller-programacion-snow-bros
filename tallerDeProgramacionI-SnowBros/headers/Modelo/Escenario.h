@@ -2,6 +2,7 @@
 #define ESCENARIO_H_
 
 #include <list>
+#include <vector>
 #include <Box2D/Box2D.h>
 #include "../Parser/JsonParser.h"
 #include "Objetos/Figuras/Figura.h"
@@ -13,6 +14,7 @@
 #include "Objetos/Personaje.h"
 #include "Objetos/Muro.h"
 #include "../Exceptions/ErrorTipoDeObjeto.h"
+
 
 typedef struct punto{
 	float x;
@@ -48,6 +50,8 @@ public:
 	bool crearPersonaje(float x, float y,char id[]);
 
 	b2World* getWorld();
+
+
 
 	unsigned int getCantObjDinamicos();
 	unsigned int getCantObjEstaticos();

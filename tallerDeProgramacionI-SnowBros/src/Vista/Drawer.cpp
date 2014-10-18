@@ -27,9 +27,32 @@ void Drawer::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y,
 	renderTexture(tex, ren, dst, clip);
 }
 
+void Drawer::loadFont(){
+	//Initialize SDL_ttf
+	if (TTF_Init() == -1) {
+		manageSDL_ttfError();
+	}
+	int sizeOfTheFont = 20;
+	fontToBeUsed = TTF_OpenFont(this->fontPath.c_str(), sizeOfTheFont);
+	if (fontToBeUsed == nullptr) {
+		manageSDL_ttfLoadFontError();
+	}
+
+	SDL_Color textColor = { 0, 0, 0 };
+	SDL_Surface* surface1 = TTF_RenderText_Solid(fontToBeUsed, "1000 Puntos",textColor);
+	SDL_Surface* surface2 = TTF_RenderText_Solid(fontToBeUsed, "3 vidas ", textColor);
+
+	if ((surface1 == nullptr) || (surface2 == nullptr))
+		manageDrawMessagesError();
+
+	messageAboutPoints = SDL_CreateTextureFromSurface(renderer, surface1);
+	messageAboutLifes = SDL_CreateTextureFromSurface(renderer, surface2);
+	SDL_FreeSurface(surface1);
+	SDL_FreeSurface(surface2);
+}
+
 //Cargar aca las imagenes de las figuras que faltan.
-bool Drawer::loadMedia()
-{
+bool Drawer::loadMedia(){
 	//Loading success flag
 	bool success = true;
 
@@ -120,8 +143,8 @@ Drawer::~Drawer() {
 	SDL_DestroyTexture(imagenPersonaje);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
-	SDL_FreeSurface(messageAboutLifes);
-	SDL_FreeSurface(messageAboutPoints);
+	SDL_DestroyTexture(messageAboutLifes);
+	SDL_DestroyTexture(messageAboutPoints);
 	TTF_CloseFont(fontToBeUsed);
 	TTF_Quit();
 	SDL_Quit();
@@ -379,28 +402,17 @@ void Drawer::drawCharacter(Personaje* person) {
 }
 
 void Drawer::drawMessages() {
-	SDL_Color textColor = { 0, 0, 0 };
-	this->messageAboutPoints = TTF_RenderText_Solid(fontToBeUsed, "1000 Puntos",
-			textColor);
-	this->messageAboutLifes = TTF_RenderText_Solid(fontToBeUsed, "3 vidas ",
-			textColor);
-
-	if ((messageAboutPoints == nullptr) || (messageAboutLifes == nullptr))
-		manageDrawMessagesError();
 
 	//Set the coordinates which we want to draw to
 	float coordXDelMensaje = ancho_px / 2 - 1 * un_to_px_x_inicial; //Centro en x
 	float coordYDelMensaje = 1 * un_to_px_y_inicial; //Parte superior de la pantalla
 
 	//Render the first message
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, messageAboutPoints);
-	renderTexture(texture, renderer, coordXDelMensaje, coordYDelMensaje);
+	renderTexture(messageAboutPoints, renderer, coordXDelMensaje, coordYDelMensaje);
 
 	//Render the other message
-	texture = SDL_CreateTextureFromSurface(renderer, messageAboutLifes);
 	coordXDelMensaje += 10 * un_to_px_x_inicial;
-	renderTexture(texture, renderer, coordXDelMensaje, coordYDelMensaje);
-	SDL_DestroyTexture(texture);
+	renderTexture(messageAboutLifes, renderer, coordXDelMensaje, coordYDelMensaje);
 }
 
 void Drawer::presentScenary() {
@@ -541,15 +553,8 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 		manageLoadCharacterError();
 	}
 
-	//Initialize SDL_ttf
-	if (TTF_Init() == -1) {
-		manageSDL_ttfError();
-	}
-	int sizeOfTheFont = 20;
-	fontToBeUsed = TTF_OpenFont(this->fontPath.c_str(), sizeOfTheFont);
-	if (fontToBeUsed == nullptr) {
-		manageSDL_ttfLoadFontError();
-	}
+	//Aca se carga la fuente.
+	loadFont();
 
 	//Aca se cargan las imagenes de las figuras.
 	loadMedia();

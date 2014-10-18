@@ -42,8 +42,8 @@ private:
 	SDL_Window *window;
 	SDL_Texture *image;
 	SDL_Texture* imagenPersonaje;
-	SDL_Surface* messageAboutPoints;
-	SDL_Surface* messageAboutLifes;
+	SDL_Texture* messageAboutPoints;
+	SDL_Texture* messageAboutLifes;
 	SDL_Rect camera;
 	SDL_Rect coordRel;
 	TTF_Font* fontToBeUsed;
@@ -83,9 +83,14 @@ private:
 
 	//Private Methods
 	//General purpose methods
+	void loadFont();
+
 	bool loadMedia();
+
 	void runWindow(int ancho_px ,int alto_px ,string imagePath);
+
 	void actualizarCamara(Personaje* personaje);
+
 	SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren);
 
 	//Drawing methods

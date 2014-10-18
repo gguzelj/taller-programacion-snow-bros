@@ -102,7 +102,6 @@ void StandByState::handleInput(Personaje &personaje,SDL_Keycode input,Uint32 inp
 					saltar(personaje);
 					break;
 				}
-
 				case SDLK_LEFT:{
 					Personaje::walking.movimientoLateralIzquierda = true;
 					personaje.state = &Personaje::walking;
@@ -110,7 +109,6 @@ void StandByState::handleInput(Personaje &personaje,SDL_Keycode input,Uint32 inp
 					personaje.setOrientacion(IZQUIERDA);
 					break;
 				}
-
 				case SDLK_RIGHT:{
 					Personaje::walking.movimientoLateralDerecha = true;
 					personaje.state = &Personaje::walking;

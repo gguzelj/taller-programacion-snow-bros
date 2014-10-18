@@ -36,11 +36,6 @@ const int32 positionIterations = 64;   //how strongly to correct position}
 
 using namespace std;
 
-typedef struct dataToSend{
-	int keycode_;		//TODO en realidad son Sint32 y Uint32 pero no me los toma, despues checkear.
-	unsigned int type_;
-} dataToSend_t;
-
 typedef struct receivedData{
 	//TODO ponerse de acuerdo en esto.
 }receivedData_t;
@@ -82,7 +77,7 @@ private:
 	 * punteros a los miembros de un dataToSend_t y los modifica segun el
 	 * evento activado por el usuario.
 	 */
-	void onEvent(int *code, unsigned int *event);
+	void onEvent(dataToSend_t* data);
 
 	/*
 	 * Maneja aquello relacionado con lo que se tiene que dibujar en la pantalla, para luego mostrarlo.

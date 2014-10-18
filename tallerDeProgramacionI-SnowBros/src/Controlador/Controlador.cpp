@@ -1,19 +1,33 @@
 #include "../../headers/Controlador/Controlador.h"
 
 Controlador::Controlador(Drawer *view ){
-	this->toggleIzquierdaApretado = false;
-	this->toggleDerechaApretado = false;
 	this->view = view;
+	cantEventos = 0;
 }
-void Controlador::handleEvents(bool* running, int *code, unsigned int *type){
+void Controlador::handleEvents(bool* running, dataToSend_t* data){
 	SDL_Event event;
-
+	cantEventos = 0;
+	/*
+	 * Como puede haber mucha cantidad de eventos, pero solo nos importan dos
+	 * de las flechas, cuando tomo dos eventos de flechas, si llega a haber mas
+	 * eventos de este tipo (cosa que dudo, pero por las dudas) se ignoran.
+	 * No pongo un break directamente porque puede haber mas eventos que no sean
+	 * para enviar al server.
+	 */
 	while(SDL_PollEvent(&event)){
-		handleEvent(&event, running);
+		if(cantEventos == 0)
+			handleEvent(&event, running, &(data->keycode_1),&(data->type_1));
+		if(cantEventos == 1)
+			handleEvent(&event, running, &(data->keycode_2),&(data->type_2));
+		if(cantEventos == 2){
+			int* aux1;
+			unsigned int* aux2;
+			handleEvent(&event, running, aux1, aux2);
+		}
 	}
 }
 
-void Controlador::handleEvent(SDL_Event* evento,bool* running){
+void Controlador::handleEvent(SDL_Event* evento,bool* running, int *code, unsigned int *type){
 	//logica de manejo de eventos del personaje
 	//model->getPersonaje()->handleInput(evento->key.keysym.sym,evento->type);
 
@@ -46,28 +60,21 @@ void Controlador::handleEvent(SDL_Event* evento,bool* running){
 					break;
 				}
 				case SDLK_LEFT:{
-					//TODO enviarle al servidor, o poner en una variable lo que luego se va a enviar al servidor
-					//Se pone en una cola?
-					if(!toggleIzquierdaApretado){
-					//dataToSend->keycode_= SDLK_LEFT;
-					//dataToSend->type_ = SDL_KEYDOWN?;
-					}
+					*type = SDL_KEYDOWN;
+					*code= SDLK_LEFT;
+					cantEventos++;
 					break;
 				}
 				case SDLK_RIGHT:{
-					if(!toggleDerechaApretado){
-					//TODO enviarle al servidor, o poner en una variable lo que luego se va a enviar al servidor
-					//Se pone en una cola?
-					//dataToSend->keycode_= SDLK_RIGHT;
-					//dataToSend->type_ = SDL_KEYDOWN?;
-					}
+					*type = SDL_KEYDOWN;
+					*code= SDLK_RIGHT;
+					cantEventos++;
 					break;
 				}
 				case SDLK_UP:{
-					//TODO enviarle al servidor, o poner en una variable lo que luego se va a enviar al servidor
-					//Se pone en una cola?
-					//dataToSend->keycode_= SDLK_UP;
-					//dataToSend->type_ = SDL_KEYDOWN?;
+					*type = SDL_KEYDOWN;
+					*code= SDLK_UP;
+					cantEventos++;
 					break;
 				}
 			}
@@ -76,28 +83,21 @@ void Controlador::handleEvent(SDL_Event* evento,bool* running){
 
 			case SDL_KEYUP:{
 				case SDLK_LEFT:{
-					//TODO enviarle al servidor, o poner en una variable lo que luego se va a enviar al servidor
-					//Se pone en una cola?
-					if(toggleIzquierdaApretado){
-					//dataToSend->keycode_= SDLK_LEFT;
-					//dataToSend->type_ = SDL_KEYUP?;
-					}
+					*type = SDL_KEYUP;
+					*code= SDLK_LEFT;
+					cantEventos++;
 					break;
 				}
 				case SDLK_RIGHT:{
-					//TODO enviarle al servidor, o poner en una variable lo que luego se va a enviar al servidor
-					//Se pone en una cola?
-					if(toggleDerechaApretado){
-					//dataToSend->keycode_= SDLK_RIGHT;
-					//dataToSend->type_ = SDL_KEYUP?;
-					}
+					*type = SDL_KEYUP;
+					*code= SDLK_RIGHT;
+					cantEventos++;
 					break;
 				}
 				case SDLK_UP:{
-					//TODO enviarle al servidor, o poner en una variable lo que luego se va a enviar al servidor
-					//Se pone en una cola?
-					//dataToSend->keycode_= SDLK_UP;
-					//dataToSend->type_ = SDL_KEYUP?;
+					*type = SDL_KEYUP;
+					*code= SDLK_UP;
+					cantEventos++;
 					break;
 				}
 			}break;

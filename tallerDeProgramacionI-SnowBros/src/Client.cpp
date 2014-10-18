@@ -78,19 +78,13 @@ void Client::enviarAlServer(int sock){
 
 	while(running_){
 		//Control all posible events
-		/* TODO Sudden realization. Se hacen varios SDL_PollEvent
-		 * al tomar los eventos. Osea que en cada step hay mas un evento simultaneo,
-		 * bah, puede haber mas de uno. Voy ahondar mas en el tema y ver si toman
-		 * hasta un limite (esto es lo que yo decia de que si tocas mas de una tecla
-		 * te toma las dos, pero me parece que tres ya no toma).
-		 */
-		onEvent(&(data->keycode_),&(data->type_));
+		onEvent(data);
 		sendall(size,data, &size);	//el primer o el ultimo size esta mal, a menos que...
 	}
 }
 
-void Client::onEvent(int *code, unsigned int *type){
-	controller_->handleEvents(&running_, code, type);
+void Client::onEvent(dataToSend_t* data){
+	controller_->handleEvents(&running_, data);
 }
 
 void Client::onRender(){

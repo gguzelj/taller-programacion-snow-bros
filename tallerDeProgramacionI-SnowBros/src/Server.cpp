@@ -148,7 +148,9 @@ int Server::acceptConnection(int newsockfd) {
 
 	std::string msg;
 	int size = sizeof(conn_id);
+	unsigned int index;
 	connection_t connection;
+	Threadsafe_queue<dataToSend_t>* personal_queue;
 
 	Log::instance()->append("Nuevo cliente conectado!", Log::INFO);
 
@@ -165,11 +167,13 @@ int Server::acceptConnection(int newsockfd) {
 	connection.socket = newsockfd;
 
 	//Si no encontramos lugar para guardar el nuevo cliente, lo informamos
-	if (!searchPlaceForConnection(connection))
+	//Ademas obtenemos en index donde se guarda la conexion, para utilizar
+	//al agregar la personal queue
+	if (!searchPlaceForConnection(connection, index))
 		return SRV_ERROR;
 
-	//Comenzamos un nuevo hilo para enviar la informacion del juego
-	std::thread(&Server::enviarDatosJuego, this, newsockfd);
+	//Comenzamos enviando la informacion del juego
+	enviarDatosJuego(newsockfd);
 
 	//Lanza el thread para que el cliente pueda empezar a mandar eventos en forma paralela
 	rcv_threads_.push_back(
@@ -177,12 +181,21 @@ int Server::acceptConnection(int newsockfd) {
 
 	//Crea la queue para el envio de datos del server al cliente y luego lanza el thread
 	//para que el server ya pueda mandarle info en forma paralela
-	Threadsafe_queue<dataToSend_t>* personal_queue = new Threadsafe_queue<
-			dataToSend_t>();
-	per_thread_snd_queues_.push_back(personal_queue);
-	snd_threads_.push_back(
-			std::thread(&Server::enviarAlCliente, this, newsockfd,
-					personal_queue));
+	personal_queue = new Threadsafe_queue<dataToSend_t>();
+
+	if (index == per_thread_snd_queues_.size()) {
+
+		per_thread_snd_queues_.push_back(personal_queue);
+		snd_threads_.push_back(
+				std::thread(&Server::enviarAlCliente, this, newsockfd,
+						personal_queue));
+
+	} else {
+
+		per_thread_snd_queues_[index] = personal_queue;
+		snd_threads_[index] = std::thread(&Server::enviarAlCliente, this,
+				newsockfd, personal_queue);
+	}
 
 	return SRV_NO_ERROR;
 }
@@ -192,34 +205,40 @@ int Server::acceptConnection(int newsockfd) {
  * Si la cantidad de conexiones es mayor o igual al limite,
  * buscamos si existe algun usuario inactivo, y utilizamos ese lugar
  */
-bool Server::searchPlaceForConnection(connection_t conn) {
+bool Server::searchPlaceForConnection(connection_t conn, unsigned int &index) {
 
 	std::string msg;
 
-	//El primer paso consta en buscar alguna conexion con el mismo ID
+//El primer paso consta en buscar alguna conexion con el mismo ID
 	for (unsigned int i = 0; i < connections_.size(); i++) {
 
 		//Si encontramos una conexion, la activamos
 		if (connections_[i].id == conn.id) {
 
+			index = i;
+			connections_[i].activa = true;
+
 			msg = "Ya existe una conexion inactiva para el ID ";
 			msg += conn.id;
 			msg += ". Se reactiva";
 			Log::instance()->append(msg, Log::INFO);
-			connections_[i].activa = true;
+
 			return true;
 
 		}
 
 	}
 
-	//Validamos si existe lugar suficiente
+//Validamos si existe lugar suficiente
 	if (connections_.size() < BACKLOG) {
+
+		index = connections_.size();
+		connections_.push_back(conn);
 
 		msg = "Agregamos la nueva conexion ";
 		msg += conn.id;
 		Log::instance()->append(msg, Log::INFO);
-		connections_.push_back(conn);
+
 		return true;
 
 	}
@@ -240,27 +259,27 @@ void Server::enviarDatosJuego(int sockfd) {
 	int size;
 	firstConnectionDetails_t datos;
 
-//El primer paso es enviar la cantidad de objetos creados en el juego
+	//El primer paso es enviar la cantidad de objetos creados en el juego
 	datos.cantObjDinamicos = model_->getCantObjDinamicos();
 	datos.cantObjEstaticos = model_->getCantObjEstaticos();
 
 	size = sizeof(datos);
 	if (sendall(sockfd, &datos, &size) <= 0) {
-		// TODO ERORR;
+		Log::instance()->append("No se pueden enviar datos", Log::WARNING);
 	}
 
-//Enviamos la lista de objetos Estaticos
+	//Enviamos la lista de objetos Estaticos
 	size = sizeof(objEstatico_t) * model_->getCantObjEstaticos();
 	objEstatico_t *objetosEstaticos = model_->getObjetosEstaticos();
 	if (sendall(sockfd, objetosEstaticos, &size) <= 0) {
-		// TODO ERORR;
+		Log::instance()->append("No se pueden enviar datos", Log::WARNING);
 	}
 
-//Enviamos la lista de los objetos Dinamicos
+	//Enviamos la lista de los objetos Dinamicos
 	size = sizeof(objDinamico_t) * model_->getCantObjDinamicos();
 	objDinamico_t *objetosDinamicos = model_->getObjetosDinamicos();
 	if (sendall(sockfd, objetosDinamicos, &size) <= 0) {
-		// TODO ERORR;
+		Log::instance()->append("No se pueden enviar datos", Log::WARNING);
 	}
 
 }
@@ -310,6 +329,7 @@ int Server::recvall(int s, void *data, int *len) {
 
 void Server::prepararEnvio() {
 	dataToSend_t dataToBeSent;
+	Threadsafe_queue<dataToSend_t>* personal_queue;
 //
 // Crea el struct y lo adapta a lo que hay que mandar
 //
@@ -320,17 +340,20 @@ void Server::prepararEnvio() {
 		if (!connections_[i].activa)
 			continue;
 
-		Threadsafe_queue<dataToSend_t>* personal_queue =
-				per_thread_snd_queues_[i];
-		personal_queue->push(dataToBeSent); // Al hacer push se notifica al thread mediante una condition_variable que tiene data para enviar
+		personal_queue = per_thread_snd_queues_[i];
+		personal_queue->push(dataToBeSent);
+		// Al hacer push se notifica al thread mediante una condition_variable que tiene data para enviar
 	}
 }
 
 void Server::enviarAlCliente(int sock,
 		Threadsafe_queue<dataToSend_t>* personal_queue) {
+
+//wait_and_pop va a esperar a que haya un elemento en la personal_queue para desencolar el mismo.
+//De esta manera hay un sincronizmo y se ahorran recursos si no se usa dicha cola
 	while (true) {
 		dataToSend_t dataToBeSent;
-		personal_queue->wait_and_pop(dataToBeSent);	//wait_and_pop va a esperar a que haya un elemento en la personal_queue para desencolar el mismo. De esta manera hay un sincronizmo y se ahorran recursos si no se usa dicha cola
+		personal_queue->wait_and_pop(dataToBeSent);
 		int size = sizeof(dataToSend_t);
 
 		if (sendall(sock, &dataToBeSent, &size) < 0) {

@@ -117,7 +117,7 @@ private:
 	/**
 	 * Buscamos si existe lugar disponible para una nueva conexion
 	 */
-	bool searchPlaceForConnection(connection_t conn);
+	bool searchPlaceForConnection(connection_t conn, unsigned int &index);
 
 	/**
 	 * Metodo utilizado para enviar por primera vez todos los datos del juego

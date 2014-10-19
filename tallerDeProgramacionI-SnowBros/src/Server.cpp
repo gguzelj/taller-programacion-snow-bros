@@ -367,7 +367,7 @@ void Server::recibirDelCliente(connection_t conn) {
 
 		receivedData_t* data = (receivedData_t*) malloc(size);
 
-		if (recvall(conn.socket, data, &size) <= 0) {
+		if (recvall(conn.socket, data, &size) != 0) {
 
 			//Si el cliente se desconecta, lo desactivamos
 			msg = "No se pueden recibir datos de la conexion ";
@@ -412,7 +412,7 @@ void Server::enviarAlCliente(connection_t conn,
 		personal_queue->wait_and_pop(dataToBeSent);
 		int size = sizeof(dataToSend_t);
 
-		if (sendall(conn.socket, &dataToBeSent, &size) < 0) {
+		if (sendall(conn.socket, &dataToBeSent, &size) != 0) {
 			std::cout << "No pude enviar. Client disconnected from server";
 			throw;
 		}

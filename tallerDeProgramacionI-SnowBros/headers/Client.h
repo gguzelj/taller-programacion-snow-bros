@@ -22,6 +22,9 @@
 #define CLIENT_OK		0
 #define CLIENT_ERROR	1
 
+#define SRV_NO_ERROR 0
+#define SRV_ERROR 1
+
 //MENSAJES
 //ERROR
 #define CLIENT_MSG_INIT_ERROR			"Client: Error al iniciar el juego"
@@ -41,6 +44,31 @@ const int32 velocityIterations = 32;   //how strongly to correct velocity
 const int32 positionIterations = 64;   //how strongly to correct position}
 
 using namespace std;
+
+//Estructuras necesarias para conectarse con el servidor
+typedef struct firstConnectionDetails{
+	unsigned int cantObjDinamicos;
+	unsigned int cantObjEstaticos;
+} firstConnectionDetails_t;
+
+typedef struct punto{
+	float x;
+	float y;
+} punto_t;
+
+typedef struct objEstatico{
+	punto_t centro;
+	float ancho;
+	float alto;
+	float rotacion;
+} objEstatico_t;
+
+typedef struct objDinamico{
+	punto_t centro;
+	float ancho;
+	float alto;
+	float rotacion;
+} objDinamico_t;
 
 class Client{
 public:

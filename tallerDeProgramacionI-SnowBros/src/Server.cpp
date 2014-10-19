@@ -50,7 +50,7 @@ int Server::init(int argc, char *argv[]) {
 	//Creamos el juego
 	parser_ = new JsonParser(jsonPath_);
 	if (parser_->parse())
-		return false;
+		return SRV_ERROR;
 
 	model_ = new Escenario(parser_);
 
@@ -129,7 +129,6 @@ void Server::newConnectionsManager() {
 	socklen_t clilen = sizeof(cli_addr);
 
 	while (acceptNewClients_) {
-
 		//Aceptamos una nueva conexion
 		int newsockfd = accept(sockfd_, (struct sockaddr *) &cli_addr, &clilen);
 
@@ -137,11 +136,9 @@ void Server::newConnectionsManager() {
 			Log::instance()->append("Al aceptar nueva conexion", Log::ERROR);
 			continue;
 		}
-
 		//Validamos si es una conexion correcta
 		if (acceptConnection(newsockfd) == SRV_ERROR)
 			continue;
-
 	}
 }
 
@@ -176,6 +173,9 @@ int Server::acceptConnection(int newsockfd) {
 	if (!searchPlaceForConnection(connection, index))
 		return SRV_ERROR;
 
+	//Creamos el personaje en el mundo
+	model_->crearPersonaje(getInitialX(),getInitialY(),connection.id);
+
 	//Comenzamos enviando la informacion del juego
 	enviarDatosJuego(newsockfd);
 
@@ -206,8 +206,8 @@ int Server::acceptConnection(int newsockfd) {
 
 /**
  * Buscamos si existe lugar disponible para una nueva conexion:
- * Si la cantidad de conexiones es mayor o igual al limite,
- * buscamos si existe algun usuario inactivo, y utilizamos ese lugar
+ * Si la cantidad de conexiones es mayor o igual al limite, se rechaza la nueva conexion.
+ * Si el usuario ya estuvo conectado pero se encontraba inacctivo, se reestablece la conexion
  */
 bool Server::searchPlaceForConnection(connection_t conn, unsigned int &index) {
 
@@ -231,9 +231,7 @@ bool Server::searchPlaceForConnection(connection_t conn, unsigned int &index) {
 				Log::instance()->append(msg, Log::WARNING);
 				return false;
 			}
-
 		}
-
 	}
 
 	//Validamos si existe lugar suficiente
@@ -306,7 +304,7 @@ void Server::recibirDelCliente(connection_t conn) {
 
 		if (recvall(conn.socket, data, &size) <= 0) {
 
-			//Si no el cliente se desconecta, lo desactivamos
+			//Si el cliente se desconecta, lo desactivamos
 			msg = "No se pueden recibir datos de la conexion ";
 			msg += conn.id;
 			Log::instance()->append(msg, Log::WARNING);
@@ -360,10 +358,19 @@ void Server::enviarAlCliente(connection_t conn,
  * Metodo encargado de hacer el step del gameloop
  */
 void Server::step() {
-	receivedData_t* event;
-	shared_rcv_queue_->wait_and_pop(event);
-//process(data)
+	receivedData_t* data;
+	shared_rcv_queue_->wait_and_pop(data);
 
+	//Get the character
+	Personaje* personaje = model_->getPersonaje(data->id);
+	if (!personaje)
+		Log::instance()->append("No se puede mapear el personaje con uno del juego", Log::WARNING);
+
+	//Process the events
+	personaje->handleInput(data->keycode_1,data->type_1);
+	personaje->handleInput(data->keycode_2,data->type_2);
+
+	//process(data)
 	model_->step();
 }
 
@@ -431,4 +438,16 @@ int Server::recvall(int s, void *data, int *len) {
 	}
 
 	return n == -1 || n == 0 ? -1 : 0; 	// return -1 on failure, 0 on success
+}
+
+float Server::getInitialX(){
+	float LO = -model_->getAnchoUn()/2 	+1;
+	float HI = model_->getAnchoUn()/2 	-1;
+
+	//This will generate a number from some arbitrary LO to some arbitrary HI
+	return (LO + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(HI-LO))));
+}
+
+float Server::getInitialY(){
+	return 0.0;
 }

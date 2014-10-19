@@ -47,18 +47,20 @@ public:
 	//Devuelve una instancia al personaje del juego
 	std::list<Personaje*>* getPersonajes();
 
-	bool crearPersonaje(float x, float y,char id[]);
+	bool crearPersonaje(float x, float y,conn_id id);
 
 	b2World* getWorld();
-
-
 
 	unsigned int getCantObjDinamicos();
 	unsigned int getCantObjEstaticos();
 	objEstatico_t* getObjetosEstaticos();
 	objDinamico_t* getObjetosDinamicos();
 
+	Personaje* getPersonaje(conn_id id);
+
 	void step();
+
+	float getAnchoUn();
 
 private:
 
@@ -72,6 +74,9 @@ private:
 	std::vector<Figura*>* figurasDinamicas_;
 	std::list<Muro*>* muros_;
 	std::list<Personaje*>* personajes_;
+
+	float ancho_un;
+	float alto_un;
 };
 
 #endif /* ESCENARIO_H_ */

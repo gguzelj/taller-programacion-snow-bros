@@ -3,6 +3,8 @@
 Escenario::Escenario(JsonParser *parser) {
 	// Define the gravity vector and then create an instance of b2world
 	b2Vec2 gravity(0.0f, parser->getGravedad());
+	ancho_un = parser->getAnchoUnEscenario();
+	alto_un = parser->getAltoUnEscenario();
 	world_ = new b2World(gravity);
 	figuras_ = new std::list<Figura*>;
 	figurasEstaticas_ = new std::vector<Figura*>;
@@ -102,15 +104,13 @@ std::list<Personaje*>* Escenario::getPersonajes() {
 
 
 
-bool Escenario::crearPersonaje(float x, float y,char id[]){
+bool Escenario::crearPersonaje(float x, float y,conn_id id){
 	Personaje* nuevoPersonaje = new Personaje(x,y,id,world_);
 	if(!nuevoPersonaje)
 		return false;
 	personajes_->push_back(nuevoPersonaje);
 	return true;
 }
-
-
 
 void acomodarEstadoPersonaje(Personaje* personaje){
 
@@ -137,20 +137,13 @@ void acomodarEstadoPersonaje(Personaje* personaje){
 
 }
 
-
-
 void Escenario::step() {
 
-	list<Personaje*>::iterator iterador;
-	iterador = personajes_->begin();
-	while( iterador != personajes_->end())
-	{
-		acomodarEstadoPersonaje(*iterador);
-		iterador++;
+	for(auto& personaje: personajes_){
+		acomodarEstadoPersonaje(*personaje);
 	}
 
 	getWorld()->Step(timeStep, velocityIterations, positionIterations);
-
 }
 
 unsigned int Escenario::getCantObjDinamicos() {
@@ -209,4 +202,17 @@ objDinamico_t* Escenario::getObjetosDinamicos() {
 
 	return obj;
 
+}
+
+Personaje* Escenario::getPersonaje(conn_id id){
+	for (auto& personaje: personajes_){
+		if (personaje->id == id)
+			return personaje;
+	}
+
+	return nullptr;
+}
+
+float Escenario::getAnchoUn(){
+	return this->ancho_un;
 }

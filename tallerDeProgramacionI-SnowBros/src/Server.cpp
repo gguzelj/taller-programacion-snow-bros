@@ -366,7 +366,6 @@ void Server::recibirDelCliente(connection_t conn) {
 	while (true) {
 
 		receivedData_t* data = (receivedData_t*) malloc(size);
-
 		if (recvall(conn.socket, data, &size) != 0) {
 
 			//Si el cliente se desconecta, lo desactivamos
@@ -376,8 +375,9 @@ void Server::recibirDelCliente(connection_t conn) {
 
 			conn.activa = false;
 			return;
-
 		}
+
+		data->id = conn.id;
 
 		// Al hacer push se notifica al step mediante una condition_variable
 		//que tiene data para procesar

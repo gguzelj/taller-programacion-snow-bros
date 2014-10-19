@@ -1,7 +1,7 @@
 #include "../../../headers/Modelo/Objetos/Personaje.h"
 #define ORIENTACION_INICIAL 'l'
 
-Personaje::Personaje(float x, float y,char id[], b2World* world){
+Personaje::Personaje(float x, float y,conn_id id, b2World* world){
 	//Parametros generales
 	this->jumpCooldown = 0;
 	this->world = world;

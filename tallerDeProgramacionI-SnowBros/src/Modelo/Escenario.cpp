@@ -3,6 +3,8 @@
 Escenario::Escenario(JsonParser *parser) {
 	// Define the gravity vector and then create an instance of b2world
 	b2Vec2 gravity(0.0f, parser->getGravedad());
+	ancho_un = parser->getAnchoUnEscenario();
+	alto_un = parser->getAltoUnEscenario();
 	world_ = new b2World(gravity);
 	figuras_ = new std::list<Figura*>;
 	figurasEstaticas_ = new std::vector<Figura*>;
@@ -102,15 +104,13 @@ std::list<Personaje*>* Escenario::getPersonajes() {
 
 
 
-bool Escenario::crearPersonaje(float x, float y,char id[]){
+bool Escenario::crearPersonaje(float x, float y,conn_id id){
 	Personaje* nuevoPersonaje = new Personaje(x,y,id,world_);
 	if(!nuevoPersonaje)
 		return false;
 	personajes_->push_back(nuevoPersonaje);
 	return true;
 }
-
-
 
 void acomodarEstadoPersonaje(Personaje* personaje){
 
@@ -137,20 +137,12 @@ void acomodarEstadoPersonaje(Personaje* personaje){
 
 }
 
-
-
 void Escenario::step() {
-
-	list<Personaje*>::iterator iterador;
-	iterador = personajes_->begin();
-	while( iterador != personajes_->end())
-	{
-		acomodarEstadoPersonaje(*iterador);
-		iterador++;
+	for(auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje){
+		acomodarEstadoPersonaje(*personaje);
 	}
 
 	getWorld()->Step(timeStep, velocityIterations, positionIterations);
-
 }
 
 unsigned int Escenario::getCantObjDinamicos() {
@@ -160,6 +152,77 @@ unsigned int Escenario::getCantObjDinamicos() {
 unsigned int Escenario::getCantObjEstaticos() {
 	return figurasEstaticas_->size();
 }
+
+
+
+
+void obtenerAltoAnchoFigura(Figura* figura,float &alto, float &ancho){
+
+	if(figura->type == "rectangulo"){
+		Rectangulo* rect = static_cast<Rectangulo *> (figura);
+		alto = rect->getAlto();
+		ancho = rect->getAncho();
+		return;
+	}
+	if(figura->type =="circulo"){
+		Circulo* circ = static_cast<Circulo *> (figura);
+		alto = circ->getRadio() * 2;
+		ancho = alto;
+		return;
+	}
+
+	if(figura->type == "poligono"){
+		Poligono* polygon = static_cast<Poligono *> (figura);
+		float escala = polygon->getEscala();
+		int lados = polygon->getLados();
+
+
+
+		if(lados == 3){
+
+			ancho = 1.732050808*escala;
+			alto = escala*3/2;
+			return;
+		}
+
+		if (lados == 4){
+
+			ancho = 2* escala;
+			alto = ancho;
+			return;
+		}
+
+		if(lados == 5){
+
+			ancho = (2*escala*sin(M_PI/5)*(1+2*cos(72*DEGTORAD)));
+			alto = escala*(1+cos(M_PI/5));
+			return;
+		}
+		if(lados == 6){
+			ancho = 2*escala*cos(M_PI/6);
+			alto = 2*escala;
+		}
+	}
+
+	if(figura->type == "trapecio"){
+		Trapecio* trap = static_cast<Trapecio *> (figura);
+		ancho = trap->getBaseMayor();
+		alto = trap->getAlto();
+		return;
+	}
+
+	if(figura->type == "paralelogramo"){
+		Paralelogramo* paralelogramo = static_cast<Paralelogramo *> (figura);
+
+		ancho = paralelogramo->getAncho();
+		alto = paralelogramo->getAlto();
+		return;
+	}
+
+}
+
+
+
 
 /**
  * Devolvemos un vector con objetos Estaticos
@@ -175,8 +238,8 @@ objEstatico_t* Escenario::getObjetosEstaticos() {
 
 		fig = (*figurasEstaticas_)[i];
 
-		obj[i].alto = 9;
-		obj[i].ancho = 9;
+		obtenerAltoAnchoFigura(fig,obj[i].alto,obj[i].ancho);
+
 		obj[i].rotacion = fig->getAngulo();
 		obj[i].centro.x = fig->x;
 		obj[i].centro.y = fig->y;
@@ -185,6 +248,7 @@ objEstatico_t* Escenario::getObjetosEstaticos() {
 	return obj;
 
 }
+
 
 /**
  * Devolvemos un vector con objetos dinamicos
@@ -200,8 +264,8 @@ objDinamico_t* Escenario::getObjetosDinamicos() {
 
 		fig = (*figurasDinamicas_)[i];
 
-		obj[i].alto = 9;
-		obj[i].ancho = 9;
+		obtenerAltoAnchoFigura(fig,obj[i].alto,obj[i].ancho);
+
 		obj[i].rotacion = fig->getAngulo();
 		obj[i].centro.x = fig->x;
 		obj[i].centro.y = fig->y;
@@ -209,4 +273,17 @@ objDinamico_t* Escenario::getObjetosDinamicos() {
 
 	return obj;
 
+}
+
+Personaje* Escenario::getPersonaje(conn_id id){
+	for(auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje){
+		if ((*personaje)->id == id)
+			return *personaje;
+	}
+
+	return nullptr;
+}
+
+float Escenario::getAnchoUn(){
+	return this->ancho_un;
 }

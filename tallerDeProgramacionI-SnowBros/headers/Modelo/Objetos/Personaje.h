@@ -11,6 +11,8 @@
 #define IZQUIERDA 'l'
 #define DERECHA 'r'
 
+typedef char conn_id[20];
+
 class Personaje : public Figura{
 	private:
 		b2Vec2 posicion;
@@ -30,7 +32,7 @@ class Personaje : public Figura{
 		static WalkingState walking;
 		static StandByState standby;
 		PersonajeState* state;
-		char id[20];
+		conn_id id;
 
 		Personaje(float x, float y,char id[], b2World* world);
 		~Personaje();   //Destructor del personaje

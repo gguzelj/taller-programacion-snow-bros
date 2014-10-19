@@ -39,8 +39,11 @@
 #define COTA_ESPERA 10000
 
 typedef struct receivedData{
-	std::string username;
-	//SDL_Event event;
+	conn_id id;
+	int keycode_1;
+	int keycode_2;
+	unsigned int type_1;
+	unsigned int type_2;
 } receivedData_t;
 
 typedef struct firstConnectionDetails{
@@ -180,6 +183,12 @@ private:
 	 * Metodo para Validar parametros con los que se ejecuta el server
 	 */
 	int validateParameters(int argc, char *argv[]);
+
+	/*
+	 * Seleccionan aleatoriamente las coordenadas iniciales de los personajes, evitando que se interpongan con otros
+	 */
+	float getInitialX();
+	float getInitialY();
 };
 
 #endif /* SERVER_H_ */

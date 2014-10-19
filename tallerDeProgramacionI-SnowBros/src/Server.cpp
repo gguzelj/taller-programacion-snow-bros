@@ -209,27 +209,30 @@ bool Server::searchPlaceForConnection(connection_t conn, unsigned int &index) {
 
 	std::string msg;
 
-//El primer paso consta en buscar alguna conexion con el mismo ID
+	//El primer paso consta en buscar alguna conexion con el mismo ID
 	for (unsigned int i = 0; i < connections_.size(); i++) {
 
-		//Si encontramos una conexion, la activamos
+		//Si encontramos una conexion inactiva con el mismo id, la activamos
 		if (connections_[i].id == conn.id) {
-
-			index = i;
-			connections_[i].activa = true;
-
-			msg = "Ya existe una conexion inactiva para el ID ";
-			msg += conn.id;
-			msg += ". Se reactiva";
-			Log::instance()->append(msg, Log::INFO);
-
-			return true;
+			if (connections_[i].activa == false) {
+				msg = "Ya existe una conexion inactiva para el ID ";
+				msg += conn.id;
+				msg += ". Se reactiva";
+				Log::instance()->append(msg, Log::INFO);
+				connections_[i].activa = true;
+				return true;
+			} else {
+				msg = "Ya existe una conexion activa para el ID ";
+				msg += conn.id;
+				Log::instance()->append(msg, Log::WARNING);
+				return false;
+			}
 
 		}
 
 	}
 
-//Validamos si existe lugar suficiente
+	//Validamos si existe lugar suficiente
 	if (connections_.size() < BACKLOG) {
 
 		index = connections_.size();

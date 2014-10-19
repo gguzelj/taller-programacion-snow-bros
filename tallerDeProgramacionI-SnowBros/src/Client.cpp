@@ -67,7 +67,7 @@ int Client::run(){
 	while(running_){
 
 		//Update the view
-		//onRender();	ya no se estaria utilizando
+		onRender(shared_rcv_queue_->wait_and_pop());
 
 		SDL_Delay(1);
 	}
@@ -139,16 +139,16 @@ void Client::enviarAlServer(){
 }
 
 void Client::recibirDelServer(){
-	//Es correcto hacer esto mismo que se hace al enviar, pero aca al recibir. O lo tengo que hacer con el valor que tira recvall?
-	int size = sizeof(Escenario);
-	Escenario* escenario = (Escenario*) malloc(size);
+
+	int size = sizeof(receivedData_t);
+	receivedData_t* data = (receivedData_t*) malloc(size);
 
 	while(running_){
 		//Voy reciviendo las cosas del servidor
-		if(recvall(sock, escenario, &size) == -1){
+		if(recvall(sock, data, &size) == -1){
 			Log::instance()->append(CLIENT_MSG_ERROR_WHEN_RECEIVING,Log::ERROR);
 		}
-		else onRender(escenario);
+		shared_rcv_queue_->push(data);
 	}
 }
 
@@ -159,9 +159,7 @@ void Client::onEvent(dataToSend_t* data,int sock, int* size){
 	}
 }
 
-void Client::onRender(Escenario* model_){
-	//TODO lo mismo de antes pero lo remarco. Agregar el struct del escenario.
-	//viene de la llamada de recibirDelServer
+void Client::onRender(receivedData_t* model_){
 	view_->updateView(model_);
 }
 

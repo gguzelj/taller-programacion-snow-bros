@@ -21,14 +21,16 @@ const float factor = 0.005;
 const float rotation = 0.0;
 const int smoothing_off = 0;
 
-
+typedef struct receivedData{
+	//TODO ponerse de acuerdo en esto.
+}receivedData_t;
 
 class Drawer{
 public:
 	Drawer();
 	~Drawer();
 
-	void updateView(Escenario* model_);
+	void updateView(receivedData_t* model_);
 	void inicializarCamara(Personaje* personaje);
 	//Zooms in in a factor of 1.01x
 	void zoomIn();
@@ -42,8 +44,8 @@ private:
 	SDL_Window *window;
 	SDL_Texture *image;
 	SDL_Texture* imagenPersonaje;
-	SDL_Surface* messageAboutPoints;
-	SDL_Surface* messageAboutLifes;
+	SDL_Texture* messageAboutPoints;
+	SDL_Texture* messageAboutLifes;
 	SDL_Rect camera;
 	SDL_Rect coordRel;
 	TTF_Font* fontToBeUsed;
@@ -83,6 +85,7 @@ private:
 
 	//Private Methods
 	//General purpose methods
+	void loadFont();
 	bool loadMedia();
 	void runWindow(int ancho_px ,int alto_px ,string imagePath);
 	void actualizarCamara(Personaje* personaje);

@@ -11,12 +11,13 @@
 #include <sys/wait.h>
 #include <signal.h>
 
+#include "threadsafe_queue.cpp"
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "Controlador/Controlador.h"
 #include "Vista/Drawer.h"
 #include "Log/Log.h"
-#include "threadsafe_queue.cpp"
 
 #define CLIENT_OK		0
 #define CLIENT_ERROR	1
@@ -40,10 +41,6 @@ const int32 velocityIterations = 32;   //how strongly to correct velocity
 const int32 positionIterations = 64;   //how strongly to correct position}
 
 using namespace std;
-
-typedef struct receivedData{
-	//TODO ponerse de acuerdo en esto.
-}receivedData_t;
 
 class Client{
 public:
@@ -110,7 +107,7 @@ private:
 	 * Maneja aquello relacionado con lo que se tiene que dibujar en la pantalla, para luego mostrarlo.
 	 * Sería la parte de "Vista" del patron MVC
 	 */
-	void onRender(Escenario* escenario);
+	void onRender(receivedData* data);
 
 	/*
 	 * Libera todos los recursos cargados en memoria

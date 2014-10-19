@@ -64,6 +64,7 @@ int Client::run() {
 		return CLIENT_ERROR;
 
 	initialize();
+
 	sendTh = std::thread(&Client::enviarAlServer, this);
 	recvTh = std::thread(&Client::recibirDelServer, this);
 
@@ -147,7 +148,11 @@ int Client::initialize() {
 
 	//Recibo la aprobacion de si entro o no.
 	size = sizeof(int);
-	recvall(sock, &entro, &size);
+	if (recvall(sock, &entro, &size) != 0) {
+		Log::instance()->append("Error al escribir al servidor", Log::ERROR);
+		return CLIENT_ERROR;
+	}
+
 	if (entro == SRV_ERROR) {
 		Log::instance()->append("El servidor rechazo la conexion", Log::ERROR);
 		return CLIENT_ERROR;
@@ -157,51 +162,48 @@ int Client::initialize() {
 
 	//Recibimos la cantidad de objetos creados en el juego
 	size = sizeof(firstConnectionDetails_t);
-	if (recvall(sock, &datos, &size) <= 0) {
+	if (recvall(sock, &datos, &size) != 0) {
 		Log::instance()->append("No se pueden recibir datos", Log::WARNING);
 		return CLIENT_ERROR;
 	}
 
-	msg = "El cliente envio ";
-	msg += datos.cantObjDinamicos + " objetos dinamicos y ";
-	msg += datos.cantObjEstaticos + " objetos estaticos.";
-	Log::instance()->append(msg, Log::INFO);
-
 	//Recibimos la lista de objetos Estaticos
 	size = sizeof(objEstatico_t) * datos.cantObjEstaticos;
 	objetosEstaticos = (objEstatico_t*) malloc(size);
-	if (recvall(sock, objetosEstaticos, &size) <= 0) {
+	if (recvall(sock, objetosEstaticos, &size) != 0) {
 		Log::instance()->append("No se pueden recibir datos", Log::WARNING);
 	}
 
 	//Recibimos la lista de objetos Dinamicos
 	size = sizeof(objDinamico_t) * datos.cantObjDinamicos;
 	objetosDinamicos = (objDinamico_t*) malloc(size);
-	if (recvall(sock, objetosDinamicos, &size) <= 0) {
+	if (recvall(sock, objetosDinamicos, &size) != 0) {
 		Log::instance()->append("No se pueden recibir datos", Log::WARNING);
 	}
 
-	Log::instance()->append("Estos son los objetos Estaticos:", Log::INFO);
+
+	std::cout << "Recibimos " << datos.cantObjDinamicos << " obj Din y ";
+	std::cout << datos.cantObjEstaticos << " obj Estaticos" << std::endl;
+
+	std::cout << "Estos son los objetos Estaticos" << std::endl;
 	for (unsigned int i = 0; i < datos.cantObjEstaticos; i++) {
 
-		msg = "Alto: ";
-		msg += objetosEstaticos[i].alto;
-		msg += "/n Ancho: ";
-		msg += objetosEstaticos[i].ancho;
-
-		Log::instance()->append(msg, Log::INFO);
+		std::cout << "alto: " << objetosEstaticos[i].alto << std::endl;
+		std::cout << "ancho: " << objetosEstaticos[i].ancho << std::endl;
+		std::cout << "rotacion: " << objetosEstaticos[i].rotacion << std::endl;
+		std::cout << "centrox: " << objetosEstaticos[i].centro.x << std::endl;
+		std::cout << "centroy: " << objetosEstaticos[i].centro.y << std::endl;
 
 	}
 
-	Log::instance()->append("Estos son los objetos Dinamicos:", Log::INFO);
+	std::cout << std::endl << "Estos son los objetos Dinamicos" << std::endl;
 	for (unsigned int i = 0; i < datos.cantObjDinamicos; i++) {
 
-		msg = "Alto: ";
-		msg += objetosDinamicos[i].alto;
-		msg += "/n Ancho: ";
-		msg += objetosDinamicos[i].ancho;
-
-		Log::instance()->append(msg, Log::INFO);
+		std::cout << "alto: " << objetosDinamicos[i].alto << std::endl;
+		std::cout << "ancho: " << objetosDinamicos[i].ancho << std::endl;
+		std::cout << "rotacion: " << objetosDinamicos[i].rotacion << std::endl;
+		std::cout << "centrox: " << objetosDinamicos[i].centro.x << std::endl;
+		std::cout << "centroy: " << objetosDinamicos[i].centro.y << std::endl;
 
 	}
 	return CLIENT_OK;
@@ -276,33 +278,12 @@ bool Client::validateParameters(int argc, char* argv[]) {
 	return CLIENT_OK;
 }
 
-int Client::recvall(int s, void *data, int *len) {
-
-	int total = 0;                  // how many bytes we've sent
-	int bytesleft = *len;   // how many we have left to send
-	int n;
-
-	receivedData_t* original = (receivedData_t*) malloc(sizeof(receivedData_t));
-	memcpy(original, data, sizeof(receivedData_t));
-
-	while (total < *len) {
-		n = recv(s, original + total, bytesleft, 0);
-		if (n == -1 || n == 0) {
-			break;
-		}
-		total += n;
-		bytesleft -= n;
-	}
-
-	memcpy(data, original, sizeof(receivedData_t));
-	free(original);
-	*len = total;                            // return number actually sent here
-	return n == -1 || n == 0 ? -1 : 0;     // return -1 on failure, 0 on success
-}
-
-int Client::sendall(int s, void *data, int *len) {
-	int total = 0;                  // how many bytes we've sent
-	int bytesleft = *len;   // how many we have left to send
+/**
+ * Metodo encargado de hacer el envio de informacion
+ */
+int Client::sendall(int s, void* data, int* len) {
+	int total = 0; 			// how many bytes we've sent
+	int bytesleft = *len; 	// how many we have left to send
 	int n;
 	while (total < *len) {
 		n = send(s, data + total, bytesleft, 0);
@@ -312,6 +293,27 @@ int Client::sendall(int s, void *data, int *len) {
 		total += n;
 		bytesleft -= n;
 	}
-	*len = total;                   // return number actually sent here
-	return n == -1 ? -1 : 0;               // return -1 on failure, 0 on success
+	*len = total;      		// return number actually sent here
+	return n == -1 ? -1 : 0; 		// return -1 on failure, 0 on success
+}
+
+/**
+ * Metodo encargado de recibir la informacion
+ */
+int Client::recvall(int s, void *data, int *len) {
+
+	int total = 0; 			// how many bytes we've recieve
+	int bytesleft = *len; 	// how many we have left to recieve
+	int n;
+
+	while (total < *len) {
+		n = recv(s, data + total, bytesleft, 0);
+		if (n == -1 || n == 0) {
+			break;
+		}
+		total += n;
+		bytesleft -= n;
+	}
+
+	return n == -1 || n == 0 ? -1 : 0; 	// return -1 on failure, 0 on success
 }

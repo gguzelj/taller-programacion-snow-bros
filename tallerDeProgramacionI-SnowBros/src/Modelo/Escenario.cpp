@@ -138,8 +138,7 @@ void acomodarEstadoPersonaje(Personaje* personaje){
 }
 
 void Escenario::step() {
-
-	for(auto& personaje: personajes_){
+	for(auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje){
 		acomodarEstadoPersonaje(*personaje);
 	}
 
@@ -205,9 +204,9 @@ objDinamico_t* Escenario::getObjetosDinamicos() {
 }
 
 Personaje* Escenario::getPersonaje(conn_id id){
-	for (auto& personaje: personajes_){
-		if (personaje->id == id)
-			return personaje;
+	for(auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje){
+		if ((*personaje)->id == id)
+			return *personaje;
 	}
 
 	return nullptr;

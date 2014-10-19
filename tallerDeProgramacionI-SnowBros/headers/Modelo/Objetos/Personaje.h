@@ -11,6 +11,8 @@
 #define IZQUIERDA 'l'
 #define DERECHA 'r'
 
+typedef char conn_id[20];
+
 class Personaje : public Figura{
 	private:
 		b2Vec2 posicion;

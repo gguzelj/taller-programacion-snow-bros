@@ -15,7 +15,7 @@
 #include "Objetos/Muro.h"
 #include "../Exceptions/ErrorTipoDeObjeto.h"
 
-
+typedef char conn_id[20];
 typedef struct punto{
 	float x;
 	float y;

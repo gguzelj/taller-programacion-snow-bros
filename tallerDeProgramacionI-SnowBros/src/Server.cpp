@@ -174,7 +174,11 @@ int Server::acceptConnection(int newsockfd) {
 		return SRV_ERROR;
 
 	//Creamos el personaje en el mundo
-	model_->crearPersonaje(getInitialX(),getInitialY(),connection.id);
+	float xIni = getInitialX();
+	float yIni = getInitialY();
+	model_->crearPersonaje(xIni,yIni,connection.id);
+	msg = "Se agrego al personaje en la posicion" + to_string(xIni) + " ; " + to_string(yIni);
+	Log::instance()->append(msg, Log::INFO);
 
 	//Comenzamos enviando la informacion del juego
 	enviarDatosJuego(newsockfd);

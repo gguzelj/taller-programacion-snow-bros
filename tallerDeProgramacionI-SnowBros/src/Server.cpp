@@ -376,7 +376,6 @@ void Server::recibirDelCliente(connection_t conn) {
 			conn.activa = false;
 			return;
 		}
-
 		data->id = conn.id;
 
 		// Al hacer push se notifica al step mediante una condition_variable
@@ -385,11 +384,16 @@ void Server::recibirDelCliente(connection_t conn) {
 	}
 }
 
+
+
 void Server::prepararEnvio() {
-	dataToSend_t dataToBeSent;
+	dataToSend_t dataToBeSent ;
 //
 // Crea el struct y lo adapta a lo que hay que mandar
 //
+	dataToBeSent.dinamicos = model_->getObjetosDinamicos();
+	dataToBeSent.personajes = model_->getPersonajesParaEnvio();
+
 // Inserta el dato a mandar en la cola de envios de cada thread
 	for (unsigned int i = 0; i < connections_.size(); i++) {
 
@@ -410,12 +414,29 @@ void Server::enviarAlCliente(connection_t conn,
 	while (true) {
 		dataToSend_t dataToBeSent;
 		personal_queue->wait_and_pop(dataToBeSent);
-		int size = sizeof(dataToSend_t);
 
-		if (sendall(conn.socket, &dataToBeSent, &size) != 0) {
-			std::cout << "No pude enviar. Client disconnected from server";
+		int sizeDinamicos = sizeof(objDinamico_t)* model_->getCantObjDinamicos();
+		int sizePersonajes = sizeof(personaje_t) * model_->getCantPersonajes() ;
+
+		if (sendall(conn.socket, dataToBeSent.dinamicos, &sizeDinamicos) != 0) {
+			std::cout << "No pude enviar objetos Dinamicos. Client disconnected from server";
 			throw;
 		}
+
+		if (sendall(conn.socket, dataToBeSent.personajes, &sizePersonajes) != 0) {
+					std::cout << "No pude enviar personajes. Client disconnected from server";
+					throw;
+		}
+
+		//libero la memoria
+		for (int i = 0; i < sizeDinamicos ; i++) {
+			free(&((dataToBeSent.dinamicos)[i]));
+		}
+		for(int j =0 ; j<sizePersonajes; j++){
+			free(&((dataToBeSent.personajes)[j]));
+		}
+
+
 	}
 }
 

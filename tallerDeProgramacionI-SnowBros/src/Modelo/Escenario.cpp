@@ -156,18 +156,20 @@ unsigned int Escenario::getCantObjEstaticos() {
 
 
 
-void obtenerAltoAnchoFigura(Figura* figura,float &alto, float &ancho){
+void obtenerAltoAnchoIdFigura(Figura* figura,float &alto, float &ancho,char& id){
 
 	if(figura->type == "rectangulo"){
 		Rectangulo* rect = static_cast<Rectangulo *> (figura);
 		alto = rect->getAlto();
 		ancho = rect->getAncho();
+		id = RECTANGULO_CODE;
 		return;
 	}
 	if(figura->type =="circulo"){
 		Circulo* circ = static_cast<Circulo *> (figura);
 		alto = circ->getRadio() * 2;
 		ancho = alto;
+		id = CIRCULO_CODE;
 		return;
 	}
 
@@ -182,6 +184,7 @@ void obtenerAltoAnchoFigura(Figura* figura,float &alto, float &ancho){
 
 			ancho = 1.732050808*escala;
 			alto = escala*3/2;
+			id = TRIANGULO_CODE;
 			return;
 		}
 
@@ -189,6 +192,7 @@ void obtenerAltoAnchoFigura(Figura* figura,float &alto, float &ancho){
 
 			ancho = 2* escala;
 			alto = ancho;
+			id = CUADRADO_CODE;
 			return;
 		}
 
@@ -196,11 +200,14 @@ void obtenerAltoAnchoFigura(Figura* figura,float &alto, float &ancho){
 
 			ancho = (2*escala*sin(M_PI/5)*(1+2*cos(72*DEGTORAD)));
 			alto = escala*(1+cos(M_PI/5));
+			id = PENTAGONO_CODE;
 			return;
 		}
 		if(lados == 6){
 			ancho = 2*escala*cos(M_PI/6);
 			alto = 2*escala;
+			id = HEXAGONO_CODE;
+			return;
 		}
 	}
 
@@ -208,6 +215,7 @@ void obtenerAltoAnchoFigura(Figura* figura,float &alto, float &ancho){
 		Trapecio* trap = static_cast<Trapecio *> (figura);
 		ancho = trap->getBaseMayor();
 		alto = trap->getAlto();
+		id = TRAPECIO_CODE;
 		return;
 	}
 
@@ -216,6 +224,7 @@ void obtenerAltoAnchoFigura(Figura* figura,float &alto, float &ancho){
 
 		ancho = paralelogramo->getAncho();
 		alto = paralelogramo->getAlto();
+		id = PARALELOGRAMO_CODE;
 		return;
 	}
 
@@ -238,7 +247,7 @@ objEstatico_t* Escenario::getObjetosEstaticos() {
 
 		fig = (*figurasEstaticas_)[i];
 
-		obtenerAltoAnchoFigura(fig,obj[i].alto,obj[i].ancho);
+		obtenerAltoAnchoIdFigura(fig,obj[i].alto,obj[i].ancho,obj[i].id);
 
 		obj[i].rotacion = fig->getAngulo();
 		obj[i].centro.x = fig->x;
@@ -248,6 +257,8 @@ objEstatico_t* Escenario::getObjetosEstaticos() {
 	return obj;
 
 }
+
+
 
 
 /**
@@ -264,7 +275,7 @@ objDinamico_t* Escenario::getObjetosDinamicos() {
 
 		fig = (*figurasDinamicas_)[i];
 
-		obtenerAltoAnchoFigura(fig,obj[i].alto,obj[i].ancho);
+		obtenerAltoAnchoIdFigura(fig,obj[i].alto,obj[i].ancho,obj[i].id);
 
 		obj[i].rotacion = fig->getAngulo();
 		obj[i].centro.x = fig->x;
@@ -274,6 +285,26 @@ objDinamico_t* Escenario::getObjetosDinamicos() {
 	return obj;
 
 }
+
+unsigned int Escenario::getCantPersonajes(){
+	return sizeof(this->getPersonajes());
+}
+
+
+personaje_t* Escenario::getPersonajesParaEnvio(){
+	personaje_t* pers =(personaje_t*) malloc( sizeof(personaje_t)* personajes_->size() );
+	int i = 0;
+	for(auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje){
+		pers[i].alto = (*personaje)->getAlto();
+		pers[i].ancho = (*personaje)->getAlto();
+		strcpy(pers[i].id,(*personaje)->id);
+		pers[i].orientacion = (*personaje)->getOrientacion();
+		pers[i].estado = (*personaje)->state->getCode();
+	}
+	return pers;
+}
+
+
 
 Personaje* Escenario::getPersonaje(conn_id id){
 	for(auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje){

@@ -3,6 +3,8 @@
 
 #include "Figura.h"
 
+
+
 class Paralelogramo : public Figura{
 private:
 	float ancho;

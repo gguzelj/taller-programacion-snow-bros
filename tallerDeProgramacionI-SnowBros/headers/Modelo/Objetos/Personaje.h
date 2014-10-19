@@ -25,6 +25,8 @@ class Personaje : public Figura{
 		int aceleracion;
 		char orientacion;
 		int jumpCooldown;
+		float ancho;
+		float alto;
 
 	public:
 		static JumpingState jumping;
@@ -43,6 +45,12 @@ class Personaje : public Figura{
 
 		float getX();
 		float getY();
+		float getAncho(){
+			return ancho;
+		}
+		float getAlto(){
+			return alto;
+		}
 		b2Vec2 getVelocity();
 		int getCantidadDeContactosActuales();
 		char getOrientacion();

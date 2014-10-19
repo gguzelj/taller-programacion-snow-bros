@@ -1,6 +1,15 @@
 #ifndef ESCENARIO_H_
 #define ESCENARIO_H_
 
+#define CIRCULO_CODE 'c'
+#define PARALELOGRAMO_CODE 'p'
+#define RECTANGULO_CODE 'r'
+#define TRAPECIO_CODE 't'
+#define TRIANGULO_CODE '3'
+#define CUADRADO_CODE '4'
+#define PENTAGONO_CODE '5'
+#define HEXAGONO_CODE '6'
+
 #include <list>
 #include <vector>
 #include <Box2D/Box2D.h>
@@ -21,8 +30,22 @@ typedef struct punto{
 	float y;
 } punto_t;
 
+
+typedef struct personaje{
+	punto_t centro;
+	char id[20];
+	float ancho;
+	float alto;
+	float rotacion;
+	char estado;
+	char orientacion;
+}personaje_t;
+
+
+
 typedef struct objEstatico{
 	punto_t centro;
+	char id;
 	float ancho;
 	float alto;
 	float rotacion;
@@ -30,6 +53,7 @@ typedef struct objEstatico{
 
 typedef struct objDinamico{
 	punto_t centro;
+	char id;
 	float ancho;
 	float alto;
 	float rotacion;
@@ -53,6 +77,10 @@ public:
 
 	unsigned int getCantObjDinamicos();
 	unsigned int getCantObjEstaticos();
+	unsigned int getCantPersonajes();
+
+	personaje_t* getPersonajesParaEnvio();
+
 	objEstatico_t* getObjetosEstaticos();
 	objDinamico_t* getObjetosDinamicos();
 

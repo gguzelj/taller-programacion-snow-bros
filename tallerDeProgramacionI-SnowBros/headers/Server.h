@@ -52,11 +52,8 @@ typedef struct firstConnectionDetails{
 } firstConnectionDetails_t;
 
 typedef struct dataToSend{
-	std::string object_id;
-	punto_t centro;
-	float ancho;
-	float alto;
-	float rotacion;
+	personaje_t* personajes;
+	objDinamico_t* dinamicos;
 } dataToSend_t;
 
 typedef char conn_id[20];

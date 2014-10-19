@@ -12,6 +12,7 @@ public:
 	~Rectangulo();
 	float getAncho();
 	float getAlto();
+
 };
 
 

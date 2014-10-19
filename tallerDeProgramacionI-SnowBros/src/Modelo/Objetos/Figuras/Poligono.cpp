@@ -51,3 +51,4 @@ int Poligono::getLados(){
 float Poligono::getEscala(){
 	return escala;
 }
+

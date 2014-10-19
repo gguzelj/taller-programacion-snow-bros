@@ -62,6 +62,8 @@ int Server::init(int argc, char *argv[]) {
  */
 int Server::createSocket() {
 
+	Log::instance()->append("Creando Socket", Log::INFO);
+
 	sockfd_ = socket(AF_INET, SOCK_STREAM, 0);
 
 	if (sockfd_ < 0) {
@@ -70,6 +72,7 @@ int Server::createSocket() {
 		return SRV_ERROR;
 	}
 
+	Log::instance()->append("Socket creado!", Log::INFO);
 	return SRV_NO_ERROR;
 }
 
@@ -91,6 +94,7 @@ int Server::bindSocket() {
 		close(sockfd_);
 		return SRV_ERROR;
 	}
+	Log::instance()->append("Socket Bindeado", Log::INFO);
 	return SRV_NO_ERROR;
 }
 
@@ -100,6 +104,8 @@ int Server::bindSocket() {
 void Server::run() {
 
 	listen(sockfd_, BACKLOG);
+
+	Log::instance()->append("Corriendo Juego", Log::INFO);
 
 	//Thread para inicializar las conexiones.
 	//Dentro se inicializan los threads para recepcion y envio
@@ -128,6 +134,9 @@ void Server::newConnectionsManager() {
 	struct sockaddr_in cli_addr;
 	socklen_t clilen = sizeof(cli_addr);
 
+	Log::instance()->append("Corriendo thread para aceptar conexiones",
+			Log::INFO);
+
 	while (acceptNewClients_) {
 
 		//Aceptamos una nueva conexion
@@ -141,7 +150,6 @@ void Server::newConnectionsManager() {
 		//Validamos si es una conexion correcta
 		if (acceptConnection(newsockfd) == SRV_ERROR)
 			continue;
-
 	}
 }
 
@@ -152,6 +160,7 @@ int Server::acceptConnection(int newsockfd) {
 
 	std::string msg;
 	int size = sizeof(conn_id);
+	int aviso;
 	unsigned int index;
 	connection_t connection;
 	Threadsafe_queue<dataToSend_t>* personal_queue;
@@ -159,8 +168,8 @@ int Server::acceptConnection(int newsockfd) {
 	Log::instance()->append("Nuevo cliente conectado!", Log::INFO);
 
 	//Recibimos el id del cliente
-	if (recvall(newsockfd, &connection.id, &size) <= 0) {
-
+	if (recvall(newsockfd, &connection.id, &size) != 0) {
+		perror("Error al leer ID");
 		msg = "No se pudo leer el ID del cliente";
 		Log::instance()->append(msg, Log::ERROR);
 		return SRV_ERROR;
@@ -173,8 +182,23 @@ int Server::acceptConnection(int newsockfd) {
 	//Si no encontramos lugar para guardar el nuevo cliente, lo informamos
 	//Ademas obtenemos en index donde se guarda la conexion, para utilizar
 	//al agregar la personal queue
-	if (!searchPlaceForConnection(connection, index))
+	size = sizeof(int);
+	if (searchPlaceForConnection(connection, index)) {
+
+		aviso = SRV_NO_ERROR;
+		if (sendall(connection.socket, &aviso, &size) != 0) {
+			Log::instance()->append("No se pueden enviar datos", Log::WARNING);
+		}
+
+	} else {
+
+		aviso = SRV_ERROR;
+		if (sendall(connection.socket, &aviso, &size) != 0) {
+			Log::instance()->append("No se pueden enviar datos", Log::WARNING);
+		}
+
 		return SRV_ERROR;
+	}
 
 	//Comenzamos enviando la informacion del juego
 	enviarDatosJuego(newsockfd);
@@ -213,6 +237,10 @@ bool Server::searchPlaceForConnection(connection_t conn, unsigned int &index) {
 
 	std::string msg;
 
+	msg = "Buscamos lugar para la conexion con ID ";
+	msg += conn.id;
+	Log::instance()->append(msg, Log::INFO);
+
 	//El primer paso consta en buscar alguna conexion con el mismo ID
 	for (unsigned int i = 0; i < connections_.size(); i++) {
 
@@ -229,6 +257,7 @@ bool Server::searchPlaceForConnection(connection_t conn, unsigned int &index) {
 				msg = "Ya existe una conexion activa para el ID ";
 				msg += conn.id;
 				Log::instance()->append(msg, Log::WARNING);
+
 				return false;
 			}
 
@@ -263,30 +292,61 @@ bool Server::searchPlaceForConnection(connection_t conn, unsigned int &index) {
  */
 void Server::enviarDatosJuego(int sockfd) {
 
+	std::string msg;
 	int size;
 	firstConnectionDetails_t datos;
 
-	//El primer paso es enviar la cantidad de objetos creados en el juego
+	Log::instance()->append("Enviamos la cantidad de objetos creados", Log::INFO);
+
+	//Enviamos la cantidad de objetos creados en el juego
 	datos.cantObjDinamicos = model_->getCantObjDinamicos();
 	datos.cantObjEstaticos = model_->getCantObjEstaticos();
 
-	size = sizeof(datos);
-	if (sendall(sockfd, &datos, &size) <= 0) {
-		Log::instance()->append("No se pueden enviar datos", Log::WARNING);
+	size = sizeof(firstConnectionDetails_t);
+	if (sendall(sockfd, &datos, &size) != 0) {
+		Log::instance()->append("No se pueden enviar datos", Log::INFO);
 	}
 
+	std::cout << "enviamos " << datos.cantObjDinamicos << " obj Din y ";
+	std::cout << datos.cantObjEstaticos << " obj Estaticos" << std::endl;
+
+
+	Log::instance()->append("Enviamos la lista de obj Estaticos", Log::INFO);
 	//Enviamos la lista de objetos Estaticos
 	size = sizeof(objEstatico_t) * model_->getCantObjEstaticos();
 	objEstatico_t *objetosEstaticos = model_->getObjetosEstaticos();
-	if (sendall(sockfd, objetosEstaticos, &size) <= 0) {
+	if (sendall(sockfd, objetosEstaticos, &size) != 0) {
 		Log::instance()->append("No se pueden enviar datos", Log::WARNING);
 	}
 
+	Log::instance()->append("Enviamos la lista de obj Dinamicos", Log::INFO);
 	//Enviamos la lista de los objetos Dinamicos
 	size = sizeof(objDinamico_t) * model_->getCantObjDinamicos();
 	objDinamico_t *objetosDinamicos = model_->getObjetosDinamicos();
-	if (sendall(sockfd, objetosDinamicos, &size) <= 0) {
+	if (sendall(sockfd, objetosDinamicos, &size) != 0) {
 		Log::instance()->append("No se pueden enviar datos", Log::WARNING);
+	}
+
+	std::cout << "Estos son los objetos Estaticos" << std::endl;
+	for (unsigned int i = 0; i < datos.cantObjEstaticos; i++) {
+
+		std::cout << "alto: " << objetosEstaticos[i].alto << std::endl;
+		std::cout << "ancho: " << objetosEstaticos[i].ancho << std::endl;
+		std::cout << "rotacion: " << objetosEstaticos[i].rotacion << std::endl;
+		std::cout << "centrox: " << objetosEstaticos[i].centro.x << std::endl;
+		std::cout << "centroy: " << objetosEstaticos[i].centro.y << std::endl;
+
+	}
+
+	std::cout << std::endl << "Estos son los objetos Dinamicos" << std::endl;
+	for (unsigned int i = 0; i < datos.cantObjDinamicos; i++) {
+
+		std::cout << "alto: " << objetosDinamicos[i].alto << std::endl;
+		std::cout << "ancho: " << objetosDinamicos[i].ancho << std::endl;
+		std::cout << "rotacion: " << objetosDinamicos[i].rotacion << std::endl;
+		std::cout << "centrox: " << objetosDinamicos[i].centro.x << std::endl;
+		std::cout << "centroy: " << objetosDinamicos[i].centro.y << std::endl;
+
 	}
 
 }
@@ -376,8 +436,8 @@ int Server::validateParameters(int argc, char *argv[]) {
 
 	Log::instance()->append("Validamos Parametros", Log::INFO);
 
-//Validamos cantidad de parametros. En caso de que no sean correctos, se
-//comienza con un juego default
+	//Validamos cantidad de parametros. En caso de que no sean correctos, se
+	//comienza con un juego default
 	if (argc != 3) {
 		Log::instance()->append("Cantidad de parametros incorrecta",
 				Log::WARNING);
@@ -389,6 +449,8 @@ int Server::validateParameters(int argc, char *argv[]) {
 		return SRV_ERROR;
 
 	jsonPath_ = argv[1];
+
+	Log::instance()->append("Parametros correctos!", Log::INFO);
 
 	return SRV_NO_ERROR;
 }

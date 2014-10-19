@@ -56,7 +56,7 @@ typedef struct dataToSend{
 	float rotacion;
 } dataToSend_t;
 
-typedef char conn_id[10];
+typedef char conn_id[20];
 
 typedef struct connection{
 	bool activa;

@@ -107,7 +107,9 @@ void Server::run() {
 
 	running_ = true;
 	while (running_) {
-		//La sincronizacion de threads se producira gracias a la shared_rcv_queue_ la cual permite ejecutar los eventos recibidos por orden de llegada
+
+		//La sincronizacion de threads se producira gracias a la shared_rcv_queue_
+		//la cual permite ejecutar los eventos recibidos por orden de llegada
 		step();
 		prepararEnvio();
 	}
@@ -128,6 +130,7 @@ void Server::newConnectionsManager() {
 
 	while (acceptNewClients_) {
 
+		//Aceptamos una nueva conexion
 		int newsockfd = accept(sockfd_, (struct sockaddr *) &cli_addr, &clilen);
 
 		if (newsockfd < 0) {
@@ -135,6 +138,7 @@ void Server::newConnectionsManager() {
 			continue;
 		}
 
+		//Validamos si es una conexion correcta
 		if (acceptConnection(newsockfd) == SRV_ERROR)
 			continue;
 
@@ -177,7 +181,7 @@ int Server::acceptConnection(int newsockfd) {
 
 	//Lanza el thread para que el cliente pueda empezar a mandar eventos en forma paralela
 	rcv_threads_.push_back(
-			std::thread(&Server::recibirDelCliente, this, newsockfd));
+			std::thread(&Server::recibirDelCliente, this, connection));
 
 	//Crea la queue para el envio de datos del server al cliente y luego lanza el thread
 	//para que el server ya pueda mandarle info en forma paralela
@@ -187,14 +191,14 @@ int Server::acceptConnection(int newsockfd) {
 
 		per_thread_snd_queues_.push_back(personal_queue);
 		snd_threads_.push_back(
-				std::thread(&Server::enviarAlCliente, this, newsockfd,
+				std::thread(&Server::enviarAlCliente, this, connection,
 						personal_queue));
 
 	} else {
 
 		per_thread_snd_queues_[index] = personal_queue;
 		snd_threads_[index] = std::thread(&Server::enviarAlCliente, this,
-				newsockfd, personal_queue);
+				connection, personal_queue);
 	}
 
 	return SRV_NO_ERROR;
@@ -291,48 +295,35 @@ void Server::enviarDatosJuego(int sockfd) {
  * Por cada cliente vamos a correr este metodo que se encarga de guardar
  * los mensajes que recibe en la cola compartida
  */
-void Server::recibirDelCliente(int sock) {
+void Server::recibirDelCliente(connection_t conn) {
 
 	int size = sizeof(receivedData_t);
+	std::string msg;
 
 	while (true) {
 
 		receivedData_t* data = (receivedData_t*) malloc(size);
 
-		if (recvall(sock, data, &size) <= 0) {
-			std::cout << "No pudo recibir. Client disconnected from server";
-			throw;
+		if (recvall(conn.socket, data, &size) <= 0) {
+
+			//Si no el cliente se desconecta, lo desactivamos
+			msg = "No se pueden recibir datos de la conexion ";
+			msg += conn.id;
+			Log::instance()->append(msg, Log::WARNING);
+
+			conn.activa = false;
+			return;
+
 		}
 
-		std::cout << "Recibi un evento del cliente: " << data->username
-				<< std::endl;
-
-		// Al hacer push se notifica al step mediante una condition_variable que tiene data para procesar
+		// Al hacer push se notifica al step mediante una condition_variable
+		//que tiene data para procesar
 		shared_rcv_queue_->push(data);
 	}
 }
 
-int Server::recvall(int s, void *data, int *len) {
-
-	int total = 0; 			// how many bytes we've recieve
-	int bytesleft = *len; 	// how many we have left to recieve
-	int n;
-
-	while (total < *len) {
-		n = recv(s, data + total, bytesleft, 0);
-		if (n == -1 || n == 0) {
-			break;
-		}
-		total += n;
-		bytesleft -= n;
-	}
-
-	return n == -1 || n == 0 ? -1 : 0; 	// return -1 on failure, 0 on success
-}
-
 void Server::prepararEnvio() {
 	dataToSend_t dataToBeSent;
-	Threadsafe_queue<dataToSend_t>* personal_queue;
 //
 // Crea el struct y lo adapta a lo que hay que mandar
 //
@@ -343,46 +334,31 @@ void Server::prepararEnvio() {
 		if (!connections_[i].activa)
 			continue;
 
-		personal_queue = per_thread_snd_queues_[i];
-		personal_queue->push(dataToBeSent);
+		per_thread_snd_queues_[i]->push(dataToBeSent);
 		// Al hacer push se notifica al thread mediante una condition_variable que tiene data para enviar
 	}
 }
 
-void Server::enviarAlCliente(int sock,
+void Server::enviarAlCliente(connection_t conn,
 		Threadsafe_queue<dataToSend_t>* personal_queue) {
 
-//wait_and_pop va a esperar a que haya un elemento en la personal_queue para desencolar el mismo.
-//De esta manera hay un sincronizmo y se ahorran recursos si no se usa dicha cola
+	//wait_and_pop va a esperar a que haya un elemento en la
+	//personal_queue para desencolar el mismo.
 	while (true) {
 		dataToSend_t dataToBeSent;
 		personal_queue->wait_and_pop(dataToBeSent);
 		int size = sizeof(dataToSend_t);
 
-		if (sendall(sock, &dataToBeSent, &size) < 0) {
+		if (sendall(conn.socket, &dataToBeSent, &size) < 0) {
 			std::cout << "No pude enviar. Client disconnected from server";
 			throw;
 		}
 	}
 }
 
-int Server::sendall(int s, void* data, int* len) {
-	int total = 0; 			// how many bytes we've sent
-	int bytesleft = *len; 	// how many we have left to send
-	int n;
-	while (total < *len) {
-		n = send(s, data + total, bytesleft, 0);
-		if (n == -1) {
-			break;
-		}
-		total += n;
-		bytesleft -= n;
-	}
-	*len = total;      		// return number actually sent here
-	return n == -1 ? -1 : 0; 		// return -1 on failure, 0 on success
-}
-
-// Ver pag 73 - libro c++11
+/**
+ * Metodo encargado de hacer el step del gameloop
+ */
 void Server::step() {
 	receivedData_t* event;
 	shared_rcv_queue_->wait_and_pop(event);
@@ -415,4 +391,44 @@ int Server::validateParameters(int argc, char *argv[]) {
 	jsonPath_ = argv[1];
 
 	return SRV_NO_ERROR;
+}
+
+/**
+ * Metodo encargado de hacer el envio de informacion
+ */
+int Server::sendall(int s, void* data, int* len) {
+	int total = 0; 			// how many bytes we've sent
+	int bytesleft = *len; 	// how many we have left to send
+	int n;
+	while (total < *len) {
+		n = send(s, data + total, bytesleft, 0);
+		if (n == -1) {
+			break;
+		}
+		total += n;
+		bytesleft -= n;
+	}
+	*len = total;      		// return number actually sent here
+	return n == -1 ? -1 : 0; 		// return -1 on failure, 0 on success
+}
+
+/**
+ * Metodo encargado de recibir la informacion
+ */
+int Server::recvall(int s, void *data, int *len) {
+
+	int total = 0; 			// how many bytes we've recieve
+	int bytesleft = *len; 	// how many we have left to recieve
+	int n;
+
+	while (total < *len) {
+		n = recv(s, data + total, bytesleft, 0);
+		if (n == -1 || n == 0) {
+			break;
+		}
+		total += n;
+		bytesleft -= n;
+	}
+
+	return n == -1 || n == 0 ? -1 : 0; 	// return -1 on failure, 0 on success
 }

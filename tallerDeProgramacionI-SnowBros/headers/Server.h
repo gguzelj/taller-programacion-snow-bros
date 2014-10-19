@@ -132,7 +132,7 @@ private:
 	 * Metodo que se encarga de encolar los eventos enviados por el cliente en la shared_rcv_queue.
 	 * En caso de detectar que el cliente se desconecto, lanzamos excepcion
 	 */
-	void recibirDelCliente(int sock);
+	void recibirDelCliente(connection_t conn);
 
 	/*
 	 * Metodo de bajo nivel de sockets
@@ -146,7 +146,7 @@ private:
 	/**
 	 * Metodo encargado de enviarle al cliente los datos del modelo, encolados en la personal_queue
 	 */
-	void enviarAlCliente(int sock, Threadsafe_queue<dataToSend_t>* personal_queue);
+	void enviarAlCliente(connection_t conn, Threadsafe_queue<dataToSend_t>* personal_queue);
 
 	/*
 	 * Metodo de bajo nivel de sockets

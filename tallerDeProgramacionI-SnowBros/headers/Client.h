@@ -58,6 +58,7 @@ typedef struct punto{
 
 typedef struct objEstatico{
 	punto_t centro;
+	char id;
 	float ancho;
 	float alto;
 	float rotacion;
@@ -65,6 +66,7 @@ typedef struct objEstatico{
 
 typedef struct objDinamico{
 	punto_t centro;
+	char id;
 	float ancho;
 	float alto;
 	float rotacion;

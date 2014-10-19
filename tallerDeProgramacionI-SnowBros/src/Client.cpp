@@ -181,30 +181,27 @@ int Client::initialize() {
 		Log::instance()->append("No se pueden recibir datos", Log::WARNING);
 	}
 
-
-	std::cout << "Recibimos " << datos.cantObjDinamicos << " obj Din y ";
+	std::cout << "Recibimos " << datos.cantObjDinamicos << " obj Dinamicos y ";
 	std::cout << datos.cantObjEstaticos << " obj Estaticos" << std::endl;
 
 	std::cout << "Estos son los objetos Estaticos" << std::endl;
 	for (unsigned int i = 0; i < datos.cantObjEstaticos; i++) {
-
+		std::cout << "id: " << objetosEstaticos[i].id << std::endl;
 		std::cout << "alto: " << objetosEstaticos[i].alto << std::endl;
 		std::cout << "ancho: " << objetosEstaticos[i].ancho << std::endl;
 		std::cout << "rotacion: " << objetosEstaticos[i].rotacion << std::endl;
 		std::cout << "centrox: " << objetosEstaticos[i].centro.x << std::endl;
-		std::cout << "centroy: " << objetosEstaticos[i].centro.y << std::endl;
-
+		std::cout << "centroy: " << objetosEstaticos[i].centro.y << std::endl<< std::endl;
 	}
 
 	std::cout << std::endl << "Estos son los objetos Dinamicos" << std::endl;
 	for (unsigned int i = 0; i < datos.cantObjDinamicos; i++) {
-
+		std::cout << "id: " << objetosDinamicos[i].id << std::endl;
 		std::cout << "alto: " << objetosDinamicos[i].alto << std::endl;
 		std::cout << "ancho: " << objetosDinamicos[i].ancho << std::endl;
 		std::cout << "rotacion: " << objetosDinamicos[i].rotacion << std::endl;
 		std::cout << "centrox: " << objetosDinamicos[i].centro.x << std::endl;
-		std::cout << "centroy: " << objetosDinamicos[i].centro.y << std::endl;
-
+		std::cout << "centroy: " << objetosDinamicos[i].centro.y << std::endl<< std::endl;
 	}
 	return CLIENT_OK;
 }

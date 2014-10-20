@@ -5,7 +5,6 @@
  */
 JsonParser::JsonParser(std::string path) {
 	escenario_ = nullptr;
-	personaje_ = nullptr;
 	path_ = path;
 }
 
@@ -72,19 +71,9 @@ bool JsonParser::setValuesFromFile() {
 		return true;
 	}
 
-	//Parseamos el personaje
-	if(parsePersonaje(root)){
-		delete escenario_;
-		delete personaje_;
-		if(path_ != PATH_DEF) return this->setDefaultValues();
-		Log::instance()->append(PARSER_MSG_INVALID_DEF_JSON,Log::ERROR);
-		return true;
-	}
-
 	//Parseamos los objetos
 	if(parseObjetos(root)){
 		delete escenario_;
-		delete personaje_;
 		for(unsigned int i = 0; i < objetos_.size(); i++) delete objetos_[i];
 		if(path_ != PATH_DEF) return this->setDefaultValues();
 		Log::instance()->append(PARSER_MSG_INVALID_DEF_JSON,Log::ERROR);
@@ -117,40 +106,6 @@ bool JsonParser::parseEscenario(Json::Value root) {
 	return ParserValidator::validarEscenario(escenario_, escenario);
 }
 
-
-void personajePorDefault(ParserValidator::personaje_t* &personaje){
-	Log::instance()->append(PARSER_MSG_CARGA_PERSONAJE_DEF , Log::INFO);
-	personaje = new ParserValidator::personaje_t();
-	personaje->x = PERSONAJE_X_DEF;
-	personaje->y = PERSONAJE_Y_DEF;
-}
-
-/**
- * Parseamos la definicion del personaje
- */
-bool JsonParser::parsePersonaje(Json::Value root) {
-
-	Log::instance()->append(PARSER_MSG_COMIENZO_PERSONAJE, Log::INFO);
-
-	Json::Value escenario = root[ESCENARIO];
-
-	if (!escenario.isMember(PERSONAJE)) {
-		Log::instance()->append(PARSER_MSG_NO_PERSONAJE , Log::WARNING);
-		personajePorDefault(personaje_);
-		return false;
-	}
-
-	Json::Value personaje = escenario[PERSONAJE];
-
-	if (!personaje.isObject()) {
-		Log::instance()->append(PARSER_MSG_TIPO_PERSONAJE, Log::WARNING);
-		personajePorDefault(personaje_);
-		return false;
-	}
-
-	ParserValidator::validarPersonaje(personaje_,personaje,escenario_);
-	return false;
-}
 
 /**
  * Parseamos las definiciones de los objetos

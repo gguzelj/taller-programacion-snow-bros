@@ -49,7 +49,6 @@ public:
 	};
 
 	static bool validarEscenario(escenario_t* &escenario, Json::Value esc);
-	static void validarPersonaje(personaje_t* &personaje, Json::Value per, escenario_t *esc);
 	static bool validarObjeto(objeto_t* &objeto, Json::Value obj, escenario_t *esc);
 
 private:
@@ -61,10 +60,6 @@ private:
 	static double valAltoUn(Json::Value esc);
 	static double valAnchoUn(Json::Value esc);
 	static std::string valImagenFondo(Json::Value esc);
-
-	//Validaciones en el personaje
-	static bool valPersonajeCoorX(Json::Value per, double &x, escenario_t *esc);
-	static bool valPersonajeCoorY(Json::Value per, double &y, escenario_t *esc);
 
 	//Validaciones de los objetos
 	static bool valTipoObjeto(Json::Value obj, std::string &tipo);

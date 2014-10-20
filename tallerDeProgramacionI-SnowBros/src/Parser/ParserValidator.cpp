@@ -22,28 +22,6 @@ bool ParserValidator::validarEscenario(escenario_t* &escenario, Json::Value esc)
 }
 
 /**
- * Realizamos todas las validaciones del personaje. En caso de
- * encontrar algun error en algun atributo, se lo modifica con un
- * valor valido (de ser posible)
- */
-void ParserValidator::validarPersonaje(personaje_t* &personaje, Json::Value per, escenario_t *esc){
-
-	personaje = new ParserValidator::personaje_t();
-
-	//Los siguientes campos son obligatorios para el personaje. En caso de que alguno
-	//de estos valores sea incorrecto, se setea un nuevo juego por default
-	if(valPersonajeCoorX(per, personaje->x, esc)){
-		Log::instance()->append(PARSER_MSG_CARGA_COORD_X_DEF,Log::WARNING);
-		personaje->x = PERSONAJE_X_DEF;
-	}
-	if(valPersonajeCoorY(per, personaje->y, esc)){
-		Log::instance()->append(PARSER_MSG_CARGA_COORD_Y_DEF,Log::WARNING);
-		personaje->y = PERSONAJE_Y_DEF;
-	}
-
-}
-
-/**
  * Realizamos todas las validaciones del objeto del escenario.
  * En caso de encontrar algun error en algun atributo, se lo
  * modifica con un valor valido (de ser posible). En otro caso
@@ -231,61 +209,6 @@ std::string ParserValidator::valImagenFondo( Json::Value esc ){
 
 	return imagenFondo;
 }
-
-/**
- * Validamos la coordenada X del personaje
- */
-bool ParserValidator::valPersonajeCoorX(Json::Value per, double &x, escenario_t *esc){
-
-	if(!per.isMember(X_COOR)){
-		Log::instance()->append(PARSER_MSG_PER_COOR_X, Log::WARNING);
-		return true;
-	}
-
-	if(!per[X_COOR].isNumeric()){
-		Log::instance()->append(PARSER_MSG_PER_COOR_X_NO_NUMBER, Log::WARNING);
-		return true;
-	}
-
-	x = per[X_COOR].asDouble();
-	double margen = esc->anchoUn / 2;
-
-	//Validamos que la coordenada X exista dentro del escenario del juego
-	if(	x > margen || x < -margen){
-		Log::instance()->append(PARSER_MSG_PER_COOR_X_FUERA_RANGO, Log::WARNING);
-		return true;
-	}
-
-	return false;
-}
-
-/**
- * Validamos la coordenada Y del personaje
- */
-bool ParserValidator::valPersonajeCoorY(Json::Value per, double &y, escenario_t *esc){
-
-	if(!per.isMember(Y_COOR)){
-		Log::instance()->append(PARSER_MSG_PER_COOR_Y, Log::WARNING);
-		return true;
-	}
-
-	if(!per[Y_COOR].isNumeric()){
-		Log::instance()->append(PARSER_MSG_PER_COOR_Y_NO_NUMBER, Log::WARNING);
-		return true;
-	}
-
-	y = per[Y_COOR].asDouble();
-	double margen = esc->altoUn / 2;
-
-	//Validamos que la coordenada X exista dentro del escenario del juego
-	if(	y > margen || y < -margen ){
-		Log::instance()->append(PARSER_MSG_PER_COOR_Y_FUERA_RANGO, Log::WARNING);
-		return true;
-	}
-
-	return false;
-}
-
 /**
  * Validaciones en el tipo de objeto
  */

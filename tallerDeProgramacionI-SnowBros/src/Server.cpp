@@ -367,11 +367,24 @@ void Server::recibirDelCliente(connection_t conn) {
 
 void Server::prepararEnvio() {
 	dataToSend_t dataToBeSent;
-//
+
 // Crea el struct y lo adapta a lo que hay que mandar
-//
-	dataToBeSent.personajes = model_->getPersonajesParaEnvio();
 	dataToBeSent.dinamicos = model_->getObjetosDinamicos();
+	dataToBeSent.personajes = model_->getPersonajesParaEnvio();
+
+	std::cout << std::endl << "Estos son los objetos Dinamicos que mandamos"
+			<< std::endl;
+	for (unsigned int i = 0; i < model_->getCantObjDinamicos(); i++) {
+		std::cout << "tipo: " << dataToBeSent.dinamicos[i].id << std::endl;
+		std::cout << "alto: " << dataToBeSent.dinamicos[i].alto << std::endl;
+		std::cout << "ancho: " << dataToBeSent.dinamicos[i].ancho << std::endl;
+		std::cout << "rotacion: " << dataToBeSent.dinamicos[i].rotacion
+				<< std::endl;
+		std::cout << "centrox: " << dataToBeSent.dinamicos[i].centro.x
+				<< std::endl;
+		std::cout << "centroy: " << dataToBeSent.dinamicos[i].centro.y
+				<< std::endl << std::endl;
+	}
 
 // Inserta el dato a mandar en la cola de envios de cada thread
 	for (unsigned int i = 0; i < connections_.size(); i++) {

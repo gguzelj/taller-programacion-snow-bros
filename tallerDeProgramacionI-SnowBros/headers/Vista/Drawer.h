@@ -1,6 +1,15 @@
 #ifndef DRAWER_H_
 #define DRAWER_H_
 
+#define CIRCULO_CODE 'c'
+#define PARALELOGRAMO_CODE 'p'
+#define RECTANGULO_CODE 'r'
+#define TRAPECIO_CODE 't'
+#define TRIANGULO_CODE '3'
+#define CUADRADO_CODE '4'
+#define PENTAGONO_CODE '5'
+#define HEXAGONO_CODE '6'
+
 #include <iostream>
 #include <Box2D/Box2D.h>
 #include "SDL2/SDL.h"
@@ -120,7 +129,7 @@ private:
 	//Drawing methods
 	void drawBackground();
 	void drawScenary(dataFromClient_t data);
-	void drawFigura(objDinamico_t* figura);
+	void drawFigura(objDinamico_t objeto);
 	void drawCharacter(Personaje* person);
 	void drawMessages();
 	void presentScenary();

@@ -249,23 +249,7 @@ void Client::onRender(dataFromServer_t data) {
 	dataToBeDraw.personajes = data.personajes;
 	dataToBeDraw.dinamicos = data.dinamicos;
 
-	std::cout << std::endl << "Estos son los objetos Dinamicos" << std::endl;
-	for (unsigned int i = 0; i < gameDetails_.cantObjDinamicos; i++) {
-
-		std::cout << "Obj nro: " << i << std::endl;
-
-		std::cout << "alto: " << dataToBeDraw.dinamicos[i].alto << std::endl;
-		std::cout << "ancho: " << dataToBeDraw.dinamicos[i].ancho << std::endl;
-		std::cout << "rotacion: " << dataToBeDraw.dinamicos[i].rotacion
-				<< std::endl;
-		std::cout << "centrox: " << dataToBeDraw.dinamicos[i].centro.x
-				<< std::endl;
-		std::cout << "centroy: " << dataToBeDraw.dinamicos[i].centro.y
-				<< std::endl;
-
-	}
-
-	//view_->updateView(dataToBeDraw);
+	view_->updateView(dataToBeDraw);
 }
 
 void Client::onCleanup() {

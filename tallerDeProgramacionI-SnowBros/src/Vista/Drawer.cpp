@@ -202,12 +202,8 @@ void Drawer::drawScenary(dataFromClient_t data) {
 	// ... guardar los objetos estaticos y dibujar...
 
 	//Dibujamos los objetos dinamicos
-	for (unsigned int i = 0; i < data.cantObjDinamicos; i++) {
-
-		std::cout << "ALTO: " <<  data.dinamicos[i].alto << std::endl;
-
-		//drawFigura();
-	}
+	for (unsigned int i = 0; i < data.cantObjDinamicos; i++)
+		drawFigura(data.dinamicos[i]);
 
 	/* METODO VIEJO:
 	 std::list<Figura*>* figuras = model->getFiguras();
@@ -221,190 +217,193 @@ void Drawer::drawScenary(dataFromClient_t data) {
 }
 
 //Dibuja una figura
-void Drawer::drawFigura(objDinamico_t* figura) {
-	/*
+void Drawer::drawFigura(objDinamico_t objeto) {
+
 	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
 	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);
 
 	int ox = (ancho_imagen / 2) + (currentZoomFactor - 1) * (ancho_imagen) / 2;
 	int oy = (alto_imagen / 2) + (currentZoomFactor - 1) * (alto_imagen) / 2;
 
-	b2Vec2 p = figura->GetCenter();
+	float escala = objeto.alto;
 
-	if (figura->type == "rectangulo") {
-		Rectangulo* rect = static_cast<Rectangulo *>(figura);
+	if (objeto.id == RECTANGULO_CODE) {
 
-		float ancho = rect->getAncho();
-		float alto = rect->getAlto();
+		float ancho = objeto.ancho;
+		float alto = objeto.alto;
 
 		rectangleTexture.render(renderer,
-				coord_relativa(coordRel.x, un_to_px_x * (p.x - ancho / 2) + ox),
-				coord_relativa(coordRel.y, -un_to_px_y * (p.y + alto / 2) + oy),
+				coord_relativa(coordRel.x,
+						un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
+				coord_relativa(coordRel.y,
+						-un_to_px_y * (objeto.centro.y + alto / 2) + oy),
 				ancho * un_to_px_x, alto * un_to_px_y, nullptr,
-				rect->getAngulo() * -RADTODEG, nullptr);
+				objeto.rotacion * -RADTODEG, nullptr);
 	}
 
-	if (figura->type == "circulo") {
-		Circulo* circ = static_cast<Circulo *>(figura);
-		float radio = circ->getRadio();
+	if (objeto.id == CIRCULO_CODE) {
+		float radio = objeto.alto / 2;
 
 		circleTexture.render(renderer,
-				coord_relativa(coordRel.x, un_to_px_x * (p.x - radio) + ox),
-				coord_relativa(coordRel.y, -un_to_px_y * (p.y + radio) + oy),
+				coord_relativa(coordRel.x,
+						un_to_px_x * (objeto.centro.x - radio) + ox),
+				coord_relativa(coordRel.y,
+						-un_to_px_y * (objeto.centro.y + radio) + oy),
 				2 * radio * un_to_px_x, 2 * radio * un_to_px_y, nullptr,
-				circ->getAngulo() * -RADTODEG, nullptr);
+				objeto.rotacion * -RADTODEG, nullptr);
 	}
 
-	if (figura->type == "poligono") {
-		Poligono* polygon = static_cast<Poligono *>(figura);
-		float escala = polygon->getEscala();
-		int lados = polygon->getLados();
+	if (objeto.id == TRIANGULO_CODE) {
+		SDL_Point centro;
+		centro.x = 1.732050808 * escala * un_to_px_x / 2;
+		centro.y = escala * 3 / 2 * un_to_px_y / 1.5;
 
-		if (lados == 3) {
-			SDL_Point centro;
-			centro.x = 1.732050808 * escala * un_to_px_x / 2;
-			centro.y = escala * 3 / 2 * un_to_px_y / 1.5;
-
-			triangleTexture.render(renderer,
-					coord_relativa(coordRel.x,
-							un_to_px_x * (p.x - 0.866025 * escala) + ox), //raiz de 3, dividido 2
-					coord_relativa(coordRel.y,
-							-un_to_px_y * (p.y + escala) + oy),
-					1.732050808 * escala * un_to_px_x,
-					escala * 3 / 2 * un_to_px_y, //raiz de 3
-					nullptr, polygon->getAngulo() * -RADTODEG, &centro);
-		} else if (lados == 4) {
-			squareTexture.render(renderer,
-					coord_relativa(coordRel.x,
-							un_to_px_x * (p.x - escala) + ox),
-					coord_relativa(coordRel.y,
-							-un_to_px_y * (p.y + escala) + oy),
-					2 * escala * un_to_px_x, 2 * escala * un_to_px_x, nullptr,
-					polygon->getAngulo() * -RADTODEG, nullptr);
-		} else if (lados == 5) {
-
-			SDL_Point centro;
-			centro.x = ((2 * escala * sin(M_PI / 5)
-					* (1 + 2 * cos(72 * DEGTORAD))) * un_to_px_x) / 2;
-			centro.y = ((2 * escala * sin(M_PI / 5)
-					* (1 + 2 * cos(72 * DEGTORAD))) * un_to_px_y) / 1.91;
-
-			pentagonTexture.render(renderer,
-					coord_relativa(coordRel.x,
-							un_to_px_x
-									* (p.x
-											- escala * sin(M_PI / 5)
-													* (1
-															+ 2
-																	* cos(
-																			72
-																					* DEGTORAD)))
-									+ ox),
-					coord_relativa(coordRel.y,
-							-un_to_px_y * (p.y + escala) + oy),
-					(2 * escala * sin(M_PI / 5) * (1 + 2 * cos(72 * DEGTORAD)))
-							* un_to_px_x,
-					escala * (1 + cos(M_PI / 5)) * un_to_px_y, nullptr,
-					polygon->getAngulo() * -RADTODEG, &centro);
-		} else {		// SI no entro en ningun if anterior, es un hexagono
-			hexagonTexture.render(renderer,
-					coord_relativa(coordRel.x,
-							un_to_px_x * (p.x - escala * cos(M_PI / 6)) + ox),
-					coord_relativa(coordRel.y,
-							-un_to_px_y * (p.y + escala) + oy),
-					2 * escala * cos(M_PI / 6) * un_to_px_x,
-					2 * escala * un_to_px_y, nullptr,
-					polygon->getAngulo() * -RADTODEG, nullptr);
-		}
+		triangleTexture.render(renderer,
+				coord_relativa(coordRel.x,
+						un_to_px_x * (objeto.centro.x - 0.866025 * escala)
+								+ ox), //raiz de 3, dividido 2
+				coord_relativa(coordRel.y,
+						-un_to_px_y * (objeto.centro.y + escala) + oy),
+				1.732050808 * escala * un_to_px_x, escala * 3 / 2 * un_to_px_y, //raiz de 3
+				nullptr, objeto.rotacion * -RADTODEG, &centro);
 	}
+
+	if (objeto.id == CUADRADO_CODE) {
+		squareTexture.render(renderer,
+				coord_relativa(coordRel.x,
+						un_to_px_x * (objeto.centro.x - escala) + ox),
+				coord_relativa(coordRel.y,
+						-un_to_px_y * (objeto.centro.y + escala) + oy),
+				2 * escala * un_to_px_x, 2 * escala * un_to_px_x, nullptr,
+				objeto.rotacion * -RADTODEG, nullptr);
+	}
+
+	if (objeto.id == PENTAGONO_CODE) {
+
+		SDL_Point centro;
+		centro.x = ((2 * escala * sin(M_PI / 5) * (1 + 2 * cos(72 * DEGTORAD)))
+				* un_to_px_x) / 2;
+		centro.y = ((2 * escala * sin(M_PI / 5) * (1 + 2 * cos(72 * DEGTORAD)))
+				* un_to_px_y) / 1.91;
+
+		pentagonTexture.render(renderer,
+				coord_relativa(coordRel.x,
+						un_to_px_x
+								* (objeto.centro.x
+										- escala * sin(M_PI / 5)
+												* (1 + 2 * cos(72 * DEGTORAD)))
+								+ ox),
+				coord_relativa(coordRel.y,
+						-un_to_px_y * (objeto.centro.y + escala) + oy),
+				(2 * escala * sin(M_PI / 5) * (1 + 2 * cos(72 * DEGTORAD)))
+						* un_to_px_x, escala * (1 + cos(M_PI / 5)) * un_to_px_y,
+				nullptr, objeto.rotacion * -RADTODEG, &centro);
+	}
+
+	if (objeto.id == HEXAGONO_CODE) {
+		hexagonTexture.render(renderer,
+				coord_relativa(coordRel.x,
+						un_to_px_x * (objeto.centro.x - escala * cos(M_PI / 6))
+								+ ox),
+				coord_relativa(coordRel.y,
+						-un_to_px_y * (objeto.centro.y + escala) + oy),
+				2 * escala * cos(M_PI / 6) * un_to_px_x,
+				2 * escala * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG,
+				nullptr);
+	}
+
 	//TODO arreglar como se muestra la imagen de trapecio
-	if (figura->type == "trapecio") {
-		Trapecio* trap = static_cast<Trapecio *>(figura);
+	if (objeto.id == TRAPECIO_CODE) {
 
-		float ancho = trap->getBaseMayor();
+		float ancho = objeto.ancho;
 		float mediana = (ancho + ancho * 0.68) / 2; //ancho*0.68 = base_menor
-		float alto = trap->getAlto();
+		float alto = objeto.alto;
 
 		trapexTexture.render(renderer,
 				coord_relativa(coordRel.x,
-						un_to_px_x * (p.x - ancho + mediana / 2) + ox),
-				coord_relativa(coordRel.y, -un_to_px_y * (p.y + alto / 2) + oy),
+						un_to_px_x * (objeto.centro.x - ancho + mediana / 2)
+								+ ox),
+				coord_relativa(coordRel.y,
+						-un_to_px_y * (objeto.centro.y + alto / 2) + oy),
 				ancho * un_to_px_x, alto * un_to_px_y, nullptr,
-				trap->getAngulo() * -RADTODEG, nullptr);
+				objeto.rotacion * -RADTODEG, nullptr);
 	}
 	//TODO arreglar como se muestra la imagen de paralelogramo
-	if (figura->type == "paralelogramo") {
-		Paralelogramo* paralelogramo = static_cast<Paralelogramo *>(figura);
+	if (objeto.id == PARALELOGRAMO_CODE) {
 
-		float ancho = paralelogramo->getAncho();
-		float alto = paralelogramo->getAlto();
+		float ancho = objeto.ancho;
+		float alto = objeto.alto;
 
 		paralelogramTexture.render(renderer,
 				coord_relativa(coordRel.x,
-						un_to_px_x * (p.x - ancho / 2 - alto / 4) + ox),
-				coord_relativa(coordRel.y, -un_to_px_y * (p.y + alto / 2) + oy),
+						un_to_px_x * (objeto.centro.x - ancho / 2 - alto / 4)
+								+ ox),
+				coord_relativa(coordRel.y,
+						-un_to_px_y * (objeto.centro.y + alto / 2) + oy),
 				(ancho + alto / 2) * un_to_px_x, alto * un_to_px_y, nullptr,
-				paralelogramo->getAngulo() * -RADTODEG, nullptr);
+				objeto.rotacion * -RADTODEG, nullptr);
 	}
 
-	char* rgb = convertir_hex_a_rgb("#96d29d");
-	//Old method lo deje para que se vean los dos por ahora. Luego borrar esto.
-	for (b2Fixture *fixture = figura->GetFixtureList(); fixture; fixture =
-			fixture->GetNext()) {
-		if (fixture->GetType() == b2Shape::e_polygon) {
-			b2PolygonShape *poly = (b2PolygonShape*) fixture->GetShape();
-			const int count = poly->GetVertexCount();
-			Sint16* xCoordOfVerts = new Sint16[count + 1];
-			Sint16* yCoordOfVerts = new Sint16[count + 1];
+	/*
+	 char* rgb = convertir_hex_a_rgb("#96d29d");
+	 //Old method lo deje para que se vean los dos por ahora. Luego borrar esto.
+	 for (b2Fixture *fixture = figura->GetFixtureList(); fixture; fixture =
+	 fixture->GetNext()) {
+	 if (fixture->GetType() == b2Shape::e_polygon) {
+	 b2PolygonShape *poly = (b2PolygonShape*) fixture->GetShape();
+	 const int count = poly->GetVertexCount();
+	 Sint16* xCoordOfVerts = new Sint16[count + 1];
+	 Sint16* yCoordOfVerts = new Sint16[count + 1];
 
-			for (int i = 0; i < count; i++) {
-				b2Vec2 p1 = figura->GetWorldPoint(poly->GetVertex(i));
-				xCoordOfVerts[i] = (Sint16) ((un_to_px_x) * (p1.x) + ox);
-				yCoordOfVerts[i] = (Sint16) (-un_to_px_y * p1.y + oy);
+	 for (int i = 0; i < count; i++) {
+	 b2Vec2 p1 = figura->GetWorldPoint(poly->GetVertex(i));
+	 xCoordOfVerts[i] = (Sint16) ((un_to_px_x) * (p1.x) + ox);
+	 yCoordOfVerts[i] = (Sint16) (-un_to_px_y * p1.y + oy);
 
-				xCoordOfVerts[i] = (Sint16) coord_relativa(coordRel.x,
-						xCoordOfVerts[i]);
-				yCoordOfVerts[i] = (Sint16) coord_relativa(coordRel.y,
-						yCoordOfVerts[i]);
-			}
-			polygonRGBA(renderer, xCoordOfVerts, yCoordOfVerts, count, rgb[0],
-					rgb[1], rgb[2], 255);
-			//texturedPolygon(renderer,xCoordOfVerts,yCoordOfVerts,count,imagePolygon,xCoordOfVerts[0],yCoordOfVerts[0]);
+	 xCoordOfVerts[i] = (Sint16) coord_relativa(coordRel.x,
+	 xCoordOfVerts[i]);
+	 yCoordOfVerts[i] = (Sint16) coord_relativa(coordRel.y,
+	 yCoordOfVerts[i]);
+	 }
+	 polygonRGBA(renderer, xCoordOfVerts, yCoordOfVerts, count, rgb[0],
+	 rgb[1], rgb[2], 255);
+	 //texturedPolygon(renderer,xCoordOfVerts,yCoordOfVerts,count,imagePolygon,xCoordOfVerts[0],yCoordOfVerts[0]);
 
-			delete[] xCoordOfVerts;
-			delete[] yCoordOfVerts;
+	 delete[] xCoordOfVerts;
+	 delete[] yCoordOfVerts;
 
-		} else if (fixture->GetType() == b2Shape::e_circle) {
-			Circulo* circ = (Circulo*) figura;
-			int centro_x = circ->getCoordX() * un_to_px_x + ox;
-			int centro_y = circ->getCoordY() * -un_to_px_y + oy;
+	 } else if (fixture->GetType() == b2Shape::e_circle) {
+	 Circulo* circ = (Circulo*) figura;
+	 int centro_x = circ->getCoordX() * un_to_px_x + ox;
+	 int centro_y = circ->getCoordY() * -un_to_px_y + oy;
 
-			//Opcion de dibujar el radio nomá
-			//Esta linea va a ser el radio que va a ir girando con el circulo
-			int borde_x = (circ->getRadio() * cos(circ->getAngulo())
-					* un_to_px_x) + centro_x;
-			int borde_y = centro_y
-					- (circ->getRadio() * sin(circ->getAngulo()) * un_to_px_y);
+	 //Opcion de dibujar el radio nomá
+	 //Esta linea va a ser el radio que va a ir girando con el circulo
+	 int borde_x = (circ->getRadio() * cos(circ->getAngulo())
+	 * un_to_px_x) + centro_x;
+	 int borde_y = centro_y
+	 - (circ->getRadio() * sin(circ->getAngulo()) * un_to_px_y);
 
-			//cambiando coordenadas por las relativas a la camara
-			centro_x = coord_relativa(coordRel.x, centro_x);
-			centro_y = coord_relativa(coordRel.y, centro_y);
+	 //cambiando coordenadas por las relativas a la camara
+	 centro_x = coord_relativa(coordRel.x, centro_x);
+	 centro_y = coord_relativa(coordRel.y, centro_y);
 
-			ellipseRGBA(this->renderer, centro_x, centro_y,
-					circ->getRadio() * un_to_px_x,
-					circ->getRadio() * un_to_px_y, rgb[0], rgb[1], rgb[2], 255);
+	 ellipseRGBA(this->renderer, centro_x, centro_y,
+	 circ->getRadio() * un_to_px_x,
+	 circ->getRadio() * un_to_px_y, rgb[0], rgb[1], rgb[2], 255);
 
-			//cambiando coordenadas por las relativas a la camara
-			borde_x = coord_relativa(coordRel.x, borde_x);
-			borde_y = coord_relativa(coordRel.y, borde_y);
+	 //cambiando coordenadas por las relativas a la camara
+	 borde_x = coord_relativa(coordRel.x, borde_x);
+	 borde_y = coord_relativa(coordRel.y, borde_y);
 
-			lineRGBA(renderer, centro_x, centro_y, borde_x, borde_y,
-					(rgb[0] + 120) % 255, (rgb[1] + 120) % 255,
-					(rgb[2] + 120) % 255, 255);
-		}
-	}
-	delete[] rgb;
-	*/
+	 lineRGBA(renderer, centro_x, centro_y, borde_x, borde_y,
+	 (rgb[0] + 120) % 255, (rgb[1] + 120) % 255,
+	 (rgb[2] + 120) % 255, 255);
+	 }
+	 }
+	 delete[] rgb;
+	 */
+	//TODO Borrar el metodo viejo. Lo deje porque se dejo antes por las dudas jaja
 }
 
 void Drawer::drawCharacter(Personaje* person) {

@@ -260,6 +260,7 @@ bool Client::validateParameters(int argc, char* argv[]) {
 	//comienza con un juego default
 	if (argc != 4) {
 		Log::instance()->append(CLIENT_MSG_CANT_PARAM, Log::WARNING);
+		help();
 		return false;
 	}
 
@@ -317,4 +318,8 @@ int Client::recvall(int s, void *data, int *len) {
 	}
 
 	return n == -1 || n == 0 ? -1 : 0; 	// return -1 on failure, 0 on success
+}
+
+void help(){
+	std::cout << "Use mode: ./Client hostname portNro name" << std::endl;
 }

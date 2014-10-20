@@ -13,6 +13,7 @@ Client::Client() {
 	view_ = nullptr;
 	host = nullptr;
 	name = nullptr;
+	estaticos_ = nullptr;
 	port = 0;
 	sock = 0;
 	shared_rcv_queue_ = new Threadsafe_queue<dataFromServer_t>();
@@ -64,7 +65,8 @@ int Client::run() {
 	if (connectToServer() == CLIENT_ERROR)
 		return CLIENT_ERROR;
 
-	initialize();
+	if(initialize() == CLIENT_ERROR)
+		return CLIENT_ERROR;
 
 	sendTh = std::thread(&Client::enviarAlServer, this);
 	recvTh = std::thread(&Client::recibirDelServer, this);
@@ -139,8 +141,6 @@ int Client::initialize() {
 	int size;
 	int entro;
 	std::string msg;
-	figura_t *objetosEstaticos;
-	figura_t *objetosDinamicos;
 
 	//Envio el nombre de cliente
 	size = 20;
@@ -183,6 +183,7 @@ void Client::enviarAlServer() {
 	while (running_) {
 		//Control all posible events
 		dataToSend_t* data = onEvent();
+		if(!data || !running_) return; //Esto es medio feo, pero por ahora cumple.
 		if (sendall(sock, data, &size) == -1) {
 			Log::instance()->append(CLIENT_MSG_ERROR_WHEN_SENDING, Log::ERROR);
 		}
@@ -215,15 +216,13 @@ void Client::recibirDelServer() {
 			Log::instance()->append(CLIENT_MSG_ERROR_WHEN_RECEIVING,
 					Log::ERROR);
 		}
-
 		shared_rcv_queue_->push(data);
-
 	}
-
 }
 
 dataToSend_t* Client::onEvent() {
 	dataToSend_t* data = controller_->handleEvents(&running_);
+	if(!running_) return nullptr;
 
 	int i;
 	for (i = 0; name[i] != '\0'; i++)

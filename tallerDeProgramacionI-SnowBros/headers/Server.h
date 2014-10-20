@@ -40,8 +40,8 @@
 typedef struct receivedData{
 	char id[20];
 	int keycode_1;
-	int keycode_2;
 	unsigned int type_1;
+	int keycode_2;
 	unsigned int type_2;
 } receivedData_t;
 

@@ -431,16 +431,6 @@ void Server::enviarAlCliente(connection_t conn,
 					std::cout << "No pude enviar personajes. Client disconnected from server";
 					throw;
 		}
-
-		//libero la memoria
-		for (int i = 0; i < sizeDinamicos ; i++) {
-			free(&((dataToBeSent.dinamicos)[i]));
-		}
-		for(int j =0 ; j<sizePersonajes; j++){
-			free(&((dataToBeSent.personajes)[j]));
-		}
-
-
 	}
 }
 

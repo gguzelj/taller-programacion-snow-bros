@@ -132,6 +132,10 @@ void Escenario::step() {
 	getWorld()->Step(timeStep, velocityIterations, positionIterations);
 }
 
+unsigned int Escenario::getCantPersonajes(){
+	return personajes_->size();
+}
+
 unsigned int Escenario::getCantObjDinamicos() {
 	return figurasDinamicas_->size();
 }
@@ -254,10 +258,6 @@ objDinamico_t* Escenario::getObjetosDinamicos() {
 		obj[i].centro.y = fig->y;
 	}
 	return obj;
-}
-
-unsigned int Escenario::getCantPersonajes(){
-	return sizeof(this->getPersonajes());
 }
 
 personaje_t* Escenario::getPersonajesParaEnvio(){

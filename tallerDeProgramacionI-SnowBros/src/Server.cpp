@@ -104,7 +104,7 @@ int Server::bindSocket() {
 void Server::run() {
 
 	listen(sockfd_, BACKLOG);
-	std::cout<<"Listening..."<<std::endl;
+	std::cout << "Listening..." << std::endl;
 
 	Log::instance()->append("Corriendo Juego", Log::INFO);
 
@@ -168,7 +168,6 @@ int Server::acceptConnection(int newsockfd) {
 
 	//Recibimos el id del cliente
 	if (recvall(newsockfd, &connection.id, &size) != 0) {
-		perror("Error al leer ID");
 		msg = "No se pudo leer el ID del cliente";
 		Log::instance()->append(msg, Log::ERROR);
 		return SRV_ERROR;
@@ -202,8 +201,9 @@ int Server::acceptConnection(int newsockfd) {
 	//Creamos el personaje en el mundo
 	float xIni = getInitialX();
 	float yIni = getInitialY();
-	model_->crearPersonaje(xIni,yIni,connection.id);
-	msg = "Se agrego al personaje en la posicion" + to_string(xIni) + " ; " + to_string(yIni);
+	model_->crearPersonaje(xIni, yIni, connection.id);
+	msg = "Se agrego al personaje en la posicion " + to_string(xIni) + " ; "
+			+ to_string(yIni);
 	Log::instance()->append(msg, Log::INFO);
 
 	//Comenzamos enviando la informacion del juego
@@ -300,9 +300,11 @@ void Server::enviarDatosJuego(int sockfd) {
 	int size;
 	firstConnectionDetails_t datos;
 
-	Log::instance()->append("Enviamos la cantidad de objetos creados", Log::INFO);
+	Log::instance()->append("Enviamos la cantidad de objetos creados",
+			Log::INFO);
 
 	//Enviamos la cantidad de objetos creados en el juego
+	datos.cantPersonajes = model_->getCantPersonajes();
 	datos.cantObjDinamicos = model_->getCantObjDinamicos();
 	datos.cantObjEstaticos = model_->getCantObjEstaticos();
 
@@ -310,10 +312,6 @@ void Server::enviarDatosJuego(int sockfd) {
 	if (sendall(sockfd, &datos, &size) != 0) {
 		Log::instance()->append("No se pueden enviar datos", Log::INFO);
 	}
-
-	std::cout << "Enviamos " << datos.cantObjDinamicos << " objetos Dinamicos y ";
-	std::cout << datos.cantObjEstaticos << " objetos Estaticos" << std::endl;
-
 
 	Log::instance()->append("Enviamos la lista de obj Estaticos", Log::INFO);
 	//Enviamos la lista de objetos Estaticos
@@ -330,27 +328,6 @@ void Server::enviarDatosJuego(int sockfd) {
 	if (sendall(sockfd, objetosDinamicos, &size) != 0) {
 		Log::instance()->append("No se pueden enviar datos", Log::WARNING);
 	}
-
-	std::cout << "Estos son los objetos Estaticos" << std::endl;
-	for (unsigned int i = 0; i < datos.cantObjEstaticos; i++) {
-		std::cout << "alto: " << objetosEstaticos[i].alto << std::endl;
-		std::cout << "ancho: " << objetosEstaticos[i].ancho << std::endl;
-		std::cout << "rotacion: " << objetosEstaticos[i].rotacion << std::endl;
-		std::cout << "centrox: " << objetosEstaticos[i].centro.x << std::endl;
-		std::cout << "centroy: " << objetosEstaticos[i].centro.y << std::endl;
-		std::cout << "tipo: " << objetosEstaticos[i].id << std::endl;
-	}
-
-	std::cout << std::endl << "Estos son los objetos Dinamicos" << std::endl;
-	for (unsigned int i = 0; i < datos.cantObjDinamicos; i++) {
-		std::cout << "alto: " << objetosDinamicos[i].alto << std::endl;
-		std::cout << "ancho: " << objetosDinamicos[i].ancho << std::endl;
-		std::cout << "rotacion: " << objetosDinamicos[i].rotacion << std::endl;
-		std::cout << "centrox: " << objetosDinamicos[i].centro.x << std::endl;
-		std::cout << "centroy: " << objetosDinamicos[i].centro.y << std::endl;
-		std::cout << "tipo: " << objetosDinamicos[i].id << std::endl;
-	}
-
 }
 
 /**
@@ -380,7 +357,7 @@ void Server::recibirDelCliente(connection_t conn) {
 		std::cout << "keycode_1: " << data->keycode_1 << std::endl;
 		std::cout << "keycode_2: " << data->keycode_2 << std::endl;
 		std::cout << "type_1: " << data->type_1 << std::endl;
-		std::cout << "type_2: " << data->type_2 << std::endl<<std::endl;
+		std::cout << "type_2: " << data->type_2 << std::endl << std::endl;
 
 		// Al hacer push se notifica al step mediante una condition_variable
 		//que tiene data para procesar
@@ -388,15 +365,13 @@ void Server::recibirDelCliente(connection_t conn) {
 	}
 }
 
-
-
 void Server::prepararEnvio() {
-	dataToSend_t dataToBeSent ;
+	dataToSend_t dataToBeSent;
 //
 // Crea el struct y lo adapta a lo que hay que mandar
 //
-	dataToBeSent.dinamicos = model_->getObjetosDinamicos();
 	dataToBeSent.personajes = model_->getPersonajesParaEnvio();
+	dataToBeSent.dinamicos = model_->getObjetosDinamicos();
 
 // Inserta el dato a mandar en la cola de envios de cada thread
 	for (unsigned int i = 0; i < connections_.size(); i++) {
@@ -413,24 +388,23 @@ void Server::prepararEnvio() {
 void Server::enviarAlCliente(connection_t conn,
 		Threadsafe_queue<dataToSend_t>* personal_queue) {
 
+	int size;
+
 	//wait_and_pop va a esperar a que haya un elemento en la
 	//personal_queue para desencolar el mismo.
 	while (true) {
 		dataToSend_t dataToBeSent;
 		personal_queue->wait_and_pop(dataToBeSent);
 
-		int sizeDinamicos = sizeof(objDinamico_t)* model_->getCantObjDinamicos();
-		int sizePersonajes = sizeof(personaje_t) * model_->getCantPersonajes() ;
+		size = sizeof(personaje_t) * model_->getCantPersonajes();
+		size += sizeof(objDinamico_t) * model_->getCantObjDinamicos();
 
-		if (sendall(conn.socket, dataToBeSent.dinamicos, &sizeDinamicos) != 0) {
-			std::cout << "No pude enviar objetos Dinamicos. Client disconnected from server";
+		if (sendall(conn.socket, &dataToBeSent, &size) != 0) {
+			std::cout
+					<< "No pude enviar objetos Dinamicos. Client disconnected from server";
 			throw;
 		}
 
-		if (sendall(conn.socket, dataToBeSent.personajes, &sizePersonajes) != 0) {
-					std::cout << "No pude enviar personajes. Client disconnected from server";
-					throw;
-		}
 	}
 }
 
@@ -444,11 +418,13 @@ void Server::step() {
 	//Get the character
 	Personaje* personaje = model_->getPersonaje(data->id);
 	if (!personaje)
-		Log::instance()->append("No se puede mapear el personaje con uno del juego", Log::WARNING);
+		Log::instance()->append(
+				"No se puede mapear el personaje con uno del juego",
+				Log::WARNING);
 
 	//Process the events
-	personaje->handleInput(data->keycode_1,data->type_1);
-	personaje->handleInput(data->keycode_2,data->type_2);
+	personaje->handleInput(data->keycode_1, data->type_1);
+	personaje->handleInput(data->keycode_2, data->type_2);
 
 	//process(data)
 	model_->step();
@@ -522,14 +498,16 @@ int Server::recvall(int s, void *data, int *len) {
 	return n == -1 || n == 0 ? -1 : 0; 	// return -1 on failure, 0 on success
 }
 
-float Server::getInitialX(){
-	float LO = -model_->getAnchoUn()/2 	+1;
-	float HI = model_->getAnchoUn()/2 	-1;
+float Server::getInitialX() {
+	float LO = -model_->getAnchoUn() / 2 + 1;
+	float HI = model_->getAnchoUn() / 2 - 1;
 
 	//This will generate a number from some arbitrary LO to some arbitrary HI
-	return (LO + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(HI-LO))));
+	return (LO
+			+ static_cast<float>(rand())
+					/ (static_cast<float>(RAND_MAX / (HI - LO))));
 }
 
-float Server::getInitialY(){
+float Server::getInitialY() {
 	return 0.0;
 }

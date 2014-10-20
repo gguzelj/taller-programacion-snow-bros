@@ -46,6 +46,7 @@ typedef struct receivedData{
 } receivedData_t;
 
 typedef struct firstConnectionDetails{
+	unsigned int cantPersonajes;
 	unsigned int cantObjDinamicos;
 	unsigned int cantObjEstaticos;
 } firstConnectionDetails_t;

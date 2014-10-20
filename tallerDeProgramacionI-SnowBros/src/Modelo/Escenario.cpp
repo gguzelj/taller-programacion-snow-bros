@@ -262,6 +262,7 @@ objDinamico_t* Escenario::getObjetosDinamicos() {
 
 personaje_t* Escenario::getPersonajesParaEnvio(){
 	personaje_t* pers =(personaje_t*) malloc( sizeof(personaje_t)* personajes_->size() );
+
 	int i = 0;
 	for(auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje){
 		pers[i].alto = (*personaje)->getAlto();
@@ -269,6 +270,7 @@ personaje_t* Escenario::getPersonajesParaEnvio(){
 		strcpy(pers[i].id,(*personaje)->id);
 		pers[i].orientacion = (*personaje)->getOrientacion();
 		pers[i].estado = (*personaje)->state->getCode();
+		i++;
 	}
 	return pers;
 }

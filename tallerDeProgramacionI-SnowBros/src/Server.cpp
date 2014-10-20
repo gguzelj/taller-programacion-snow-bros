@@ -104,7 +104,6 @@ int Server::bindSocket() {
 void Server::run() {
 
 	listen(sockfd_, BACKLOG);
-	std::cout << "Listening..." << std::endl;
 
 	Log::instance()->append("Corriendo Juego", Log::INFO);
 
@@ -353,12 +352,6 @@ void Server::recibirDelCliente(connection_t conn) {
 			return;
 		}
 
-		std::cout << "Cliente: " << data->id << std::endl;
-		std::cout << "keycode_1: " << data->keycode_1 << std::endl;
-		std::cout << "keycode_2: " << data->keycode_2 << std::endl;
-		std::cout << "type_1: " << data->type_1 << std::endl;
-		std::cout << "type_2: " << data->type_2 << std::endl << std::endl;
-
 		// Al hacer push se notifica al step mediante una condition_variable
 		//que tiene data para procesar
 		shared_rcv_queue_->push(data);
@@ -366,11 +359,12 @@ void Server::recibirDelCliente(connection_t conn) {
 }
 
 void Server::prepararEnvio() {
+
 	dataToSend_t dataToBeSent;
 
-// Crea el struct y lo adapta a lo que hay que mandar
-	dataToBeSent.dinamicos = model_->getObjetosDinamicos();
+	// Crea el struct y lo adapta a lo que hay que mandar
 	dataToBeSent.personajes = model_->getPersonajesParaEnvio();
+	dataToBeSent.dinamicos = model_->getObjetosDinamicos();
 
 	std::cout << std::endl << "Estos son los objetos Dinamicos que mandamos"
 			<< std::endl;
@@ -402,22 +396,25 @@ void Server::enviarAlCliente(connection_t conn,
 		Threadsafe_queue<dataToSend_t>* personal_queue) {
 
 	int size;
+	dataToSend_t dataToBeSent;
 
 	//wait_and_pop va a esperar a que haya un elemento en la
 	//personal_queue para desencolar el mismo.
 	while (true) {
-		dataToSend_t dataToBeSent;
+
 		personal_queue->wait_and_pop(dataToBeSent);
 
+		//Enviamos los personajes
 		size = sizeof(personaje_t) * model_->getCantPersonajes();
-		size += sizeof(objDinamico_t) * model_->getCantObjDinamicos();
-
-		if (sendall(conn.socket, &dataToBeSent, &size) != 0) {
-			std::cout
-					<< "No pude enviar objetos Dinamicos. Client disconnected from server";
-			throw;
+		if (sendall(conn.socket, dataToBeSent.personajes, &size) != 0) {
+			Log::instance()->append("No se pueden enviar datos", Log::WARNING);
 		}
 
+		//Enviamos los objetos
+		size = sizeof(objDinamico_t) * model_->getCantObjDinamicos();
+		if (sendall(conn.socket, dataToBeSent.dinamicos, &size) != 0) {
+			Log::instance()->append("No se pueden enviar datos", Log::WARNING);
+		}
 	}
 }
 

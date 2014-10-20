@@ -4,30 +4,29 @@ Controlador::Controlador(Drawer *view ){
 	this->view = view;
 	cantEventos = 0;
 }
-void Controlador::handleEvents(bool* running, dataToSend_t* data){
+dataToSend_t* Controlador::handleEvents(bool* running){
 	SDL_Event event;
 	cantEventos = 0;
-	/*
-	 * Como puede haber mucha cantidad de eventos, pero solo nos importan dos
-	 * de las flechas, cuando tomo dos eventos de flechas, si llega a haber mas
-	 * eventos de este tipo (cosa que dudo, pero por las dudas) se ignoran.
-	 * No pongo un break directamente porque puede haber mas eventos que no sean
-	 * para enviar al server.
-	 */
+
+	int size = sizeof(dataToSend_t);
+	dataToSend_t* data = (dataToSend_t*) malloc(size);
+	bzero(data, size);
+
 	while(SDL_PollEvent(&event)){
 		if(cantEventos == 0)
 			handleEvent(&event, running, &(data->keycode_1),&(data->type_1));
 		if(cantEventos == 1)
 			handleEvent(&event, running, &(data->keycode_2),&(data->type_2));
 		if(cantEventos == 2){
-			int* aux1;
-			unsigned int* aux2;
-			handleEvent(&event, running, aux1, aux2);
+			int aux1 = 0;
+			unsigned int aux2 = 0;
+			handleEvent(&event, running, &aux1, &aux2);
 		}
 	}
+	return data;
 }
 
-void Controlador::handleEvent(SDL_Event* evento,bool* running, int *code, unsigned int *type){
+void Controlador::handleEvent(SDL_Event* evento,bool* running, int32_t *code, uint32_t *type){
 	//logica de manejo de eventos del personaje
 	//model->getPersonaje()->handleInput(evento->key.keysym.sym,evento->type);
 

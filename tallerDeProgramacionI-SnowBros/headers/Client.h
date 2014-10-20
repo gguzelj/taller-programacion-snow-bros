@@ -131,7 +131,7 @@ private:
 	 * punteros a los miembros de un dataToSend_t y los modifica segun el
 	 * evento activado por el usuario.
 	 */
-	void onEvent(dataToSend_t* data,int socket,int* sizeOfdataToSend_t);
+	dataToSend_t* onEvent();
 
 	/*
 	 * Maneja aquello relacionado con lo que se tiene que dibujar en la pantalla, para luego mostrarlo.

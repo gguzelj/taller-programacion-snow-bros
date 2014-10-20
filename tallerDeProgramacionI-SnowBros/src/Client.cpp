@@ -209,11 +209,14 @@ int Client::initialize() {
 void Client::enviarAlServer() {
 
 	int size = sizeof(dataToSend_t);
-	dataToSend_t* data = (dataToSend_t*) malloc(size);
-
 	while (running_) {
 		//Control all posible events
-		onEvent(data, sock, &size);
+		dataToSend_t* data  = onEvent();
+		if (sendall(sock, data, &size) == -1) {
+			Log::instance()->append(CLIENT_MSG_ERROR_WHEN_SENDING, Log::ERROR);
+		}
+
+		SDL_Delay(100);
 	}
 }
 
@@ -232,11 +235,20 @@ void Client::recibirDelServer() {
 	}
 }
 
-void Client::onEvent(dataToSend_t* data, int sock, int* size) {
-	controller_->handleEvents(&running_, data);
-	if (sendall(sock, data, size) == -1) {
-		Log::instance()->append(CLIENT_MSG_ERROR_WHEN_SENDING, Log::ERROR);
-	}
+dataToSend_t* Client::onEvent() {
+	dataToSend_t* data = controller_->handleEvents(&running_);
+
+	int i;
+	for(i = 0; name[i] != '\0';i++)
+		data->id[i] = name[i];
+	data->id[i] = name[i];
+	std::cout << "Cliente: " << data->id << std::endl;
+	std::cout << "type_1: " << data->type_1 << std::endl;
+	std::cout << "keycode_1: " << data->keycode_1 << std::endl;
+	std::cout << "type_2: " << data->type_2 << std::endl;
+	std::cout << "keycode_2: " << data->keycode_2 << std::endl;
+
+	return data;
 }
 
 void Client::onRender(receivedData_t* model_) {

@@ -314,19 +314,12 @@ void Server::enviarDatosJuego(int sockfd) {
 
 	Log::instance()->append("Enviamos la lista de obj Estaticos", Log::INFO);
 	//Enviamos la lista de objetos Estaticos
-	size = sizeof(objEstatico_t) * model_->getCantObjEstaticos();
-	objEstatico_t *objetosEstaticos = model_->getObjetosEstaticos();
+	size = sizeof(figura_t) * model_->getCantObjEstaticos();
+	figura_t *objetosEstaticos = model_->getObjetosEstaticos();
 	if (sendall(sockfd, objetosEstaticos, &size) != 0) {
 		Log::instance()->append("No se pueden enviar datos", Log::WARNING);
 	}
 
-	Log::instance()->append("Enviamos la lista de obj Dinamicos", Log::INFO);
-	//Enviamos la lista de los objetos Dinamicos
-	size = sizeof(objDinamico_t) * model_->getCantObjDinamicos();
-	objDinamico_t *objetosDinamicos = model_->getObjetosDinamicos();
-	if (sendall(sockfd, objetosDinamicos, &size) != 0) {
-		Log::instance()->append("No se pueden enviar datos", Log::WARNING);
-	}
 }
 
 /**
@@ -397,7 +390,7 @@ void Server::enviarAlCliente(connection_t conn,
 		}
 
 		//Enviamos los objetos
-		size = sizeof(objDinamico_t) * model_->getCantObjDinamicos();
+		size = sizeof(figura_t) * model_->getCantObjDinamicos();
 		if (sendall(conn.socket, dataToBeSent.dinamicos, &size) != 0) {
 			Log::instance()->append("No se pueden enviar datos", Log::WARNING);
 		}

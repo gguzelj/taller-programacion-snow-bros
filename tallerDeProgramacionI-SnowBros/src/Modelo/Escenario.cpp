@@ -217,12 +217,12 @@ void obtenerAltoAnchoIdFigura(Figura* figura,float &alto, float &ancho,char& id)
 /**
  * Devolvemos un vector con objetos Estaticos
  */
-objEstatico_t* Escenario::getObjetosEstaticos() {
+figura_t* Escenario::getObjetosEstaticos() {
 
-	objEstatico_t* obj;
+	figura_t* obj;
 	Figura* fig;
-	obj = (objEstatico_t*) malloc(
-			sizeof(objEstatico_t) * figurasEstaticas_->size());
+	obj = (figura_t*) malloc(
+			sizeof(figura_t) * figurasEstaticas_->size());
 
 	for (unsigned int i = 0; i < figurasEstaticas_->size(); i++) {
 
@@ -240,12 +240,12 @@ objEstatico_t* Escenario::getObjetosEstaticos() {
 /**
  * Devolvemos un vector con objetos dinamicos
  */
-objDinamico_t* Escenario::getObjetosDinamicos() {
+figura_t* Escenario::getObjetosDinamicos() {
 
-	objDinamico_t* obj;
+	figura_t* obj;
 	Figura* fig;
-	obj = (objDinamico_t*) malloc(
-			sizeof(objDinamico_t) * figurasDinamicas_->size());
+	obj = (figura_t*) malloc(
+			sizeof(figura_t) * figurasDinamicas_->size());
 
 	for (unsigned int i = 0; i < figurasDinamicas_->size(); i++) {
 

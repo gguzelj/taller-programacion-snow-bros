@@ -40,21 +40,13 @@ typedef struct personaje{
 	char orientacion;
 }personaje_t;
 
-typedef struct objEstatico{
+typedef struct figura{
 	punto_t centro;
 	char id;
 	float ancho;
 	float alto;
 	float rotacion;
-} objEstatico_t;
-
-typedef struct objDinamico{
-	punto_t centro;
-	char id;
-	float ancho;
-	float alto;
-	float rotacion;
-} objDinamico_t;
+} figura_t;
 
 class Escenario {
 public:
@@ -76,8 +68,8 @@ public:
 
 	personaje_t* getPersonajesParaEnvio();
 
-	objEstatico_t* getObjetosEstaticos();
-	objDinamico_t* getObjetosDinamicos();
+	figura_t* getObjetosEstaticos();
+	figura_t* getObjetosDinamicos();
 
 	/*
 	 * Devuelve la lista de Personajes

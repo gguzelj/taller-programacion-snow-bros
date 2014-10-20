@@ -53,7 +53,7 @@ typedef struct firstConnectionDetails{
 
 typedef struct dataToSend{
 	personaje_t* personajes;
-	objDinamico_t* dinamicos;
+	figura_t* dinamicos;
 } dataToSend_t;
 
 typedef char conn_id[TAM];

@@ -47,14 +47,10 @@ using namespace std;
 
 //Estructuras necesarias para conectarse con el servidor
 typedef struct firstConnectionDetails{
+	unsigned int cantPersonajes;
 	unsigned int cantObjDinamicos;
 	unsigned int cantObjEstaticos;
 } firstConnectionDetails_t;
-
-typedef struct punto{
-	float x;
-	float y;
-} punto_t;
 
 typedef struct objEstatico{
 	punto_t centro;
@@ -64,13 +60,10 @@ typedef struct objEstatico{
 	float rotacion;
 } objEstatico_t;
 
-typedef struct objDinamico{
-	punto_t centro;
-	char id;
-	float ancho;
-	float alto;
-	float rotacion;
-} objDinamico_t;
+typedef struct dataFromServer{
+	personaje_t* personajes;
+	objDinamico_t* dinamicos;
+} dataFromServer_t;
 
 class Client{
 public:
@@ -106,10 +99,11 @@ private:
 	std::thread sendTh;
 	std::thread recvTh;
 
-    Threadsafe_queue<receivedData_t*>* shared_rcv_queue_;
+    Threadsafe_queue<dataFromServer_t*>* shared_rcv_queue_;
 
 	Controlador *controller_;
 	Drawer *view_;
+	firstConnectionDetails_t gameDetails_;
 
 	/**
 	 * Metodo para crear el socket con el que va a trabajar el server
@@ -137,7 +131,7 @@ private:
 	 * Maneja aquello relacionado con lo que se tiene que dibujar en la pantalla, para luego mostrarlo.
 	 * Sería la parte de "Vista" del patron MVC
 	 */
-	void onRender(receivedData* data);
+	void onRender(dataFromServer* data);
 
 	/*
 	 * Libera todos los recursos cargados en memoria

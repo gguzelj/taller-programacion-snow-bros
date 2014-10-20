@@ -14,7 +14,7 @@ Client::Client() {
 	host = nullptr;
 	name = nullptr;
 	sock = 0;
-	shared_rcv_queue_ = new Threadsafe_queue<receivedData_t*>();
+	shared_rcv_queue_ = new Threadsafe_queue<dataFromServer_t*>();
 
 	//Seteamos el nivel del logger:
 	//	-Si loggerLevel = INFO se loguean todos los mensajes
@@ -138,7 +138,6 @@ int Client::initialize() {
 	int size;
 	int entro;
 	std::string msg;
-	firstConnectionDetails_t datos;
 	objEstatico_t *objetosEstaticos;
 	objDinamico_t *objetosDinamicos;
 
@@ -162,47 +161,25 @@ int Client::initialize() {
 
 	//Recibimos la cantidad de objetos creados en el juego
 	size = sizeof(firstConnectionDetails_t);
-	if (recvall(sock, &datos, &size) != 0) {
+	if (recvall(sock, &gameDetails_, &size) != 0) {
 		Log::instance()->append("No se pueden recibir datos", Log::WARNING);
 		return CLIENT_ERROR;
 	}
 
 	//Recibimos la lista de objetos Estaticos
-	size = sizeof(objEstatico_t) * datos.cantObjEstaticos;
+	size = sizeof(objEstatico_t) * gameDetails_.cantObjEstaticos;
 	objetosEstaticos = (objEstatico_t*) malloc(size);
 	if (recvall(sock, objetosEstaticos, &size) != 0) {
 		Log::instance()->append("No se pueden recibir datos", Log::WARNING);
 	}
 
 	//Recibimos la lista de objetos Dinamicos
-	size = sizeof(objDinamico_t) * datos.cantObjDinamicos;
+	size = sizeof(objDinamico_t) * gameDetails_.cantObjDinamicos;
 	objetosDinamicos = (objDinamico_t*) malloc(size);
 	if (recvall(sock, objetosDinamicos, &size) != 0) {
 		Log::instance()->append("No se pueden recibir datos", Log::WARNING);
 	}
 
-	std::cout << "Recibimos " << datos.cantObjDinamicos << " obj Dinamicos y ";
-	std::cout << datos.cantObjEstaticos << " obj Estaticos" << std::endl;
-
-	std::cout << "Estos son los objetos Estaticos" << std::endl;
-	for (unsigned int i = 0; i < datos.cantObjEstaticos; i++) {
-		std::cout << "id: " << objetosEstaticos[i].id << std::endl;
-		std::cout << "alto: " << objetosEstaticos[i].alto << std::endl;
-		std::cout << "ancho: " << objetosEstaticos[i].ancho << std::endl;
-		std::cout << "rotacion: " << objetosEstaticos[i].rotacion << std::endl;
-		std::cout << "centrox: " << objetosEstaticos[i].centro.x << std::endl;
-		std::cout << "centroy: " << objetosEstaticos[i].centro.y << std::endl<< std::endl;
-	}
-
-	std::cout << std::endl << "Estos son los objetos Dinamicos" << std::endl;
-	for (unsigned int i = 0; i < datos.cantObjDinamicos; i++) {
-		std::cout << "id: " << objetosDinamicos[i].id << std::endl;
-		std::cout << "alto: " << objetosDinamicos[i].alto << std::endl;
-		std::cout << "ancho: " << objetosDinamicos[i].ancho << std::endl;
-		std::cout << "rotacion: " << objetosDinamicos[i].rotacion << std::endl;
-		std::cout << "centrox: " << objetosDinamicos[i].centro.x << std::endl;
-		std::cout << "centroy: " << objetosDinamicos[i].centro.y << std::endl<< std::endl;
-	}
 	return CLIENT_OK;
 }
 
@@ -222,10 +199,18 @@ void Client::enviarAlServer() {
 
 void Client::recibirDelServer() {
 
-	int size = sizeof(receivedData_t);
-	receivedData_t* data = (receivedData_t*) malloc(size);
+	int size;
+	dataFromServer_t* data;
+
+	//La cant de bytes a recibir esta definida por la cantidad de
+	//personajes y la cantidad de objetos dinamicos:
+	size = sizeof(personaje_t) * gameDetails_.cantPersonajes;
+	size += sizeof(objDinamico_t) * gameDetails_.cantObjDinamicos;
+
+	data = (dataFromServer_t*) malloc(size);
 
 	while (running_) {
+
 		//Voy reciviendo las cosas del servidor
 		if (recvall(sock, data, &size) == -1) {
 			Log::instance()->append(CLIENT_MSG_ERROR_WHEN_RECEIVING,
@@ -251,8 +236,16 @@ dataToSend_t* Client::onEvent() {
 	return data;
 }
 
-void Client::onRender(receivedData_t* model_) {
-	view_->updateView(model_);
+void Client::onRender(dataFromServer_t* data) {
+
+	dataFromClient_t dataToBeDraw;
+
+	dataToBeDraw.cantPersonajes = gameDetails_.cantPersonajes;
+	dataToBeDraw.cantObjDinamicos = gameDetails_.cantObjDinamicos;
+	dataToBeDraw.personajes = data->personajes;
+	dataToBeDraw.dinamicos = data->dinamicos;
+
+	view_->updateView(dataToBeDraw);
 }
 
 void Client::onCleanup() {

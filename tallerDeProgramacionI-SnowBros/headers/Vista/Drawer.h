@@ -21,16 +21,42 @@ const float factor = 0.005;
 const float rotation = 0.0;
 const int smoothing_off = 0;
 
-typedef struct receivedData{
-	//TODO ponerse de acuerdo en esto.
-}receivedData_t;
+typedef struct punto{
+	float x;
+	float y;
+} punto_t;
+
+typedef struct objDinamico{
+	punto_t centro;
+	char id;
+	float ancho;
+	float alto;
+	float rotacion;
+} objDinamico_t;
+
+typedef struct personaje{
+	punto_t centro;
+	char id[20];
+	float ancho;
+	float alto;
+	float rotacion;
+	char estado;
+	char orientacion;
+}personaje_t;
+
+typedef struct dataFromClient{
+	unsigned int cantPersonajes;
+	unsigned int cantObjDinamicos;
+	personaje_t* personajes;
+	objDinamico_t* dinamicos;
+} dataFromClient_t;
 
 class Drawer{
 public:
 	Drawer();
 	~Drawer();
 
-	void updateView(receivedData_t* model_);
+	void updateView(dataFromClient_t data);
 	void inicializarCamara(Personaje* personaje);
 	//Zooms in in a factor of 1.01x
 	void zoomIn();
@@ -93,8 +119,8 @@ private:
 
 	//Drawing methods
 	void drawBackground();
-	void drawScenary(Escenario* model);
-	void drawFigura(Figura* figura);
+	void drawScenary(dataFromClient_t data);
+	void drawFigura(objDinamico_t* figura);
 	void drawCharacter(Personaje* person);
 	void drawMessages();
 	void presentScenary();

@@ -27,71 +27,65 @@ void Drawer::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y,
 	renderTexture(tex, ren, dst, clip);
 }
 
-void Drawer::loadFont(){
-        //Initialize SDL_ttf
-        if (TTF_Init() == -1) {
-                manageSDL_ttfError();
-        }
-        int sizeOfTheFont = 20;
-        fontToBeUsed = TTF_OpenFont(this->fontPath.c_str(), sizeOfTheFont);
-        if (fontToBeUsed == nullptr)
-			manageSDL_ttfLoadFontError();
-        SDL_Color textColor = { 0, 0, 0 };
-        SDL_Surface* surface1 = TTF_RenderText_Solid(fontToBeUsed, "1000 Puntos",textColor);
-        SDL_Surface* surface2 = TTF_RenderText_Solid(fontToBeUsed, "3 vidas ", textColor);
+void Drawer::loadFont() {
+	//Initialize SDL_ttf
+	if (TTF_Init() == -1) {
+		manageSDL_ttfError();
+	}
+	int sizeOfTheFont = 20;
+	fontToBeUsed = TTF_OpenFont(this->fontPath.c_str(), sizeOfTheFont);
+	if (fontToBeUsed == nullptr)
+		manageSDL_ttfLoadFontError();
+	SDL_Color textColor = { 0, 0, 0 };
+	SDL_Surface* surface1 = TTF_RenderText_Solid(fontToBeUsed, "1000 Puntos",
+			textColor);
+	SDL_Surface* surface2 = TTF_RenderText_Solid(fontToBeUsed, "3 vidas ",
+			textColor);
 
-        if ((surface1 == nullptr) || (surface2 == nullptr))
-			manageDrawMessagesError();
+	if ((surface1 == nullptr) || (surface2 == nullptr))
+		manageDrawMessagesError();
 
-        messageAboutPoints = SDL_CreateTextureFromSurface(renderer, surface1);
-        messageAboutLifes = SDL_CreateTextureFromSurface(renderer, surface2);
-        SDL_FreeSurface(surface1);
-        SDL_FreeSurface(surface2);
+	messageAboutPoints = SDL_CreateTextureFromSurface(renderer, surface1);
+	messageAboutLifes = SDL_CreateTextureFromSurface(renderer, surface2);
+	SDL_FreeSurface(surface1);
+	SDL_FreeSurface(surface2);
 }
 
-bool Drawer::loadMedia(){
+bool Drawer::loadMedia() {
 	//Loading success flag
 	bool success = true;
 
 	//Load images
-	if(!rectangleTexture.loadFromFile(rectangleImage, renderer))
-	{
-		printf( "Failed to load fondito texture!\n" );
+	if (!rectangleTexture.loadFromFile(rectangleImage, renderer)) {
+		printf("Failed to load fondito texture!\n");
 		success = false;
 	}
-	if(!circleTexture.loadFromFile(circleImage, renderer))
-	{
-		printf( "Failed to load fondito texture!\n" );
+	if (!circleTexture.loadFromFile(circleImage, renderer)) {
+		printf("Failed to load fondito texture!\n");
 		success = false;
 	}
-	if(!triangleTexture.loadFromFile(triangleImagePath, renderer))
-	{
-		printf( "Failed to load fondito texture!\n" );
+	if (!triangleTexture.loadFromFile(triangleImagePath, renderer)) {
+		printf("Failed to load fondito texture!\n");
 		success = false;
 	}
-	if(!squareTexture.loadFromFile(squareImagePath, renderer))
-	{
-		printf( "Failed to load fondito texture!\n" );
+	if (!squareTexture.loadFromFile(squareImagePath, renderer)) {
+		printf("Failed to load fondito texture!\n");
 		success = false;
 	}
-	if(!pentagonTexture.loadFromFile(pentagonImagePath, renderer))
-	{
-		printf( "Failed to load fondito texture!\n" );
+	if (!pentagonTexture.loadFromFile(pentagonImagePath, renderer)) {
+		printf("Failed to load fondito texture!\n");
 		success = false;
 	}
-	if(!hexagonTexture.loadFromFile(hexagonImagePath, renderer))
-	{
-		printf( "Failed to load fondito texture!\n" );
+	if (!hexagonTexture.loadFromFile(hexagonImagePath, renderer)) {
+		printf("Failed to load fondito texture!\n");
 		success = false;
 	}
-	if(!trapexTexture.loadFromFile(trapexImagePath, renderer))
-	{
-		printf( "Failed to load fondito texture!\n" );
+	if (!trapexTexture.loadFromFile(trapexImagePath, renderer)) {
+		printf("Failed to load fondito texture!\n");
 		success = false;
 	}
-	if(!paralelogramTexture.loadFromFile(paralelogramImagePath, renderer))
-	{
-		printf( "Failed to load fondito texture!\n" );
+	if (!paralelogramTexture.loadFromFile(paralelogramImagePath, renderer)) {
+		printf("Failed to load fondito texture!\n");
 		success = false;
 	}
 
@@ -150,19 +144,17 @@ Drawer::~Drawer() {
 	IMG_Quit();
 }
 
-void Drawer::updateView(receivedData_t* model) {
+void Drawer::updateView(dataFromClient_t data) {
 	this->clearScenary();
 	this->drawBackground();
-	//this->drawScenary(model);
+	this->drawScenary(data);
 	this->drawMessages();
 	this->presentScenary();
 }
 
-
 // ############################### //
 // ##### Auxiliray functions ##### //
 // ############################### //
-
 
 float coord_relativa(float referencia, float coord) {
 	return coord - referencia;
@@ -204,17 +196,33 @@ void Drawer::drawBackground() {
 	renderTexture(image, renderer, 0, 0, &camera);
 }
 
-void Drawer::drawScenary(Escenario* model) {
-	std::list<Figura*>* figuras = model->getFiguras();
-	actualizarCamara(model->getPersonaje());
-	for (auto figura : *figuras) {
-		this->drawFigura(figura);
+void Drawer::drawScenary(dataFromClient_t data) {
+
+	//Dibujamos los objetos estaticos
+	// ... guardar los objetos estaticos y dibujar...
+
+	//Dibujamos los objetos dinamicos
+	for (unsigned int i = 0; i < data.cantObjDinamicos; i++) {
+
+		std::cout << "ALTO: " <<  data.dinamicos[i].alto << std::endl;
+
+		//drawFigura();
 	}
-	this->drawCharacter(model->getPersonaje());
+
+	/* METODO VIEJO:
+	 std::list<Figura*>* figuras = model->getFiguras();
+	 actualizarCamara(model->getPersonaje());
+
+	 for (auto figura : *figuras) {
+	 this->drawFigura(figura);
+	 }
+	 this->drawCharacter(model->getPersonaje());
+	 */
 }
 
 //Dibuja una figura
-void Drawer::drawFigura(Figura* figura) {
+void Drawer::drawFigura(objDinamico_t* figura) {
+	/*
 	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
 	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);
 
@@ -223,96 +231,126 @@ void Drawer::drawFigura(Figura* figura) {
 
 	b2Vec2 p = figura->GetCenter();
 
-	if (figura->type == "rectangulo"){
-	    Rectangulo* rect = static_cast<Rectangulo *> (figura);
+	if (figura->type == "rectangulo") {
+		Rectangulo* rect = static_cast<Rectangulo *>(figura);
 
 		float ancho = rect->getAncho();
 		float alto = rect->getAlto();
 
-		rectangleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-ancho/2) + ox),
-										  coord_relativa(coordRel.y, -un_to_px_y * (p.y+alto/2) + oy),
-										  ancho*un_to_px_x, alto*un_to_px_y,
-										  nullptr, rect->getAngulo()*-RADTODEG, nullptr);
+		rectangleTexture.render(renderer,
+				coord_relativa(coordRel.x, un_to_px_x * (p.x - ancho / 2) + ox),
+				coord_relativa(coordRel.y, -un_to_px_y * (p.y + alto / 2) + oy),
+				ancho * un_to_px_x, alto * un_to_px_y, nullptr,
+				rect->getAngulo() * -RADTODEG, nullptr);
 	}
 
-	if (figura->type == "circulo"){
-	    Circulo* circ = static_cast<Circulo *> (figura);
-	    float radio = circ->getRadio();
+	if (figura->type == "circulo") {
+		Circulo* circ = static_cast<Circulo *>(figura);
+		float radio = circ->getRadio();
 
-	    circleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-radio) + ox),
-				 					   coord_relativa(coordRel.y, -un_to_px_y * (p.y+radio) + oy),
-				 					   2*radio*un_to_px_x, 2*radio*un_to_px_y,
-				 					   nullptr, circ->getAngulo()*-RADTODEG, nullptr);
+		circleTexture.render(renderer,
+				coord_relativa(coordRel.x, un_to_px_x * (p.x - radio) + ox),
+				coord_relativa(coordRel.y, -un_to_px_y * (p.y + radio) + oy),
+				2 * radio * un_to_px_x, 2 * radio * un_to_px_y, nullptr,
+				circ->getAngulo() * -RADTODEG, nullptr);
 	}
 
-	if (figura->type == "poligono"){
-		Poligono* polygon = static_cast<Poligono *> (figura);
+	if (figura->type == "poligono") {
+		Poligono* polygon = static_cast<Poligono *>(figura);
 		float escala = polygon->getEscala();
 		int lados = polygon->getLados();
 
-		if(lados == 3){
+		if (lados == 3) {
 			SDL_Point centro;
-			centro.x = 1.732050808*escala*un_to_px_x/2;
-			centro.y = escala*3/2*un_to_px_y/1.5;
+			centro.x = 1.732050808 * escala * un_to_px_x / 2;
+			centro.y = escala * 3 / 2 * un_to_px_y / 1.5;
 
-			triangleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-0.866025*escala) + ox), //raiz de 3, dividido 2
-										     coord_relativa(coordRel.y, -un_to_px_y * (p.y+escala) + oy),
-										     1.732050808*escala*un_to_px_x, escala*3/2*un_to_px_y, //raiz de 3
-										     nullptr, polygon->getAngulo()*-RADTODEG, &centro);
-		}
-		else if (lados == 4){
-			squareTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala) + ox),
-										   coord_relativa(coordRel.y, -un_to_px_y * (p.y+escala) + oy),
-										   2*escala*un_to_px_x, 2*escala*un_to_px_x,
-										   nullptr, polygon->getAngulo()*-RADTODEG, nullptr);
-		}
-		else if (lados == 5){
+			triangleTexture.render(renderer,
+					coord_relativa(coordRel.x,
+							un_to_px_x * (p.x - 0.866025 * escala) + ox), //raiz de 3, dividido 2
+					coord_relativa(coordRel.y,
+							-un_to_px_y * (p.y + escala) + oy),
+					1.732050808 * escala * un_to_px_x,
+					escala * 3 / 2 * un_to_px_y, //raiz de 3
+					nullptr, polygon->getAngulo() * -RADTODEG, &centro);
+		} else if (lados == 4) {
+			squareTexture.render(renderer,
+					coord_relativa(coordRel.x,
+							un_to_px_x * (p.x - escala) + ox),
+					coord_relativa(coordRel.y,
+							-un_to_px_y * (p.y + escala) + oy),
+					2 * escala * un_to_px_x, 2 * escala * un_to_px_x, nullptr,
+					polygon->getAngulo() * -RADTODEG, nullptr);
+		} else if (lados == 5) {
 
 			SDL_Point centro;
-			centro.x = ((2*escala*sin(M_PI/5)*(1+2*cos(72*DEGTORAD)))*un_to_px_x)/2;
-			centro.y = ((2*escala*sin(M_PI/5)*(1+2*cos(72*DEGTORAD)))*un_to_px_y)/1.91;
+			centro.x = ((2 * escala * sin(M_PI / 5)
+					* (1 + 2 * cos(72 * DEGTORAD))) * un_to_px_x) / 2;
+			centro.y = ((2 * escala * sin(M_PI / 5)
+					* (1 + 2 * cos(72 * DEGTORAD))) * un_to_px_y) / 1.91;
 
-			pentagonTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala*sin(M_PI/5)*(1+2*cos(72*DEGTORAD))) + ox),
-										     coord_relativa(coordRel.y, -un_to_px_y * (p.y+escala) + oy),
-										     (2*escala*sin(M_PI/5)*(1+2*cos(72*DEGTORAD)))*un_to_px_x, escala*(1+cos(M_PI/5))*un_to_px_y,
-										     nullptr, polygon->getAngulo()*-RADTODEG, &centro);
-		}
-		else{		// SI no entro en ningun if anterior, es un hexagono
-			hexagonTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-escala*cos(M_PI/6)) + ox),
-											coord_relativa(coordRel.y, -un_to_px_y * (p.y+escala) + oy),
-											2*escala*cos(M_PI/6)*un_to_px_x, 2*escala*un_to_px_y,
-											nullptr, polygon->getAngulo()*-RADTODEG, nullptr);
+			pentagonTexture.render(renderer,
+					coord_relativa(coordRel.x,
+							un_to_px_x
+									* (p.x
+											- escala * sin(M_PI / 5)
+													* (1
+															+ 2
+																	* cos(
+																			72
+																					* DEGTORAD)))
+									+ ox),
+					coord_relativa(coordRel.y,
+							-un_to_px_y * (p.y + escala) + oy),
+					(2 * escala * sin(M_PI / 5) * (1 + 2 * cos(72 * DEGTORAD)))
+							* un_to_px_x,
+					escala * (1 + cos(M_PI / 5)) * un_to_px_y, nullptr,
+					polygon->getAngulo() * -RADTODEG, &centro);
+		} else {		// SI no entro en ningun if anterior, es un hexagono
+			hexagonTexture.render(renderer,
+					coord_relativa(coordRel.x,
+							un_to_px_x * (p.x - escala * cos(M_PI / 6)) + ox),
+					coord_relativa(coordRel.y,
+							-un_to_px_y * (p.y + escala) + oy),
+					2 * escala * cos(M_PI / 6) * un_to_px_x,
+					2 * escala * un_to_px_y, nullptr,
+					polygon->getAngulo() * -RADTODEG, nullptr);
 		}
 	}
 	//TODO arreglar como se muestra la imagen de trapecio
-	if(figura->type == "trapecio"){
-	    Trapecio* trap = static_cast<Trapecio *> (figura);
+	if (figura->type == "trapecio") {
+		Trapecio* trap = static_cast<Trapecio *>(figura);
 
 		float ancho = trap->getBaseMayor();
-		float mediana = (ancho+ancho*0.68)/2; //ancho*0.68 = base_menor
+		float mediana = (ancho + ancho * 0.68) / 2; //ancho*0.68 = base_menor
 		float alto = trap->getAlto();
 
-		trapexTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-ancho+mediana/2) + ox),
-									   coord_relativa(coordRel.y, -un_to_px_y * (p.y+alto/2) + oy),
-									   ancho*un_to_px_x, alto*un_to_px_y,
-									   nullptr, trap->getAngulo()*-RADTODEG, nullptr);
+		trapexTexture.render(renderer,
+				coord_relativa(coordRel.x,
+						un_to_px_x * (p.x - ancho + mediana / 2) + ox),
+				coord_relativa(coordRel.y, -un_to_px_y * (p.y + alto / 2) + oy),
+				ancho * un_to_px_x, alto * un_to_px_y, nullptr,
+				trap->getAngulo() * -RADTODEG, nullptr);
 	}
 	//TODO arreglar como se muestra la imagen de paralelogramo
-	if(figura->type == "paralelogramo"){
-	    Paralelogramo* paralelogramo = static_cast<Paralelogramo *> (figura);
+	if (figura->type == "paralelogramo") {
+		Paralelogramo* paralelogramo = static_cast<Paralelogramo *>(figura);
 
 		float ancho = paralelogramo->getAncho();
 		float alto = paralelogramo->getAlto();
 
-		paralelogramTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-ancho/2-alto/4) + ox),
-								   	   	     coord_relativa(coordRel.y, -un_to_px_y * (p.y+alto/2) + oy),
-								   	   	     (ancho+alto/2)*un_to_px_x, alto*un_to_px_y,
-								   	   	     nullptr, paralelogramo->getAngulo()*-RADTODEG, nullptr);
+		paralelogramTexture.render(renderer,
+				coord_relativa(coordRel.x,
+						un_to_px_x * (p.x - ancho / 2 - alto / 4) + ox),
+				coord_relativa(coordRel.y, -un_to_px_y * (p.y + alto / 2) + oy),
+				(ancho + alto / 2) * un_to_px_x, alto * un_to_px_y, nullptr,
+				paralelogramo->getAngulo() * -RADTODEG, nullptr);
 	}
 
 	char* rgb = convertir_hex_a_rgb("#96d29d");
-    //Old method lo deje para que se vean los dos por ahora. Luego borrar esto.
-    for (b2Fixture *fixture = figura->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
+	//Old method lo deje para que se vean los dos por ahora. Luego borrar esto.
+	for (b2Fixture *fixture = figura->GetFixtureList(); fixture; fixture =
+			fixture->GetNext()) {
 		if (fixture->GetType() == b2Shape::e_polygon) {
 			b2PolygonShape *poly = (b2PolygonShape*) fixture->GetShape();
 			const int count = poly->GetVertexCount();
@@ -324,10 +362,13 @@ void Drawer::drawFigura(Figura* figura) {
 				xCoordOfVerts[i] = (Sint16) ((un_to_px_x) * (p1.x) + ox);
 				yCoordOfVerts[i] = (Sint16) (-un_to_px_y * p1.y + oy);
 
-				xCoordOfVerts[i] = (Sint16) coord_relativa(coordRel.x, xCoordOfVerts[i]);
-				yCoordOfVerts[i] = (Sint16) coord_relativa(coordRel.y, yCoordOfVerts[i]);
+				xCoordOfVerts[i] = (Sint16) coord_relativa(coordRel.x,
+						xCoordOfVerts[i]);
+				yCoordOfVerts[i] = (Sint16) coord_relativa(coordRel.y,
+						yCoordOfVerts[i]);
 			}
-			polygonRGBA(renderer, xCoordOfVerts, yCoordOfVerts, count, rgb[0], rgb[1], rgb[2], 255);
+			polygonRGBA(renderer, xCoordOfVerts, yCoordOfVerts, count, rgb[0],
+					rgb[1], rgb[2], 255);
 			//texturedPolygon(renderer,xCoordOfVerts,yCoordOfVerts,count,imagePolygon,xCoordOfVerts[0],yCoordOfVerts[0]);
 
 			delete[] xCoordOfVerts;
@@ -340,16 +381,18 @@ void Drawer::drawFigura(Figura* figura) {
 
 			//Opcion de dibujar el radio nomá
 			//Esta linea va a ser el radio que va a ir girando con el circulo
-			int borde_x = (circ->getRadio() * cos(circ->getAngulo())* un_to_px_x) + centro_x;
-			int borde_y = centro_y - (circ->getRadio() * sin(circ->getAngulo()) * un_to_px_y);
+			int borde_x = (circ->getRadio() * cos(circ->getAngulo())
+					* un_to_px_x) + centro_x;
+			int borde_y = centro_y
+					- (circ->getRadio() * sin(circ->getAngulo()) * un_to_px_y);
 
 			//cambiando coordenadas por las relativas a la camara
 			centro_x = coord_relativa(coordRel.x, centro_x);
 			centro_y = coord_relativa(coordRel.y, centro_y);
 
 			ellipseRGBA(this->renderer, centro_x, centro_y,
-						circ->getRadio() * un_to_px_x,
-						circ->getRadio() * un_to_px_y, rgb[0], rgb[1], rgb[2], 255);
+					circ->getRadio() * un_to_px_x,
+					circ->getRadio() * un_to_px_y, rgb[0], rgb[1], rgb[2], 255);
 
 			//cambiando coordenadas por las relativas a la camara
 			borde_x = coord_relativa(coordRel.x, borde_x);
@@ -359,8 +402,9 @@ void Drawer::drawFigura(Figura* figura) {
 					(rgb[0] + 120) % 255, (rgb[1] + 120) % 255,
 					(rgb[2] + 120) % 255, 255);
 		}
-    }
-    delete[] rgb;
+	}
+	delete[] rgb;
+	*/
 }
 
 void Drawer::drawCharacter(Personaje* person) {
@@ -407,11 +451,13 @@ void Drawer::drawMessages() {
 	float coordYDelMensaje = 1 * un_to_px_y_inicial; //Parte superior de la pantalla
 
 	//Render the first message
-	renderTexture(messageAboutPoints, renderer, coordXDelMensaje, coordYDelMensaje);
+	renderTexture(messageAboutPoints, renderer, coordXDelMensaje,
+			coordYDelMensaje);
 
 	//Render the other message
 	coordXDelMensaje += 10 * un_to_px_x_inicial;
-	renderTexture(messageAboutPoints, renderer, coordXDelMensaje, coordYDelMensaje);
+	renderTexture(messageAboutPoints, renderer, coordXDelMensaje,
+			coordYDelMensaje);
 }
 
 void Drawer::presentScenary() {
@@ -530,13 +576,14 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 
 	//Opening a window
 	window = SDL_CreateWindow("Snow Bros", SDL_WINDOWPOS_CENTERED,
-			SDL_WINDOWPOS_CENTERED, ancho_px, alto_px, SDL_WINDOW_SHOWN);
+	SDL_WINDOWPOS_CENTERED, ancho_px, alto_px, SDL_WINDOW_SHOWN);
 	if (window == nullptr) {
 		manageCreateWindowError();
 	}
 
 	//Creating a renderer
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	renderer = SDL_CreateRenderer(window, -1,
+			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (renderer == nullptr) {
 		manageCreateRendererError();
 	}

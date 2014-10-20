@@ -35,13 +35,13 @@ typedef struct punto{
 	float y;
 } punto_t;
 
-typedef struct objDinamico{
+typedef struct figura{
 	punto_t centro;
 	char id;
 	float ancho;
 	float alto;
 	float rotacion;
-} objDinamico_t;
+} figura_t;
 
 typedef struct personaje{
 	punto_t centro;
@@ -56,8 +56,10 @@ typedef struct personaje{
 typedef struct dataFromClient{
 	unsigned int cantPersonajes;
 	unsigned int cantObjDinamicos;
+	unsigned int cantObjEstaticos;
 	personaje_t* personajes;
-	objDinamico_t* dinamicos;
+	figura_t* dinamicos;
+	figura_t* estaticos;
 } dataFromClient_t;
 
 class Drawer{
@@ -129,7 +131,7 @@ private:
 	//Drawing methods
 	void drawBackground();
 	void drawScenary(dataFromClient_t data);
-	void drawFigura(objDinamico_t objeto);
+	void drawFigura(figura_t objeto);
 	void drawCharacter(Personaje* person);
 	void drawMessages();
 	void presentScenary();

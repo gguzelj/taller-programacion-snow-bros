@@ -52,17 +52,9 @@ typedef struct firstConnectionDetails{
 	unsigned int cantObjEstaticos;
 } firstConnectionDetails_t;
 
-typedef struct objEstatico{
-	punto_t centro;
-	char id;
-	float ancho;
-	float alto;
-	float rotacion;
-} objEstatico_t;
-
 typedef struct dataFromServer{
 	personaje_t* personajes;
-	objDinamico_t* dinamicos;
+	figura_t* dinamicos;
 } dataFromServer_t;
 
 class Client{
@@ -104,6 +96,7 @@ private:
 	Controlador *controller_;
 	Drawer *view_;
 	firstConnectionDetails_t gameDetails_;
+	figura_t* estaticos_;
 
 	/**
 	 * Metodo para crear el socket con el que va a trabajar el server

@@ -199,7 +199,8 @@ void Drawer::drawBackground() {
 void Drawer::drawScenary(dataFromClient_t data) {
 
 	//Dibujamos los objetos estaticos
-	// ... guardar los objetos estaticos y dibujar...
+	for (unsigned int i = 0; i < data.cantObjEstaticos; i++)
+		drawFigura(data.estaticos[i]);
 
 	//Dibujamos los objetos dinamicos
 	for (unsigned int i = 0; i < data.cantObjDinamicos; i++)
@@ -217,7 +218,7 @@ void Drawer::drawScenary(dataFromClient_t data) {
 }
 
 //Dibuja una figura
-void Drawer::drawFigura(objDinamico_t objeto) {
+void Drawer::drawFigura(figura_t objeto) {
 
 	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
 	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);

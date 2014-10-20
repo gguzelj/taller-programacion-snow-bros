@@ -139,8 +139,8 @@ int Client::initialize() {
 	int size;
 	int entro;
 	std::string msg;
-	objEstatico_t *objetosEstaticos;
-	objDinamico_t *objetosDinamicos;
+	figura_t *objetosEstaticos;
+	figura_t *objetosDinamicos;
 
 	//Envio el nombre de cliente
 	size = 20;
@@ -168,16 +168,9 @@ int Client::initialize() {
 	}
 
 	//Recibimos la lista de objetos Estaticos
-	size = sizeof(objEstatico_t) * gameDetails_.cantObjEstaticos;
-	objetosEstaticos = (objEstatico_t*) malloc(size);
-	if (recvall(sock, objetosEstaticos, &size) != 0) {
-		Log::instance()->append("No se pueden recibir datos", Log::WARNING);
-	}
-
-	//Recibimos la lista de objetos Dinamicos
-	size = sizeof(objDinamico_t) * gameDetails_.cantObjDinamicos;
-	objetosDinamicos = (objDinamico_t*) malloc(size);
-	if (recvall(sock, objetosDinamicos, &size) != 0) {
+	size = sizeof(figura_t) * gameDetails_.cantObjEstaticos;
+	estaticos_ = (figura_t*) malloc(size);
+	if (recvall(sock, estaticos_, &size) != 0) {
 		Log::instance()->append("No se pueden recibir datos", Log::WARNING);
 	}
 
@@ -216,8 +209,8 @@ void Client::recibirDelServer() {
 		}
 
 		//Recibimos los objetos dinamicos
-		size = sizeof(objDinamico_t) * gameDetails_.cantObjDinamicos;
-		data.dinamicos = (objDinamico_t*) malloc(size);
+		size = sizeof(figura_t) * gameDetails_.cantObjDinamicos;
+		data.dinamicos = (figura_t*) malloc(size);
 		if (recvall(sock, data.dinamicos, &size) != 0) {
 			Log::instance()->append(CLIENT_MSG_ERROR_WHEN_RECEIVING,
 					Log::ERROR);
@@ -246,10 +239,13 @@ void Client::onRender(dataFromServer_t data) {
 
 	dataToBeDraw.cantPersonajes = gameDetails_.cantPersonajes;
 	dataToBeDraw.cantObjDinamicos = gameDetails_.cantObjDinamicos;
+	dataToBeDraw.cantObjEstaticos = gameDetails_.cantObjEstaticos;
 	dataToBeDraw.personajes = data.personajes;
 	dataToBeDraw.dinamicos = data.dinamicos;
+	dataToBeDraw.estaticos = estaticos_;
 
 	view_->updateView(dataToBeDraw);
+
 }
 
 void Client::onCleanup() {

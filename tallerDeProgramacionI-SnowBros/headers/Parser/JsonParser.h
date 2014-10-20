@@ -33,8 +33,6 @@ public:
 	float 		getGravedad(){ return escenario_->gravedad;};
 	float 		getAltoUnEscenario(){ return escenario_->altoUn;};
 	float 		getAnchoUnEscenario(){ return escenario_->anchoUn;};
-	float 		getCoorXPersonaje(){ return personaje_->x;};
-	float 		getCoorYPersonaje(){ return personaje_->y;};
 	std::string getTipoObjeto(unsigned int index);
 	float 		getCoorXObjeto(unsigned int index);
 	float 		getCoorYObjeto(unsigned int index);
@@ -59,14 +57,12 @@ private:
 	std::string jsonFile_;
 	std::string path_;
 	ParserValidator::escenario_t *escenario_;
-	ParserValidator::personaje_t *personaje_;
 	std::vector<ParserValidator::objeto_t*> objetos_;
 
 	//Metodos
 	bool setDefaultValues();
 	bool setValuesFromFile();
 	bool parseEscenario(Json::Value root);
-	bool parsePersonaje(Json::Value root);
 	bool parseObjetos(Json::Value root);
 
 };

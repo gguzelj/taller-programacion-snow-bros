@@ -275,7 +275,7 @@ personaje_t* Escenario::getPersonajesParaEnvio(){
 
 Personaje* Escenario::getPersonaje(conn_id id){
 	for(auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje){
-		if ((*personaje)->id == id)
+		if (strcmp((*personaje)->id , id) == 0 )
 			return *personaje;
 	}
 	return nullptr;

@@ -104,6 +104,7 @@ int Server::bindSocket() {
 void Server::run() {
 
 	listen(sockfd_, BACKLOG);
+	std::cout<<"Listening..."<<std::endl;
 
 	Log::instance()->append("Corriendo Juego", Log::INFO);
 

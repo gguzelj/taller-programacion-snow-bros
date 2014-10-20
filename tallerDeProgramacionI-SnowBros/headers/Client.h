@@ -99,7 +99,7 @@ private:
 	std::thread sendTh;
 	std::thread recvTh;
 
-    Threadsafe_queue<dataFromServer_t*>* shared_rcv_queue_;
+    Threadsafe_queue<dataFromServer_t>* shared_rcv_queue_;
 
 	Controlador *controller_;
 	Drawer *view_;
@@ -131,7 +131,7 @@ private:
 	 * Maneja aquello relacionado con lo que se tiene que dibujar en la pantalla, para luego mostrarlo.
 	 * Sería la parte de "Vista" del patron MVC
 	 */
-	void onRender(dataFromServer* data);
+	void onRender(dataFromServer data);
 
 	/*
 	 * Libera todos los recursos cargados en memoria

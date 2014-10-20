@@ -8,13 +8,14 @@ Client::Client() {
 	this->running_ = true;
 	//TODO agregar el struct que va a ser el escenario que reciba del server.
 	//model_ = nullptr;
-	view_ = nullptr;
+
 	controller_ = nullptr;
-	port = 0;
+	view_ = nullptr;
 	host = nullptr;
 	name = nullptr;
+	port = 0;
 	sock = 0;
-	shared_rcv_queue_ = new Threadsafe_queue<dataFromServer_t*>();
+	shared_rcv_queue_ = new Threadsafe_queue<dataFromServer_t>();
 
 	//Seteamos el nivel del logger:
 	//	-Si loggerLevel = INFO se loguean todos los mensajes
@@ -188,7 +189,7 @@ void Client::enviarAlServer() {
 	int size = sizeof(dataToSend_t);
 	while (running_) {
 		//Control all posible events
-		dataToSend_t* data  = onEvent();
+		dataToSend_t* data = onEvent();
 		if (sendall(sock, data, &size) == -1) {
 			Log::instance()->append(CLIENT_MSG_ERROR_WHEN_SENDING, Log::ERROR);
 		}
@@ -200,52 +201,71 @@ void Client::enviarAlServer() {
 void Client::recibirDelServer() {
 
 	int size;
-	dataFromServer_t* data;
+	dataFromServer_t data;
 
 	//La cant de bytes a recibir esta definida por la cantidad de
 	//personajes y la cantidad de objetos dinamicos:
-	size = sizeof(personaje_t) * gameDetails_.cantPersonajes;
-	size += sizeof(objDinamico_t) * gameDetails_.cantObjDinamicos;
-
-	data = (dataFromServer_t*) malloc(size);
-
 	while (running_) {
 
-		//Voy reciviendo las cosas del servidor
-		if (recvall(sock, data, &size) == -1) {
+		//Recibimos los personajes
+		size = sizeof(personaje_t) * gameDetails_.cantPersonajes;
+		data.personajes = (personaje_t*) malloc(size);
+		if (recvall(sock, data.personajes, &size) != 0) {
 			Log::instance()->append(CLIENT_MSG_ERROR_WHEN_RECEIVING,
 					Log::ERROR);
 		}
+
+		//Recibimos los objetos dinamicos
+		size = sizeof(objDinamico_t) * gameDetails_.cantObjDinamicos;
+		data.dinamicos = (objDinamico_t*) malloc(size);
+		if (recvall(sock, data.dinamicos, &size) != 0) {
+			Log::instance()->append(CLIENT_MSG_ERROR_WHEN_RECEIVING,
+					Log::ERROR);
+		}
+
 		shared_rcv_queue_->push(data);
+
 	}
+
 }
 
 dataToSend_t* Client::onEvent() {
 	dataToSend_t* data = controller_->handleEvents(&running_);
 
 	int i;
-	for(i = 0; name[i] != '\0';i++)
+	for (i = 0; name[i] != '\0'; i++)
 		data->id[i] = name[i];
 	data->id[i] = name[i];
-	std::cout << "Cliente: " << data->id << std::endl;
-	std::cout << "type_1: " << data->type_1 << std::endl;
-	std::cout << "keycode_1: " << data->keycode_1 << std::endl;
-	std::cout << "type_2: " << data->type_2 << std::endl;
-	std::cout << "keycode_2: " << data->keycode_2 << std::endl;
 
 	return data;
 }
 
-void Client::onRender(dataFromServer_t* data) {
+void Client::onRender(dataFromServer_t data) {
 
 	dataFromClient_t dataToBeDraw;
 
 	dataToBeDraw.cantPersonajes = gameDetails_.cantPersonajes;
 	dataToBeDraw.cantObjDinamicos = gameDetails_.cantObjDinamicos;
-	dataToBeDraw.personajes = data->personajes;
-	dataToBeDraw.dinamicos = data->dinamicos;
+	dataToBeDraw.personajes = data.personajes;
+	dataToBeDraw.dinamicos = data.dinamicos;
 
-	view_->updateView(dataToBeDraw);
+	std::cout << std::endl << "Estos son los objetos Dinamicos" << std::endl;
+	for (unsigned int i = 0; i < gameDetails_.cantObjDinamicos; i++) {
+
+		std::cout << "Obj nro: " << i << std::endl;
+
+		std::cout << "alto: " << dataToBeDraw.dinamicos[i].alto << std::endl;
+		std::cout << "ancho: " << dataToBeDraw.dinamicos[i].ancho << std::endl;
+		std::cout << "rotacion: " << dataToBeDraw.dinamicos[i].rotacion
+				<< std::endl;
+		std::cout << "centrox: " << dataToBeDraw.dinamicos[i].centro.x
+				<< std::endl;
+		std::cout << "centroy: " << dataToBeDraw.dinamicos[i].centro.y
+				<< std::endl;
+
+	}
+
+	//view_->updateView(dataToBeDraw);
 }
 
 void Client::onCleanup() {

@@ -4,6 +4,7 @@
 
 //Constantes para los atributos del json
 #define ESCENARIO              "escenario"
+#define MAXIMO_JUGADORES	   "maximo-jugadores"
 #define GRAVEDAD 			   "gravedad"
 #define ALTO_PX                "alto-px"
 #define ANCHO_PX               "ancho-px"
@@ -31,6 +32,7 @@
 #define TRAPECIO               "trapecio"
 
 //Valores Default para el juego
+#define MAXIMO_JUGADORES_DEF	4
 #define GRAVEDAD_DEF			-10.0f
 #define ALTO_PX_DEF             720
 #define ANCHO_PX_DEF            1024
@@ -45,6 +47,8 @@
 #define PERSONAJE_Y_DEF			 0
 
 //Rangos de valores validos para el juego
+#define MAXIMO_JUGADORES_MAX	20
+#define MAXIMO_JUGADORES_MIN	2
 #define ALTO_PX_MAX				720
 #define ALTO_PX_MIN             200
 #define ANCHO_PX_MAX            1366
@@ -128,6 +132,9 @@
 
 //WARNING
 #define PARSER_MSG_OPEN_FILE                        "Parser: No se pudo abrir el archivo "
+#define PARSER_MSG_ESC_MXJG							"Parser: Escenario - Atributo maximo-jugadores sin definir. Se carga valor por default."
+#define PARSER_MSG_ESC_MXJG_NO_NUMBER				"Parser: Escenario - Atributo maximo-jugadores es un numero. Se carga valor por default."
+#define PARSER_MSG_ESC_MXJG_FUERA_RANGO				"Parser: Escenario - Atributo maximo-jugadores fuera de rango. Se carga valor por default."
 #define PARSER_MSG_ESC_GRAVEDAD                     "Parser: Escenario - Atributo gravedad sin definir. Se carga valor por default."
 #define PARSER_MSG_ESC_GRAVEDAD_NO_NUMBER			"Parser: Escenario - Atributo gravedad es un numero. Se carga valor por default."
 #define PARSER_MSG_ESC_GRAVEDAD_POSITIVA			"Parser: Escenario - Atributo gravedad debe ser un numero negativo. Se carga valor por default."

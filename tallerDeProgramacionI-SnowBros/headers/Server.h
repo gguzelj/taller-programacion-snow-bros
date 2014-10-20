@@ -34,7 +34,6 @@
 
 #define SRV_NO_ERROR 0
 #define SRV_ERROR 1
-#define BACKLOG 10 // how many pending connections queue will hold
 #define TAM 20
 
 typedef struct receivedData{
@@ -84,6 +83,7 @@ private:
 	bool running_;
 	int port_;
 	int sockfd_;
+	int connectionsLimit_;
 	bool acceptNewClients_;
 
 	Escenario *model_;

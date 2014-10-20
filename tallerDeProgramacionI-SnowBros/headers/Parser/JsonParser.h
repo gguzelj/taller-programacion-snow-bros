@@ -29,6 +29,9 @@ public:
 
 	unsigned int getCantidadObjetos();
 
+	//Metodos utilizados por el server
+	int 		getConnectionsLimit(){ return escenario_->maximoJugadores;};
+
 	//Metodos utilizados por el modelo
 	float 		getGravedad(){ return escenario_->gravedad;};
 	float 		getAltoUnEscenario(){ return escenario_->altoUn;};

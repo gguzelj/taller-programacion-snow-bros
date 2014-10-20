@@ -9,6 +9,7 @@ Server::Server() {
 	running_ = false;
 	sockfd_ = 0;
 	port_ = 0;
+	connectionsLimit_ = 0;
 	model_ = nullptr;
 	parser_ = nullptr;
 	jsonPath_ = "";
@@ -53,6 +54,8 @@ int Server::init(int argc, char *argv[]) {
 		return SRV_ERROR;
 
 	model_ = new Escenario(parser_);
+
+	connectionsLimit_ = parser_->getConnectionsLimit();
 
 	return SRV_NO_ERROR;
 }
@@ -103,7 +106,7 @@ int Server::bindSocket() {
  */
 void Server::run() {
 
-	listen(sockfd_, BACKLOG);
+	listen(sockfd_, connectionsLimit_);
 
 	Log::instance()->append("Corriendo Juego", Log::INFO);
 
@@ -269,7 +272,7 @@ bool Server::searchPlaceForConnection(connection_t conn, unsigned int &index) {
 	}
 
 	//Validamos si existe lugar suficiente
-	if (connections_.size() < BACKLOG) {
+	if (connections_.size() < connectionsLimit_) {
 
 		index = connections_.size();
 		connections_.push_back(conn);

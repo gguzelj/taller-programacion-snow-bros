@@ -6,14 +6,12 @@ Escenario::Escenario(JsonParser *parser) {
 	ancho_un = parser->getAnchoUnEscenario();
 	alto_un = parser->getAltoUnEscenario();
 	world_ = new b2World(gravity);
-	figuras_ = new std::list<Figura*>;
 	figurasEstaticas_ = new std::vector<Figura*>;
 	figurasDinamicas_ = new std::vector<Figura*>;
 	muros_ = new std::list<Muro*>;
 	personajes_ = new std::list<Personaje*>;
 	Figura* figura_i;
 	Muro* muro_i;
-
 
 	//Create the ground
 	muro_i = new Muro(parser->getAnchoUnEscenario(),
@@ -59,13 +57,6 @@ Escenario::Escenario(JsonParser *parser) {
 			FIGURA_WARNING_OVERLAP + parser->getObjectDefinition(index),
 					Log::WARNING);
 		} else {
-			figuras_->push_back(figura_i);
-
-			
-			if (parser->esObjetoEstatico(index))
-				figurasEstaticas_->push_back(figura_i);
-
-
 			if (parser->esObjetoEstatico(index))
 				figurasEstaticas_->push_back(figura_i);
 			else
@@ -76,15 +67,17 @@ Escenario::Escenario(JsonParser *parser) {
 
 Escenario::~Escenario() {
 	// Borrar cada uno de los objetos
-	for (int i = 0; figuras_->size(); i++) {
-		(figuras_->pop_back());
+	for (int i = 0; figurasEstaticas_->size(); i++) {
+		(figurasEstaticas_->pop_back());
+	}
+	for (int i = 0; figurasDinamicas_->size(); i++) {
+		(figurasDinamicas_->pop_back());
 	}
 	for (int i = 0; personajes_->size(); i++) {
 		(personajes_->pop_back());
 	}
 
 	// Borrar las listas
-	delete figuras_;
 	delete muros_;
 	delete personajes_;
 	delete world_;
@@ -94,15 +87,9 @@ b2World* Escenario::getWorld() {
 	return world_;
 }
 
-std::list<Figura*>* Escenario::getFiguras() {
-	return figuras_;
-}
-
 std::list<Personaje*>* Escenario::getPersonajes() {
 	return personajes_;
 }
-
-
 
 bool Escenario::crearPersonaje(float x, float y,conn_id id){
 	Personaje* nuevoPersonaje = new Personaje(x,y,id,world_);
@@ -153,9 +140,6 @@ unsigned int Escenario::getCantObjEstaticos() {
 	return figurasEstaticas_->size();
 }
 
-
-
-
 void obtenerAltoAnchoIdFigura(Figura* figura,float &alto, float &ancho,char& id){
 
 	if(figura->type == "rectangulo"){
@@ -178,10 +162,7 @@ void obtenerAltoAnchoIdFigura(Figura* figura,float &alto, float &ancho,char& id)
 		float escala = polygon->getEscala();
 		int lados = polygon->getLados();
 
-
-
 		if(lados == 3){
-
 			ancho = 1.732050808*escala;
 			alto = escala*3/2;
 			id = TRIANGULO_CODE;
@@ -189,7 +170,6 @@ void obtenerAltoAnchoIdFigura(Figura* figura,float &alto, float &ancho,char& id)
 		}
 
 		if (lados == 4){
-
 			ancho = 2* escala;
 			alto = ancho;
 			id = CUADRADO_CODE;
@@ -197,12 +177,12 @@ void obtenerAltoAnchoIdFigura(Figura* figura,float &alto, float &ancho,char& id)
 		}
 
 		if(lados == 5){
-
 			ancho = (2*escala*sin(M_PI/5)*(1+2*cos(72*DEGTORAD)));
 			alto = escala*(1+cos(M_PI/5));
 			id = PENTAGONO_CODE;
 			return;
 		}
+
 		if(lados == 6){
 			ancho = 2*escala*cos(M_PI/6);
 			alto = 2*escala;
@@ -230,9 +210,6 @@ void obtenerAltoAnchoIdFigura(Figura* figura,float &alto, float &ancho,char& id)
 
 }
 
-
-
-
 /**
  * Devolvemos un vector con objetos Estaticos
  */
@@ -253,13 +230,8 @@ objEstatico_t* Escenario::getObjetosEstaticos() {
 		obj[i].centro.x = fig->x;
 		obj[i].centro.y = fig->y;
 	}
-
 	return obj;
-
 }
-
-
-
 
 /**
  * Devolvemos un vector con objetos dinamicos
@@ -281,15 +253,12 @@ objDinamico_t* Escenario::getObjetosDinamicos() {
 		obj[i].centro.x = fig->x;
 		obj[i].centro.y = fig->y;
 	}
-
 	return obj;
-
 }
 
 unsigned int Escenario::getCantPersonajes(){
 	return sizeof(this->getPersonajes());
 }
-
 
 personaje_t* Escenario::getPersonajesParaEnvio(){
 	personaje_t* pers =(personaje_t*) malloc( sizeof(personaje_t)* personajes_->size() );
@@ -304,14 +273,11 @@ personaje_t* Escenario::getPersonajesParaEnvio(){
 	return pers;
 }
 
-
-
 Personaje* Escenario::getPersonaje(conn_id id){
 	for(auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje){
 		if ((*personaje)->id == id)
 			return *personaje;
 	}
-
 	return nullptr;
 }
 

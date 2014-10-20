@@ -35,11 +35,10 @@
 #define SRV_NO_ERROR 0
 #define SRV_ERROR 1
 #define BACKLOG 10 // how many pending connections queue will hold
-#define MICROSECONDS 5000000
-#define COTA_ESPERA 10000
+#define TAM 20
 
 typedef struct receivedData{
-	conn_id id;
+	char id[20];
 	int keycode_1;
 	int keycode_2;
 	unsigned int type_1;
@@ -56,7 +55,7 @@ typedef struct dataToSend{
 	objDinamico_t* dinamicos;
 } dataToSend_t;
 
-typedef char conn_id[20];
+typedef char conn_id[TAM];
 
 typedef struct connection{
 	bool activa;

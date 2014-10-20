@@ -30,7 +30,6 @@ typedef struct punto{
 	float y;
 } punto_t;
 
-
 typedef struct personaje{
 	punto_t centro;
 	char id[20];
@@ -40,8 +39,6 @@ typedef struct personaje{
 	char estado;
 	char orientacion;
 }personaje_t;
-
-
 
 typedef struct objEstatico{
 	punto_t centro;
@@ -64,8 +61,6 @@ public:
 	Escenario(JsonParser *parser);
 	virtual ~Escenario();
 
-	std::list<Figura*>* getFiguras();
-
 	std::list<Muro*>* getParedes();
 
 	//Devuelve una instancia al personaje del juego
@@ -84,8 +79,14 @@ public:
 	objEstatico_t* getObjetosEstaticos();
 	objDinamico_t* getObjetosDinamicos();
 
+	/*
+	 * Devuelve la lista de Personajes
+	 */
 	Personaje* getPersonaje(conn_id id);
 
+	/*
+	 * Realiza un step en la simulacion.
+	 */
 	void step();
 
 	float getAnchoUn();
@@ -97,7 +98,6 @@ private:
 	const int32 positionIterations = 64;   //how strongly to correct position}
 
 	b2World* world_;
-	std::list<Figura*>* figuras_;
 	std::vector<Figura*>* figurasEstaticas_;
 	std::vector<Figura*>* figurasDinamicas_;
 	std::list<Muro*>* muros_;

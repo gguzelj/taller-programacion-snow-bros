@@ -310,8 +310,8 @@ void Server::enviarDatosJuego(int sockfd) {
 		Log::instance()->append("No se pueden enviar datos", Log::INFO);
 	}
 
-	std::cout << "enviamos " << datos.cantObjDinamicos << " obj Din y ";
-	std::cout << datos.cantObjEstaticos << " obj Estaticos" << std::endl;
+	std::cout << "Enviamos " << datos.cantObjDinamicos << " objetos Dinamicos y ";
+	std::cout << datos.cantObjEstaticos << " objetos Estaticos" << std::endl;
 
 
 	Log::instance()->append("Enviamos la lista de obj Estaticos", Log::INFO);
@@ -332,24 +332,22 @@ void Server::enviarDatosJuego(int sockfd) {
 
 	std::cout << "Estos son los objetos Estaticos" << std::endl;
 	for (unsigned int i = 0; i < datos.cantObjEstaticos; i++) {
-
 		std::cout << "alto: " << objetosEstaticos[i].alto << std::endl;
 		std::cout << "ancho: " << objetosEstaticos[i].ancho << std::endl;
 		std::cout << "rotacion: " << objetosEstaticos[i].rotacion << std::endl;
 		std::cout << "centrox: " << objetosEstaticos[i].centro.x << std::endl;
 		std::cout << "centroy: " << objetosEstaticos[i].centro.y << std::endl;
-
+		std::cout << "tipo: " << objetosEstaticos[i].id << std::endl;
 	}
 
 	std::cout << std::endl << "Estos son los objetos Dinamicos" << std::endl;
 	for (unsigned int i = 0; i < datos.cantObjDinamicos; i++) {
-
 		std::cout << "alto: " << objetosDinamicos[i].alto << std::endl;
 		std::cout << "ancho: " << objetosDinamicos[i].ancho << std::endl;
 		std::cout << "rotacion: " << objetosDinamicos[i].rotacion << std::endl;
 		std::cout << "centrox: " << objetosDinamicos[i].centro.x << std::endl;
 		std::cout << "centroy: " << objetosDinamicos[i].centro.y << std::endl;
-
+		std::cout << "tipo: " << objetosDinamicos[i].id << std::endl;
 	}
 
 }
@@ -376,7 +374,12 @@ void Server::recibirDelCliente(connection_t conn) {
 			conn.activa = false;
 			return;
 		}
-		data->id = conn.id;
+
+		std::cout << "Cliente: " << data->id << std::endl;
+		std::cout << "keycode_1: " << data->keycode_1 << std::endl;
+		std::cout << "keycode_2: " << data->keycode_2 << std::endl;
+		std::cout << "type_1: " << data->type_1 << std::endl;
+		std::cout << "type_2: " << data->type_2 << std::endl<<std::endl;
 
 		// Al hacer push se notifica al step mediante una condition_variable
 		//que tiene data para procesar

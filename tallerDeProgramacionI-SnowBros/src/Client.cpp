@@ -139,7 +139,6 @@ int Client::connectToServer() {
 }
 
 int Client::initialize() {
-
 	int size;
 	int entro;
 	std::string msg;
@@ -212,6 +211,8 @@ int Client::initialize() {
 }
 
 void Client::enviarAlServer() {
+	FILE* file = fopen ("clSend.txt","w");
+	fclose(file);
 
 	int size = sizeof(dataToSend_t);
 	while (running_) {
@@ -220,6 +221,7 @@ void Client::enviarAlServer() {
 		if (sendall(sock, data, &size) == -1) {
 			Log::instance()->append(CLIENT_MSG_ERROR_WHEN_SENDING, Log::ERROR);
 		}
+		SDL_Delay(1);
 	}
 }
 
@@ -227,6 +229,9 @@ void Client::recibirDelServer() {
 
 	int size;
 	dataFromServer_t data;
+
+	FILE* file = fopen ("clRecv.txt","w");
+	fclose(file);
 
 	//La cant de bytes a recibir esta definida por la cantidad de
 	//personajes y la cantidad de objetos dinamicos:
@@ -248,6 +253,10 @@ void Client::recibirDelServer() {
 					Log::ERROR);
 		}
 		shared_rcv_queue_->push(data);
+
+		file = fopen("clRecv.txt", "a");
+		fprintf(file, "Cant Personajes: %d\nCant Dinamicos: %d\n", gameDetails_.cantObjDinamicos, gameDetails_.cantPersonajes);
+		fclose(file);
 	}
 }
 
@@ -258,6 +267,12 @@ dataToSend_t* Client::onEvent() {
 	for (i = 0; name[i] != '\0'; i++)
 		data->id[i] = name[i];
 	data->id[i] = name[i];
+
+	FILE* file = fopen ("clSend.txt","a");
+
+	fprintf(file, "Cliente: %s\ntype_1: %d\nkeycode_1: %d\ntype_2: %d\nkeycode_2: %d\n",data->id,data->type_1,data->keycode_1,data->type_2,data->keycode_2);
+
+	fclose(file);
 
 	return data;
 }

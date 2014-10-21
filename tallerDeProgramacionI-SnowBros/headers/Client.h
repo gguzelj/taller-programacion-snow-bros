@@ -38,11 +38,6 @@
 #define CLIENT_MSG_DELETE_CLIENT 		"Client: Borrando Juego"
 #define CLIENT_MSG_VAL_PAR				"Client: Validando parametros de entrada"
 
-
-const float32 timeStep = 1/60.0;       //the length of time passed to simulate (seconds)
-const int32 velocityIterations = 32;   //how strongly to correct velocity
-const int32 positionIterations = 64;   //how strongly to correct position}
-
 using namespace std;
 
 //Estructuras necesarias para conectarse con el servidor

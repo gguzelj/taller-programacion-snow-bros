@@ -26,7 +26,7 @@ dataToSend_t* Controlador::handleEvents(bool* running){
 	return data;
 }
 
-void Controlador::handleEvent(SDL_Event* evento,bool* running, int32_t *code, uint32_t *type){
+void Controlador::handleEvent(SDL_Event* evento,bool* running, int32_t *code, Uint32 *type){
 	//logica de manejo de eventos del personaje
 	//model->getPersonaje()->handleInput(evento->key.keysym.sym,evento->type);
 
@@ -60,19 +60,19 @@ void Controlador::handleEvent(SDL_Event* evento,bool* running, int32_t *code, ui
 				}
 				case SDLK_LEFT:{
 					*type = SDL_KEYDOWN;
-					*code= SDLK_LEFT;
+					*code= evento->key.keysym.sym;
 					cantEventos++;
 					break;
 				}
 				case SDLK_RIGHT:{
 					*type = SDL_KEYDOWN;
-					*code= SDLK_RIGHT;
+					*code= evento->key.keysym.sym;
 					cantEventos++;
 					break;
 				}
 				case SDLK_UP:{
 					*type = SDL_KEYDOWN;
-					*code= SDLK_UP;
+					*code= evento->key.keysym.sym;
 					cantEventos++;
 					break;
 				}
@@ -83,19 +83,19 @@ void Controlador::handleEvent(SDL_Event* evento,bool* running, int32_t *code, ui
 			case SDL_KEYUP:{
 				case SDLK_LEFT:{
 					*type = SDL_KEYUP;
-					*code= SDLK_LEFT;
+					*code= evento->key.keysym.sym;
 					cantEventos++;
 					break;
 				}
 				case SDLK_RIGHT:{
 					*type = SDL_KEYUP;
-					*code= SDLK_RIGHT;
+					*code= evento->key.keysym.sym;
 					cantEventos++;
 					break;
 				}
 				case SDLK_UP:{
 					*type = SDL_KEYUP;
-					*code= SDLK_UP;
+					*code= evento->key.keysym.sym;
 					cantEventos++;
 					break;
 				}

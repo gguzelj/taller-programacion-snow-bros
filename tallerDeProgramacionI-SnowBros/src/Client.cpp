@@ -218,6 +218,7 @@ void Client::enviarAlServer() {
 	while (running_) {
 		//Control all posible events
 		dataToSend_t* data = onEvent();
+		if (data->keycode_1 == 0 && data->keycode_2 ==0 )continue;
 		if (sendall(sock, data, &size) == -1) {
 			Log::instance()->append(CLIENT_MSG_ERROR_WHEN_SENDING, Log::ERROR);
 		}

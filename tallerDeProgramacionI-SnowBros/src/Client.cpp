@@ -220,8 +220,6 @@ void Client::enviarAlServer() {
 		if (sendall(sock, data, &size) == -1) {
 			Log::instance()->append(CLIENT_MSG_ERROR_WHEN_SENDING, Log::ERROR);
 		}
-		//Esto esta solo para poder ver lo que se manda.
-		SDL_Delay(50);
 	}
 }
 

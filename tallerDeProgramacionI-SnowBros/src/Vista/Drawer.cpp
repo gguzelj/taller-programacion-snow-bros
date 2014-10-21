@@ -230,125 +230,84 @@ void Drawer::drawFigura(figura_t objeto) {
 
         float escala = objeto.alto;
 
+        float ancho = objeto.ancho;
+        float alto = objeto.alto;
+
         if (objeto.id == RECTANGULO_CODE) {
-
-                float ancho = objeto.ancho;
-                float alto = objeto.alto;
-
-                rectangleTexture.render(renderer,
-                                coord_relativa(coordRel.x,
-                                                un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
-                                coord_relativa(coordRel.y,
-                                                -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
-                                ancho * un_to_px_x, alto * un_to_px_y, nullptr,
-                                objeto.rotacion * -RADTODEG, nullptr);
+			rectangleTexture.render(renderer,
+							coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
+							coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
+							ancho * un_to_px_x, alto * un_to_px_y, nullptr,
+							objeto.rotacion * -RADTODEG, nullptr);
         }
 
         if (objeto.id == CIRCULO_CODE) {
-                float radio = objeto.alto / 2;
+			float radio = objeto.alto / 2;
 
-                circleTexture.render(renderer,
-                                coord_relativa(coordRel.x,
-                                                un_to_px_x * (objeto.centro.x - radio) + ox),
-                                coord_relativa(coordRel.y,
-                                                -un_to_px_y * (objeto.centro.y + radio) + oy),
-                                2 * radio * un_to_px_x, 2 * radio * un_to_px_y, nullptr,
-                                objeto.rotacion * -RADTODEG, nullptr);
+			circleTexture.render(renderer,
+							coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - radio) + ox),
+							coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + radio) + oy),
+							ancho * un_to_px_x, alto * un_to_px_y, nullptr,
+							objeto.rotacion * -RADTODEG, nullptr);
         }
 
         if (objeto.id == TRIANGULO_CODE) {
-                SDL_Point centro;
-                centro.x = 1.732050808 * escala * un_to_px_x / 2;
-                centro.y = escala * 3 / 2 * un_to_px_y / 1.5;
+			SDL_Point centro;
+			centro.x = 1.732050808 * escala * un_to_px_x / 2;
+			centro.y = escala * 3 / 2 * un_to_px_y / 1.5;
 
-                triangleTexture.render(renderer,
-                                coord_relativa(coordRel.x,
-                                                un_to_px_x * (objeto.centro.x - 0.866025 * escala)
-                                                                + ox), //raiz de 3, dividido 2
-                                coord_relativa(coordRel.y,
-                                                -un_to_px_y * (objeto.centro.y + escala) + oy),
-                                1.732050808 * escala * un_to_px_x, escala * 3 / 2 * un_to_px_y, //raiz de 3
-                                nullptr, objeto.rotacion * -RADTODEG, &centro);
+			triangleTexture.render(renderer,
+							coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
+							coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
+							ancho * un_to_px_x, alto * un_to_px_y,
+							nullptr, objeto.rotacion * -RADTODEG, &centro);
         }
 
         if (objeto.id == CUADRADO_CODE) {
-                squareTexture.render(renderer,
-                                coord_relativa(coordRel.x,
-                                                un_to_px_x * (objeto.centro.x - escala) + ox),
-                                coord_relativa(coordRel.y,
-                                                -un_to_px_y * (objeto.centro.y + escala) + oy),
-                                2 * escala * un_to_px_x, 2 * escala * un_to_px_x, nullptr,
-                                objeto.rotacion * -RADTODEG, nullptr);
+			squareTexture.render(renderer,
+						    coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
+						    coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
+						    ancho * un_to_px_x, alto * un_to_px_y, nullptr,
+						    objeto.rotacion * -RADTODEG, nullptr);
         }
 
         if (objeto.id == PENTAGONO_CODE) {
+			SDL_Point centro;
+			centro.x = (ancho * un_to_px_x) / 2;
+			centro.y = (ancho * un_to_px_y) / 1.91;
 
-                SDL_Point centro;
-                centro.x = ((2 * escala * sin(M_PI / 5) * (1 + 2 * cos(72 * DEGTORAD)))
-                                * un_to_px_x) / 2;
-                centro.y = ((2 * escala * sin(M_PI / 5) * (1 + 2 * cos(72 * DEGTORAD)))
-                                * un_to_px_y) / 1.91;
-
-                pentagonTexture.render(renderer,
-                                coord_relativa(coordRel.x,
-                                                un_to_px_x
-                                                                * (objeto.centro.x
-                                                                                - escala * sin(M_PI / 5)
-                                                                                                * (1 + 2 * cos(72 * DEGTORAD)))
-                                                                + ox),
-                                coord_relativa(coordRel.y,
-                                                -un_to_px_y * (objeto.centro.y + escala) + oy),
-                                (2 * escala * sin(M_PI / 5) * (1 + 2 * cos(72 * DEGTORAD)))
-                                                * un_to_px_x, escala * (1 + cos(M_PI / 5)) * un_to_px_y,
-                                nullptr, objeto.rotacion * -RADTODEG, &centro);
+			pentagonTexture.render(renderer,
+							coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
+							coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / (1+cos(M_PI/5))) + oy),
+							ancho * un_to_px_x, alto * un_to_px_y, nullptr,
+							objeto.rotacion * -RADTODEG, &centro);
         }
 
         if (objeto.id == HEXAGONO_CODE) {
-                hexagonTexture.render(renderer,
-                                coord_relativa(coordRel.x,
-                                                un_to_px_x * (objeto.centro.x - escala * cos(M_PI / 6))
-                                                                + ox),
-                                coord_relativa(coordRel.y,
-                                                -un_to_px_y * (objeto.centro.y + escala) + oy),
-                                2 * escala * cos(M_PI / 6) * un_to_px_x,
-                                2 * escala * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG,
-                                nullptr);
+			hexagonTexture.render(renderer,
+						    coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
+						    coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
+						    ancho * un_to_px_x, alto * un_to_px_y, nullptr,
+						    objeto.rotacion * -RADTODEG, nullptr);
         }
 
         //TODO arreglar como se muestra la imagen de trapecio
         if (objeto.id == TRAPECIO_CODE) {
-
-                float ancho = objeto.ancho;
-                float mediana = (ancho + ancho * 0.68) / 2; //ancho*0.68 = base_menor
-                float alto = objeto.alto;
-
-                trapexTexture.render(renderer,
-                                coord_relativa(coordRel.x,
-                                                un_to_px_x * (objeto.centro.x - ancho + mediana / 2)
-                                                                + ox),
-                                coord_relativa(coordRel.y,
-                                                -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
-                                ancho * un_to_px_x, alto * un_to_px_y, nullptr,
-                                objeto.rotacion * -RADTODEG, nullptr);
+			trapexTexture.render(renderer,
+							coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
+							coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
+							ancho * un_to_px_x, alto * un_to_px_y, nullptr,
+							objeto.rotacion * -RADTODEG, nullptr);
         }
         //TODO arreglar como se muestra la imagen de paralelogramo
         if (objeto.id == PARALELOGRAMO_CODE) {
-
-                float ancho = objeto.ancho;
-                float alto = objeto.alto;
-
-                paralelogramTexture.render(renderer,
-                                coord_relativa(coordRel.x,
-                                                un_to_px_x * (objeto.centro.x - ancho / 2 - alto / 4)
-                                                                + ox),
-                                coord_relativa(coordRel.y,
-                                                -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
-                                (ancho + alto / 2) * un_to_px_x, alto * un_to_px_y, nullptr,
-                                objeto.rotacion * -RADTODEG, nullptr);
+			paralelogramTexture.render(renderer,
+							coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
+							coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
+							ancho * un_to_px_x, alto * un_to_px_y, nullptr,
+							objeto.rotacion * -RADTODEG, nullptr);
         }
 }
-
-
 
 void Drawer::drawCharacter(personaje_t person) {
 	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);

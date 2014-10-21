@@ -9,9 +9,19 @@
         "objetos": [
                      {
                        "tipo":"rectangulo",
-                       "x":-4,
-                       "y":0,
-                       "ancho":4,
+                       "x":-14,
+                       "y":-7,
+                       "ancho":20,
+                       "alto":1,
+                       "rot":0,
+                       "masa":3,
+                       "estatico":true
+                     },
+                     {
+                       "tipo":"rectangulo",
+                       "x":7,
+                       "y":-7,
+                       "ancho":20,
                        "alto":1,
                        "rot":0,
                        "masa":3,
@@ -38,15 +48,15 @@
                      },
                      {
                        "tipo":"poligono",
-                       "x":1,
-                       "y":4,
+                       "x":-6,
+                       "y":0,
                        "lados":3,
-                       "escala":2,
-                       "rot":0,
+                       "escala":1.5,
+                       "rot":45,
                        "masa":5,
                        "estatico":false
                      },
-                      {
+                     {
                        "tipo":"poligono",
                        "x":4,
                        "y":0,
@@ -62,7 +72,7 @@
                        "y":2,
                        "lados":5,
                        "escala":1,
-                       "rot":0,
+                       "rot":30,
                        "masa":5,
                        "estatico":false
                      },
@@ -72,26 +82,6 @@
                        "y":0,
                        "lados":6,
                        "escala":1,
-                       "rot":0,
-                       "masa":5,
-                       "estatico":false
-                     },
-                     {
-                       "tipo":"trapecio",
-                       "x":16,
-                       "y":9,
-                       "alto":4,
-                       "base":7.50,
-                       "rot":0,
-                       "masa":5,
-                       "estatico":false
-                     },                   
-                     {
-                       "tipo":"paralelogramo",
-                       "x":17,
-                       "y":0,
-                       "alto":1,
-                       "ancho":2,
                        "rot":0,
                        "masa":5,
                        "estatico":false

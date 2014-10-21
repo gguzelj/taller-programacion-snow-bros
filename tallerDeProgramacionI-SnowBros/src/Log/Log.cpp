@@ -20,7 +20,7 @@ void Log::closeLog() {
 
 void Log::append(std::string msg, LOG_TYPE logType) {
 
-	std::string fileName("Log-Game.txt");
+	std::string fileName("Log-Server.txt");
 	std::ofstream out(fileName, std::ios_base::app);
 
 	if(logType >= loggerLevel)

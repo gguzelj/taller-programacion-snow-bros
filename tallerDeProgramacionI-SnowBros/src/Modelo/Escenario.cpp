@@ -101,9 +101,6 @@ bool Escenario::asignarPersonaje(conn_id id){
 	return false;
 }
 
-
-
-
 bool Escenario::crearPersonaje(float x, float y,conn_id id){
 	Personaje* nuevoPersonaje = new Personaje(x,y,id,world_);
 	if(!nuevoPersonaje)
@@ -117,16 +114,14 @@ void acomodarEstadoPersonaje(Personaje* personaje){
 	personaje->decreaseJumpCooldown();
 	//chequeo para cambiar el estado jumping a falling o el estado cuando cae de una plataforma
 	//esta implementado aca para que cambie cuando tiene que hacerlo
-	if (personaje->getVelocity().y <= 0.0f
-			&& personaje->getCantidadDeContactosActuales() == 0) {
+	if (personaje->getVelocity().y <= 0.0f && personaje->getCantidadDeContactosActuales() == 0) {
 		personaje->state = &Personaje::falling;
 	} else if (personaje->getVelocity().y <= 0.0f
 			&& personaje->state == &Personaje::jumping) {
 		personaje->state = &Personaje::standby;
 	}
 
-	if (Personaje::walking.movimientoLateralDerecha
-			|| Personaje::walking.movimientoLateralIzquierda)
+	if (Personaje::walking.movimientoLateralDerecha	|| Personaje::walking.movimientoLateralIzquierda)
 		Personaje::walking.caminar(*personaje);
 
 	if (Personaje::jumping.debeSaltar && personaje->state->getCode() != JUMPING

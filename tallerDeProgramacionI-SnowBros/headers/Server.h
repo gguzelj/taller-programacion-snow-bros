@@ -37,11 +37,11 @@
 #define TAM 20
 
 typedef struct receivedData{
-	char id[20];
-	int keycode_1;
-	unsigned int type_1;
-	int keycode_2;
-	unsigned int type_2;
+	char id[TAM];
+	int32_t keycode_1;
+	uint32_t type_1;
+	int32_t keycode_2;
+	uint32_t type_2;
 } receivedData_t;
 
 typedef struct firstConnectionDetails{

@@ -374,8 +374,6 @@ void Server::enviarDatosJuego(int sockfd) {
                 std::cout << "centroy: " << personajes[i].centro.y << std::endl<< std::endl;
         }
 
-
-
     free(objetosEstaticos);
     free(objetosDinamicos);
     free(personajes);
@@ -391,6 +389,9 @@ void Server::recibirDelCliente(connection_t conn) {
 	int size = sizeof(receivedData_t);
 	std::string msg;
 
+	FILE* file = fopen ("svRecv.txt","w");
+	fclose(file);
+
 	while (true) {
 
 		receivedData_t* data = (receivedData_t*) malloc(size);
@@ -404,6 +405,12 @@ void Server::recibirDelCliente(connection_t conn) {
 			conn.activa = false;
 			return;
 		}
+
+		FILE* file = fopen ("svRecv.txt","a");
+
+		fprintf(file, "Cliente: %s\ntype_1: %d\nkeycode_1: %d\ntype_2: %d\nkeycode_2: %d\n",data->id,data->type_1,data->keycode_1,data->type_2,data->keycode_2);
+
+		fclose(file);
 
 		// Al hacer push se notifica al step mediante una condition_variable
 		//que tiene data para procesar
@@ -437,6 +444,9 @@ void Server::enviarAlCliente(connection_t conn,
 	int size;
 	dataToSend_t dataToBeSent;
 
+	FILE* file = fopen ("svSend.txt","w");
+	fclose(file);
+
 	//wait_and_pop va a esperar a que haya un elemento en la
 	//personal_queue para desencolar el mismo.
 	while (true) {
@@ -454,6 +464,10 @@ void Server::enviarAlCliente(connection_t conn,
 		if (sendall(conn.socket, dataToBeSent.dinamicos, &size) != 0) {
 			Log::instance()->append("No se pueden enviar datos", Log::WARNING);
 		}
+
+		file = fopen("svSend.txt", "a");
+		fprintf(file, "Cant Personajes: %d\nCant Dinamicos: %d\n", model_->getCantPersonajes(), model_->getCantObjDinamicos());
+		fclose(file);
 	}
 }
 

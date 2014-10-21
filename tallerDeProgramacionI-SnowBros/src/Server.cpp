@@ -15,6 +15,9 @@ Server::Server() {
 	jsonPath_ = "";
 	shared_rcv_queue_ = new Threadsafe_queue<receivedData_t*>();
 
+	//Inicializo el generador de randoms
+	srand (static_cast <unsigned> (time(0)));
+
 	Log::instance()->loggerLevel = Log::INFO;
 	Log::instance()->append("Creando SERVER!", Log::INFO);
 }

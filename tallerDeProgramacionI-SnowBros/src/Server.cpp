@@ -347,8 +347,6 @@ void Server::enviarDatosJuego(int sockfd) {
     	Log::instance()->append("No se pueden enviar datos", Log::WARNING);
     }
 
-
-
     std::cout << "Estos son los objetos Estaticos" << std::endl;
     for (unsigned int i = 0; i < datos.cantObjEstaticos; i++) {
     		std::cout << "id: " << objetosEstaticos[i].id << std::endl;

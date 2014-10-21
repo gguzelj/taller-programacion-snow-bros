@@ -233,8 +233,7 @@ figura_t* Escenario::getObjetosEstaticos() {
 
 	figura_t* obj;
 	Figura* fig;
-	obj = (figura_t*) malloc(
-			sizeof(figura_t) * figurasEstaticas_->size());
+	obj = (figura_t*) malloc( sizeof(figura_t) * figurasEstaticas_->size());
 
 	for (unsigned int i = 0; i < figurasEstaticas_->size(); i++) {
 
@@ -243,8 +242,9 @@ figura_t* Escenario::getObjetosEstaticos() {
 		obtenerAltoAnchoIdFigura(fig,obj[i].alto,obj[i].ancho,obj[i].id);
 
 		obj[i].rotacion = fig->getAngulo();
-		obj[i].centro.x = fig->x;
-		obj[i].centro.y = fig->y;
+		b2Vec2 center = fig->GetCenter();
+		obj[i].centro.x = center.x;
+		obj[i].centro.y = center.y;
 	}
 	return obj;
 }
@@ -265,8 +265,9 @@ figura_t* Escenario::getObjetosDinamicos() {
 		obtenerAltoAnchoIdFigura(fig,obj[i].alto,obj[i].ancho,obj[i].id);
 
 		obj[i].rotacion = fig->getAngulo();
-		obj[i].centro.x = fig->x;
-		obj[i].centro.y = fig->y;
+		b2Vec2 center = fig->GetCenter();
+		obj[i].centro.x = center.x;
+		obj[i].centro.y = center.y;
 	}
 	return obj;
 }
@@ -281,6 +282,8 @@ personaje_t* Escenario::getPersonajesParaEnvio(){
 		strcpy(pers[i].id,(*personaje)->id);
 		pers[i].orientacion = (*personaje)->getOrientacion();
 		pers[i].estado = (*personaje)->state->getCode();
+		pers[i].centro.x = (*personaje)->getX();
+		pers[i].centro.y = (*personaje)->getY();
 		i++;
 	}
 	return pers;

@@ -169,12 +169,46 @@ int Client::initialize() {
 		return CLIENT_ERROR;
 	}
 
-	//Recibimos la lista de objetos Estaticos
+	Log::instance()->append("Recibimos los objetos estaticos.", Log::INFO);
+
 	size = sizeof(figura_t) * gameDetails_.cantObjEstaticos;
 	estaticos_ = (figura_t*) malloc(size);
 	if (recvall(sock, estaticos_, &size) != 0) {
 		Log::instance()->append("No se pueden recibir datos", Log::WARNING);
+		return CLIENT_ERROR;
 	}
+
+	Log::instance()->append("Recibimos los objetos dinamicos.", Log::INFO);
+
+	size = sizeof(figura_t) * gameDetails_.cantObjDinamicos;
+	dinamicos_ = (figura_t*) malloc(size);
+	if (recvall(sock, dinamicos_, &size) != 0) {
+		Log::instance()->append("No se pueden recibir datos", Log::WARNING);
+		return CLIENT_ERROR;
+	}
+
+    std::cout << "Recibimos " << gameDetails_.cantObjDinamicos << " obj Dinamicos y ";
+    std::cout << gameDetails_.cantObjEstaticos << " obj Estaticos" << std::endl;
+
+    std::cout << "Estos son los objetos Estaticos" << std::endl;
+    for (unsigned int i = 0; i < gameDetails_.cantObjEstaticos; i++) {
+            std::cout << "id: " << estaticos_[i].id << std::endl;
+            std::cout << "alto: " << estaticos_[i].alto << std::endl;
+            std::cout << "ancho: " << estaticos_[i].ancho << std::endl;
+            std::cout << "rotacion: " << estaticos_[i].rotacion << std::endl;
+            std::cout << "centrox: " << estaticos_[i].centro.x << std::endl;
+            std::cout << "centroy: " << estaticos_[i].centro.y << std::endl<< std::endl;
+    }
+
+    std::cout << "Estos son los objetos Dinamicos" << std::endl;
+    for (unsigned int i = 0; i < gameDetails_.cantObjDinamicos; i++) {
+            std::cout << "id: " << dinamicos_[i].id << std::endl;
+            std::cout << "alto: " << dinamicos_[i].alto << std::endl;
+            std::cout << "ancho: " << dinamicos_[i].ancho << std::endl;
+            std::cout << "rotacion: " << dinamicos_[i].rotacion << std::endl;
+            std::cout << "centrox: " << dinamicos_[i].centro.x << std::endl;
+            std::cout << "centroy: " << dinamicos_[i].centro.y << std::endl<< std::endl;
+    }
 
 	return CLIENT_OK;
 }
@@ -185,12 +219,11 @@ void Client::enviarAlServer() {
 	while (running_) {
 		//Control all posible events
 		dataToSend_t* data = onEvent();
-		if(!data || !running_) return; //Esto es medio feo, pero por ahora cumple.
 		if (sendall(sock, data, &size) == -1) {
 			Log::instance()->append(CLIENT_MSG_ERROR_WHEN_SENDING, Log::ERROR);
 		}
-
-		SDL_Delay(100);
+		//Esto esta solo para poder ver lo que se manda.
+		SDL_Delay(50);
 	}
 }
 
@@ -224,12 +257,17 @@ void Client::recibirDelServer() {
 
 dataToSend_t* Client::onEvent() {
 	dataToSend_t* data = controller_->handleEvents(&running_);
-	if(!running_) return nullptr;
 
 	int i;
 	for (i = 0; name[i] != '\0'; i++)
 		data->id[i] = name[i];
 	data->id[i] = name[i];
+
+    std::cout << "Cliente: " << data->id << std::endl;
+    std::cout << "type_1: " << data->type_1 << std::endl;
+    std::cout << "keycode_1: " << data->keycode_1 << std::endl;
+    std::cout << "type_2: " << data->type_2 << std::endl;
+    std::cout << "keycode_2: " << data->keycode_2 << std::endl;
 
 	return data;
 }

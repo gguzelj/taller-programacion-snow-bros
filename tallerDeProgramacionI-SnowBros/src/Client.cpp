@@ -190,26 +190,6 @@ int Client::initialize() {
     std::cout << "Recibimos " << gameDetails_.cantObjDinamicos << " obj Dinamicos y ";
     std::cout << gameDetails_.cantObjEstaticos << " obj Estaticos" << std::endl;
 
-    std::cout << "Estos son los objetos Estaticos" << std::endl;
-    for (unsigned int i = 0; i < gameDetails_.cantObjEstaticos; i++) {
-            std::cout << "id: " << estaticos_[i].id << std::endl;
-            std::cout << "alto: " << estaticos_[i].alto << std::endl;
-            std::cout << "ancho: " << estaticos_[i].ancho << std::endl;
-            std::cout << "rotacion: " << estaticos_[i].rotacion << std::endl;
-            std::cout << "centrox: " << estaticos_[i].centro.x << std::endl;
-            std::cout << "centroy: " << estaticos_[i].centro.y << std::endl<< std::endl;
-    }
-
-    std::cout << "Estos son los objetos Dinamicos" << std::endl;
-    for (unsigned int i = 0; i < gameDetails_.cantObjDinamicos; i++) {
-            std::cout << "id: " << dinamicos_[i].id << std::endl;
-            std::cout << "alto: " << dinamicos_[i].alto << std::endl;
-            std::cout << "ancho: " << dinamicos_[i].ancho << std::endl;
-            std::cout << "rotacion: " << dinamicos_[i].rotacion << std::endl;
-            std::cout << "centrox: " << dinamicos_[i].centro.x << std::endl;
-            std::cout << "centroy: " << dinamicos_[i].centro.y << std::endl<< std::endl;
-    }
-
 	return CLIENT_OK;
 }
 
@@ -262,12 +242,6 @@ dataToSend_t* Client::onEvent() {
 	for (i = 0; name[i] != '\0'; i++)
 		data->id[i] = name[i];
 	data->id[i] = name[i];
-
-    std::cout << "Cliente: " << data->id << std::endl;
-    std::cout << "type_1: " << data->type_1 << std::endl;
-    std::cout << "keycode_1: " << data->keycode_1 << std::endl;
-    std::cout << "type_2: " << data->type_2 << std::endl;
-    std::cout << "keycode_2: " << data->keycode_2 << std::endl;
 
 	return data;
 }

@@ -59,6 +59,7 @@ public:
 	std::list<Personaje*>* getPersonajes();
 
 	bool crearPersonaje(float x, float y,conn_id id);
+	bool asignarPersonaje(conn_id id);
 
 	b2World* getWorld();
 

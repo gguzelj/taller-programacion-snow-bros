@@ -60,6 +60,17 @@ int Server::init(int argc, char *argv[]) {
 
 	connectionsLimit_ = parser_->getConnectionsLimit();
 
+
+	float xIni;
+	float yIni;
+
+	for(int i = 0; i<connectionsLimit_;i++){
+		 xIni = getInitialX();
+		 yIni = getInitialY();
+		 model_->crearPersonaje(xIni,yIni,"sin asignar");
+	}
+
+
 	return SRV_NO_ERROR;
 }
 
@@ -204,11 +215,10 @@ int Server::acceptConnection(int newsockfd) {
 	}
 
 	//Creamos el personaje en el mundo
-	float xIni = getInitialX();
-	float yIni = getInitialY();
-	model_->crearPersonaje(xIni, yIni, connection.id);
-	msg = "Se agrego al personaje en la posicion " + to_string(xIni) + " ; "
-			+ to_string(yIni);
+
+	model_->asignarPersonaje(connection.id);
+	msg = "Se asigno un personaje a la conexion " ;
+	msg+=	connection.id;
 	Log::instance()->append(msg, Log::INFO);
 
 	//Comenzamos enviando la informacion del juego
@@ -327,17 +337,17 @@ void Server::enviarDatosJuego(int sockfd) {
     size = sizeof(figura_t) * model_->getCantObjDinamicos();
     figura_t *objetosDinamicos = model_->getObjetosDinamicos();
     if (sendall(sockfd, objetosDinamicos, &size) != 0) {
-            Log::instance()->append("No se pueden enviar datos", Log::WARNING);
+    	Log::instance()->append("No se pueden enviar datos", Log::WARNING);
     }
 
-//TODO implementar
-/*    Log::instance()->append("Enviamos la lista de Personajes", Log::INFO);
-    //Enviamos la lista de Personajes.
-    size = sizeof(personaje_t) * model_->getCantPersonajes();
-    personaje_t* personajes = model_->getPersonajes();
-    if (sendall(sockfd, personajes, &size) != 0){
-        Log::instance()->append("No se pueden enviar datos", Log::WARNING);
-    }*/
+    Log::instance()->append("Enviamos la lista de personajes", Log::INFO);
+    size = sizeof(personaje_t )* model_->getCantPersonajes();
+    personaje_t* personajes = model_->getPersonajesParaEnvio();
+    if(sendall(sockfd,personajes,&size)!=0){
+    	Log::instance()->append("No se pueden enviar datos", Log::WARNING);
+    }
+
+
 
     std::cout << "Estos son los objetos Estaticos" << std::endl;
     for (unsigned int i = 0; i < datos.cantObjEstaticos; i++) {
@@ -358,6 +368,20 @@ void Server::enviarDatosJuego(int sockfd) {
             std::cout << "centrox: " << objetosDinamicos[i].centro.x << std::endl;
             std::cout << "centroy: " << objetosDinamicos[i].centro.y << std::endl<< std::endl;
     }
+
+    std::cout << "Estos son los personajes" << std::endl;
+        for (unsigned int i = 0; i < datos.cantPersonajes; i++) {
+            	std::cout << "id: " << personajes[i].id << std::endl;
+                std::cout << "centrox: " << personajes[i].centro.x << std::endl;
+                std::cout << "centroy: " << personajes[i].centro.y << std::endl<< std::endl;
+        }
+
+
+
+    free(objetosEstaticos);
+    free(objetosDinamicos);
+    free(personajes);
+
 }
 
 /**

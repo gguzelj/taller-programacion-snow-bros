@@ -91,6 +91,19 @@ std::list<Personaje*>* Escenario::getPersonajes() {
 	return personajes_;
 }
 
+bool Escenario::asignarPersonaje(conn_id id){
+	for(auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje){
+			if(strcmp((*personaje)->id,"sin asignar") == 0){
+				strcpy((*personaje)->id,id);
+				return true;
+			}
+	}
+	return false;
+}
+
+
+
+
 bool Escenario::crearPersonaje(float x, float y,conn_id id){
 	Personaje* nuevoPersonaje = new Personaje(x,y,id,world_);
 	if(!nuevoPersonaje)
@@ -280,6 +293,7 @@ Personaje* Escenario::getPersonaje(conn_id id){
 	}
 	return nullptr;
 }
+
 
 float Escenario::getAnchoUn(){
 	return this->ancho_un;

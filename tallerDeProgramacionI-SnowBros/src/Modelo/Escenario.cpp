@@ -211,7 +211,6 @@ void obtenerAltoAnchoIdFigura(Figura* figura,float &alto, float &ancho,char& id)
 		id = PARALELOGRAMO_CODE;
 		return;
 	}
-
 }
 
 /**
@@ -244,8 +243,7 @@ figura_t* Escenario::getObjetosDinamicos() {
 
 	figura_t* obj;
 	Figura* fig;
-	obj = (figura_t*) malloc(
-			sizeof(figura_t) * figurasDinamicas_->size());
+	obj = (figura_t*) malloc(sizeof(figura_t) * figurasDinamicas_->size());
 
 	for (unsigned int i = 0; i < figurasDinamicas_->size(); i++) {
 

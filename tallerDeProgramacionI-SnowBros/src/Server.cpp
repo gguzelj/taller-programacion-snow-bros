@@ -212,22 +212,18 @@ int Server::acceptConnection(int newsockfd) {
 	enviarDatosJuego(newsockfd);
 
 	//Lanza el thread para que el cliente pueda empezar a mandar eventos en forma paralela
-	rcv_threads_.push_back(
-			std::thread(&Server::recibirDelCliente, this, connection));
+	rcv_threads_.push_back(std::thread(&Server::recibirDelCliente, this, connection));
 
 	//Crea la queue para el envio de datos del server al cliente y luego lanza el thread
 	//para que el server ya pueda mandarle info en forma paralela
 	personal_queue = new Threadsafe_queue<dataToSend_t>();
 
 	if (index == per_thread_snd_queues_.size()) {
-
 		per_thread_snd_queues_.push_back(personal_queue);
-		snd_threads_.push_back(
-				std::thread(&Server::enviarAlCliente, this, connection,
+		snd_threads_.push_back(std::thread(&Server::enviarAlCliente, this, connection,
 						personal_queue));
 
 	} else {
-
 		per_thread_snd_queues_[index] = personal_queue;
 		snd_threads_[index] = std::thread(&Server::enviarAlCliente, this,
 				connection, personal_queue);
@@ -315,7 +311,7 @@ void Server::enviarDatosJuego(int sockfd) {
 		Log::instance()->append("No se pueden enviar datos", Log::INFO);
 	}
 
-	Log::instance()->append("Enviamos la lista de obj Estaticos", Log::INFO);
+	Log::instance()->append("Enviamos la lista de objetos Estaticos", Log::INFO);
 	//Enviamos la lista de objetos Estaticos
 	size = sizeof(figura_t) * model_->getCantObjEstaticos();
 	figura_t *objetosEstaticos = model_->getObjetosEstaticos();
@@ -323,6 +319,42 @@ void Server::enviarDatosJuego(int sockfd) {
 		Log::instance()->append("No se pueden enviar datos", Log::WARNING);
 	}
 
+    Log::instance()->append("Enviamos la lista de objetos Dinamicos", Log::INFO);
+    //Enviamos la lista de los objetos Dinamicos
+    size = sizeof(figura_t) * model_->getCantObjDinamicos();
+    figura_t *objetosDinamicos = model_->getObjetosDinamicos();
+    if (sendall(sockfd, objetosDinamicos, &size) != 0) {
+            Log::instance()->append("No se pueden enviar datos", Log::WARNING);
+    }
+
+//TODO implementar
+/*    Log::instance()->append("Enviamos la lista de Personajes", Log::INFO);
+    //Enviamos la lista de Personajes.
+    size = sizeof(personaje_t) * model_->getCantPersonajes();
+    personaje_t* personajes = model_->getPersonajes();
+    if (sendall(sockfd, personajes, &size) != 0){
+        Log::instance()->append("No se pueden enviar datos", Log::WARNING);
+    }*/
+
+    std::cout << "Estos son los objetos Estaticos" << std::endl;
+    for (unsigned int i = 0; i < datos.cantObjEstaticos; i++) {
+    		std::cout << "id: " << objetosEstaticos[i].id << std::endl;
+            std::cout << "alto: " << objetosEstaticos[i].alto << std::endl;
+            std::cout << "ancho: " << objetosEstaticos[i].ancho << std::endl;
+            std::cout << "rotacion: " << objetosEstaticos[i].rotacion << std::endl;
+            std::cout << "centrox: " << objetosEstaticos[i].centro.x << std::endl;
+            std::cout << "centroy: " << objetosEstaticos[i].centro.y << std::endl<< std::endl;
+    }
+
+    std::cout << "Estos son los objetos Dinamicos" << std::endl;
+    for (unsigned int i = 0; i < datos.cantObjDinamicos; i++) {
+        	std::cout << "id: " << objetosDinamicos[i].id << std::endl;
+            std::cout << "alto: " << objetosDinamicos[i].alto << std::endl;
+            std::cout << "ancho: " << objetosDinamicos[i].ancho << std::endl;
+            std::cout << "rotacion: " << objetosDinamicos[i].rotacion << std::endl;
+            std::cout << "centrox: " << objetosDinamicos[i].centro.x << std::endl;
+            std::cout << "centroy: " << objetosDinamicos[i].centro.y << std::endl<< std::endl;
+    }
 }
 
 /**

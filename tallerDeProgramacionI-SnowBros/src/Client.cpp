@@ -162,6 +162,7 @@ int Client::initialize() {
 
 	Log::instance()->append("El servidor acepto la conexion", Log::INFO);
 
+
 	//Recibimos la cantidad de objetos creados en el juego
 	size = sizeof(firstConnectionDetails_t);
 	if (recvall(sock, &gameDetails_, &size) != 0) {
@@ -187,8 +188,25 @@ int Client::initialize() {
 		return CLIENT_ERROR;
 	}
 
+	size = sizeof(personaje_t) * gameDetails_.cantPersonajes;
+	personajes_ = (personaje_t*) malloc(size);
+	if (recvall(sock, personajes_, &size) != 0) {
+		Log::instance()->append("No se pueden recibir datos", Log::WARNING);
+		return CLIENT_ERROR;
+	}
+
+	Log::instance()->append("Recibimos los personajes.", Log::INFO);
+
+	personaje_t personajePrincipal;
+	for(int i = 0; i < gameDetails_.cantPersonajes;i++ ){
+		if(strcmp( (personajes_[i]).id,name) == 0)
+			personajePrincipal = personajes_[i];
+	}
+	view_->inicializarCamara(personajePrincipal);
+
     std::cout << "Recibimos " << gameDetails_.cantObjDinamicos << " obj Dinamicos y ";
     std::cout << gameDetails_.cantObjEstaticos << " obj Estaticos" << std::endl;
+    std::cout <<"recibimos"<< gameDetails_.cantPersonajes << "personajes"<< std::endl;
 
 	return CLIENT_OK;
 }
@@ -257,7 +275,7 @@ void Client::onRender(dataFromServer_t data) {
 	dataToBeDraw.dinamicos = data.dinamicos;
 	dataToBeDraw.estaticos = estaticos_;
 
-	view_->updateView(dataToBeDraw);
+	view_->updateView(dataToBeDraw,name);
 
 }
 

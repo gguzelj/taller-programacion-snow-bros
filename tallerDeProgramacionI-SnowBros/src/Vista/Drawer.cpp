@@ -144,7 +144,14 @@ Drawer::~Drawer() {
 	IMG_Quit();
 }
 
-void Drawer::updateView(dataFromClient_t data) {
+void Drawer::updateView(dataFromClient_t data,char* name) {
+	personaje_t personajePrincipal;
+	for(int i = 0; i < data.cantPersonajes;i++ ){
+		if(strcmp( (data.personajes[i]).id,name) == 0)
+			personajePrincipal = data.personajes[i];
+	}
+	this->actualizarCamara(personajePrincipal);
+
 	this->clearScenary();
 	this->drawBackground();
 	this->drawScenary(data);
@@ -205,6 +212,11 @@ void Drawer::drawScenary(dataFromClient_t data) {
 	//Dibujamos los objetos dinamicos
 	for (unsigned int i = 0; i < data.cantObjDinamicos; i++)
 		drawFigura(data.dinamicos[i]);
+
+	for(unsigned int i = 0 ; i< data.cantPersonajes ; i++){
+		if(strcmp(data.personajes[i].id,"sin asignar") != 0)
+			drawCharacter(data.personajes[i]);
+	}
 }
 
 //Dibuja una figura
@@ -336,18 +348,20 @@ void Drawer::drawFigura(figura_t objeto) {
         }
 }
 
-void Drawer::drawCharacter(Personaje* person) {
+
+
+void Drawer::drawCharacter(personaje_t person) {
 	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
 	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);
 
 	int ox = (ancho_imagen / 2) + (currentZoomFactor - 1) * (ancho_imagen) / 2;
 	int oy = (alto_imagen / 2) + (currentZoomFactor - 1) * (alto_imagen) / 2;
 
-	char codigo_estado = person->state->getCode();
-	char orientacion = person->getOrientacion();
+	char codigo_estado = person.estado;
+	char orientacion = person.orientacion;
 
-	float pos_x = (person->getX()) * (this->un_to_px_x) + ox;
-	float pos_y = (person->getY()) * -(this->un_to_px_y) + oy;
+	float pos_x = (person.centro.x) * (this->un_to_px_x) + ox;
+	float pos_y = (person.centro.y) * -(this->un_to_px_y) + oy;
 	pos_x = coord_relativa(coordRel.x, pos_x);
 	pos_y = coord_relativa(coordRel.y, pos_y);
 
@@ -405,15 +419,15 @@ void ajusteFueraDeLimite(SDL_Rect &rect, int limIzq, int limDer, int limInf,
 		rect.x = limDer;
 }
 
-void Drawer::inicializarCamara(Personaje* personaje) {
+void Drawer::inicializarCamara(personaje_t personaje) {
 	float ancho_imagen = ancho_un * FACTOR_CONVERSION_UN_A_PX;
 	float alto_imagen = alto_un * FACTOR_CONVERSION_UN_A_PX;
 
 	int ox = (ancho_imagen / 2) + (currentZoomFactor - 1) * (ancho_imagen) / 2;
 	int oy = (alto_imagen / 2) + (currentZoomFactor - 1) * (alto_imagen) / 2;
 
-	float pos_x = (personaje->getX()) * (this->un_to_px_x) + ox;
-	float pos_y = personaje->getY() * -(this->un_to_px_y) + oy;
+	float pos_x = (personaje.centro.x) * (this->un_to_px_x) + ox;
+	float pos_y = personaje.centro.y * -(this->un_to_px_y) + oy;
 
 	camera.x = pos_x - camera.w / 2;
 	camera.y = pos_y - camera.h / 2;
@@ -440,15 +454,15 @@ void Drawer::inicializarCamara(Personaje* personaje) {
 
 }
 
-void Drawer::actualizarCamara(Personaje* personaje) {
+void Drawer::actualizarCamara(personaje_t personaje) {
 	float ancho_imagen = ancho_un * FACTOR_CONVERSION_UN_A_PX;
 	float alto_imagen = alto_un * FACTOR_CONVERSION_UN_A_PX;
 
 	int ox = (ancho_imagen / 2) + (currentZoomFactor - 1) * (ancho_imagen) / 2;
 	int oy = (alto_imagen / 2) + (currentZoomFactor - 1) * (alto_imagen) / 2;
 
-	float pos_x = (personaje->getX()) * (this->un_to_px_x) + ox;
-	float pos_y = personaje->getY() * -(this->un_to_px_y) + oy;
+	float pos_x = (personaje.centro.x) * (this->un_to_px_x) + ox;
+	float pos_y = personaje.centro.y * -(this->un_to_px_y) + oy;
 
 	float x_relativa = coord_relativa(coordRel.x + (coordRel.w / 2), pos_x);
 	float y_relativa = coord_relativa(coordRel.y + (coordRel.h / 2), pos_y);

@@ -67,8 +67,8 @@ public:
 	Drawer();
 	~Drawer();
 
-	void updateView(dataFromClient_t data);
-	void inicializarCamara(Personaje* personaje);
+	void updateView(dataFromClient_t data,char* name);
+	void inicializarCamara(personaje_t personaje);
 	//Zooms in in a factor of 1.01x
 	void zoomIn();
 	//Zooms out in a factor of 0.99x
@@ -125,14 +125,14 @@ private:
 	void loadFont();
 	bool loadMedia();
 	void runWindow(int ancho_px ,int alto_px ,string imagePath);
-	void actualizarCamara(Personaje* personaje);
+	void actualizarCamara(personaje_t personaje);
 	SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren);
 
 	//Drawing methods
 	void drawBackground();
 	void drawScenary(dataFromClient_t data);
 	void drawFigura(figura_t objeto);
-	void drawCharacter(Personaje* person);
+	void drawCharacter(personaje_t person);
 	void drawMessages();
 	void presentScenary();
 	void clearScenary();

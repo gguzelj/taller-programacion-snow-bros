@@ -98,6 +98,7 @@ private:
 	firstConnectionDetails_t gameDetails_;
 	figura_t* estaticos_;
 	figura_t* dinamicos_;
+	personaje_t* personajes_;
 
 	/**
 	 * Metodo para crear el socket con el que va a trabajar el server

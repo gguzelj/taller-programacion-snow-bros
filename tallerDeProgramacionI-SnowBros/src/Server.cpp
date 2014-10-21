@@ -61,11 +61,11 @@ int Server::init(int argc, char *argv[]) {
 	connectionsLimit_ = parser_->getConnectionsLimit();
 
 
-	float xIni;
+	float xIni = 1;
 	float yIni;
 
 	for(int i = 0; i<connectionsLimit_;i++){
-		 xIni = getInitialX();
+		 xIni = 0;
 		 yIni = getInitialY();
 		 model_->crearPersonaje(xIni,yIni,"sin asignar");
 	}

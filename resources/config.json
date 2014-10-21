@@ -9,82 +9,23 @@
         "objetos": [
                      {
                        "tipo":"rectangulo",
-                       "x":-14,
-                       "y":-7,
-                       "ancho":20,
-                       "alto":1,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":7,
-                       "y":-7,
-                       "ancho":20,
-                       "alto":1,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":3,
-                       "y":7,
-                       "ancho":2,
-                       "alto":1,
-                       "rot":45,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"circulo",
-                       "x":-9,
-                       "y":4.1,
-                       "escala":1,
-                       "rot":0,
-                       "masa":5,
-                       "estatico":false
-                     },
-                     {
-                       "tipo":"poligono",
-                       "x":-6,
+                       "x":-2,
                        "y":0,
-                       "lados":3,
-                       "escala":1.5,
-                       "rot":45,
-                       "masa":5,
+                       "ancho":4,
+                       "alto":1,
+                       "rot":0,
+                       "masa":3,
                        "estatico":false
                      },
                      {
-                       "tipo":"poligono",
+                       "tipo":"rectangulo",
                        "x":4,
                        "y":0,
-                       "lados":4,
-                       "escala":1,
+                       "ancho":4,
+                       "alto":1,
                        "rot":0,
-                       "masa":5,
-                       "estatico":false
-                     },
-                     {
-                       "tipo":"poligono",
-                       "x":-9,
-                       "y":2,
-                       "lados":5,
-                       "escala":1,
-                       "rot":30,
-                       "masa":5,
-                       "estatico":false
-                     },
-                     {
-                       "tipo":"poligono",
-                       "x":7,
-                       "y":0,
-                       "lados":6,
-                       "escala":1,
-                       "rot":0,
-                       "masa":5,
-                       "estatico":false
+                       "masa":3,
+                       "estatico":true
                      }
                    ]
     }

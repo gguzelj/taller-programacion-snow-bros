@@ -228,8 +228,6 @@ void Drawer::drawFigura(figura_t objeto) {
         int ox = (ancho_imagen / 2) + (currentZoomFactor - 1) * (ancho_imagen) / 2;
         int oy = (alto_imagen / 2) + (currentZoomFactor - 1) * (alto_imagen) / 2;
 
-        float escala = objeto.alto;
-
         float ancho = objeto.ancho;
         float alto = objeto.alto;
 
@@ -253,12 +251,12 @@ void Drawer::drawFigura(figura_t objeto) {
 
         if (objeto.id == TRIANGULO_CODE) {
 			SDL_Point centro;
-			centro.x = 1.732050808 * escala * un_to_px_x / 2;
-			centro.y = escala * 3 / 2 * un_to_px_y / 1.5;
+			centro.x = ancho / 2 * un_to_px_x;
+			centro.y = alto * un_to_px_y / 1.5;
 
 			triangleTexture.render(renderer,
 							coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
-							coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
+							coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 1.5) + oy),
 							ancho * un_to_px_x, alto * un_to_px_y,
 							nullptr, objeto.rotacion * -RADTODEG, &centro);
         }

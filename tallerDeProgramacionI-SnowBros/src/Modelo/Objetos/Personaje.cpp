@@ -31,13 +31,11 @@ Personaje::Personaje(float x, float y,conn_id id, b2World* world){
 	cuerpoDelPersonaje.gravityScale = 4;
 
 	//definiendo ahora el fixture del personaje
-	float mitadAncho = MITAD_ANCHO_PERSONAJE;
-	float mitadAlto = MITAD_ALTO_PERSONAJE;
-	this->ancho = 2* mitadAncho;
-	this->alto = 2*mitadAlto;
+	this->ancho = MITAD_ANCHO_PERSONAJE;
+	this->alto = MITAD_ALTO_PERSONAJE;
 
 	b2PolygonShape shapeDelPersonaje;						//esto va a ser si queremos que sea una caja...
-	shapeDelPersonaje.SetAsBox(mitadAncho,mitadAlto);		//...con las siguientes dimensiones
+	shapeDelPersonaje.SetAsBox(ancho,alto);		//...con las siguientes dimensiones
 	b2FixtureDef fixtureDelPersonaje;						//creo el fixture
 	fixtureDelPersonaje.shape = &shapeDelPersonaje;			//le asigno la forma que determine antes
 	fixtureDelPersonaje.density = 1;						//una densidad cualquiera

@@ -277,8 +277,8 @@ personaje_t* Escenario::getPersonajesParaEnvio(){
 		strcpy(pers[i].id,(*personaje)->id);
 		pers[i].orientacion = (*personaje)->getOrientacion();
 		pers[i].estado = (*personaje)->state->getCode();
-		pers[i].centro.x = (*personaje)->getX()+0.9;
-		pers[i].centro.y = (*personaje)->getY()-0.9;
+		pers[i].centro.x = (*personaje)->getX();
+		pers[i].centro.y = (*personaje)->getY();
 		i++;
 	}
 	return pers;

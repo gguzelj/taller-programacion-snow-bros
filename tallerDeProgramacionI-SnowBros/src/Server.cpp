@@ -64,10 +64,10 @@ int Server::init(int argc, char *argv[]) {
 	float xIni = 1;
 	float yIni;
 
-	for(int i = 0; i<connectionsLimit_;i++){
-		 xIni = 0;
+	for(int i = -1; i<connectionsLimit_;i+=5){
+		 xIni = i;
 		 yIni = getInitialY();
-		 model_->crearPersonaje(xIni,yIni,"sin asignar");
+		 model_->crearPersonaje(xIni,5,"sin asignar");
 	}
 
 

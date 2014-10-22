@@ -50,7 +50,7 @@ std::string Log::logTypeToString(LOG_TYPE logType){
 
 void Log::printNewLogger(){
 
-	std::string fileName("Log-Game.txt");
+	std::string fileName("Server-Log.txt");
 	std::ofstream out(fileName, std::ios_base::app);
 
 	out << "*&------------------------------------------------------------------------------------------------------*&\n";

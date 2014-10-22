@@ -476,21 +476,22 @@ void Server::enviarAlCliente(connection_t conn,
  */
 void Server::step() {
 	receivedData_t* data;
-	shared_rcv_queue_->wait_and_pop(data);
+	bool recibioData = shared_rcv_queue_->try_pop(data);
+	if (recibioData){
+		//Get the character
+		Personaje* personaje = model_->getPersonaje(data->id);
+		if (!personaje)
+			Log::instance()->append(
+					"No se puede mapear el personaje con uno del juego",
+					Log::WARNING);
 
-	//Get the character
-	Personaje* personaje = model_->getPersonaje(data->id);
-	if (!personaje)
-		Log::instance()->append(
-				"No se puede mapear el personaje con uno del juego",
-				Log::WARNING);
-
-	//Process the events
-	personaje->handleInput(data->keycode_1, data->type_1);
-	personaje->handleInput(data->keycode_2, data->type_2);
-
+		//Process the events
+		personaje->handleInput(data->keycode_1, data->type_1);
+		personaje->handleInput(data->keycode_2, data->type_2);
+	}
 	//process(data)
 	model_->step();
+	SDL_Delay(50);
 }
 
 /**

@@ -218,11 +218,18 @@ void Client::enviarAlServer() {
 	while (running_) {
 		//Control all posible events
 		dataToSend_t* data = onEvent();
-		if (data->keycode_1 == 0 && data->keycode_2 ==0 )continue;
+		if (data->keycode_1 == 0 && data->keycode_2 ==0 ){
+			free(data);
+			continue;
+		}
 		if (sendall(sock, data, &size) == -1) {
 			Log::instance()->append(CLIENT_MSG_ERROR_WHEN_SENDING, Log::ERROR);
 		}
+		FILE* file = fopen ("clSend.txt","a");
+		fprintf(file, "Cliente: %s\ntype_1: %d\nkeycode_1: %d\ntype_2: %d\nkeycode_2: %d\n",data->id,data->type_1,data->keycode_1,data->type_2,data->keycode_2);
+		fclose(file);
 		SDL_Delay(1);
+		free(data);
 	}
 }
 
@@ -242,16 +249,14 @@ void Client::recibirDelServer() {
 		size = sizeof(personaje_t) * gameDetails_.cantPersonajes;
 		data.personajes = (personaje_t*) malloc(size);
 		if (recvall(sock, data.personajes, &size) != 0) {
-			Log::instance()->append(CLIENT_MSG_ERROR_WHEN_RECEIVING,
-					Log::ERROR);
+			//Log::instance()->append(CLIENT_MSG_ERROR_WHEN_RECEIVING, Log::ERROR);
 		}
 
 		//Recibimos los objetos dinamicos
 		size = sizeof(figura_t) * gameDetails_.cantObjDinamicos;
 		data.dinamicos = (figura_t*) malloc(size);
 		if (recvall(sock, data.dinamicos, &size) != 0) {
-			Log::instance()->append(CLIENT_MSG_ERROR_WHEN_RECEIVING,
-					Log::ERROR);
+			//Log::instance()->append(CLIENT_MSG_ERROR_WHEN_RECEIVING, Log::ERROR);
 		}
 		shared_rcv_queue_->push(data);
 
@@ -268,13 +273,6 @@ dataToSend_t* Client::onEvent() {
 	for (i = 0; name[i] != '\0'; i++)
 		data->id[i] = name[i];
 	data->id[i] = name[i];
-
-	FILE* file = fopen ("clSend.txt","a");
-
-	fprintf(file, "Cliente: %s\ntype_1: %d\nkeycode_1: %d\ntype_2: %d\nkeycode_2: %d\n",data->id,data->type_1,data->keycode_1,data->type_2,data->keycode_2);
-
-	fclose(file);
-
 	return data;
 }
 

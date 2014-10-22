@@ -273,12 +273,12 @@ personaje_t* Escenario::getPersonajesParaEnvio(){
 	int i = 0;
 	for(auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje){
 		pers[i].alto = (*personaje)->getAlto();
-		pers[i].ancho = (*personaje)->getAlto();
+		pers[i].ancho = (*personaje)->getAncho();
 		strcpy(pers[i].id,(*personaje)->id);
 		pers[i].orientacion = (*personaje)->getOrientacion();
 		pers[i].estado = (*personaje)->state->getCode();
-		pers[i].centro.x = (*personaje)->getX();
-		pers[i].centro.y = (*personaje)->getY();
+		pers[i].centro.x = (*personaje)->getX()+0.9;
+		pers[i].centro.y = (*personaje)->getY()-0.9;
 		i++;
 	}
 	return pers;

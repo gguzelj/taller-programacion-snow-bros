@@ -10,6 +10,11 @@
 #define PENTAGONO_CODE '5'
 #define HEXAGONO_CODE '6'
 
+//Conversion de unidades
+#define DEGTORAD 0.0174532925199432957f
+#define RADTODEG 57.295779513082320876f
+
+#include "../Log/Log.h"
 #include <iostream>
 #include <Box2D/Box2D.h>
 #include "SDL2/SDL.h"
@@ -17,7 +22,6 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL2_rotozoom.h>
 #include <SDL2/SDL_ttf.h>
-#include "../Parser/JsonParser.h"
 #include "../Exceptions/SDLError.h"
 #include "LTexture.h"
 #include <cmath>

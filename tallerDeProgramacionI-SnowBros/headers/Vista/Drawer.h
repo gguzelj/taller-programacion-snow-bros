@@ -18,7 +18,6 @@
 #include <SDL2/SDL2_rotozoom.h>
 #include <SDL2/SDL_ttf.h>
 #include "../Parser/JsonParser.h"
-#include "../Modelo/Escenario.h"
 #include "../Exceptions/SDLError.h"
 #include "LTexture.h"
 #include <cmath>

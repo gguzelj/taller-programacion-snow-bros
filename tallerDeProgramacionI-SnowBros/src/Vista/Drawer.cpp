@@ -7,6 +7,14 @@
 #define COTA_INF_Y -(alto_px)/5
 #define COTA_SUP_X	(ancho_px)/5
 #define COTA_SUP_Y	(alto_px)/5
+//defines que eran del Personaje.cpp
+#define MITAD_ANCHO_PERSONAJE 0.5f
+#define MITAD_ALTO_PERSONAJE 0.85
+//defines que eran de Estados.h
+#define JUMPING 'j'
+#define STANDBY 's'
+#define WALKING 'w'
+#define FALLING 'f'
 
 void Drawer::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, SDL_Rect dst,
 		SDL_Rect *clip = nullptr) {

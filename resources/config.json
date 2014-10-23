@@ -1,7 +1,5 @@
 {
     "escenario": {
-        "alto-px": 600,
-        "ancho-px":800,
         "alto-un":62.62,
         "ancho-un":78.28,
         "imagen_fondo":"resources/snowBackground.png",
@@ -9,7 +7,7 @@
         "objetos": [
                      {
                        "tipo":"rectangulo",
-                       "x":-1,
+                       "x":-2,
                        "y":0,
                        "ancho":4,
                        "alto":1,
@@ -17,14 +15,120 @@
                        "masa":3,
                        "estatico":false
                      },
-{
+			{
                        "tipo":"rectangulo",
                        "x":-15,
-                       "y":0,
-                       "ancho":4,
+                       "y":-27,
+                       "ancho":10,
                        "alto":1,
                        "rot":0,
                        "masa":3,
+                       "estatico":true
+                     },
+			{
+                       "tipo":"rectangulo",
+                       "x":15,
+                       "y":-27,
+                       "ancho":10,
+                       "alto":1,
+                       "rot":0,
+                       "masa":3,
+                       "estatico":true
+                     },
+                     {
+                       "tipo":"circulo",
+                       "x":-13,
+                       "y":11,
+                       "escala":0.5,
+                       "color":"#1234AA",
+                       "rot":0,
+                       "masa":5,
+                       "estatico":false
+                     },
+                     {
+                       "tipo":"circulo",
+                       "x":-10,
+                       "y":11,
+                       "escala":0.5,
+                       "color":"#1234AA",
+                       "rot":0,
+                       "masa":5,
+                       "estatico":false
+                     },
+                     {
+                       "tipo":"circulo",
+                       "x":13,
+                       "y":11,
+                       "escala":0.5,
+                       "color":"#1234AA",
+                       "rot":0,
+                       "masa":5,
+                       "estatico":false
+                     },
+                     {
+                       "tipo":"circulo",
+                       "x":10,
+                       "y":11,
+                       "escala":0.5,
+                       "color":"#1234AA",
+                       "rot":0,
+                       "masa":5,
+                       "estatico":false
+                     },
+                     {
+                       "tipo":"poligono",
+                       "lados":5,
+                       "x":25,
+                       "y":-28,
+                       "escala":4,
+                       "color":"#8834AA",
+                       "rot":0,
+                       "masa":5,
+                       "estatico":false
+                     },                   
+                     {
+                       "tipo":"paralelogramo",
+                       "x":0,
+                       "y":-27,
+                       "alto":2,
+                       "ancho":5,
+                       "color":"#00ff45",
+                       "rot":0,
+                       "masa":5,
+                       "estatico":true,
+                       "inclinacion":30
+                     },                
+                     {
+                       "tipo":"trapecio",
+                       "x":35,
+                       "y":-25,
+                       "alto":4,
+                       "base":5,
+                       "color":"#00ff45",
+                       "rot":0,
+                       "masa":5,
+                       "estatico":true,
+                       "inclinacion":30
+                     },
+			{
+                       "tipo":"rectangulo",
+                       "x":30,
+                       "y":-20,
+                       "ancho":4,
+                       "alto":1,
+                       "rot":135,
+                       "masa":3,
+                       "estatico":true
+                     },
+                     {
+                       "tipo":"poligono",
+                       "lados":3,
+                       "x":25,
+                       "y":-15,
+                       "escala":3,
+                       "color":"#8834AA",
+                       "rot":0,
+                       "masa":5,
                        "estatico":true
                      }
                    ]

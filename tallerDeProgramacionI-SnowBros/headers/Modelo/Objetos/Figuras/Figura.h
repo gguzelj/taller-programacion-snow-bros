@@ -44,7 +44,6 @@ public:
 	float getAngulo();
 	float getMasa();
 	bool esEstatico();
-	b2Body* getb2Body();
 };
 
 #endif /* FIGURA_H_ */

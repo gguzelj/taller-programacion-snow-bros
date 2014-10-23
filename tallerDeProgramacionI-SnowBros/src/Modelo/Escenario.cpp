@@ -6,10 +6,16 @@ Escenario::Escenario(JsonParser *parser) {
 	ancho_un = parser->getAnchoUnEscenario();
 	alto_un = parser->getAltoUnEscenario();
 	world_ = new b2World(gravity);
+
+	world_->SetContactListener(&contactos);
+
 	figurasEstaticas_ = new std::vector<Figura*>;
 	figurasDinamicas_ = new std::vector<Figura*>;
 	muros_ = new std::list<Muro*>;
 	personajes_ = new std::list<Personaje*>;
+
+	contactos.setPersonaje(personajes_);
+
 	Figura* figura_i;
 	Muro* muro_i;
 
@@ -110,7 +116,6 @@ bool Escenario::crearPersonaje(float x, float y,conn_id id){
 }
 
 void acomodarEstadoPersonaje(Personaje* personaje){
-
 	personaje->decreaseJumpCooldown();
 	//chequeo para cambiar el estado jumping a falling o el estado cuando cae de una plataforma
 	//esta implementado aca para que cambie cuando tiene que hacerlo
@@ -134,7 +139,8 @@ void acomodarEstadoPersonaje(Personaje* personaje){
 
 void Escenario::step() {
 	for(auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje){
-		acomodarEstadoPersonaje(*personaje);
+		if(strcmp((*personaje)->id,"sin asignar") != 0)
+			acomodarEstadoPersonaje(*personaje);
 	}
 
 	getWorld()->Step(timeStep, velocityIterations, positionIterations);

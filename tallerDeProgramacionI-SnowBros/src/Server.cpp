@@ -60,12 +60,11 @@ int Server::init(int argc, char *argv[]) {
 
 	connectionsLimit_ = parser_->getConnectionsLimit();
 
-
 	float xIni = 1;
 	float yIni;
 
-	for(int i = -1; i<connectionsLimit_;i+=5){
-		 xIni = i;
+	for(int i = 0;  i<connectionsLimit_;i++){
+		 xIni = i*7;
 		 yIni = getInitialY();
 		 model_->crearPersonaje(xIni,5,"sin asignar");
 	}
@@ -485,9 +484,11 @@ void Server::step() {
 					"No se puede mapear el personaje con uno del juego",
 					Log::WARNING);
 
-		//Process the events
-		personaje->handleInput(data->keycode_1, data->type_1);
-		personaje->handleInput(data->keycode_2, data->type_2);
+		else{
+			//Process the events
+			personaje->handleInput(data->keycode_1, data->type_1);
+			personaje->handleInput(data->keycode_2, data->type_2);
+		}
 	}
 	//process(data)
 	model_->step();

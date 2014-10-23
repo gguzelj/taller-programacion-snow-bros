@@ -2,6 +2,8 @@
 #define CONTROLADORDECONTACTOS_H_
 
 #include "Box2D/Box2D.h"
+#include <iostream>
+#include <list>
 
 class Personaje;
 
@@ -13,16 +15,16 @@ const int ID_RIGHT_WALL_SENSOR = 5;
 // Se usan variables booleanas ya que solo nos interesa si toca el suelo
 class Contacto : public b2ContactListener{
 private:
-	int* contactosSensor;
+
 	int* contactosLeftSensor;
 	int* contactosRightSensor;
 
-	Personaje* personaje;
+	std::list<Personaje*>* personajes;
 
 public:
-
-	void setPersonaje(Personaje* personaje){
-		this->personaje = personaje;
+	int* contactosSensor;
+	void setPersonaje(std::list<Personaje*>* personajes){
+		this->personajes = personajes;
 	}
 
 	void updateContacto(int* contactosDelSensor, int* contactosDelSensorL, int* contactosDelSensorR){

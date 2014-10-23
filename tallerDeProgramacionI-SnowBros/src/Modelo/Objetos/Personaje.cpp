@@ -15,12 +15,12 @@ Personaje::Personaje(float x, float y,conn_id id, b2World* world){
 	this->walking.movimientoLateralIzquierda = false;
 
 	//Parametros para controlar los contactos
-	this->contactos.setPersonaje(this);
+	//this->contactos.setPersonaje(this);
 	this->cantidadDeContactosActuales = 0; //Comienza en el aire
 	this->cantidadDeContactosIzquierda = 0;
 	this->cantidadDeContactosDerecha = 0;
-	this->contactos.updateContacto(&cantidadDeContactosActuales,&cantidadDeContactosIzquierda,&cantidadDeContactosDerecha);
-	this->world->SetContactListener(&contactos);
+	//this->contactos.updateContacto(&cantidadDeContactosActuales,&cantidadDeContactosIzquierda,&cantidadDeContactosDerecha);
+	//this->world->SetContactListener(&contactos);
 
 
 	//definiendo el body del personaje

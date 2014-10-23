@@ -18,10 +18,8 @@ class Personaje : public Figura{
 		b2Vec2 posicion;
 		b2World* world;                         //Viene por parametro.
 		b2Body* body;
-		Contacto contactos;
-		int cantidadDeContactosActuales;
-		int cantidadDeContactosIzquierda;
-		int cantidadDeContactosDerecha;
+		//Contacto contactos;
+
 		int aceleracion;
 		char orientacion;
 		int jumpCooldown;
@@ -29,6 +27,9 @@ class Personaje : public Figura{
 		float alto;
 
 	public:
+		int cantidadDeContactosActuales;
+		int cantidadDeContactosIzquierda;
+		int cantidadDeContactosDerecha;
 		static JumpingState jumping;
 		static FallingState falling;
 		static WalkingState walking;
@@ -50,6 +51,11 @@ class Personaje : public Figura{
 		}
 		float getAlto(){
 			return alto;
+		}
+
+
+		b2Body* getb2Body(){
+			return this->body;
 		}
 		b2Vec2 getVelocity();
 		int getCantidadDeContactosActuales();

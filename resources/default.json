@@ -2,7 +2,7 @@
     "escenario": {
         "alto-px": 600,
         "ancho-px":800,
-        "alto-un":22,
+        "alto-un":62,
         "ancho-un":70,
         "imagen_fondo":"resources/snowBackground.png",
         "gravedad":-10,

@@ -2,34 +2,24 @@
     "escenario": {
         "alto-px": 600,
         "ancho-px":800,
-        "alto-un":23,
-        "ancho-un":70,
+        "alto-un":62.62,
+        "ancho-un":78.28,
         "imagen_fondo":"resources/snowBackground.png",
         "gravedad":-10,
         "objetos": [
                      {
                        "tipo":"rectangulo",
-                       "x":-2.1,
+                       "x":-1,
                        "y":0,
                        "ancho":4,
                        "alto":1,
                        "rot":0,
                        "masa":3,
-                       "estatico":true
-                     },
-					 {
-                       "tipo":"rectangulo",
-                       "x":2.9,
-                       "y":0,
-                       "ancho":20,
-                       "alto":2,
-                       "rot":90,
-                       "masa":3,
                        "estatico":false
-                     },			
-                     			{
+                     },
+{
                        "tipo":"rectangulo",
-                       "x":2.1,
+                       "x":-15,
                        "y":0,
                        "ancho":4,
                        "alto":1,

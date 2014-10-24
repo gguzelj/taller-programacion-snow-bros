@@ -175,7 +175,7 @@ int Server::acceptConnection(int newsockfd) {
 	unsigned int index;
 	connection_t connection;
 	Threadsafe_queue<dataToSend_t>* personal_queue;
-	std::cout << "Muievo cliente";
+
 	Log::instance()->append("Nuevo cliente conectado!", Log::INFO);
 
 	try {
@@ -200,8 +200,6 @@ int Server::acceptConnection(int newsockfd) {
 
 			return SRV_ERROR;
 		}
-
-		std::cout << "Aceptamos conexion" << std::endl;
 
 		//Creamos el personaje en el mundo
 		model_->asignarPersonaje(connection.id);
@@ -232,10 +230,10 @@ int Server::acceptConnection(int newsockfd) {
 					connection, personal_queue);
 		}
 
-	} catch (sendException& e) {
+	} catch (const sendException& e) {
 		return SRV_ERROR;
 
-	} catch (receiveException& e) {
+	} catch (const receiveException& e) {
 		return SRV_ERROR;
 	}
 
@@ -322,7 +320,7 @@ void Server::enviarDatosJuego(int sockfd) {
 		enviarDinamicos(sockfd, model_->getObjetosDinamicos());
 		enviarPersonajes(sockfd, model_->getPersonajesParaEnvio());
 
-	} catch (sendException& e) {
+	} catch (const sendException& e) {
 		return;
 	}
 }
@@ -344,7 +342,7 @@ void Server::recibirDelCliente(connection_t conn) {
 
 			recvall(conn.socket, data, sizeof(receivedData_t));
 
-		} catch (receiveException& e) {
+		} catch (const receiveException& e) {
 
 			free(data);
 			conn.activa = false;
@@ -402,7 +400,7 @@ void Server::enviarAlCliente(connection_t conn,
 			enviarPersonajes(conn.socket, dataToBeSent.personajes);
 			enviarDinamicos(conn.socket, dataToBeSent.dinamicos);
 
-		} catch (sendException& e) {
+		} catch (const sendException& e) {
 
 			conn.activa = false;
 
@@ -537,7 +535,7 @@ void Server::sendall(int s, void* data, int len) throw (sendException) {
 		//Si aparece un error al enviar, lanzamos una excepcion
 		if (n == -1) {
 			Log::instance()->append("Error al enviar al cliente", Log::ERROR);
-			throw new sendException();
+			throw sendException();
 		}
 
 		total += n;
@@ -561,7 +559,7 @@ void Server::recvall(int s, void *data, int len) throw (receiveException) {
 		//Si aparece un error al recibir, lanzamos una excepcion
 		if (n == -1 || n == 0) {
 			Log::instance()->append("Error al leer del Cliente", Log::ERROR);
-			throw new receiveException();
+			throw receiveException();
 		}
 
 		total += n;

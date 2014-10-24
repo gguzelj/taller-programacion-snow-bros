@@ -13,6 +13,7 @@ Personaje::Personaje(float x, float y,conn_id id, b2World* world){
 	this->orientacion = ORIENTACION_INICIAL;
 	this->walking.movimientoLateralDerecha = false;
 	this->walking.movimientoLateralIzquierda = false;
+	this->connectionState = DESCONECTADO;
 
 	//Parametros para controlar los contactos
 	//this->contactos.setPersonaje(this);

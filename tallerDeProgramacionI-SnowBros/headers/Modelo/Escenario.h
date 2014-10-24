@@ -38,6 +38,7 @@ typedef struct personaje{
 	float rotacion;
 	char estado;
 	char orientacion;
+	char connectionState;
 }personaje_t;
 
 typedef struct figura{
@@ -58,6 +59,7 @@ public:
 	//Devuelve una instancia al personaje del juego
 	std::list<Personaje*>* getPersonajes();
 
+	void setPersonajeConnectionState(conn_id id, char state);
 	bool crearPersonaje(float x, float y,conn_id id);
 	bool asignarPersonaje(conn_id id);
 

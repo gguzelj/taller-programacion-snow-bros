@@ -346,6 +346,7 @@ void Server::recibirDelCliente(connection_t conn) {
 
 			free(data);
 			conn.activa = false;
+			model_->setPersonajeConnectionState(conn.id, ESPERANDO);
 
 			msg = "No se pueden recibir datos de la conexion ";
 			msg += conn.id;
@@ -441,7 +442,7 @@ void Server::step() {
 
 	//process(data)
 	model_->step();
-	SDL_Delay(50);
+	SDL_Delay(35);
 }
 
 /**

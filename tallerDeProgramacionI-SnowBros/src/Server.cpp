@@ -256,7 +256,7 @@ bool Server::searchPlaceForConnection(connection_t *conn, unsigned int &index) {
 	for (unsigned int i = 0; i < connections_.size(); i++) {
 
 		//Si encontramos una conexion inactiva con el mismo id, la activamos
-		if (connections_[i]->id == conn->id) {
+		if (strcmp(connections_[i]->id, conn->id) == 0) {
 			if (connections_[i]->activa == false) {
 				msg = "Ya existe una conexion inactiva para el ID ";
 				msg += conn->id;

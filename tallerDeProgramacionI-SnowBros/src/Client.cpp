@@ -199,10 +199,10 @@ int Client::initialize() {
 			}
 		}
 
-	} catch (sendException& e) {
+	} catch (const sendException& e) {
 		return CLIENT_ERROR;
 
-	} catch (receiveException& e) {
+	} catch (const receiveException& e) {
 		return CLIENT_ERROR;
 	}
 
@@ -241,7 +241,7 @@ void Client::enviarAlServer() {
 			free(data);
 		}
 
-	} catch (sendException& e) {
+	} catch (const sendException& e) {
 		running_ = false;
 		Log::instance()->append(CLIENT_MSG_ERROR_WHEN_SENDING, Log::ERROR);
 		return;
@@ -274,7 +274,7 @@ void Client::recibirDelServer() {
 
 		}
 
-	} catch (sendException& e) {
+	} catch (const sendException& e) {
 		running_ = false;
 		Log::instance()->append(CLIENT_MSG_ERROR_WHEN_RECEIVING, Log::ERROR);
 		return;
@@ -385,10 +385,9 @@ void Client::sendall(int s, void* data, int len) throw (sendException) {
 
 		//Si aparece un error al enviar, lanzamos una excepcion
 		if (n == -1) {
-			std::cout << "ERROR AL ENVIARRRR" << std::endl;
 			Log::instance()->append("Error al escribir al servidor",
 					Log::ERROR);
-			throw new sendException();
+			throw sendException();
 		}
 
 		total += n;
@@ -411,9 +410,8 @@ void Client::recvall(int s, void *data, int len) throw (receiveException) {
 
 		//Si aparece un error al recibir, lanzamos una excepcion
 		if (n == -1 || n == 0) {
-			std::cout << "ERROR AL RECIBIR" << std::endl;
 			Log::instance()->append("Error al leer del servidor", Log::ERROR);
-			throw new receiveException();
+			throw receiveException();
 		}
 
 		total += n;

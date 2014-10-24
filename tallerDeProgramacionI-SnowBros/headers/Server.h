@@ -97,7 +97,7 @@ private:
 
 	std::thread newConnectionsThread_;
 
-	std::vector<connection_t> connections_;
+	std::vector<connection_t*> connections_;
 	std::vector<std::thread> rcv_threads_;
 	std::vector<std::thread> snd_threads_;
 	Threadsafe_queue<receivedData_t*>* shared_rcv_queue_;
@@ -122,7 +122,7 @@ private:
 	/**
 	 * Buscamos si existe lugar disponible para una nueva conexion
 	 */
-	bool searchPlaceForConnection(connection_t conn, unsigned int &index);
+	bool searchPlaceForConnection(connection_t *conn, unsigned int &index);
 
 	/**
 	 * Metodo utilizado para enviar por primera vez todos los datos del juego
@@ -137,7 +137,7 @@ private:
 	 * Metodo que se encarga de encolar los eventos enviados por el cliente en la shared_rcv_queue.
 	 * En caso de detectar que el cliente se desconecto, lanzamos excepcion
 	 */
-	void recibirDelCliente(connection_t conn);
+	void recibirDelCliente(connection_t *conn);
 
 	///////////////////////////
 	//Thread de envio de info//
@@ -146,7 +146,7 @@ private:
 	/**
 	 * Metodo encargado de enviarle al cliente los datos del modelo, encolados en la personal_queue
 	 */
-	void enviarAlCliente(connection_t conn, Threadsafe_queue<dataToSend_t>* personal_queue);
+	void enviarAlCliente(connection_t *conn, Threadsafe_queue<dataToSend_t>* personal_queue);
 
 	////////////////////////////////////////////////////////////////////////////
 	//Thread principal. Se comunican con los otros threads mediante las queues//

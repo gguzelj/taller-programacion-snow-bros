@@ -128,10 +128,9 @@ void Server::run() {
 	running_ = true;
 	while (running_) {
 
-		//La sincronizacion de threads se producira gracias a la shared_rcv_queue_
-		//la cual permite ejecutar los eventos recibidos por orden de llegada
 		step();
 		enviarAClientes();
+
 	}
 
 	Log::instance()->append("Fin del juego", Log::INFO);
@@ -173,7 +172,7 @@ int Server::acceptConnection(int newsockfd) {
 	std::string msg;
 	int aviso;
 	unsigned int index;
-	connection_t connection;
+	connection_t* connection = (connection_t*) malloc(sizeof(connection_t));
 	Threadsafe_queue<dataToSend_t>* personal_queue;
 
 	Log::instance()->append("Nuevo cliente conectado!", Log::INFO);
@@ -181,9 +180,9 @@ int Server::acceptConnection(int newsockfd) {
 	try {
 
 		//Recibimos el id del cliente
-		recvall(newsockfd, &connection.id, sizeof(conn_id));
-		connection.activa = true;
-		connection.socket = newsockfd;
+		recvall(newsockfd, &(connection->id), sizeof(conn_id));
+		connection->activa = true;
+		connection->socket = newsockfd;
 
 		//Si no encontramos lugar para guardar el nuevo cliente, lo informamos
 		//Ademas obtenemos en index donde se guarda la conexion, para utilizar
@@ -191,20 +190,20 @@ int Server::acceptConnection(int newsockfd) {
 		if (searchPlaceForConnection(connection, index)) {
 
 			aviso = SRV_NO_ERROR;
-			sendall(connection.socket, &aviso, sizeof(int));
+			sendall(connection->socket, &aviso, sizeof(int));
 
 		} else {
 
 			aviso = SRV_ERROR;
-			sendall(connection.socket, &aviso, sizeof(int));
+			sendall(connection->socket, &aviso, sizeof(int));
 
 			return SRV_ERROR;
 		}
 
 		//Creamos el personaje en el mundo
-		model_->asignarPersonaje(connection.id);
+		model_->asignarPersonaje(connection->id);
 		msg = "Se asigno un personaje a la conexion ";
-		msg += connection.id;
+		msg += connection->id;
 		Log::instance()->append(msg, Log::INFO);
 
 		//Comenzamos enviando la informacion del juego
@@ -245,29 +244,29 @@ int Server::acceptConnection(int newsockfd) {
  * Si la cantidad de conexiones es mayor o igual al limite, se rechaza la nueva conexion.
  * Si el usuario ya estuvo conectado pero se encontraba inacctivo, se reestablece la conexion
  */
-bool Server::searchPlaceForConnection(connection_t conn, unsigned int &index) {
+bool Server::searchPlaceForConnection(connection_t *conn, unsigned int &index) {
 
 	std::string msg;
 
 	msg = "Buscamos lugar para la conexion con ID ";
-	msg += conn.id;
+	msg += conn->id;
 	Log::instance()->append(msg, Log::INFO);
 
 	//El primer paso consta en buscar alguna conexion con el mismo ID
 	for (unsigned int i = 0; i < connections_.size(); i++) {
 
 		//Si encontramos una conexion inactiva con el mismo id, la activamos
-		if (connections_[i].id == conn.id) {
-			if (connections_[i].activa == false) {
+		if (connections_[i]->id == conn->id) {
+			if (connections_[i]->activa == false) {
 				msg = "Ya existe una conexion inactiva para el ID ";
-				msg += conn.id;
+				msg += conn->id;
 				msg += ". Se reactiva";
 				Log::instance()->append(msg, Log::INFO);
-				connections_[i].activa = true;
+				connections_[i]->activa = true;
 				return true;
 			} else {
 				msg = "Ya existe una conexion activa para el ID ";
-				msg += conn.id;
+				msg += conn->id;
 				Log::instance()->append(msg, Log::WARNING);
 
 				return false;
@@ -282,7 +281,7 @@ bool Server::searchPlaceForConnection(connection_t conn, unsigned int &index) {
 		connections_.push_back(conn);
 
 		msg = "Agregamos la nueva conexion ";
-		msg += conn.id;
+		msg += conn->id;
 		Log::instance()->append(msg, Log::INFO);
 
 		return true;
@@ -290,7 +289,7 @@ bool Server::searchPlaceForConnection(connection_t conn, unsigned int &index) {
 	}
 
 	msg = "No existe lugar disponible para la nueva conexion ";
-	msg += conn.id;
+	msg += conn->id;
 	Log::instance()->append(msg, Log::WARNING);
 
 	return false;
@@ -329,7 +328,7 @@ void Server::enviarDatosJuego(int sockfd) {
  * Por cada cliente vamos a correr este metodo que se encarga de guardar
  * los mensajes que recibe en la cola compartida
  */
-void Server::recibirDelCliente(connection_t conn) {
+void Server::recibirDelCliente(connection_t *conn) {
 
 	std::string msg;
 	receivedData_t* data;
@@ -340,15 +339,15 @@ void Server::recibirDelCliente(connection_t conn) {
 
 		try {
 
-			recvall(conn.socket, data, sizeof(receivedData_t));
+			recvall(conn->socket, data, sizeof(receivedData_t));
 
 		} catch (const receiveException& e) {
 
 			free(data);
-			conn.activa = false;
+			conn->activa = false;
 
 			msg = "No se pueden recibir datos de la conexion ";
-			msg += conn.id;
+			msg += conn->id;
 			Log::instance()->append(msg, Log::WARNING);
 
 			return;
@@ -374,7 +373,7 @@ void Server::enviarAClientes() {
 
 	for (unsigned int i = 0; i < connections_.size(); i++) {
 
-		if (!connections_[i].activa)
+		if (!connections_[i]->activa)
 			continue;
 
 		per_thread_snd_queues_[i]->push(dataToBeSent);
@@ -385,7 +384,7 @@ void Server::enviarAClientes() {
  * Thread que corre por cada cliente para enviarle informacion
  * del juego
  */
-void Server::enviarAlCliente(connection_t conn,
+void Server::enviarAlCliente(connection_t *conn,
 		Threadsafe_queue<dataToSend_t>* personal_queue) {
 
 	std::string msg;
@@ -397,15 +396,15 @@ void Server::enviarAlCliente(connection_t conn,
 
 		try {
 
-			enviarPersonajes(conn.socket, dataToBeSent.personajes);
-			enviarDinamicos(conn.socket, dataToBeSent.dinamicos);
+			enviarPersonajes(conn->socket, dataToBeSent.personajes);
+			enviarDinamicos(conn->socket, dataToBeSent.dinamicos);
 
 		} catch (const sendException& e) {
 
-			conn.activa = false;
+			conn->activa = false;
 
 			msg = "No se pueden enviar datos a la conexion ";
-			msg += conn.id;
+			msg += conn->id;
 			Log::instance()->append(msg, Log::WARNING);
 
 			return;
@@ -425,6 +424,7 @@ void Server::step() {
 
 		//Buscamos el personaje y procesamos sus eventos
 		Personaje* personaje = model_->getPersonaje(data->id);
+
 		if (!personaje)
 			Log::instance()->append(
 					"No se puede mapear el personaje con uno del juego",

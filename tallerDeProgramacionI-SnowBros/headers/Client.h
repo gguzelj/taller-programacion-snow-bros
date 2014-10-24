@@ -12,6 +12,8 @@
 #include <signal.h>
 
 #include "threadsafe_queue.cpp"
+#include "Exceptions/receiveException.h"
+#include "Exceptions/sendException.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -25,6 +27,12 @@
 #define SRV_NO_ERROR 0
 #define SRV_ERROR 1
 
+#define HB_TIMEOUT 1
+
+//Definimos los tipos de mensajes que pueden enviarse al server
+#define HB_MSG_TYPE 1
+#define EVENT_MSG_TYPE 2
+
 //MENSAJES
 //ERROR
 #define CLIENT_MSG_INIT_ERROR			"Client: Error al iniciar el juego"
@@ -32,6 +40,8 @@
 #define CLIENT_MSG_CANT_PARAM			"Client: La cantidad de parametros no es correcta."
 #define CLIENT_MSG_ERROR_WHEN_RECEIVING	"Client: Error al utilizar recvall(), problemas en la conexion?"
 #define CLIENT_MSG_ERROR_WHEN_SENDING	"Client: Error al utilizar sendall(), problemas en el servidor?"
+#define CLIENT_MSG_SOCK					"Client: No se pudo crear el socket"
+#define CLIENT_MSG_SOCK_TIMEOUT			"Client: No se pudo setear un timeout para el socket"
 
 //INFO
 #define CLIENT_MSG_NEW_CLIENT			"Client: Comienzo de nuevo Juego"
@@ -83,6 +93,7 @@ private:
 	const char* host;
 	char* name;
 
+	//std::thread hbTh;
 	std::thread sendTh;
 	std::thread recvTh;
 
@@ -128,6 +139,11 @@ private:
 	 */
 	void onCleanup();
 
+	/**
+	 * Metodo para enviar heartBeats al servidor
+	 */
+	void enviarHeartBeat();
+
 	/*
 	 * Metodo en donde estara corriendo el thread que envia informacion al servidor.
 	 */
@@ -143,17 +159,32 @@ private:
 	 */
 	bool validateParameters(int argc, char* argv[]);
 
-    /*
+	/**
+	 * Metodo para recibir los objetos dinamicos
+	 */
+	void recibirDinamicos(figura_t* &dinamicos);
+
+	/**
+	 * Metodo para recibir los objetos estaticos
+	 */
+	void recibirEstaticos(figura_t* &estaticos);
+
+	/**
+	 * Metodo para recibir los personajes
+	 */
+	void recibirPersonajes(personaje_t* &personajes);
+
+	/*
      * Metodo de bajo nivel de sockets para recibir hasta una cierta
      * cantidad de bytes determinada.
      */
-	int recvall(int s, void *data, int *len);
+	void recvall(int s, void *data, int len) throw(receiveException);
 
     /*
      * Metodo de bajo nivel de sockets para enviar hasta una cierta
      * cantidad de bytes determinada.
      */
-	int sendall(int s, void *data, int *len);
+	void sendall(int s, void *data, int len) throw(sendException);
 
 };
 

@@ -16,14 +16,13 @@ Client::Client() {
 	host = nullptr;
 	name = nullptr;
 	estaticos_ = nullptr;
+	dinamicos_ = nullptr;
+	personajes_ = nullptr;
+
 	port = 0;
 	sock = 0;
 	shared_rcv_queue_ = new Threadsafe_queue<dataFromServer_t>();
 
-	//Seteamos el nivel del logger:
-	//	-Si loggerLevel = INFO se loguean todos los mensajes
-	//	-Si loggerLevel = WARNING se loguean solo mensajes de WARNING y ERROR
-	//	-Si loggerLevel = ERROR se loguean solo mensajes del tipo ERROR
 	Log::instance()->loggerLevel = Log::INFO;
 	Log::instance()->append(CLIENT_MSG_NEW_CLIENT, Log::INFO);
 }
@@ -67,9 +66,10 @@ int Client::run() {
 	if (connectToServer() == CLIENT_ERROR)
 		return CLIENT_ERROR;
 
-	if(initialize() == CLIENT_ERROR)
+	if (initialize() == CLIENT_ERROR)
 		return CLIENT_ERROR;
 
+	//hbTh = std::thread(&Client::enviarHeartBeat, this);
 	sendTh = std::thread(&Client::enviarAlServer, this);
 	recvTh = std::thread(&Client::recibirDelServer, this);
 
@@ -92,20 +92,46 @@ int Client::run() {
 // ##### Private methods #### //
 // ########################## //
 
+/**
+ * Creamos el socket utilizado para conectarnos con el servidor
+ * Tambien seteamos el HeartBeat Timeout. Esto hara que las funciones
+ * send y recv devuelvan un error si no se pudo enviar/recibir un mensaje
+ * en el tiempo indicado
+ */
 int Client::createSocket() {
+
+	struct timeval timeout;
+	timeout.tv_sec = HB_TIMEOUT;
+	timeout.tv_usec = 0;
 
 	Log::instance()->append("Creando Socket", Log::INFO);
 
 	sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (sock < 0) {
-		Log::instance()->append("No se pudo crear el socket", Log::ERROR);
+		Log::instance()->append(CLIENT_MSG_SOCK, Log::ERROR);
 		return CLIENT_ERROR;
 	}
+	/*
+	 //Si el socket se creo correctamente, agregamos el timeout
+	 if (setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (char *) &timeout,
+	 sizeof(timeout)) < 0) {
+	 Log::instance()->append(CLIENT_MSG_SOCK_TIMEOUT, Log::ERROR);
+	 return CLIENT_ERROR;
+	 }
 
+	 if (setsockopt(sock, SOL_SOCKET, SO_SNDTIMEO, (char *) &timeout,
+	 sizeof(timeout)) < 0) {
+	 Log::instance()->append(CLIENT_MSG_SOCK_TIMEOUT, Log::ERROR);
+	 return CLIENT_ERROR;
+	 }
+	 */
 	Log::instance()->append("Socket creado!", Log::INFO);
 	return CLIENT_OK;
 }
 
+/**
+ * Metodo utilizado para establecer conexion con el servidor
+ */
 int Client::connectToServer() {
 
 	std::string msg;
@@ -139,131 +165,121 @@ int Client::connectToServer() {
 }
 
 int Client::initialize() {
-	int size;
 	int entro;
 	std::string msg;
 
-	//Envio el nombre de cliente
-	size = 20;
-	sendall(sock, name, &size);
+	try {
 
-	//Recibo la aprobacion de si entro o no.
-	size = sizeof(int);
-	if (recvall(sock, &entro, &size) != 0) {
-		Log::instance()->append("Error al escribir al servidor", Log::ERROR);
+		//Envio el nombre de cliente
+		sendall(sock, name, 20);
+
+		//Recibo la respuesta del servidor
+		recvall(sock, &entro, sizeof(int));
+
+		if (entro == SRV_ERROR) {
+			Log::instance()->append("Servidor rechazo la conexion", Log::ERROR);
+			return CLIENT_ERROR;
+		} else {
+			Log::instance()->append("Servidor acepto la conexion", Log::INFO);
+		}
+
+		//Recibimos la cantidad de objetos creados en el juego
+		recvall(sock, &gameDetails_, sizeof(firstConnectionDetails_t));
+
+		//Recibimos la cantidad de objetos creados
+		recibirEstaticos(estaticos_);
+		recibirDinamicos(dinamicos_);
+		recibirPersonajes(personajes_);
+
+		//Inicializamos la vista para el personaje principal
+		for (unsigned int i = 0; i < gameDetails_.cantPersonajes; i++) {
+
+			if (strcmp((personajes_[i]).id, name) == 0) {
+				view_->inicializarCamara(personajes_[i]);
+			}
+		}
+
+	} catch (sendException& e) {
+		return CLIENT_ERROR;
+
+	} catch (receiveException& e) {
 		return CLIENT_ERROR;
 	}
 
-	if (entro == SRV_ERROR) {
-		Log::instance()->append("El servidor rechazo la conexion", Log::ERROR);
-		return CLIENT_ERROR;
-	}
-
-	Log::instance()->append("El servidor acepto la conexion", Log::INFO);
-
-
-	//Recibimos la cantidad de objetos creados en el juego
-	size = sizeof(firstConnectionDetails_t);
-	if (recvall(sock, &gameDetails_, &size) != 0) {
-		Log::instance()->append("No se pueden recibir datos", Log::WARNING);
-		return CLIENT_ERROR;
-	}
-
-	Log::instance()->append("Recibimos los objetos estaticos.", Log::INFO);
-
-	size = sizeof(figura_t) * gameDetails_.cantObjEstaticos;
-	estaticos_ = (figura_t*) malloc(size);
-	if (recvall(sock, estaticos_, &size) != 0) {
-		Log::instance()->append("No se pueden recibir datos", Log::WARNING);
-		return CLIENT_ERROR;
-	}
-
-	Log::instance()->append("Recibimos los objetos dinamicos.", Log::INFO);
-
-	size = sizeof(figura_t) * gameDetails_.cantObjDinamicos;
-	dinamicos_ = (figura_t*) malloc(size);
-	if (recvall(sock, dinamicos_, &size) != 0) {
-		Log::instance()->append("No se pueden recibir datos", Log::WARNING);
-		return CLIENT_ERROR;
-	}
-
-	size = sizeof(personaje_t) * gameDetails_.cantPersonajes;
-	personajes_ = (personaje_t*) malloc(size);
-	if (recvall(sock, personajes_, &size) != 0) {
-		Log::instance()->append("No se pueden recibir datos", Log::WARNING);
-		return CLIENT_ERROR;
-	}
-
-	Log::instance()->append("Recibimos los personajes.", Log::INFO);
-
-	personaje_t personajePrincipal;
-	for(int i = 0; i < gameDetails_.cantPersonajes;i++ ){
-		if(strcmp( (personajes_[i]).id,name) == 0)
-			personajePrincipal = personajes_[i];
-	}
-	view_->inicializarCamara(personajePrincipal);
-
-    std::cout << "Recibimos " << gameDetails_.cantObjDinamicos << " obj Dinamicos y ";
-    std::cout << gameDetails_.cantObjEstaticos << " obj Estaticos" << std::endl;
-    std::cout <<"recibimos"<< gameDetails_.cantPersonajes << "personajes"<< std::endl;
-
+	std::cout << "Terminamos de recibir datos de ini" << std::endl;
 	return CLIENT_OK;
 }
 
-void Client::enviarAlServer() {
-	FILE* file = fopen ("clSend.txt","w");
-	fclose(file);
+/**
+ * Metodo utilizado para enviar señales de vida al servidor.
+ */
+void Client::enviarHeartBeat() {
 
-	int size = sizeof(dataToSend_t);
-	while (running_) {
-		//Control all posible events
-		dataToSend_t* data = onEvent();
-		if (data->keycode_1 == 0 && data->keycode_2 ==0 ){
-			free(data);
-			continue;
-		}
-		if (sendall(sock, data, &size) == -1) {
-			Log::instance()->append(CLIENT_MSG_ERROR_WHEN_SENDING, Log::ERROR);
-		}
-		FILE* file = fopen ("clSend.txt","a");
-		fprintf(file, "Cliente: %s\ntype_1: %d\nkeycode_1: %d\ntype_2: %d\nkeycode_2: %d\n",data->id,data->type_1,data->keycode_1,data->type_2,data->keycode_2);
-		fclose(file);
-		SDL_Delay(1);
-		free(data);
-	}
+	int msgType = HB_MSG_TYPE;
+	int size = sizeof(msgType);
+
 }
 
+/**
+ * Metodo utilizado para enviar nuevos eventos al servidor
+ */
+void Client::enviarAlServer() {
+
+	try {
+
+		while (running_) {
+
+			dataToSend_t* data = onEvent();
+			if (data->keycode_1 == 0 && data->keycode_2 == 0) {
+				free(data);
+				continue;
+			}
+
+			sendall(sock, data, sizeof(dataToSend_t));
+
+			SDL_Delay(1);
+			free(data);
+		}
+
+	} catch (sendException& e) {
+		running_ = false;
+		Log::instance()->append(CLIENT_MSG_ERROR_WHEN_SENDING, Log::ERROR);
+		return;
+	}
+
+}
+
+/**
+ * Metodo para recibir mensajes del servidor con la informacion de
+ * los personajes y los objetos dinamicos. Los objetos estaticos nunca
+ * cambian, por lo que no son necesarios
+ */
 void Client::recibirDelServer() {
 
-	int size;
 	dataFromServer_t data;
 
-	FILE* file = fopen ("clRecv.txt","w");
-	fclose(file);
+	try {
 
-	//La cant de bytes a recibir esta definida por la cantidad de
-	//personajes y la cantidad de objetos dinamicos:
-	while (running_) {
+		//La cant de bytes a recibir esta definida por la cantidad de
+		//personajes y la cantidad de objetos dinamicos:
+		while (running_) {
 
-		//Recibimos los personajes
-		size = sizeof(personaje_t) * gameDetails_.cantPersonajes;
-		data.personajes = (personaje_t*) malloc(size);
-		if (recvall(sock, data.personajes, &size) != 0) {
-			//Log::instance()->append(CLIENT_MSG_ERROR_WHEN_RECEIVING, Log::ERROR);
+			//Recibimos los personajes
+			recibirPersonajes(data.personajes);
+
+			//Recibimos los objetos dinamicos
+			recibirDinamicos(data.dinamicos);
+
+			shared_rcv_queue_->push(data);
+
 		}
 
-		//Recibimos los objetos dinamicos
-		size = sizeof(figura_t) * gameDetails_.cantObjDinamicos;
-		data.dinamicos = (figura_t*) malloc(size);
-		if (recvall(sock, data.dinamicos, &size) != 0) {
-			//Log::instance()->append(CLIENT_MSG_ERROR_WHEN_RECEIVING, Log::ERROR);
-		}
-		shared_rcv_queue_->push(data);
-
-		file = fopen("clRecv.txt", "a");
-		fprintf(file, "Cant Personajes: %d\nCant Dinamicos: %d\n", gameDetails_.cantObjDinamicos, gameDetails_.cantPersonajes);
-		fclose(file);
+	} catch (sendException& e) {
+		running_ = false;
+		Log::instance()->append(CLIENT_MSG_ERROR_WHEN_RECEIVING, Log::ERROR);
+		return;
 	}
+
 }
 
 dataToSend_t* Client::onEvent() {
@@ -287,7 +303,7 @@ void Client::onRender(dataFromServer_t data) {
 	dataToBeDraw.dinamicos = data.dinamicos;
 	dataToBeDraw.estaticos = estaticos_;
 
-	view_->updateView(dataToBeDraw,name);
+	view_->updateView(dataToBeDraw, name);
 
 }
 
@@ -325,45 +341,88 @@ bool Client::validateParameters(int argc, char* argv[]) {
 }
 
 /**
+ * Metodo para recibir los objetos dinamicos
+ */
+void Client::recibirDinamicos(figura_t* &dinamicos) {
+
+	int size = sizeof(figura_t) * gameDetails_.cantObjDinamicos;
+	dinamicos = (figura_t*) malloc(size);
+
+	recvall(sock, dinamicos, size);
+}
+
+/**
+ * Metodo para recibir los objetos estaticos
+ */
+void Client::recibirEstaticos(figura_t* &estaticos) {
+
+	int size = sizeof(figura_t) * gameDetails_.cantObjEstaticos;
+	estaticos = (figura_t*) malloc(size);
+
+	recvall(sock, estaticos, size);
+}
+
+/**
+ * Metodo para recibir los personajes
+ */
+void Client::recibirPersonajes(personaje_t* &personajes) {
+
+	int size = sizeof(personaje_t) * gameDetails_.cantPersonajes;
+	personajes = (personaje_t*) malloc(size);
+
+	recvall(sock, personajes, size);
+}
+
+/**
  * Metodo encargado de hacer el envio de informacion
  */
-int Client::sendall(int s, void* data, int* len) {
+void Client::sendall(int s, void* data, int len) throw (sendException) {
 	int total = 0; 			// how many bytes we've sent
-	int bytesleft = *len; 	// how many we have left to send
+	int bytesleft = len; 	// how many we have left to send
 	int n;
-	while (total < *len) {
+	while (total < len) {
 		n = send(s, data + total, bytesleft, 0);
+
+		//Si aparece un error al enviar, lanzamos una excepcion
 		if (n == -1) {
-			break;
+			std::cout << "ERROR AL ENVIARRRR" << std::endl;
+			Log::instance()->append("Error al escribir al servidor",
+					Log::ERROR);
+			throw new sendException();
 		}
+
 		total += n;
 		bytesleft -= n;
 	}
-	*len = total;      		// return number actually sent here
-	return n == -1 ? -1 : 0; 		// return -1 on failure, 0 on success
+	return;
 }
 
 /**
  * Metodo encargado de recibir la informacion
  */
-int Client::recvall(int s, void *data, int *len) {
+void Client::recvall(int s, void *data, int len) throw (receiveException) {
 
-	int total = 0; 			// how many bytes we've recieve
-	int bytesleft = *len; 	// how many we have left to recieve
+	int total = 0;
+	int bytesleft = len;
 	int n;
 
-	while (total < *len) {
+	while (total < len) {
 		n = recv(s, data + total, bytesleft, 0);
+
+		//Si aparece un error al recibir, lanzamos una excepcion
 		if (n == -1 || n == 0) {
-			break;
+			std::cout << "ERROR AL RECIBIR" << std::endl;
+			Log::instance()->append("Error al leer del servidor", Log::ERROR);
+			throw new receiveException();
 		}
+
 		total += n;
 		bytesleft -= n;
 	}
 
-	return n == -1 || n == 0 ? -1 : 0; 	// return -1 on failure, 0 on success
+	return;
 }
 
-void help(){
+void help() {
 	std::cout << "Use mode: ./Client hostname portNro name" << std::endl;
 }

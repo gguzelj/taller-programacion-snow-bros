@@ -101,6 +101,7 @@ bool Escenario::asignarPersonaje(conn_id id){
 	for(auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje){
 			if(strcmp((*personaje)->id,"sin asignar") == 0){
 				strcpy((*personaje)->id,id);
+				(*personaje)->setConnectionState(CONECTADO);
 				return true;
 			}
 	}
@@ -113,6 +114,15 @@ bool Escenario::crearPersonaje(float x, float y,conn_id id){
 		return false;
 	personajes_->push_back(nuevoPersonaje);
 	return true;
+}
+
+
+void Escenario::setPersonajeConnectionState(conn_id id, char state){
+	for(auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje){
+			if(strcmp((*personaje)->id,id) == 0)
+				(*personaje)->setConnectionState(state);
+	}
+
 }
 
 void acomodarEstadoPersonaje(Personaje* personaje){
@@ -285,6 +295,7 @@ personaje_t* Escenario::getPersonajesParaEnvio(){
 		pers[i].estado = (*personaje)->state->getCode();
 		pers[i].centro.x = (*personaje)->getX();
 		pers[i].centro.y = (*personaje)->getY();
+		pers[i].connectionState = (*personaje)->getConnectionState();
 		i++;
 	}
 	return pers;

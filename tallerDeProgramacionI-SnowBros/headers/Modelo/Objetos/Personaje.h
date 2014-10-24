@@ -11,6 +11,11 @@
 #define IZQUIERDA 'l'
 #define DERECHA 'r'
 
+
+#define DESCONECTADO -1
+#define ESPERANDO 0
+#define CONECTADO 1
+
 typedef char conn_id[20];
 
 class Personaje : public Figura{
@@ -22,6 +27,7 @@ class Personaje : public Figura{
 
 		int aceleracion;
 		char orientacion;
+		char connectionState;
 		int jumpCooldown;
 		float ancho;
 		float alto;
@@ -46,11 +52,18 @@ class Personaje : public Figura{
 
 		float getX();
 		float getY();
+		//Y estos por que estan definidos aca?
 		float getAncho(){
 			return ancho;
 		}
 		float getAlto(){
 			return alto;
+		}
+		char getConnectionState(){
+			return connectionState;
+		}
+		void setConnectionState(char state){
+			connectionState = state;
 		}
 
 

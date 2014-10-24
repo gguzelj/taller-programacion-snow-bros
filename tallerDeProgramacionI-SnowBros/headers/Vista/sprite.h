@@ -6,7 +6,7 @@
  */
 #include "SDL2/SDL.h"
 
-#define SPRITE_PATH "resources/spritesnow.png"
+#define SPRITE_PATH "resources/sprites/sprite_player_own.png"
 #define ALTO_CAMINAR 26
 #define POS_X_CAMINAR 30
 #define POS_Y_CAMINAR 10

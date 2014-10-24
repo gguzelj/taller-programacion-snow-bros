@@ -14,6 +14,24 @@
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
 
+//defines de la camara
+#define FACTOR_DESPLAZAMIENTO 5 *currentZoomFactor
+#define FACTOR_CONVERSION_UN_A_PX 32
+#define COTA_INF_X -(ancho_px )/5
+#define COTA_INF_Y -(alto_px)/5
+#define COTA_SUP_X	(ancho_px)/5
+#define COTA_SUP_Y	(alto_px)/5
+
+//defines que eran del Personaje.cpp
+#define MITAD_ANCHO_PERSONAJE 0.5f
+#define MITAD_ALTO_PERSONAJE 0.85
+
+//defines que eran de Estados.h
+#define JUMPING 'j'
+#define STANDBY 's'
+#define WALKING 'w'
+#define FALLING 'f'
+
 #include "../Log/Log.h"
 #include <iostream>
 #include <Box2D/Box2D.h>
@@ -54,6 +72,7 @@ typedef struct personaje{
 	float rotacion;
 	char estado;
 	char orientacion;
+	char connectionState;
 }personaje_t;
 
 typedef struct dataFromClient{

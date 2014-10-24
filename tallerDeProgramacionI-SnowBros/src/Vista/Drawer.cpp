@@ -1,21 +1,6 @@
 #include "../../headers/Vista/Drawer.h"
 #include "../../headers/Vista/sprite.h"
 
-#define FACTOR_DESPLAZAMIENTO 5 *currentZoomFactor
-#define FACTOR_CONVERSION_UN_A_PX 32
-#define COTA_INF_X -(ancho_px )/5
-#define COTA_INF_Y -(alto_px)/5
-#define COTA_SUP_X	(ancho_px)/5
-#define COTA_SUP_Y	(alto_px)/5
-//defines que eran del Personaje.cpp
-#define MITAD_ANCHO_PERSONAJE 0.5f
-#define MITAD_ALTO_PERSONAJE 0.85
-//defines que eran de Estados.h
-#define JUMPING 'j'
-#define STANDBY 's'
-#define WALKING 'w'
-#define FALLING 'f'
-
 void Drawer::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, SDL_Rect dst,
 		SDL_Rect *clip = nullptr) {
 	SDL_RenderCopy(ren, tex, clip, &dst);
@@ -65,35 +50,35 @@ bool Drawer::loadMedia() {
 
 	//Load images
 	if (!rectangleTexture.loadFromFile(rectangleImage, renderer)) {
-		printf("Failed to load fondito texture!\n");
+		printf("Failed to load rectangle texture!\n");
 		success = false;
 	}
 	if (!circleTexture.loadFromFile(circleImage, renderer)) {
-		printf("Failed to load fondito texture!\n");
+		printf("Failed to load circle texture!\n");
 		success = false;
 	}
 	if (!triangleTexture.loadFromFile(triangleImagePath, renderer)) {
-		printf("Failed to load fondito texture!\n");
+		printf("Failed to load triangle texture!\n");
 		success = false;
 	}
 	if (!squareTexture.loadFromFile(squareImagePath, renderer)) {
-		printf("Failed to load fondito texture!\n");
+		printf("Failed to load square texture!\n");
 		success = false;
 	}
 	if (!pentagonTexture.loadFromFile(pentagonImagePath, renderer)) {
-		printf("Failed to load fondito texture!\n");
+		printf("Failed to load pentagon texture!\n");
 		success = false;
 	}
 	if (!hexagonTexture.loadFromFile(hexagonImagePath, renderer)) {
-		printf("Failed to load fondito texture!\n");
+		printf("Failed to load hexagon texture!\n");
 		success = false;
 	}
 	if (!trapexTexture.loadFromFile(trapexImagePath, renderer)) {
-		printf("Failed to load fondito texture!\n");
+		printf("Failed to load trapex texture!\n");
 		success = false;
 	}
 	if (!paralelogramTexture.loadFromFile(paralelogramImagePath, renderer)) {
-		printf("Failed to load fondito texture!\n");
+		printf("Failed to load paralelogram texture!\n");
 		success = false;
 	}
 
@@ -221,8 +206,9 @@ void Drawer::drawScenary(dataFromClient_t data) {
 	for (unsigned int i = 0; i < data.cantObjDinamicos; i++)
 		drawFigura(data.dinamicos[i]);
 
+	//TODO dibujar cada personaje con su sprite correspondiente
 	for(unsigned int i = 0 ; i< data.cantPersonajes ; i++){
-		if(strcmp(data.personajes[i].id,"sin asignar") != 0)
+		if(data.personajes[i].connectionState >= 0)
 			drawCharacter(data.personajes[i]);
 	}
 }

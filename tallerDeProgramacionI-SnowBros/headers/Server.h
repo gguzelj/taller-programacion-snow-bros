@@ -23,6 +23,9 @@
 #include <sys/wait.h>
 #include <signal.h>
 
+#include "Exceptions/receiveException.h"
+#include "Exceptions/sendException.h"
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <Box2D/Box2D.h>
@@ -34,6 +37,7 @@
 
 #define SRV_NO_ERROR 0
 #define SRV_ERROR 1
+#define HB_TIMEOUT 1
 #define TAM 20
 
 typedef struct receivedData{
@@ -85,6 +89,7 @@ private:
 	int sockfd_;
 	int connectionsLimit_;
 	bool acceptNewClients_;
+	firstConnectionDetails_t datos_;
 
 	Escenario *model_;
 	JsonParser *parser_;
@@ -134,11 +139,6 @@ private:
 	 */
 	void recibirDelCliente(connection_t conn);
 
-	/*
-	 * Metodo de bajo nivel de sockets
-	 */
-	int recvall(int s, void* data, int* len);
-
 	///////////////////////////
 	//Thread de envio de info//
 	///////////////////////////
@@ -147,11 +147,6 @@ private:
 	 * Metodo encargado de enviarle al cliente los datos del modelo, encolados en la personal_queue
 	 */
 	void enviarAlCliente(connection_t conn, Threadsafe_queue<dataToSend_t>* personal_queue);
-
-	/*
-	 * Metodo de bajo nivel de sockets
-	 */
-	int sendall(int s, void* data, int* len);
 
 	////////////////////////////////////////////////////////////////////////////
 	//Thread principal. Se comunican con los otros threads mediante las queues//
@@ -162,7 +157,7 @@ private:
 	 * Una vez generado el struct lo encola en una cola de envios, la cual sera utilizada para enviarle a los threads
 	 * de envio, el dato a mandar
 	 */
-	void prepararEnvio();
+	void enviarAClientes();
 
 	/**
 	 * Metodo para crear el socket que va a utilizar el server
@@ -186,6 +181,33 @@ private:
 	 */
 	float getInitialX();
 	float getInitialY();
+
+	/**
+	 * Metodo para enviar los objetos dinamicos
+	 */
+	void enviarDinamicos(int sock, figura_t* dinamicos);
+
+	/**
+	 * Metodo para enviar los objetos estaticos
+	 */
+	void enviarEstaticos(int sock, figura_t* estaticos);
+
+	/**
+	 * Metodo para enviar los personajes
+	 */
+	void enviarPersonajes(int sock, personaje_t* personajes);
+
+	/*
+     * Metodo de bajo nivel de sockets para recibir hasta una cierta
+     * cantidad de bytes determinada.
+     */
+	void recvall(int s, void *data, int len) throw(receiveException);
+
+    /*
+     * Metodo de bajo nivel de sockets para enviar hasta una cierta
+     * cantidad de bytes determinada.
+     */
+	void sendall(int s, void *data, int len) throw(sendException);
 };
 
 #endif /* SERVER_H_ */

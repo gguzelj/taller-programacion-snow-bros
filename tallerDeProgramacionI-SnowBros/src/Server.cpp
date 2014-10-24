@@ -16,7 +16,7 @@ Server::Server() {
 	shared_rcv_queue_ = new Threadsafe_queue<receivedData_t*>();
 
 	//Inicializo el generador de randoms
-	srand (static_cast <unsigned> (time(0)));
+	srand(static_cast<unsigned>(time(0)));
 
 	Log::instance()->loggerLevel = Log::INFO;
 	Log::instance()->append("Creando SERVER!", Log::INFO);
@@ -63,12 +63,11 @@ int Server::init(int argc, char *argv[]) {
 	float xIni = 1;
 	float yIni;
 
-	for(int i = 0;  i<connectionsLimit_;i++){
-		 xIni = i*7;
-		 yIni = getInitialY();
-		 model_->crearPersonaje(xIni,5,"sin asignar");
+	for (int i = 0; i < connectionsLimit_; i++) {
+		xIni = i * 7;
+		yIni = getInitialY();
+		model_->crearPersonaje(xIni, yIni, "sin asignar");
 	}
-
 
 	return SRV_NO_ERROR;
 }
@@ -124,7 +123,6 @@ void Server::run() {
 	Log::instance()->append("Corriendo Juego", Log::INFO);
 
 	//Thread para inicializar las conexiones.
-	//Dentro se inicializan los threads para recepcion y envio
 	newConnectionsThread_ = std::thread(&Server::newConnectionsManager, this);
 
 	running_ = true;
@@ -133,7 +131,7 @@ void Server::run() {
 		//La sincronizacion de threads se producira gracias a la shared_rcv_queue_
 		//la cual permite ejecutar los eventos recibidos por orden de llegada
 		step();
-		prepararEnvio();
+		enviarAClientes();
 	}
 
 	Log::instance()->append("Fin del juego", Log::INFO);
@@ -173,72 +171,72 @@ void Server::newConnectionsManager() {
 int Server::acceptConnection(int newsockfd) {
 
 	std::string msg;
-	int size = sizeof(conn_id);
 	int aviso;
 	unsigned int index;
 	connection_t connection;
 	Threadsafe_queue<dataToSend_t>* personal_queue;
-
+	std::cout << "Muievo cliente";
 	Log::instance()->append("Nuevo cliente conectado!", Log::INFO);
 
-	//Recibimos el id del cliente
-	if (recvall(newsockfd, &connection.id, &size) != 0) {
-		msg = "No se pudo leer el ID del cliente";
-		Log::instance()->append(msg, Log::ERROR);
-		return SRV_ERROR;
+	try {
 
-	}
+		//Recibimos el id del cliente
+		recvall(newsockfd, &connection.id, sizeof(conn_id));
+		connection.activa = true;
+		connection.socket = newsockfd;
 
-	connection.activa = true;
-	connection.socket = newsockfd;
+		//Si no encontramos lugar para guardar el nuevo cliente, lo informamos
+		//Ademas obtenemos en index donde se guarda la conexion, para utilizar
+		//al agregar la personal queue
+		if (searchPlaceForConnection(connection, index)) {
 
-	//Si no encontramos lugar para guardar el nuevo cliente, lo informamos
-	//Ademas obtenemos en index donde se guarda la conexion, para utilizar
-	//al agregar la personal queue
-	size = sizeof(int);
-	if (searchPlaceForConnection(connection, index)) {
+			aviso = SRV_NO_ERROR;
+			sendall(connection.socket, &aviso, sizeof(int));
 
-		aviso = SRV_NO_ERROR;
-		if (sendall(connection.socket, &aviso, &size) != 0) {
-			Log::instance()->append("No se pueden enviar datos", Log::WARNING);
+		} else {
+
+			aviso = SRV_ERROR;
+			sendall(connection.socket, &aviso, sizeof(int));
+
+			return SRV_ERROR;
 		}
 
-	} else {
+		std::cout << "Aceptamos conexion" << std::endl;
 
-		aviso = SRV_ERROR;
-		if (sendall(connection.socket, &aviso, &size) != 0) {
-			Log::instance()->append("No se pueden enviar datos", Log::WARNING);
+		//Creamos el personaje en el mundo
+		model_->asignarPersonaje(connection.id);
+		msg = "Se asigno un personaje a la conexion ";
+		msg += connection.id;
+		Log::instance()->append(msg, Log::INFO);
+
+		//Comenzamos enviando la informacion del juego
+		enviarDatosJuego(newsockfd);
+
+		//Lanza el thread para que el cliente pueda empezar a mandar eventos en forma paralela
+		rcv_threads_.push_back(
+				std::thread(&Server::recibirDelCliente, this, connection));
+
+		//Crea la queue para el envio de datos del server al cliente y luego lanza el thread
+		//para que el server ya pueda mandarle info en forma paralela
+		personal_queue = new Threadsafe_queue<dataToSend_t>();
+
+		if (index == per_thread_snd_queues_.size()) {
+			per_thread_snd_queues_.push_back(personal_queue);
+			snd_threads_.push_back(
+					std::thread(&Server::enviarAlCliente, this, connection,
+							personal_queue));
+
+		} else {
+			per_thread_snd_queues_[index] = personal_queue;
+			snd_threads_[index] = std::thread(&Server::enviarAlCliente, this,
+					connection, personal_queue);
 		}
 
+	} catch (sendException& e) {
 		return SRV_ERROR;
-	}
 
-	//Creamos el personaje en el mundo
-
-	model_->asignarPersonaje(connection.id);
-	msg = "Se asigno un personaje a la conexion " ;
-	msg+=	connection.id;
-	Log::instance()->append(msg, Log::INFO);
-
-	//Comenzamos enviando la informacion del juego
-	enviarDatosJuego(newsockfd);
-
-	//Lanza el thread para que el cliente pueda empezar a mandar eventos en forma paralela
-	rcv_threads_.push_back(std::thread(&Server::recibirDelCliente, this, connection));
-
-	//Crea la queue para el envio de datos del server al cliente y luego lanza el thread
-	//para que el server ya pueda mandarle info en forma paralela
-	personal_queue = new Threadsafe_queue<dataToSend_t>();
-
-	if (index == per_thread_snd_queues_.size()) {
-		per_thread_snd_queues_.push_back(personal_queue);
-		snd_threads_.push_back(std::thread(&Server::enviarAlCliente, this, connection,
-						personal_queue));
-
-	} else {
-		per_thread_snd_queues_[index] = personal_queue;
-		snd_threads_[index] = std::thread(&Server::enviarAlCliente, this,
-				connection, personal_queue);
+	} catch (receiveException& e) {
+		return SRV_ERROR;
 	}
 
 	return SRV_NO_ERROR;
@@ -307,76 +305,26 @@ bool Server::searchPlaceForConnection(connection_t conn, unsigned int &index) {
 void Server::enviarDatosJuego(int sockfd) {
 
 	std::string msg;
-	int size;
-	firstConnectionDetails_t datos;
 
-	Log::instance()->append("Enviamos la cantidad de objetos creados",
-			Log::INFO);
+	Log::instance()->append("Enviamos la cant de objetos creados", Log::INFO);
 
-	//Enviamos la cantidad de objetos creados en el juego
-	datos.cantPersonajes = model_->getCantPersonajes();
-	datos.cantObjDinamicos = model_->getCantObjDinamicos();
-	datos.cantObjEstaticos = model_->getCantObjEstaticos();
+	try {
 
-	size = sizeof(firstConnectionDetails_t);
-	if (sendall(sockfd, &datos, &size) != 0) {
-		Log::instance()->append("No se pueden enviar datos", Log::INFO);
+		datos_.cantPersonajes = model_->getCantPersonajes();
+		datos_.cantObjDinamicos = model_->getCantObjDinamicos();
+		datos_.cantObjEstaticos = model_->getCantObjEstaticos();
+
+		//Enviamos la cantidad de objetos creados en el juego
+		sendall(sockfd, &datos_, sizeof(datos_));
+
+		//Enviamos la lista de objetos
+		enviarEstaticos(sockfd, model_->getObjetosEstaticos());
+		enviarDinamicos(sockfd, model_->getObjetosDinamicos());
+		enviarPersonajes(sockfd, model_->getPersonajesParaEnvio());
+
+	} catch (sendException& e) {
+		return;
 	}
-
-	Log::instance()->append("Enviamos la lista de objetos Estaticos", Log::INFO);
-	//Enviamos la lista de objetos Estaticos
-	size = sizeof(figura_t) * model_->getCantObjEstaticos();
-	figura_t *objetosEstaticos = model_->getObjetosEstaticos();
-	if (sendall(sockfd, objetosEstaticos, &size) != 0) {
-		Log::instance()->append("No se pueden enviar datos", Log::WARNING);
-	}
-
-    Log::instance()->append("Enviamos la lista de objetos Dinamicos", Log::INFO);
-    //Enviamos la lista de los objetos Dinamicos
-    size = sizeof(figura_t) * model_->getCantObjDinamicos();
-    figura_t *objetosDinamicos = model_->getObjetosDinamicos();
-    if (sendall(sockfd, objetosDinamicos, &size) != 0) {
-    	Log::instance()->append("No se pueden enviar datos", Log::WARNING);
-    }
-
-    Log::instance()->append("Enviamos la lista de personajes", Log::INFO);
-    size = sizeof(personaje_t )* model_->getCantPersonajes();
-    personaje_t* personajes = model_->getPersonajesParaEnvio();
-    if(sendall(sockfd,personajes,&size)!=0){
-    	Log::instance()->append("No se pueden enviar datos", Log::WARNING);
-    }
-
-    std::cout << "Estos son los objetos Estaticos" << std::endl;
-    for (unsigned int i = 0; i < datos.cantObjEstaticos; i++) {
-    		std::cout << "id: " << objetosEstaticos[i].id << std::endl;
-            std::cout << "alto: " << objetosEstaticos[i].alto << std::endl;
-            std::cout << "ancho: " << objetosEstaticos[i].ancho << std::endl;
-            std::cout << "rotacion: " << objetosEstaticos[i].rotacion << std::endl;
-            std::cout << "centrox: " << objetosEstaticos[i].centro.x << std::endl;
-            std::cout << "centroy: " << objetosEstaticos[i].centro.y << std::endl<< std::endl;
-    }
-
-    std::cout << "Estos son los objetos Dinamicos" << std::endl;
-    for (unsigned int i = 0; i < datos.cantObjDinamicos; i++) {
-        	std::cout << "id: " << objetosDinamicos[i].id << std::endl;
-            std::cout << "alto: " << objetosDinamicos[i].alto << std::endl;
-            std::cout << "ancho: " << objetosDinamicos[i].ancho << std::endl;
-            std::cout << "rotacion: " << objetosDinamicos[i].rotacion << std::endl;
-            std::cout << "centrox: " << objetosDinamicos[i].centro.x << std::endl;
-            std::cout << "centroy: " << objetosDinamicos[i].centro.y << std::endl<< std::endl;
-    }
-
-    std::cout << "Estos son los personajes" << std::endl;
-        for (unsigned int i = 0; i < datos.cantPersonajes; i++) {
-            	std::cout << "id: " << personajes[i].id << std::endl;
-                std::cout << "centrox: " << personajes[i].centro.x << std::endl;
-                std::cout << "centroy: " << personajes[i].centro.y << std::endl<< std::endl;
-        }
-
-    free(objetosEstaticos);
-    free(objetosDinamicos);
-    free(personajes);
-
 }
 
 /**
@@ -385,89 +333,88 @@ void Server::enviarDatosJuego(int sockfd) {
  */
 void Server::recibirDelCliente(connection_t conn) {
 
-	int size = sizeof(receivedData_t);
 	std::string msg;
+	receivedData_t* data;
 
-	FILE* file = fopen ("svRecv.txt","w");
-	fclose(file);
+	while (running_) {
 
-	while (true) {
+		data = (receivedData_t*) malloc(sizeof(receivedData_t));
 
-		receivedData_t* data = (receivedData_t*) malloc(size);
-		if (recvall(conn.socket, data, &size) != 0) {
+		try {
 
-			//Si el cliente se desconecta, lo desactivamos
+			recvall(conn.socket, data, sizeof(receivedData_t));
+
+		} catch (receiveException& e) {
+
+			free(data);
+			conn.activa = false;
+
 			msg = "No se pueden recibir datos de la conexion ";
 			msg += conn.id;
 			Log::instance()->append(msg, Log::WARNING);
 
-			conn.activa = false;
 			return;
 		}
 
-		FILE* file = fopen ("svRecv.txt","a");
-
-		fprintf(file, "Cliente: %s\ntype_1: %d\nkeycode_1: %d\ntype_2: %d\nkeycode_2: %d\n",data->id,data->type_1,data->keycode_1,data->type_2,data->keycode_2);
-
-		fclose(file);
-
-		// Al hacer push se notifica al step mediante una condition_variable
-		//que tiene data para procesar
 		shared_rcv_queue_->push(data);
+
 	}
+
 }
 
-void Server::prepararEnvio() {
+/**
+ * Metodo encargado de enviar los datos a los distintos clientes.
+ * Insertamos la informacion en una cola que utilizan los distintos
+ * threads
+ */
+void Server::enviarAClientes() {
 
 	dataToSend_t dataToBeSent;
 
-	// Crea el struct y lo adapta a lo que hay que mandar
 	dataToBeSent.personajes = model_->getPersonajesParaEnvio();
 	dataToBeSent.dinamicos = model_->getObjetosDinamicos();
 
-	// Inserta el dato a mandar en la cola de envios de cada thread
 	for (unsigned int i = 0; i < connections_.size(); i++) {
 
-		//Ignoramos las conexiones que no estan activas
 		if (!connections_[i].activa)
 			continue;
 
 		per_thread_snd_queues_[i]->push(dataToBeSent);
-		// Al hacer push se notifica al thread mediante una condition_variable que tiene data para enviar
 	}
 }
 
+/**
+ * Thread que corre por cada cliente para enviarle informacion
+ * del juego
+ */
 void Server::enviarAlCliente(connection_t conn,
 		Threadsafe_queue<dataToSend_t>* personal_queue) {
 
-	int size;
+	std::string msg;
 	dataToSend_t dataToBeSent;
 
-	FILE* file = fopen ("svSend.txt","w");
-	fclose(file);
-
-	//wait_and_pop va a esperar a que haya un elemento en la
-	//personal_queue para desencolar el mismo.
 	while (true) {
 
 		personal_queue->wait_and_pop(dataToBeSent);
 
-		//Enviamos los personajes
-		size = sizeof(personaje_t) * model_->getCantPersonajes();
-		if (sendall(conn.socket, dataToBeSent.personajes, &size) != 0) {
-			Log::instance()->append("No se pueden enviar datos", Log::WARNING);
+		try {
+
+			enviarPersonajes(conn.socket, dataToBeSent.personajes);
+			enviarDinamicos(conn.socket, dataToBeSent.dinamicos);
+
+		} catch (sendException& e) {
+
+			conn.activa = false;
+
+			msg = "No se pueden enviar datos a la conexion ";
+			msg += conn.id;
+			Log::instance()->append(msg, Log::WARNING);
+
+			return;
 		}
 
-		//Enviamos los objetos
-		size = sizeof(figura_t) * model_->getCantObjDinamicos();
-		if (sendall(conn.socket, dataToBeSent.dinamicos, &size) != 0) {
-			Log::instance()->append("No se pueden enviar datos", Log::WARNING);
-		}
-
-		file = fopen("svSend.txt", "a");
-		fprintf(file, "Cant Personajes: %d\nCant Dinamicos: %d\n", model_->getCantPersonajes(), model_->getCantObjDinamicos());
-		fclose(file);
 	}
+
 }
 
 /**
@@ -475,21 +422,25 @@ void Server::enviarAlCliente(connection_t conn,
  */
 void Server::step() {
 	receivedData_t* data;
-	bool recibioData = shared_rcv_queue_->try_pop(data);
-	if (recibioData){
-		//Get the character
+
+	if (shared_rcv_queue_->try_pop(data)) {
+
+		//Buscamos el personaje y procesamos sus eventos
 		Personaje* personaje = model_->getPersonaje(data->id);
 		if (!personaje)
 			Log::instance()->append(
 					"No se puede mapear el personaje con uno del juego",
 					Log::WARNING);
 
-		else{
-			//Process the events
+		else {
+
 			personaje->handleInput(data->keycode_1, data->type_1);
 			personaje->handleInput(data->keycode_2, data->type_2);
+
 		}
+
 	}
+
 	//process(data)
 	model_->step();
 	SDL_Delay(50);
@@ -504,8 +455,7 @@ int Server::validateParameters(int argc, char *argv[]) {
 
 	Log::instance()->append("Validamos Parametros", Log::INFO);
 
-	//Validamos cantidad de parametros. En caso de que no sean correctos, se
-	//comienza con un juego default
+	//Validamos cantidad de parametros
 	if (argc != 3) {
 		Log::instance()->append("Cantidad de parametros incorrecta",
 				Log::WARNING);
@@ -524,45 +474,8 @@ int Server::validateParameters(int argc, char *argv[]) {
 }
 
 /**
- * Metodo encargado de hacer el envio de informacion
+ * Asignamos una posicion inicial para un personaje que se esta creando
  */
-int Server::sendall(int s, void* data, int* len) {
-	int total = 0; 			// how many bytes we've sent
-	int bytesleft = *len; 	// how many we have left to send
-	int n;
-	while (total < *len) {
-		n = send(s, data + total, bytesleft, 0);
-		if (n == -1) {
-			break;
-		}
-		total += n;
-		bytesleft -= n;
-	}
-	*len = total;      		// return number actually sent here
-	return n == -1 ? -1 : 0; 		// return -1 on failure, 0 on success
-}
-
-/**
- * Metodo encargado de recibir la informacion
- */
-int Server::recvall(int s, void *data, int *len) {
-
-	int total = 0; 			// how many bytes we've recieve
-	int bytesleft = *len; 	// how many we have left to recieve
-	int n;
-
-	while (total < *len) {
-		n = recv(s, data + total, bytesleft, 0);
-		if (n == -1 || n == 0) {
-			break;
-		}
-		total += n;
-		bytesleft -= n;
-	}
-
-	return n == -1 || n == 0 ? -1 : 0; 	// return -1 on failure, 0 on success
-}
-
 float Server::getInitialX() {
 	float LO = -model_->getAnchoUn() / 2 + 1;
 	float HI = model_->getAnchoUn() / 2 - 1;
@@ -573,6 +486,87 @@ float Server::getInitialX() {
 					/ (static_cast<float>(RAND_MAX / (HI - LO))));
 }
 
+/**
+ * Asignamos una posicion incial para un personaje que se esta creando
+ */
 float Server::getInitialY() {
 	return 0.0;
+}
+
+/**
+ * Metodo para enviar los objetos dinamicos
+ */
+void Server::enviarDinamicos(int sock, figura_t* dinamicos) {
+
+	int size = sizeof(figura_t) * datos_.cantObjDinamicos;
+	sendall(sock, dinamicos, size);
+
+}
+
+/**
+ * Metodo para enviar los objetos estaticos
+ */
+void Server::enviarEstaticos(int sock, figura_t* estaticos) {
+
+	int size = sizeof(figura_t) * datos_.cantObjEstaticos;
+	sendall(sock, estaticos, size);
+
+}
+
+/**
+ * Metodo para enviar los personajes
+ */
+void Server::enviarPersonajes(int sock, personaje_t* personajes) {
+
+	int size = sizeof(personaje_t) * datos_.cantPersonajes;
+	sendall(sock, personajes, size);
+
+}
+
+/**
+ * Metodo encargado de hacer el envio de informacion
+ */
+void Server::sendall(int s, void* data, int len) throw (sendException) {
+	int total = 0;
+	int bytesleft = len;
+	int n;
+
+	while (total < len) {
+		n = send(s, data + total, bytesleft, 0);
+
+		//Si aparece un error al enviar, lanzamos una excepcion
+		if (n == -1) {
+			Log::instance()->append("Error al enviar al cliente", Log::ERROR);
+			throw new sendException();
+		}
+
+		total += n;
+		bytesleft -= n;
+	}
+	return;
+}
+
+/**
+ * Metodo encargado de recibir la informacion
+ */
+void Server::recvall(int s, void *data, int len) throw (receiveException) {
+
+	int total = 0;
+	int bytesleft = len;
+	int n;
+
+	while (total < len) {
+		n = recv(s, data + total, bytesleft, 0);
+
+		//Si aparece un error al recibir, lanzamos una excepcion
+		if (n == -1 || n == 0) {
+			Log::instance()->append("Error al leer del Cliente", Log::ERROR);
+			throw new receiveException();
+		}
+
+		total += n;
+		bytesleft -= n;
+	}
+
+	return;
 }

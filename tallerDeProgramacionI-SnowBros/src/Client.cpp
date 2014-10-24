@@ -82,6 +82,9 @@ int Client::run() {
 		SDL_Delay(1);
 	}
 
+	recvTh.join();
+	sendTh.join();
+
 	//cleaning up
 	onCleanup();
 

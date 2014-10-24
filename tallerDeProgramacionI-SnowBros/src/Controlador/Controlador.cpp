@@ -12,7 +12,7 @@ dataToSend_t* Controlador::handleEvents(bool* running){
 	dataToSend_t* data = (dataToSend_t*) malloc(size);
 	bzero(data, size);
 
-	while(SDL_PollEvent(&event)){
+	while(SDL_PollEvent(&event) && &running){
 		if(cantEventos == 0)
 			handleEvent(&event, running, &(data->keycode_1),&(data->type_1));
 		if(cantEventos == 1)

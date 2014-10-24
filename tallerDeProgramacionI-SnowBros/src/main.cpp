@@ -9,12 +9,20 @@ int main(int argc, char* argv[]) {
 
 	Client* client = new Client();
 
-	if(client->init(argc, argv) == CLIENT_ERROR){
+	if(client->init(argc, argv) == CLIENT_ERROR)
+	{
 		delete client;
 		return CLIENT_ERROR;
 	}
 
-	client->run();
+	try
+	{
+		client->run();
+	}
+	catch(...)
+	{
+		std::cout << "Se ha cerrado por una excepcion." << std::endl;
+	}
 
 	delete client;
 

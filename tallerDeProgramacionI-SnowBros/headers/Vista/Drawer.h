@@ -199,6 +199,10 @@ private:
 	*/
 	void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, SDL_Rect *clip);
 
+	/*
+	 * Selecciona una textura en base a un indice que corresponde a cada jugador.
+	 * Este indice no puede ser negativo, ni tampoco > = 5
+	 */
 	SDL_Texture* selectTexture(int index) throw(ErrorFueraDeRango);
 };
 

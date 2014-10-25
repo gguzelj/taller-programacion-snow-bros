@@ -7,6 +7,11 @@
 #include "SDL2/SDL.h"
 
 #define SPRITE_PATH "resources/sprites/sprite_player_own.png"
+#define SPRITE2_PATH "resources/sprites/sprite_player_blue.png"
+#define SPRITE3_PATH "resources/sprites/sprite_player_red.png"
+#define SPRITE4_PATH "resources/sprites/sprite_player_green.png"
+#define SPRITE5_PATH "resources/sprites/sprite_player_waiting.png"
+
 #define ALTO_CAMINAR 26
 #define POS_X_CAMINAR 30
 #define POS_Y_CAMINAR 10

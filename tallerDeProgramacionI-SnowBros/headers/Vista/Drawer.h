@@ -41,6 +41,7 @@
 #include <SDL2/SDL2_rotozoom.h>
 #include <SDL2/SDL_ttf.h>
 #include "../Exceptions/SDLError.h"
+#include "../Exceptions/ErrorFueraDeRango.h"
 #include "LTexture.h"
 #include <cmath>
 #include <typeinfo>
@@ -103,6 +104,10 @@ private:
 	SDL_Window *window;
 	SDL_Texture *image;
 	SDL_Texture* imagenPersonaje;
+	SDL_Texture* imagenPersonaje2;
+	SDL_Texture* imagenPersonaje3;
+	SDL_Texture* imagenPersonaje4;
+	SDL_Texture* imagenPersonaje5;
 	SDL_Texture* messageAboutPoints;
 	SDL_Texture* messageAboutLifes;
 	SDL_Rect camera;
@@ -154,7 +159,7 @@ private:
 	void drawBackground();
 	void drawScenary(dataFromClient_t data);
 	void drawFigura(figura_t objeto);
-	void drawCharacter(personaje_t person);
+	void drawCharacter(personaje_t person, int index, int connectionState);
 	void drawMessages();
 	void presentScenary();
 	void clearScenary();
@@ -193,6 +198,8 @@ private:
 	*		default of nullptr draws the entire texture
 	*/
 	void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, SDL_Rect *clip);
+
+	SDL_Texture* selectTexture(int index) throw(ErrorFueraDeRango);
 };
 
 

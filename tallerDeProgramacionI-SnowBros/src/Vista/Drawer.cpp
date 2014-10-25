@@ -90,6 +90,10 @@ Drawer::Drawer() {
 	this->window = nullptr;
 	this->image = nullptr;
 	this->imagenPersonaje = nullptr;
+	this->imagenPersonaje2 = nullptr;
+	this->imagenPersonaje3 = nullptr;
+	this->imagenPersonaje4 = nullptr;
+	this->imagenPersonaje5 = nullptr;
 	this->messageAboutLifes = nullptr;
 	this->messageAboutPoints = nullptr;
 	this->fontToBeUsed = nullptr;
@@ -127,6 +131,10 @@ Drawer::Drawer() {
 Drawer::~Drawer() {
 	SDL_DestroyTexture(image);
 	SDL_DestroyTexture(imagenPersonaje);
+	SDL_DestroyTexture(imagenPersonaje2);
+	SDL_DestroyTexture(imagenPersonaje3);
+	SDL_DestroyTexture(imagenPersonaje4);
+	SDL_DestroyTexture(imagenPersonaje5);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_DestroyTexture(messageAboutLifes);
@@ -139,7 +147,7 @@ Drawer::~Drawer() {
 
 void Drawer::updateView(dataFromClient_t data,char* name) {
 	personaje_t personajePrincipal;
-	for(int i = 0; i < data.cantPersonajes;i++ ){
+	for(unsigned int i = 0; i < data.cantPersonajes;i++ ){
 		if(strcmp( (data.personajes[i]).id,name) == 0)
 			personajePrincipal = data.personajes[i];
 	}
@@ -206,10 +214,11 @@ void Drawer::drawScenary(dataFromClient_t data) {
 	for (unsigned int i = 0; i < data.cantObjDinamicos; i++)
 		drawFigura(data.dinamicos[i]);
 
-	//TODO dibujar cada personaje con su sprite correspondiente
+	//dibujar cada personaje con su sprite correspondiente
 	for(unsigned int i = 0 ; i< data.cantPersonajes ; i++){
+		//Dibujo normal
 		if(data.personajes[i].connectionState >= 0)
-			drawCharacter(data.personajes[i]);
+			drawCharacter(data.personajes[i],i, data.personajes[i].connectionState);
 	}
 }
 
@@ -301,7 +310,7 @@ void Drawer::drawFigura(figura_t objeto) {
         }
 }
 
-void Drawer::drawCharacter(personaje_t person) {
+void Drawer::drawCharacter(personaje_t person, int index, int connectionState) {
 	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
 	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);
 
@@ -316,7 +325,10 @@ void Drawer::drawCharacter(personaje_t person) {
 	pos_x = coord_relativa(coordRel.x, pos_x);
 	pos_y = coord_relativa(coordRel.y, pos_y);
 
-	SDL_Texture *textura = this->imagenPersonaje;
+	SDL_Texture *textura;
+
+	if (connectionState == 1) textura = selectTexture(index);	//Elijo una textura para el jugador normal
+	else if (connectionState == 0) textura = imagenPersonaje5;	//Selecciono la textura waiting
 
 	switch (codigo_estado) {
 	case JUMPING:
@@ -455,7 +467,6 @@ void Drawer::actualizarCamara(personaje_t personaje) {
 			limSupCamera);
 	ajusteFueraDeLimite(coordRel, limiteIzquierdo, limiteDerecho,
 			limiteInferior, limiteSuperior);
-
 }
 
 void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
@@ -492,6 +503,26 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 	imagenPersonaje = this->loadTexture(SPRITE_PATH, this->renderer);
 	if (imagenPersonaje == nullptr) {
 		manageLoadCharacterError();
+	}
+
+	imagenPersonaje2 = this->loadTexture(SPRITE2_PATH, this->renderer);
+	if (imagenPersonaje == nullptr) {
+		logSDLError("Error al utilizar IMG_LoadTexture. Verifique el path de la imagen.");
+	}
+
+	imagenPersonaje3 = this->loadTexture(SPRITE3_PATH, this->renderer);
+	if (imagenPersonaje == nullptr) {
+		logSDLError("Error al utilizar IMG_LoadTexture. Verifique el path de la imagen.");
+	}
+
+	imagenPersonaje4 = this->loadTexture(SPRITE4_PATH, this->renderer);
+	if (imagenPersonaje == nullptr) {
+		logSDLError("Error al utilizar IMG_LoadTexture. Verifique el path de la imagen.");
+	}
+
+	imagenPersonaje5 = this->loadTexture(SPRITE5_PATH, this->renderer);
+	if (imagenPersonaje == nullptr) {
+		logSDLError("Error al utilizar IMG_LoadTexture. Verifique el path de la imagen.");
 	}
 
 	//Initialize SDL_ttf
@@ -658,4 +689,18 @@ void Drawer::zoomOut() {
 	//Zoom out a la escala de las figuras
 	un_to_px_x = un_to_px_x_inicial * currentZoomFactor;
 	un_to_px_y = un_to_px_y_inicial * currentZoomFactor;
+}
+
+SDL_Texture* Drawer::selectTexture(int index) throw(ErrorFueraDeRango){
+	if (index >= 4 || index < 0) throw ErrorFueraDeRango();
+
+	if (index == 0) return imagenPersonaje;
+
+	else if (index == 1) return imagenPersonaje2;
+
+	else if (index == 2 )return imagenPersonaje3;
+
+	else{
+		return imagenPersonaje4;
+	}
 }

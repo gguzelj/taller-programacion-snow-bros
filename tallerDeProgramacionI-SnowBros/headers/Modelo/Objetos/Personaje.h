@@ -33,6 +33,10 @@ class Personaje : public Figura{
 		float alto;
 
 	public:
+
+		bool movimientoLateralDerecha,
+			movimientoLateralIzquierda,
+			debeSaltar;
 		int cantidadDeContactosActuales;
 		int cantidadDeContactosIzquierda;
 		int cantidadDeContactosDerecha;

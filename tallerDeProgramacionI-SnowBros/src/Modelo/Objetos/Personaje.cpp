@@ -11,8 +11,9 @@ Personaje::Personaje(float x, float y,conn_id id, b2World* world){
 	strcpy(this->id,id);
 	this->state = &Personaje::standby;
 	this->orientacion = ORIENTACION_INICIAL;
-	this->walking.movimientoLateralDerecha = false;
-	this->walking.movimientoLateralIzquierda = false;
+	this->movimientoLateralDerecha = false;
+	this->movimientoLateralIzquierda = false;
+	this->debeSaltar = false;
 	this->connectionState = CONECTADO;
 
 	//Parametros para controlar los contactos

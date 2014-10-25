@@ -27,7 +27,7 @@ public:
 	char getCode(){
 		return JUMPING;
 	}
-	bool debeSaltar;
+	//bool debeSaltar;
 };
 
 class FallingState: public OnAirState{
@@ -54,8 +54,8 @@ public:
 	}
 	void caminar(Personaje &personaje);
 
-	bool movimientoLateralDerecha,
-	movimientoLateralIzquierda;
+	//bool movimientoLateralDerecha,
+	//movimientoLateralIzquierda;
 };
 
 

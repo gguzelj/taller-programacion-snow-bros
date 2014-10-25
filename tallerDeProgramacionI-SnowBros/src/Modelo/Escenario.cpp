@@ -137,10 +137,10 @@ void acomodarEstadoPersonaje(Personaje* personaje){
 		personaje->state = &Personaje::standby;
 	}
 
-	if (Personaje::walking.movimientoLateralDerecha	|| Personaje::walking.movimientoLateralIzquierda)
+	if (personaje->movimientoLateralDerecha	|| personaje->movimientoLateralIzquierda)
 		Personaje::walking.caminar(*personaje);
 
-	if (Personaje::jumping.debeSaltar && personaje->state->getCode() != JUMPING
+	if (personaje->debeSaltar && personaje->state->getCode() != JUMPING
 			&& personaje->state->getCode() != FALLING) {
 		personaje->jump();
 		personaje->state = &Personaje::jumping;

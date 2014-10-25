@@ -432,22 +432,22 @@ void Drawer::actualizarCamara(personaje_t personaje) {
 
 	if (x_relativa <= COTA_INF_X) {
 		if (camera.x > limIzqCamera)
-			camera.x -= FACTOR_DESPLAZAMIENTO;
+			camera.x -= abs(x_relativa-COTA_SUP_X);
 		coordRel.x = camera.x * currentZoomFactor;
 	} else {
 		if (x_relativa >= COTA_SUP_X) {
 			if (camera.x < limDerCamera)
-				camera.x += FACTOR_DESPLAZAMIENTO;
+				camera.x += abs(x_relativa-COTA_SUP_X);
 			coordRel.x = camera.x * currentZoomFactor;
 		}
 	}
 	if (y_relativa <= COTA_INF_Y) {
 		if (camera.y > limInfCamera)
-			camera.y -= FACTOR_DESPLAZAMIENTO;
+			camera.y -= abs(y_relativa-COTA_INF_Y);
 		coordRel.y = camera.y * currentZoomFactor;
 	} else if (y_relativa >= COTA_SUP_Y) {
 		if (camera.y < limSupCamera)
-			camera.y += FACTOR_DESPLAZAMIENTO;
+			camera.y += abs(y_relativa-COTA_SUP_Y);
 		coordRel.y = camera.y * currentZoomFactor;
 	}
 

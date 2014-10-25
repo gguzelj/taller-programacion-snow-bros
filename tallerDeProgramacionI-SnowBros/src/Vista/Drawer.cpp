@@ -432,7 +432,7 @@ void Drawer::actualizarCamara(personaje_t personaje) {
 
 	if (x_relativa <= COTA_INF_X) {
 		if (camera.x > limIzqCamera)
-			camera.x -= abs(x_relativa-COTA_SUP_X);
+			camera.x -= abs(x_relativa-COTA_INF_X);
 		coordRel.x = camera.x * currentZoomFactor;
 	} else {
 		if (x_relativa >= COTA_SUP_X) {
@@ -455,6 +455,7 @@ void Drawer::actualizarCamara(personaje_t personaje) {
 			limSupCamera);
 	ajusteFueraDeLimite(coordRel, limiteIzquierdo, limiteDerecho,
 			limiteInferior, limiteSuperior);
+
 }
 
 void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {

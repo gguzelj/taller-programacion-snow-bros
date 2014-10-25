@@ -15,7 +15,7 @@
 #define RADTODEG 57.295779513082320876f
 
 //defines de la camara
-#define FACTOR_DESPLAZAMIENTO 5 *currentZoomFactor
+
 #define FACTOR_CONVERSION_UN_A_PX 32
 #define COTA_INF_X -(ancho_px )/5
 #define COTA_INF_Y -(alto_px)/5

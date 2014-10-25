@@ -100,6 +100,7 @@ private:
 
 	float ancho_un;
 	float alto_un;
+	unsigned int cantidadMaximaDePersonajes;
 };
 
 #endif /* ESCENARIO_H_ */

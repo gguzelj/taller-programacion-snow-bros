@@ -87,7 +87,7 @@ private:
 	bool running_;
 	int port_;
 	int sockfd_;
-	int connectionsLimit_;
+	unsigned int connectionsLimit_;
 	bool acceptNewClients_;
 	firstConnectionDetails_t datos_;
 
@@ -130,6 +130,24 @@ private:
 	 */
 	void enviarDatosJuego(int sockfd);
 
+	/*
+	 * Metodo encargado de crearle el personaje correspondiente al usuario que se acaba de conectar, referenciado
+	 * por el parametro connection
+	 */
+	void crearPersonaje(connection_t* connection, unsigned int index);
+
+	/*
+	 * Determina si el usario conectado es nuevo (return true) o bien ya tiene un historial en el juego (return false)
+	 */
+	bool esNuevoCliente(unsigned int index);
+
+	//Lanza el thread para que el cliente pueda empezar a mandar eventos en forma paralela
+	void initReceivingThread(connection_t* connection);
+
+	//Crea la queue para el envio de datos del server al cliente y luego lanza el thread
+	//para que el server ya pueda mandarle info en forma paralela
+	void initSendingThread(connection_t* connection, unsigned int index);
+
 	//////////////////////////////////
 	//Thread de recepcion de eventos//
 	//////////////////////////////////
@@ -138,6 +156,12 @@ private:
 	 * En caso de detectar que el cliente se desconecto, lanzamos excepcion
 	 */
 	void recibirDelCliente(connection_t *conn);
+
+	/*
+     * Metodo de bajo nivel de sockets para recibir hasta una cierta
+     * cantidad de bytes determinada.
+     */
+	void recvall(int s, void *data, int len) throw(receiveException);
 
 	///////////////////////////
 	//Thread de envio de info//
@@ -148,16 +172,38 @@ private:
 	 */
 	void enviarAlCliente(connection_t *conn, Threadsafe_queue<dataToSend_t>* personal_queue);
 
-	////////////////////////////////////////////////////////////////////////////
-	//Thread principal. Se comunican con los otros threads mediante las queues//
-	////////////////////////////////////////////////////////////////////////////
-	void step();
 	/*
 	 * Toma la informacion necesario del modelo para generar un struct que se enviara a los clientes.
 	 * Una vez generado el struct lo encola en una cola de envios, la cual sera utilizada para enviarle a los threads
 	 * de envio, el dato a mandar
 	 */
 	void enviarAClientes();
+
+	/**
+	 * Metodo para enviar los objetos dinamicos
+	 */
+	void enviarDinamicos(int sock, figura_t* dinamicos);
+
+	/**
+	 * Metodo para enviar los objetos estaticos
+	 */
+	void enviarEstaticos(int sock, figura_t* estaticos);
+
+	/**
+	 * Metodo para enviar los personajes
+	 */
+	void enviarPersonajes(int sock, personaje_t* personajes);
+
+    /*
+     * Metodo de bajo nivel de sockets para enviar hasta una cierta
+     * cantidad de bytes determinada.
+     */
+	void sendall(int s, void *data, int len) throw(sendException);
+
+	////////////////////////////////////////////////////////////////////////////
+	//Thread principal. Se comunican con los otros threads mediante las queues//
+	////////////////////////////////////////////////////////////////////////////
+	void step();
 
 	/**
 	 * Metodo para crear el socket que va a utilizar el server
@@ -181,33 +227,6 @@ private:
 	 */
 	float getInitialX();
 	float getInitialY();
-
-	/**
-	 * Metodo para enviar los objetos dinamicos
-	 */
-	void enviarDinamicos(int sock, figura_t* dinamicos);
-
-	/**
-	 * Metodo para enviar los objetos estaticos
-	 */
-	void enviarEstaticos(int sock, figura_t* estaticos);
-
-	/**
-	 * Metodo para enviar los personajes
-	 */
-	void enviarPersonajes(int sock, personaje_t* personajes);
-
-	/*
-     * Metodo de bajo nivel de sockets para recibir hasta una cierta
-     * cantidad de bytes determinada.
-     */
-	void recvall(int s, void *data, int len) throw(receiveException);
-
-    /*
-     * Metodo de bajo nivel de sockets para enviar hasta una cierta
-     * cantidad de bytes determinada.
-     */
-	void sendall(int s, void *data, int len) throw(sendException);
 };
 
 #endif /* SERVER_H_ */

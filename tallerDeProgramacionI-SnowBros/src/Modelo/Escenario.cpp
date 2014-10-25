@@ -14,6 +14,7 @@ Escenario::Escenario(JsonParser *parser) {
 	muros_ = new std::list<Muro*>;
 	personajes_ = new std::list<Personaje*>;
 
+	cantidadMaximaDePersonajes = parser->getConnectionsLimit();
 	contactos.setPersonaje(personajes_);
 
 	Figura* figura_i;
@@ -157,7 +158,7 @@ void Escenario::step() {
 }
 
 unsigned int Escenario::getCantPersonajes(){
-	return personajes_->size();
+	return cantidadMaximaDePersonajes;
 }
 
 unsigned int Escenario::getCantObjDinamicos() {
@@ -284,7 +285,7 @@ figura_t* Escenario::getObjetosDinamicos() {
 }
 
 personaje_t* Escenario::getPersonajesParaEnvio(){
-	personaje_t* pers =(personaje_t*) malloc( sizeof(personaje_t)* personajes_->size() );
+	personaje_t* pers =(personaje_t*) malloc( sizeof(personaje_t)* cantidadMaximaDePersonajes );
 
 	int i = 0;
 	for(auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje){
@@ -298,6 +299,19 @@ personaje_t* Escenario::getPersonajesParaEnvio(){
 		pers[i].connectionState = (*personaje)->getConnectionState();
 		i++;
 	}
+
+	//Rellena con basura
+	for(unsigned int j = i ; j < cantidadMaximaDePersonajes ; j++){
+		pers[j].alto = 0;
+		pers[j].ancho = 0;
+		strcpy(pers[j].id,"no");
+		pers[j].orientacion = 'n';
+		pers[j].estado = 'n';
+		pers[j].centro.x = 0;
+		pers[j].centro.y = 0;
+		pers[j].connectionState = DESCONECTADO;
+	}
+
 	return pers;
 }
 

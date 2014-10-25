@@ -60,15 +60,6 @@ int Server::init(int argc, char *argv[]) {
 
 	connectionsLimit_ = parser_->getConnectionsLimit();
 
-	float xIni = 1;
-	float yIni;
-
-	for (int i = 0; i < connectionsLimit_; i++) {
-		xIni = i * 7;
-		yIni = getInitialY();
-		model_->crearPersonaje(xIni, yIni, "sin asignar");
-	}
-
 	return SRV_NO_ERROR;
 }
 
@@ -127,22 +118,14 @@ void Server::run() {
 
 	running_ = true;
 	while (running_) {
-
 		step();
 		enviarAClientes();
-
 	}
 
 	Log::instance()->append("Fin del juego", Log::INFO);
 	return;
 }
 
-/*
- * Metodo que se encarga de inicializar una conexion con el cliente.
- * Si el cliente es aceptado, lanza los threads de enviar y recibir datos, correspondientes al nuevo cliente.
- * A su vez se guarda dicho socket en un vector de sockets.
- * Este metodo ademas seria el encargado de autenticar a los clientes y mandarle la info inicial del juego
- */
 void Server::newConnectionsManager() {
 	struct sockaddr_in cli_addr;
 	socklen_t clilen = sizeof(cli_addr);
@@ -173,12 +156,10 @@ int Server::acceptConnection(int newsockfd) {
 	int aviso;
 	unsigned int index;
 	connection_t* connection = (connection_t*) malloc(sizeof(connection_t));
-	Threadsafe_queue<dataToSend_t>* personal_queue;
 
 	Log::instance()->append("Nuevo cliente conectado!", Log::INFO);
 
 	try {
-
 		//Recibimos el id del cliente
 		recvall(newsockfd, &(connection->id), sizeof(conn_id));
 		connection->activa = true;
@@ -188,46 +169,22 @@ int Server::acceptConnection(int newsockfd) {
 		//Ademas obtenemos en index donde se guarda la conexion, para utilizar
 		//al agregar la personal queue
 		if (searchPlaceForConnection(connection, index)) {
-
 			aviso = SRV_NO_ERROR;
 			sendall(connection->socket, &aviso, sizeof(int));
-
 		} else {
-
 			aviso = SRV_ERROR;
 			sendall(connection->socket, &aviso, sizeof(int));
-
 			return SRV_ERROR;
 		}
 
-		//Creamos el personaje en el mundo
-		model_->asignarPersonaje(connection->id);
-		msg = "Se asigno un personaje a la conexion ";
-		msg += connection->id;
-		Log::instance()->append(msg, Log::INFO);
+		crearPersonaje(connection, index);
 
 		//Comenzamos enviando la informacion del juego
 		enviarDatosJuego(newsockfd);
 
-		//Lanza el thread para que el cliente pueda empezar a mandar eventos en forma paralela
-		rcv_threads_.push_back(
-				std::thread(&Server::recibirDelCliente, this, connection));
+		initReceivingThread(connection);
 
-		//Crea la queue para el envio de datos del server al cliente y luego lanza el thread
-		//para que el server ya pueda mandarle info en forma paralela
-		personal_queue = new Threadsafe_queue<dataToSend_t>();
-
-		if (index == per_thread_snd_queues_.size()) {
-			per_thread_snd_queues_.push_back(personal_queue);
-			snd_threads_.push_back(
-					std::thread(&Server::enviarAlCliente, this, connection,
-							personal_queue));
-
-		} else {
-			per_thread_snd_queues_[index] = personal_queue;
-			snd_threads_[index] = std::thread(&Server::enviarAlCliente, this,
-					connection, personal_queue);
-		}
+		initSendingThread(connection, index);
 
 	} catch (const sendException& e) {
 		return SRV_ERROR;
@@ -247,7 +204,6 @@ int Server::acceptConnection(int newsockfd) {
 bool Server::searchPlaceForConnection(connection_t *conn, unsigned int &index) {
 
 	std::string msg;
-
 	msg = "Buscamos lugar para la conexion con ID ";
 	msg += conn->id;
 	Log::instance()->append(msg, Log::INFO);
@@ -259,8 +215,8 @@ bool Server::searchPlaceForConnection(connection_t *conn, unsigned int &index) {
 		if (strcmp(connections_[i]->id, conn->id) == 0) {
 			if (connections_[i]->activa == false) {
 				msg = "Ya existe una conexion inactiva para el ID ";
-				msg += conn->id;
-				msg += ". Se reactiva";
+				msg +=conn->id;
+				msg +=". Se reactiva";
 				Log::instance()->append(msg, Log::INFO);
 				connections_[i]->activa = true;
 				return true;
@@ -268,7 +224,6 @@ bool Server::searchPlaceForConnection(connection_t *conn, unsigned int &index) {
 				msg = "Ya existe una conexion activa para el ID ";
 				msg += conn->id;
 				Log::instance()->append(msg, Log::WARNING);
-
 				return false;
 			}
 		}
@@ -303,8 +258,6 @@ void Server::enviarDatosJuego(int sockfd) {
 
 	std::string msg;
 
-	Log::instance()->append("Enviamos la cant de objetos creados", Log::INFO);
-
 	try {
 
 		datos_.cantPersonajes = model_->getCantPersonajes();
@@ -314,10 +267,17 @@ void Server::enviarDatosJuego(int sockfd) {
 		//Enviamos la cantidad de objetos creados en el juego
 		sendall(sockfd, &datos_, sizeof(datos_));
 
+		Log::instance()->append("Se ha enviado la cantidad de objetos creados", Log::INFO);
+
 		//Enviamos la lista de objetos
 		enviarEstaticos(sockfd, model_->getObjetosEstaticos());
+		Log::instance()->append("Objetos estaticos iniciales enviados", Log::INFO);
+
 		enviarDinamicos(sockfd, model_->getObjetosDinamicos());
+		Log::instance()->append("Objetos dinamicos iniciales enviados", Log::INFO);
+
 		enviarPersonajes(sockfd, model_->getPersonajesParaEnvio());
+		Log::instance()->append("Personajes iniciales enviados", Log::INFO);
 
 	} catch (const sendException& e) {
 		return;
@@ -397,7 +357,6 @@ void Server::enviarAlCliente(connection_t *conn,
 		personal_queue->wait_and_pop(dataToBeSent);
 
 		try {
-
 			enviarPersonajes(conn->socket, dataToBeSent.personajes);
 			enviarDinamicos(conn->socket, dataToBeSent.dinamicos);
 
@@ -411,9 +370,7 @@ void Server::enviarAlCliente(connection_t *conn,
 
 			return;
 		}
-
 	}
-
 }
 
 /**
@@ -423,7 +380,6 @@ void Server::step() {
 	receivedData_t* data;
 
 	if (shared_rcv_queue_->try_pop(data)) {
-
 		//Buscamos el personaje y procesamos sus eventos
 		Personaje* personaje = model_->getPersonaje(data->id);
 
@@ -431,17 +387,11 @@ void Server::step() {
 			Log::instance()->append(
 					"No se puede mapear el personaje con uno del juego",
 					Log::WARNING);
-
 		else {
-
 			personaje->handleInput(data->keycode_1, data->type_1);
 			personaje->handleInput(data->keycode_2, data->type_2);
-
 		}
-
 	}
-
-	//process(data)
 	model_->step();
 	SDL_Delay(35);
 }
@@ -477,8 +427,8 @@ int Server::validateParameters(int argc, char *argv[]) {
  * Asignamos una posicion inicial para un personaje que se esta creando
  */
 float Server::getInitialX() {
-	float LO = -model_->getAnchoUn() / 2 + 1;
-	float HI = model_->getAnchoUn() / 2 - 1;
+	float LO = -(model_->getAnchoUn() / 2) + 4;
+	float HI = (model_->getAnchoUn() / 2) - 4;
 
 	//This will generate a number from some arbitrary LO to some arbitrary HI
 	return (LO
@@ -510,7 +460,6 @@ void Server::enviarEstaticos(int sock, figura_t* estaticos) {
 
 	int size = sizeof(figura_t) * datos_.cantObjEstaticos;
 	sendall(sock, estaticos, size);
-
 }
 
 /**
@@ -520,7 +469,6 @@ void Server::enviarPersonajes(int sock, personaje_t* personajes) {
 
 	int size = sizeof(personaje_t) * datos_.cantPersonajes;
 	sendall(sock, personajes, size);
-
 }
 
 /**
@@ -569,4 +517,52 @@ void Server::recvall(int s, void *data, int len) throw (receiveException) {
 	}
 
 	return;
+}
+
+void Server::crearPersonaje(connection_t* connection, unsigned int index){
+
+	if (esNuevoCliente(index)){
+		model_->crearPersonaje(getInitialX(), getInitialY(), connection->id);
+	}
+
+	else{
+		model_->setPersonajeConnectionState(connection->id,CONECTADO);
+	}
+
+	std::string msg;
+	msg = "Se asigno un personaje a la conexion ";
+	msg += connection->id;
+	Log::instance()->append(msg, Log::INFO);
+}
+
+bool Server::esNuevoCliente(unsigned int index){
+	connection_t* lastConnection = connections_.back();
+
+	//Si es nuevo cliente, debe estar a lo ultimo del vector de connections_ y ademas esta seteado como conexion activa
+	return ((lastConnection->activa) && (index == (connections_.size()-1)));
+}
+
+void Server::initReceivingThread(connection_t* connection){
+	Log::instance()->append("Comienza el thread para recibir datos del nuevo cliente", Log::INFO);
+	rcv_threads_.push_back(std::thread(&Server::recibirDelCliente, this, connection));
+}
+
+void Server::initSendingThread(connection_t* connection, unsigned int index){
+
+	Threadsafe_queue<dataToSend_t>* personal_queue = new Threadsafe_queue<dataToSend_t>();
+
+	if (esNuevoCliente(index)) {
+		Log::instance()->append("Comienza el thread para envio del nuevo cliente", Log::INFO);
+
+		per_thread_snd_queues_.push_back(personal_queue);
+		snd_threads_.push_back(
+				std::thread(&Server::enviarAlCliente, this, connection,
+						personal_queue));
+
+	} else {
+		per_thread_snd_queues_[index] = personal_queue;
+		snd_threads_[index] = std::thread(&Server::enviarAlCliente, this,
+				connection, personal_queue);
+	}
+
 }

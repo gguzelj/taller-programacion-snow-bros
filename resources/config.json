@@ -2,8 +2,10 @@
     "escenario": {
         "alto-un":62.62,
         "ancho-un":78.28,
+        "maximo-jugadores":4,
         "imagen_fondo":"resources/snowBackground.png",
         "gravedad":-10,
+        "personaje": {"x": 9,"y":4},
         "objetos": [
                      {
                        "tipo":"rectangulo",
@@ -15,7 +17,7 @@
                        "masa":3,
                        "estatico":false
                      },
-			{
+                        {
                        "tipo":"rectangulo",
                        "x":-15,
                        "y":-27,
@@ -25,7 +27,7 @@
                        "masa":3,
                        "estatico":true
                      },
-			{
+                        {
                        "tipo":"rectangulo",
                        "x":15,
                        "y":-27,
@@ -110,7 +112,7 @@
                        "estatico":true,
                        "inclinacion":30
                      },
-			{
+                        {
                        "tipo":"rectangulo",
                        "x":30,
                        "y":-20,

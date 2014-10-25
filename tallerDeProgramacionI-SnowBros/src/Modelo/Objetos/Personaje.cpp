@@ -41,6 +41,7 @@ Personaje::Personaje(float x, float y,conn_id id, b2World* world){
 	fixtureDelPersonaje.shape = &shapeDelPersonaje;			//le asigno la forma que determine antes
 	fixtureDelPersonaje.density = 1;						//una densidad cualquiera
 	fixtureDelPersonaje.friction = 1;						//Le invento una friccion
+	fixtureDelPersonaje.filter.groupIndex = -1;				//Setting the groupIndex to negative will cause no collision
 
 	this->body = this->world->CreateBody(&cuerpoDelPersonaje);
 	this->body->SetFixedRotation(true);		//Evito que rote

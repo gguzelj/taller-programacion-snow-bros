@@ -113,8 +113,8 @@ Drawer::Drawer() {
 	//Hardcodeo esto por ahora.
 	this->ancho_px = 1024;
 	this->alto_px = 720;
-	this->alto_un = 62.62; //Alto de la imagen dividido factor de conversion
-	this->ancho_un = 78.28; //Ancho de la imagen dividido factor de conversion
+	this->alto_un = 80; //Alto de la imagen dividido factor de conversion
+	this->ancho_un = 100; //Ancho de la imagen dividido factor de conversion
 
 	this->currentZoomFactor = 1.0;
 	this->camera = {0,0,ancho_px,alto_px};

@@ -17,7 +17,7 @@
 
 //defines de la camara
 
-#define FACTOR_CONVERSION_UN_A_PX 32
+#define FACTOR_CONVERSION_UN_A_PX 25
 #define COTA_INF_X -(ancho_px )/5
 #define COTA_INF_Y -(alto_px)/5
 #define COTA_SUP_X	(ancho_px)/5

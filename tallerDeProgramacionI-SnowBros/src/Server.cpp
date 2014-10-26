@@ -18,19 +18,18 @@ Server::Server() {
 	//Inicializo el generador de randoms
 	srand(static_cast<unsigned>(time(0)));
 
-	Log::instance()->loggerLevel = Log::INFO;
-	Log::instance()->append("Creando SERVER!", Log::INFO);
+	Log::ins()->loggerLevel = Log::INFO;
+	Log::ins()->add(SRV_MSG_CREATE, Log::INFO);
 }
 
 /**
  * Destructor del server
  */
 Server::~Server() {
-	//Dejamos de aceptar nuevos clientes
+
 	acceptNewClients_ = false;
 	newConnectionsThread_.join();
 
-	//Cerramos el socket abierto
 	close(sockfd_);
 }
 
@@ -39,19 +38,15 @@ Server::~Server() {
  */
 int Server::init(int argc, char *argv[]) {
 
-	//Validamos los parametros con los que se ejecuto el server
 	if (validateParameters(argc, argv) == SRV_ERROR)
 		return SRV_ERROR;
 
-	//Creamos el socket
 	if (createSocket() == SRV_ERROR)
 		return SRV_ERROR;
 
-	//Bindeamos el socket
 	if (bindSocket() == SRV_ERROR)
 		return SRV_ERROR;
 
-	//Creamos el juego
 	parser_ = new JsonParser(jsonPath_);
 	if (parser_->parse())
 		return SRV_ERROR;
@@ -68,17 +63,16 @@ int Server::init(int argc, char *argv[]) {
  */
 int Server::createSocket() {
 
-	Log::instance()->append("Creando Socket", Log::INFO);
+	Log::ins()->add(SRV_MSG_SOCK_CREATE, Log::INFO);
 
 	sockfd_ = socket(AF_INET, SOCK_STREAM, 0);
 
 	if (sockfd_ < 0) {
-		Log::instance()->append("Error al tratar de abrir el socket",
-				Log::ERROR);
+		Log::ins()->add(SRV_MSG_SOCK_ERROR, Log::ERROR);
 		return SRV_ERROR;
 	}
 
-	Log::instance()->append("Socket creado!", Log::INFO);
+	Log::ins()->add(SRV_MSG_SOCK_OK, Log::INFO);
 	return SRV_NO_ERROR;
 }
 
@@ -88,6 +82,8 @@ int Server::createSocket() {
 int Server::bindSocket() {
 	struct sockaddr_in serv_addr;
 
+	Log::ins()->add(SRV_MSG_BIND_CREATE, Log::INFO);
+
 	memset(&serv_addr, 0, sizeof serv_addr);
 
 	serv_addr.sin_family = AF_INET;
@@ -95,12 +91,14 @@ int Server::bindSocket() {
 	serv_addr.sin_port = htons(port_);
 
 	if (bind(sockfd_, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
-		Log::instance()->append("Error al tratar de bindear el socket",
-				Log::ERROR);
+
+		Log::ins()->add(SRV_MSG_BIND_ERROR, Log::ERROR);
 		close(sockfd_);
 		return SRV_ERROR;
+
 	}
-	Log::instance()->append("Socket Bindeado", Log::INFO);
+
+	Log::ins()->add(SRV_MSG_BIND_OK, Log::INFO);
 	return SRV_NO_ERROR;
 }
 
@@ -111,7 +109,7 @@ void Server::run() {
 
 	listen(sockfd_, connectionsLimit_);
 
-	Log::instance()->append("Corriendo Juego", Log::INFO);
+	Log::ins()->add(SRV_MSG_RUNNING_GAME, Log::INFO);
 
 	//Thread para inicializar las conexiones.
 	newConnectionsThread_ = std::thread(&Server::newConnectionsManager, this);
@@ -122,7 +120,7 @@ void Server::run() {
 		enviarAClientes();
 	}
 
-	Log::instance()->append("Fin del juego", Log::INFO);
+	Log::ins()->add(SRV_MSG_END_GAME, Log::INFO);
 	return;
 }
 
@@ -133,18 +131,17 @@ void Server::newConnectionsManager() {
 	struct sockaddr_in cli_addr;
 	socklen_t clilen = sizeof(cli_addr);
 
-	Log::instance()->append("Corriendo thread para aceptar conexiones",
-			Log::INFO);
+	Log::ins()->add(SRV_MSG_CONN_MAN, Log::INFO);
 
 	while (acceptNewClients_) {
 		//Aceptamos una nueva conexion
 		int newsockfd = accept(sockfd_, (struct sockaddr *) &cli_addr, &clilen);
 
 		if (newsockfd < 0) {
-			Log::instance()->append("Al aceptar nueva conexion", Log::ERROR);
+			Log::ins()->add(SRV_MSG_CONN_ERROR, Log::ERROR);
 			continue;
 		}
-		//Validamos si es una conexion correcta
+		//Validamos si es posible aceptar la nueva conexion
 		if (acceptConnection(newsockfd) == SRV_ERROR)
 			continue;
 	}
@@ -159,7 +156,7 @@ int Server::acceptConnection(int newsockfd) {
 	bool reconexion;
 	connection_t* connection = (connection_t*) malloc(sizeof(connection_t));
 
-	Log::instance()->append("Nuevo cliente conectado!", Log::INFO);
+	Log::ins()->add(SRV_MSG_NEW_CLIENT, Log::INFO);
 
 	try {
 
@@ -209,9 +206,7 @@ int Server::manejarNuevoCliente(connection_t *conn) {
 	std::string msg;
 	int aviso;
 
-	msg = "Buscamos lugar para la conexion con ID ";
-	msg += conn->id;
-	Log::instance()->append(msg, Log::INFO);
+	Log::ins()->add(SRV_MSG_SEARCH_POS + conn->id, Log::INFO);
 
 	//Validamos si existe lugar suficiente
 	if (connections_.size() < connectionsLimit_) {
@@ -221,9 +216,7 @@ int Server::manejarNuevoCliente(connection_t *conn) {
 		aviso = SRV_NO_ERROR;
 		sendall(conn->socket, &aviso, sizeof(int));
 
-		msg = "Agregamos la nueva conexion ";
-		msg += conn->id;
-		Log::instance()->append(msg, Log::INFO);
+		Log::ins()->add(SRV_MSG_ADD_CONN + conn->id, Log::INFO);
 
 		return SRV_NO_ERROR;
 
@@ -232,9 +225,7 @@ int Server::manejarNuevoCliente(connection_t *conn) {
 	aviso = SRV_ERROR;
 	sendall(conn->socket, &aviso, sizeof(int));
 
-	msg = "No existe lugar disponible para la nueva conexion ";
-	msg += conn->id;
-	Log::instance()->append(msg, Log::WARNING);
+	Log::ins()->add(SRV_MSG_REJ_CONN + conn->id, Log::WARNING);
 
 	return SRV_ERROR;
 }
@@ -247,9 +238,7 @@ int Server::manejarReconexion(connection_t *conn) {
 	std::string msg;
 	int aviso;
 
-	msg = "Intentamos reconectar a la conexion con ID ";
-	msg += conn->id;
-	Log::instance()->append(msg, Log::INFO);
+	Log::ins()->add(SRV_MSG_TRY_RECONN + conn->id, Log::INFO);
 
 	//El primer paso consta en buscar alguna conexion con el mismo ID
 	for (unsigned int i = 0; i < connections_.size(); i++) {
@@ -262,10 +251,9 @@ int Server::manejarReconexion(connection_t *conn) {
 				aviso = SRV_NO_ERROR;
 				sendall(conn->socket, &aviso, sizeof(int));
 
-				Log::instance()->append("Cliente Reconectado", Log::INFO);
+				Log::ins()->add(SRV_MSG_RECONN + conn->id, Log::INFO);
 
-				connections_[i]->activa = true;
-				connections_[i]->socket = conn->socket;
+				connections_[i] = conn;
 
 				return SRV_NO_ERROR;
 
@@ -274,9 +262,7 @@ int Server::manejarReconexion(connection_t *conn) {
 				aviso = SRV_ERROR;
 				sendall(conn->socket, &aviso, sizeof(int));
 
-				msg = "Ya existe una conexion activa para el ID ";
-				msg += conn->id;
-				Log::instance()->append(msg, Log::WARNING);
+				Log::ins()->add(SRV_MSG_RECONN_ERROR + conn->id, Log::WARNING);
 
 				return SRV_ERROR;
 			}
@@ -296,8 +282,6 @@ int Server::manejarReconexion(connection_t *conn) {
  */
 void Server::enviarDatosJuego(int sockfd) {
 
-	std::string msg;
-
 	try {
 
 		datos_.cantPersonajes = model_->getCantPersonajes();
@@ -312,6 +296,8 @@ void Server::enviarDatosJuego(int sockfd) {
 		enviarDinamicos(sockfd, model_->getObjetosDinamicos());
 		enviarPersonajes(sockfd, model_->getPersonajesParaEnvio());
 
+		Log::ins()->add(SRV_MSG_INIT_DATA, Log::INFO);
+
 	} catch (const sendException& e) {
 		return;
 	}
@@ -325,14 +311,16 @@ void Server::recibirDelCliente(connection_t *conn) {
 
 	std::string msg;
 	receivedData_t* data;
+	bool recibirDelCliente = true;
 
-	while (running_) {
+	while (recibirDelCliente) {
 
 		data = (receivedData_t*) malloc(sizeof(receivedData_t));
 
 		try {
 
 			recvall(conn->socket, data, sizeof(receivedData_t));
+			shared_rcv_queue_->push(data);
 
 		} catch (const receiveException& e) {
 
@@ -341,14 +329,11 @@ void Server::recibirDelCliente(connection_t *conn) {
 			conn->activa = false;
 			model_->setPersonajeConnectionState(conn->id, ESPERANDO);
 
-			msg = "No se pueden recibir datos de la conexion ";
-			msg += conn->id;
-			Log::instance()->append(msg, Log::WARNING);
+			Log::ins()->add(SRV_MSG_RECEIVE_ERROR + conn->id, Log::WARNING);
 
-			return;
+			recibirDelCliente = false;
+
 		}
-
-		shared_rcv_queue_->push(data);
 
 	}
 
@@ -383,8 +368,9 @@ void Server::enviarAlCliente(connection_t *conn) {
 
 	std::string msg;
 	dataToSend_t dataToBeSent;
+	bool enviarAlCliente = true;
 
-	while (true) {
+	while (enviarAlCliente) {
 
 		conn->dataQueue->wait_and_pop(dataToBeSent);
 
@@ -396,14 +382,16 @@ void Server::enviarAlCliente(connection_t *conn) {
 		} catch (const sendException& e) {
 
 			conn->activa = false;
+			model_->setPersonajeConnectionState(conn->id, ESPERANDO);
 
-			msg = "No se pueden enviar datos a la conexion ";
-			msg += conn->id;
-			Log::instance()->append(msg, Log::WARNING);
+			Log::ins()->add(SRV_MSG_SEND_ERROR + conn->id, Log::WARNING);
 
-			return;
+			enviarAlCliente = false;
+
 		}
+
 	}
+
 }
 
 /**
@@ -413,21 +401,21 @@ void Server::step() {
 	receivedData_t* data;
 
 	if (shared_rcv_queue_->try_pop(data)) {
+
 		//Buscamos el personaje y procesamos sus eventos
 		Personaje* personaje = model_->getPersonaje(data->id);
 
 		if (!personaje) {
-			Log::instance()->append(
-					"No se puede mapear el personaje con uno del juego",
-					Log::WARNING);
-			std::cout << data->id << std::endl;
+			Log::ins()->add(SRV_MSG_PER_MAP + data->id, Log::WARNING);
 		} else {
 			personaje->handleInput(data->keycode_1, data->type_1);
 			personaje->handleInput(data->keycode_2, data->type_2);
 		}
+
 	}
+
 	model_->step();
-	SDL_Delay(35);
+	SDL_Delay(30);
 }
 
 /**
@@ -437,12 +425,11 @@ void Server::step() {
  */
 int Server::validateParameters(int argc, char *argv[]) {
 
-	Log::instance()->append("Validamos Parametros", Log::INFO);
+	Log::ins()->add(SRV_MSG_VAL_PARAM, Log::INFO);
 
-//Validamos cantidad de parametros
+	//Validamos cantidad de parametros
 	if (argc != 3) {
-		Log::instance()->append("Cantidad de parametros incorrecta",
-				Log::WARNING);
+		Log::ins()->add(SRV_MSG_PARAM_INC, Log::WARNING);
 		return SRV_ERROR;
 	}
 
@@ -452,7 +439,7 @@ int Server::validateParameters(int argc, char *argv[]) {
 
 	jsonPath_ = argv[1];
 
-	Log::instance()->append("Parametros correctos!", Log::INFO);
+	Log::ins()->add(SRV_MSG_PARAM_OK, Log::INFO);
 
 	return SRV_NO_ERROR;
 }
@@ -464,7 +451,7 @@ float Server::getInitialX() {
 	float LO = -(model_->getAnchoUn() / 2) + 4;
 	float HI = (model_->getAnchoUn() / 2) - 4;
 
-//This will generate a number from some arbitrary LO to some arbitrary HI
+	//This will generate a number from some arbitrary LO to some arbitrary HI
 	return (LO
 			+ static_cast<float>(rand())
 					/ (static_cast<float>(RAND_MAX / (HI - LO))));
@@ -518,7 +505,7 @@ void Server::sendall(int s, void* data, int len) throw (sendException) {
 
 		//Si aparece un error al enviar, lanzamos una excepcion
 		if (n == -1) {
-			Log::instance()->append("Error al enviar al cliente", Log::ERROR);
+			Log::ins()->add("Error al enviar al cliente", Log::ERROR);
 			throw sendException();
 		}
 
@@ -542,7 +529,7 @@ void Server::recvall(int s, void *data, int len) throw (receiveException) {
 
 		//Si aparece un error al recibir, lanzamos una excepcion
 		if (n == -1 || n == 0) {
-			Log::instance()->append("Error al leer del Cliente", Log::ERROR);
+			Log::ins()->add("Error al leer del Cliente", Log::ERROR);
 			throw receiveException();
 		}
 
@@ -563,16 +550,10 @@ void Server::crearPersonaje(connection_t* connection, bool reconexion) {
 	if (reconexion) {
 		model_->setPersonajeConnectionState(connection->id, CONECTADO);
 	} else {
-		if (!model_->crearPersonaje(getInitialX(), getInitialY(),
-				connection->id)) {
-			std::cout << "No se crea personaje" << std::endl;
-		}
+		model_->crearPersonaje(getInitialX(), getInitialY(), connection->id);
 	}
 
-	std::string msg;
-	msg = "Se asigno un personaje a la conexion ";
-	msg += connection->id;
-	Log::instance()->append(msg, Log::INFO);
+	Log::ins()->add(SRV_MSG_NEW_PER + connection->id, Log::INFO);
 }
 
 /**
@@ -594,8 +575,7 @@ void Server::initReceivingThread(connection_t* connection) {
 	std::thread t(&Server::recibirDelCliente, this, connection);
 	t.detach();
 
-	Log::instance()->append("Comienza el thread para recibir datos del cliente",
-			Log::INFO);
+	Log::ins()->add(SRV_MSG_RECEIVING_THREAD + connection->id, Log::INFO);
 }
 
 /**
@@ -608,6 +588,5 @@ void Server::initSendingThread(connection_t* connection) {
 	std::thread t(&Server::enviarAlCliente, this, connection);
 	t.detach();
 
-	Log::instance()->append("Comienza el thread para enviar datos al cliente",
-			Log::INFO);
+	Log::ins()->add(SRV_MSG_SEND_THREAD + connection->id, Log::INFO);
 }

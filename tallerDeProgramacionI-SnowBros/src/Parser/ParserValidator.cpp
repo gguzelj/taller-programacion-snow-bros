@@ -71,19 +71,19 @@ int ParserValidator::valMaximoJugadores(Json::Value esc) {
 	int maxiJug;
 
 	if (!esc.isMember(MAXIMO_JUGADORES)) {
-		Log::instance()->append(PARSER_MSG_ESC_MXJG, Log::WARNING);
+		Log::ins()->add(PARSER_MSG_ESC_MXJG, Log::WARNING);
 		return MAXIMO_JUGADORES_DEF;
 	}
 
 	if (!esc[MAXIMO_JUGADORES].isNumeric()) {
-		Log::instance()->append(PARSER_MSG_ESC_MXJG_NO_NUMBER, Log::WARNING);
+		Log::ins()->add(PARSER_MSG_ESC_MXJG_NO_NUMBER, Log::WARNING);
 		return MAXIMO_JUGADORES_DEF;
 	}
 
 	maxiJug = esc[MAXIMO_JUGADORES].asInt();
 
 	if (maxiJug > MAXIMO_JUGADORES_MAX || maxiJug < MAXIMO_JUGADORES_MIN) {
-		Log::instance()->append(PARSER_MSG_ESC_MXJG_FUERA_RANGO,
+		Log::ins()->add(PARSER_MSG_ESC_MXJG_FUERA_RANGO,
 				Log::WARNING);
 		return MAXIMO_JUGADORES_DEF;
 	}
@@ -98,18 +98,18 @@ int ParserValidator::valMaximoJugadores(Json::Value esc) {
 double ParserValidator::valGravedad(Json::Value esc) {
 
 	if (!esc.isMember(GRAVEDAD)) {
-		Log::instance()->append(PARSER_MSG_ESC_GRAVEDAD, Log::WARNING);
+		Log::ins()->add(PARSER_MSG_ESC_GRAVEDAD, Log::WARNING);
 		return GRAVEDAD_DEF;
 	}
 
 	if (!esc[GRAVEDAD].isNumeric()) {
-		Log::instance()->append(PARSER_MSG_ESC_GRAVEDAD_NO_NUMBER,
+		Log::ins()->add(PARSER_MSG_ESC_GRAVEDAD_NO_NUMBER,
 				Log::WARNING);
 		return GRAVEDAD_DEF;
 	}
 
 	if (esc[GRAVEDAD] >= 0) {
-		Log::instance()->append(PARSER_MSG_ESC_GRAVEDAD_POSITIVA, Log::WARNING);
+		Log::ins()->add(PARSER_MSG_ESC_GRAVEDAD_POSITIVA, Log::WARNING);
 		return GRAVEDAD_DEF;
 	}
 
@@ -124,19 +124,19 @@ int ParserValidator::valAltoPx(Json::Value esc) {
 	int altoPx;
 
 	if (!esc.isMember(ALTO_PX)) {
-		Log::instance()->append(PARSER_MSG_ESC_ALTO_PX, Log::WARNING);
+		Log::ins()->add(PARSER_MSG_ESC_ALTO_PX, Log::WARNING);
 		return ALTO_PX_DEF;
 	}
 
 	if (!esc[ALTO_PX].isNumeric()) {
-		Log::instance()->append(PARSER_MSG_ESC_ALTO_PX_NO_NUMBER, Log::WARNING);
+		Log::ins()->add(PARSER_MSG_ESC_ALTO_PX_NO_NUMBER, Log::WARNING);
 		return ALTO_PX_DEF;
 	}
 
 	altoPx = esc[ALTO_PX].asInt();
 
 	if (altoPx > ALTO_PX_MAX || altoPx < ALTO_PX_MIN) {
-		Log::instance()->append(PARSER_MSG_ESC_ALTO_PX_FUERA_RANGO,
+		Log::ins()->add(PARSER_MSG_ESC_ALTO_PX_FUERA_RANGO,
 				Log::WARNING);
 		return ALTO_PX_DEF;
 	}
@@ -152,12 +152,12 @@ int ParserValidator::valAnchoPx(Json::Value esc) {
 	int anchoPx;
 
 	if (!esc.isMember(ANCHO_PX)) {
-		Log::instance()->append(PARSER_MSG_ESC_ANCHO_PX, Log::WARNING);
+		Log::ins()->add(PARSER_MSG_ESC_ANCHO_PX, Log::WARNING);
 		return ANCHO_PX_DEF;
 	}
 
 	if (!esc[ANCHO_PX].isNumeric()) {
-		Log::instance()->append(PARSER_MSG_ESC_ANCHO_PX_NO_NUMBER,
+		Log::ins()->add(PARSER_MSG_ESC_ANCHO_PX_NO_NUMBER,
 				Log::WARNING);
 		return ANCHO_PX_DEF;
 	}
@@ -165,7 +165,7 @@ int ParserValidator::valAnchoPx(Json::Value esc) {
 	anchoPx = esc[ANCHO_PX].asInt();
 
 	if (anchoPx > ANCHO_PX_MAX || anchoPx < ANCHO_PX_MIN) {
-		Log::instance()->append(PARSER_MSG_ESC_ANCHO_PX_FUERA_RANGO,
+		Log::ins()->add(PARSER_MSG_ESC_ANCHO_PX_FUERA_RANGO,
 				Log::WARNING);
 		return ANCHO_PX_DEF;
 	}
@@ -181,19 +181,19 @@ double ParserValidator::valAltoUn(Json::Value esc) {
 	double altoUn;
 
 	if (!esc.isMember(ALTO_UN)) {
-		Log::instance()->append(PARSER_MSG_ESC_ALTO_UN, Log::WARNING);
+		Log::ins()->add(PARSER_MSG_ESC_ALTO_UN, Log::WARNING);
 		return ALTO_UN_DEF;
 	}
 
 	if (!esc[ALTO_UN].isNumeric()) {
-		Log::instance()->append(PARSER_MSG_ESC_ALTO_UN_NO_NUMBER, Log::WARNING);
+		Log::ins()->add(PARSER_MSG_ESC_ALTO_UN_NO_NUMBER, Log::WARNING);
 		return ALTO_UN_DEF;
 	}
 
 	altoUn = esc[ALTO_UN].asDouble();
 
 	if (altoUn > ALTO_UN_MAX || altoUn < ALTO_UN_MIN) {
-		Log::instance()->append(PARSER_MSG_ESC_ALTO_UN_FUERA_RANGO,
+		Log::ins()->add(PARSER_MSG_ESC_ALTO_UN_FUERA_RANGO,
 				Log::WARNING);
 		return ALTO_UN_DEF;
 	}
@@ -209,12 +209,12 @@ double ParserValidator::valAnchoUn(Json::Value esc) {
 	double anchoUn;
 
 	if (!esc.isMember(ANCHO_UN)) {
-		Log::instance()->append(PARSER_MSG_ESC_ANCHO_UN, Log::WARNING);
+		Log::ins()->add(PARSER_MSG_ESC_ANCHO_UN, Log::WARNING);
 		return ANCHO_UN_DEF;
 	}
 
 	if (!esc[ANCHO_UN].isNumeric()) {
-		Log::instance()->append(PARSER_MSG_ESC_ANCHO_UN_NO_NUMBER,
+		Log::ins()->add(PARSER_MSG_ESC_ANCHO_UN_NO_NUMBER,
 				Log::WARNING);
 		return ANCHO_UN_DEF;
 	}
@@ -222,7 +222,7 @@ double ParserValidator::valAnchoUn(Json::Value esc) {
 	anchoUn = esc[ANCHO_UN].asDouble();
 
 	if (anchoUn > ANCHO_UN_MAX || anchoUn < ANCHO_UN_MIN) {
-		Log::instance()->append(PARSER_MSG_ESC_ANCHO_UN_FUERA_RANGO,
+		Log::ins()->add(PARSER_MSG_ESC_ANCHO_UN_FUERA_RANGO,
 				Log::WARNING);
 		return ANCHO_UN_DEF;
 	}
@@ -238,12 +238,12 @@ std::string ParserValidator::valImagenFondo(Json::Value esc) {
 	std::string imagenFondo;
 
 	if (!esc.isMember(IMAGEN_FONDO)) {
-		Log::instance()->append(PARSER_MSG_ESC_IMAGEN_FONDO, Log::WARNING);
+		Log::ins()->add(PARSER_MSG_ESC_IMAGEN_FONDO, Log::WARNING);
 		return IMAGEN_FONDO_DEF;
 	}
 
 	if (!esc[IMAGEN_FONDO].isString()) {
-		Log::instance()->append(PARSER_MSG_ESC_IMAGEN_FONDO_NO_STRING,
+		Log::ins()->add(PARSER_MSG_ESC_IMAGEN_FONDO_NO_STRING,
 				Log::WARNING);
 		return IMAGEN_FONDO_DEF;
 	}
@@ -252,7 +252,7 @@ std::string ParserValidator::valImagenFondo(Json::Value esc) {
 
 	std::ifstream file(imagenFondo);
 	if (!file.good()) {
-		Log::instance()->append(PARSER_MSG_ESC_IMAGEN_FONDO_NO_EXISTE,
+		Log::ins()->add(PARSER_MSG_ESC_IMAGEN_FONDO_NO_EXISTE,
 				Log::WARNING);
 		return IMAGEN_FONDO_DEF;
 	}
@@ -265,13 +265,13 @@ std::string ParserValidator::valImagenFondo(Json::Value esc) {
 bool ParserValidator::valTipoObjeto(Json::Value obj, std::string &tipo) {
 
 	if (!obj.isMember(TIPO)) {
-		Log::instance()->append(PARSER_MSG_OBJ_TIPO + obj.toStyledString(),
+		Log::ins()->add(PARSER_MSG_OBJ_TIPO + obj.toStyledString(),
 				Log::WARNING);
 		return true;
 	}
 
 	if (!obj[TIPO].isString()) {
-		Log::instance()->append(
+		Log::ins()->add(
 		PARSER_MSG_OBJ_TIPO_NO_STRING + obj.toStyledString(), Log::WARNING);
 		return true;
 	}
@@ -280,7 +280,7 @@ bool ParserValidator::valTipoObjeto(Json::Value obj, std::string &tipo) {
 
 	if (tipo != RECTANGULO && tipo != CIRCULO && tipo != PARALELOGRAMO
 			&& tipo != POLIGONO && tipo != TRAPECIO) {
-		Log::instance()->append(
+		Log::ins()->add(
 		PARSER_MSG_OBJ_TIPO_DESCONOCIDO + obj.toStyledString(), Log::WARNING);
 		return true;
 	}
@@ -295,13 +295,13 @@ bool ParserValidator::valCoorXObjeto(Json::Value obj, double &x,
 		escenario_t *esc) {
 
 	if (!obj.isMember(X_COOR)) {
-		Log::instance()->append(PARSER_MSG_OBJ_COOR_X + obj.toStyledString(),
+		Log::ins()->add(PARSER_MSG_OBJ_COOR_X + obj.toStyledString(),
 				Log::WARNING);
 		return true;
 	}
 
 	if (!obj[X_COOR].isNumeric()) {
-		Log::instance()->append(
+		Log::ins()->add(
 		PARSER_MSG_OBJ_COOR_X_NO_NUMBER + obj.toStyledString(), Log::WARNING);
 		return true;
 	}
@@ -311,7 +311,7 @@ bool ParserValidator::valCoorXObjeto(Json::Value obj, double &x,
 
 	//Validamos que la coordenada X exista dentro del escenario del juego
 	if (x > margen || x < -margen) {
-		Log::instance()->append(
+		Log::ins()->add(
 		PARSER_MSG_OBJ_COOR_X_FUERA_RANGO + obj.toStyledString(), Log::WARNING);
 		return true;
 	}
@@ -326,13 +326,13 @@ bool ParserValidator::valCoorYObjeto(Json::Value obj, double &y,
 		escenario_t *esc) {
 
 	if (!obj.isMember(Y_COOR)) {
-		Log::instance()->append(PARSER_MSG_OBJ_COOR_Y + obj.toStyledString(),
+		Log::ins()->add(PARSER_MSG_OBJ_COOR_Y + obj.toStyledString(),
 				Log::WARNING);
 		return true;
 	}
 
 	if (!obj[Y_COOR].isNumeric()) {
-		Log::instance()->append(
+		Log::ins()->add(
 		PARSER_MSG_OBJ_COOR_Y_NO_NUMBER + obj.toStyledString(), Log::WARNING);
 		return true;
 	}
@@ -342,7 +342,7 @@ bool ParserValidator::valCoorYObjeto(Json::Value obj, double &y,
 
 	//Validamos que la coordenada X exista dentro del escenario del juego
 	if (y > margen || y < -margen) {
-		Log::instance()->append(
+		Log::ins()->add(
 		PARSER_MSG_OBJ_COOR_Y_FUERA_RANGO + obj.toStyledString(), Log::WARNING);
 		return true;
 	}
@@ -366,13 +366,13 @@ bool ParserValidator::valEscalaObjeto(Json::Value obj, double &escala) {
 
 	//En cualquier otro caso, es un atributo obligatorio
 	if (!obj.isMember(ESCALA)) {
-		Log::instance()->append(PARSER_MSG_OBJ_ESCALA + obj.toStyledString(),
+		Log::ins()->add(PARSER_MSG_OBJ_ESCALA + obj.toStyledString(),
 				Log::WARNING);
 		return true;
 	}
 
 	if (!obj[ESCALA].isNumeric()) {
-		Log::instance()->append(
+		Log::ins()->add(
 		PARSER_MSG_OBJ_ESCALA_NO_NUMBER + obj.toStyledString(), Log::WARNING);
 		return true;
 	}
@@ -381,7 +381,7 @@ bool ParserValidator::valEscalaObjeto(Json::Value obj, double &escala) {
 
 	//Validamos si la escala existe entre el rango permitido
 	if (escala < ESCALA_MIN || escala > ESCALA_MAX) {
-		Log::instance()->append(
+		Log::ins()->add(
 		PARSER_MSG_OBJ_ESCALA_FUERA_RANGO + obj.toStyledString(), Log::WARNING);
 		return true;
 	}
@@ -402,13 +402,13 @@ bool ParserValidator::valLadosObjeto(Json::Value obj, int &lados) {
 		return false;
 
 	if (!obj.isMember(LADOS)) {
-		Log::instance()->append(PARSER_MSG_OBJ_LADOS + obj.toStyledString(),
+		Log::ins()->add(PARSER_MSG_OBJ_LADOS + obj.toStyledString(),
 				Log::WARNING);
 		return true;
 	}
 
 	if (!obj[LADOS].isNumeric()) {
-		Log::instance()->append(
+		Log::ins()->add(
 		PARSER_MSG_OBJ_LADOS_NO_NUMBER + obj.toStyledString(), Log::WARNING);
 		return true;
 	}
@@ -416,7 +416,7 @@ bool ParserValidator::valLadosObjeto(Json::Value obj, int &lados) {
 	lados = obj[LADOS].asInt();
 
 	if (lados < LADOS_MIN || lados > LADOS_MAX) {
-		Log::instance()->append(
+		Log::ins()->add(
 		PARSER_MSG_OBJ_LADOS_FUERA_RANGO + obj.toStyledString(), Log::WARNING);
 		return true;
 	}
@@ -437,13 +437,13 @@ bool ParserValidator::valAnchoObjeto(Json::Value obj, double &ancho) {
 		return false;
 
 	if (!obj.isMember(ANCHO)) {
-		Log::instance()->append(PARSER_MSG_OBJ_ANCHO + obj.toStyledString(),
+		Log::ins()->add(PARSER_MSG_OBJ_ANCHO + obj.toStyledString(),
 				Log::WARNING);
 		return true;
 	}
 
 	if (!obj[ANCHO].isNumeric()) {
-		Log::instance()->append(
+		Log::ins()->add(
 		PARSER_MSG_OBJ_ANCHO_NO_NUMBER + obj.toStyledString(), Log::WARNING);
 		return true;
 	}
@@ -451,7 +451,7 @@ bool ParserValidator::valAnchoObjeto(Json::Value obj, double &ancho) {
 	ancho = obj[ANCHO].asDouble();
 
 	if (ancho < ANCHO_MIN || ancho > ANCHO_MAX) {
-		Log::instance()->append(
+		Log::ins()->add(
 		PARSER_MSG_OBJ_ANCHO_FUERA_RANGO + obj.toStyledString(), Log::WARNING);
 		return true;
 	}
@@ -473,13 +473,13 @@ bool ParserValidator::valAltoObjeto(Json::Value obj, double &alto) {
 		return false;
 
 	if (!obj.isMember(ALTO)) {
-		Log::instance()->append(PARSER_MSG_OBJ_ALTO + obj.toStyledString(),
+		Log::ins()->add(PARSER_MSG_OBJ_ALTO + obj.toStyledString(),
 				Log::WARNING);
 		return true;
 	}
 
 	if (!obj[ALTO].isNumeric()) {
-		Log::instance()->append(
+		Log::ins()->add(
 		PARSER_MSG_OBJ_ALTO_NO_NUMBER + obj.toStyledString(), Log::WARNING);
 		return true;
 	}
@@ -487,7 +487,7 @@ bool ParserValidator::valAltoObjeto(Json::Value obj, double &alto) {
 	alto = obj[ALTO].asDouble();
 
 	if (alto < ALTO_MIN || alto > ALTO_MAX) {
-		Log::instance()->append(
+		Log::ins()->add(
 		PARSER_MSG_OBJ_ALTO_FUERA_RANGO + obj.toStyledString(), Log::WARNING);
 		return true;
 	}
@@ -508,13 +508,13 @@ bool ParserValidator::valBaseObjeto(Json::Value obj, double &base) {
 		return false;
 
 	if (!obj.isMember(BASE)) {
-		Log::instance()->append(PARSER_MSG_OBJ_BASE + obj.toStyledString(),
+		Log::ins()->add(PARSER_MSG_OBJ_BASE + obj.toStyledString(),
 				Log::WARNING);
 		return true;
 	}
 
 	if (!obj[BASE].isNumeric()) {
-		Log::instance()->append(
+		Log::ins()->add(
 		PARSER_MSG_OBJ_BASE_NO_NUMBER + obj.toStyledString(), Log::WARNING);
 		return true;
 	}
@@ -522,7 +522,7 @@ bool ParserValidator::valBaseObjeto(Json::Value obj, double &base) {
 	base = obj[BASE].asDouble();
 
 	if (base < BASE_MIN || base > BASE_MAX) {
-		Log::instance()->append(
+		Log::ins()->add(
 		PARSER_MSG_OBJ_BASE_FUERA_RANGO + obj.toStyledString(), Log::WARNING);
 		return true;
 	}
@@ -537,13 +537,13 @@ bool ParserValidator::valBaseObjeto(Json::Value obj, double &base) {
 bool ParserValidator::valEstaticoObjeto(Json::Value obj, bool &estatico) {
 
 	if (!obj.isMember(ESTATICO)) {
-		Log::instance()->append(PARSER_MSG_OBJ_ESTATICO + obj.toStyledString(),
+		Log::ins()->add(PARSER_MSG_OBJ_ESTATICO + obj.toStyledString(),
 				Log::WARNING);
 		return true;
 	}
 
 	if (!obj[ESTATICO].isBool()) {
-		Log::instance()->append(
+		Log::ins()->add(
 		PARSER_MSG_OBJ_ESTATICO_NO_BOOL + obj.toStyledString(), Log::WARNING);
 		return true;
 	}
@@ -568,13 +568,13 @@ int ParserValidator::valRotObjeto(Json::Value obj) {
 		return false;
 
 	if (!obj.isMember(ROT)) {
-		Log::instance()->append(PARSER_MSG_OBJ_ROT + obj.toStyledString(),
+		Log::ins()->add(PARSER_MSG_OBJ_ROT + obj.toStyledString(),
 				Log::WARNING);
 		return ROT_DEF;
 	}
 
 	if (!obj[ROT].isNumeric()) {
-		Log::instance()->append(
+		Log::ins()->add(
 		PARSER_MSG_OBJ_ROT_NO_NUMBER + obj.toStyledString(), Log::WARNING);
 		return ROT_DEF;
 	}
@@ -583,7 +583,7 @@ int ParserValidator::valRotObjeto(Json::Value obj) {
 
 	//Validaciones de la rotacion del objeto
 	if (rotacion < ROT_MIN || rotacion > ROT_MAX) {
-		Log::instance()->append(
+		Log::ins()->add(
 		PARSER_MSG_OBJ_ROT_FUERA_RANGO + obj.toStyledString(), Log::WARNING);
 		return ROT_DEF;
 	}
@@ -599,13 +599,13 @@ int ParserValidator::valMasaObjeto(Json::Value obj) {
 	int masa;
 
 	if (!obj.isMember(MASA)) {
-		Log::instance()->append(PARSER_MSG_OBJ_MASA + obj.toStyledString(),
+		Log::ins()->add(PARSER_MSG_OBJ_MASA + obj.toStyledString(),
 				Log::WARNING);
 		return MASA_DEF;
 	}
 
 	if (!obj[MASA].isNumeric()) {
-		Log::instance()->append(
+		Log::ins()->add(
 		PARSER_MSG_OBJ_MASA_NO_NUMBER + obj.toStyledString(), Log::WARNING);
 		return MASA_DEF;
 	}
@@ -614,7 +614,7 @@ int ParserValidator::valMasaObjeto(Json::Value obj) {
 
 	//Validaciones de la masa del objeto
 	if (masa < MASA_MIN || masa > MASA_MAX) {
-		Log::instance()->append(
+		Log::ins()->add(
 		PARSER_MSG_OBJ_MASA_FUERA_RANGO + obj.toStyledString(), Log::WARNING);
 		return MASA_DEF;
 	}

@@ -13,9 +13,9 @@ public:
 		INFO = 0, WARNING, ERROR,
 	} LOG_TYPE;
 
-    static Log *instance();
+    static Log *ins();
     LOG_TYPE loggerLevel;
-    void append(std::string msg, LOG_TYPE logType);
+    void add(std::string msg, LOG_TYPE logType);
     void closeLog();
 
 

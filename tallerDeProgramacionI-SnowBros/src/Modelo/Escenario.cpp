@@ -60,7 +60,7 @@ Escenario::Escenario(JsonParser *parser) {
 		//En ese caso, se elimina el objeto y se guarda en el log
 		if (figura_i->validarOverlap()) {
 
-			Log::instance()->append(
+			Log::ins()->add(
 			FIGURA_WARNING_OVERLAP + parser->getObjectDefinition(index),
 					Log::WARNING);
 		} else {

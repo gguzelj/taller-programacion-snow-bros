@@ -40,7 +40,37 @@
 #define HB_TIMEOUT 1
 #define TAM 20
 
-typedef struct receivedData{
+//MENSAJES
+#define SRV_MSG_CREATE					"Creando Servidor"
+#define SRV_MSG_VAL_PARAM				"Validando parametros"
+#define SRV_MSG_PARAM_INC				"Cantidad de parametros incorrecta"
+#define SRV_MSG_PARAM_OK				"Parametros Correctos"
+#define SRV_MSG_SOCK_CREATE				"Creando socket"
+#define SRV_MSG_SOCK_ERROR				"Error al tratar de abrir el socket"
+#define SRV_MSG_SOCK_OK					"Socket creado correctamente"
+#define SRV_MSG_BIND_CREATE				"Bindeando Socket"
+#define SRV_MSG_BIND_ERROR				"Error al tratar de bindear el socket"
+#define SRV_MSG_BIND_OK					"Socket bindeado"
+#define SRV_MSG_RUNNING_GAME			"Corriendo Juego"
+#define SRV_MSG_END_GAME				"Fin del Juego"
+#define SRV_MSG_CONN_MAN				"Corriendo thread para aceptar conexiones"
+#define SRV_MSG_CONN_ERROR				"No se pudo aceptar la nueva conexion"
+#define SRV_MSG_NEW_CLIENT				"Nuevo cliente conectado"
+#define SRV_MSG_SEARCH_POS				"Buscamos lugar para la conexion. ID: "
+#define SRV_MSG_ADD_CONN				"Agregamos al nuevo cliente. ID: "
+#define SRV_MSG_REJ_CONN				"Capacidad maxima de clientes alcanzada. No aceptamos la conexion. ID: "
+#define SRV_MSG_TRY_RECONN				"Intentamos reconectar al cliente. ID: "
+#define SRV_MSG_RECONN					"Cliente reconectado. ID: "
+#define SRV_MSG_RECONN_ERROR			"Ya existe una conexion con el mismo identificador. ID: "
+#define SRV_MSG_INIT_DATA				"Datos iniciales del juego enviados"
+#define SRV_MSG_RECEIVE_ERROR			"No se pueden recibir datos del cliente. ID: "
+#define SRV_MSG_SEND_ERROR				"No se pueden enviar datos al cliente. ID: "
+#define SRV_MSG_PER_MAP					"No se puede mapear el cliente con un personaje del juego. ID: "
+#define SRV_MSG_NEW_PER					"Se asigno un nuevo personaje al cliente. ID: "
+#define SRV_MSG_RECEIVING_THREAD		"Comienza el thread para recibir datos del cliente. ID: "
+#define SRV_MSG_SEND_THREAD				"Comienza el thread para enviar datos al cliente. ID: "
+
+typedef struct receivedData {
 	char id[TAM];
 	int32_t keycode_1;
 	uint32_t type_1;
@@ -48,26 +78,25 @@ typedef struct receivedData{
 	uint32_t type_2;
 } receivedData_t;
 
-typedef struct firstConnectionDetails{
+typedef struct firstConnectionDetails {
 	unsigned int cantPersonajes;
 	unsigned int cantObjDinamicos;
 	unsigned int cantObjEstaticos;
 } firstConnectionDetails_t;
 
-typedef struct dataToSend{
+typedef struct dataToSend {
 	personaje_t* personajes;
 	figura_t* dinamicos;
 } dataToSend_t;
 
 typedef char conn_id[TAM];
 
-typedef struct connection{
+typedef struct connection {
 	bool activa;
 	conn_id id;
 	int socket;
 	Threadsafe_queue<dataToSend_t>* dataQueue;
 } connection_t;
-
 
 /**
  * Clase Server
@@ -115,7 +144,7 @@ private:
 	/**
 	 * Metodo encargado de negociar la conexion con el cliente
 	 */
-	int acceptConnection (int newsockfd);
+	int acceptConnection(int newsockfd);
 
 	/**
 	 * Manejamos el caso de un nuevo cliente
@@ -161,10 +190,10 @@ private:
 	void recibirDelCliente(connection_t *conn);
 
 	/*
-     * Metodo de bajo nivel de sockets para recibir hasta una cierta
-     * cantidad de bytes determinada.
-     */
-	void recvall(int s, void *data, int len) throw(receiveException);
+	 * Metodo de bajo nivel de sockets para recibir hasta una cierta
+	 * cantidad de bytes determinada.
+	 */
+	void recvall(int s, void *data, int len) throw (receiveException);
 
 	///////////////////////////
 	//Thread de envio de info//
@@ -197,11 +226,11 @@ private:
 	 */
 	void enviarPersonajes(int sock, personaje_t* personajes);
 
-    /*
-     * Metodo de bajo nivel de sockets para enviar hasta una cierta
-     * cantidad de bytes determinada.
-     */
-	void sendall(int s, void *data, int len) throw(sendException);
+	/*
+	 * Metodo de bajo nivel de sockets para enviar hasta una cierta
+	 * cantidad de bytes determinada.
+	 */
+	void sendall(int s, void *data, int len) throw (sendException);
 
 	////////////////////////////////////////////////////////////////////////////
 	//Thread principal. Se comunican con los otros threads mediante las queues//

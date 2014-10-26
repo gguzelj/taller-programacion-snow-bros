@@ -1,7 +1,7 @@
 {
     "escenario": {
-        "alto-un":62.62,
-        "ancho-un":78.28,
+        "alto-un":80,
+        "ancho-un":100,
         "maximo-jugadores":4,
         "gravedad":-10,
         "objetos": [

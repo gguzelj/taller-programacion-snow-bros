@@ -360,7 +360,7 @@ void Server::recibirDelCliente(connection_t *conn) {
 			conn->activa = false;
 			model_->setPersonajeConnectionState(conn->id, ESPERANDO);
 
-			Log::ins()->add(SRV_MSG_RECEIVE_ERROR + std::string(conn->id),
+			Log::ins()->add(SRV_MSG_RECEIVE_ERROR + std::string(conn->id) + ". Se desactiva la conexion",
 					Log::WARNING);
 
 			recibirDelCliente = false;
@@ -539,7 +539,7 @@ void Server::sendall(int s, void* data, int len) throw (sendException) {
 
 		//Si aparece un error al enviar, lanzamos una excepcion
 		if (n == -1) {
-			Log::ins()->add("Error al enviar al cliente", Log::ERROR);
+			Log::ins()->add("Ha ocurrido un error en la conexion con el cliente", Log::ERROR);
 			throw sendException();
 		}
 
@@ -563,7 +563,7 @@ void Server::recvall(int s, void *data, int len) throw (receiveException) {
 
 		//Si aparece un error al recibir, lanzamos una excepcion
 		if (n == -1 || n == 0) {
-			Log::ins()->add("Error al leer del Cliente", Log::ERROR);
+			Log::ins()->add("Ha ocurrido un error en la conexion con el cliente", Log::ERROR);
 			throw receiveException();
 		}
 

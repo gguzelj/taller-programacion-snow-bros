@@ -626,7 +626,7 @@ SDL_Texture* Drawer::loadTexture(const std::string &file, SDL_Renderer *ren) {
 	return texture;
 }
 void Drawer::logSDLError(const std::string &msg) {
-	Log::instance()->append(msg + SDL_GetError(), Log::ERROR);
+	Log::ins()->add(msg + SDL_GetError(), Log::ERROR);
 }
 
 void Drawer::zoomIn() {

@@ -23,13 +23,13 @@ Client::Client() {
 	sock = 0;
 	shared_rcv_queue_ = new Threadsafe_queue<dataFromServer_t>();
 
-	Log::instance()->loggerLevel = Log::INFO;
-	Log::instance()->append(CLIENT_MSG_NEW_CLIENT, Log::INFO);
+	Log::ins()->loggerLevel = Log::INFO;
+	Log::ins()->add(CLIENT_MSG_NEW_CLIENT, Log::INFO);
 }
 
 Client::~Client() {
-	Log::instance()->append(CLIENT_MSG_DELETE_CLIENT, Log::INFO);
-	Log::instance()->closeLog();
+	Log::ins()->add(CLIENT_MSG_DELETE_CLIENT, Log::INFO);
+	Log::ins()->closeLog();
 }
 
 /*
@@ -45,18 +45,18 @@ bool Client::init(int argc, char* argv[]) {
 
 	try {
 
-		Log::instance()->append("Creando vista y controlador", Log::INFO);
+		Log::ins()->add("Creando vista y controlador", Log::INFO);
 		view_ = new Drawer();
 		controller_ = new Controlador(view_);
 		//TODO cambiar el modelo por lo que reciba del server
 		//view_->inicializarCamara(model_->getPersonaje());
-		Log::instance()->append("Vista y controlador creados", Log::INFO);
+		Log::ins()->add("Vista y controlador creados", Log::INFO);
 
 		return CLIENT_OK;
 
 	} catch (exception& e) {
 		std::cout << e.what() << std::endl;
-		Log::instance()->append(CLIENT_MSG_INIT_ERROR, Log::INFO);
+		Log::ins()->add(CLIENT_MSG_INIT_ERROR, Log::INFO);
 		return CLIENT_ERROR;
 	}
 }
@@ -107,11 +107,11 @@ int Client::createSocket() {
 	timeout.tv_sec = HB_TIMEOUT;
 	timeout.tv_usec = 0;
 
-	Log::instance()->append("Creando Socket", Log::INFO);
+	Log::ins()->add("Creando Socket", Log::INFO);
 
 	sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (sock < 0) {
-		Log::instance()->append(CLIENT_MSG_SOCK, Log::ERROR);
+		Log::ins()->add(CLIENT_MSG_SOCK, Log::ERROR);
 		return CLIENT_ERROR;
 	}
 	/*
@@ -128,7 +128,7 @@ int Client::createSocket() {
 	 return CLIENT_ERROR;
 	 }
 	 */
-	Log::instance()->append("Socket creado!", Log::INFO);
+	Log::ins()->add("Socket creado!", Log::INFO);
 	return CLIENT_OK;
 }
 
@@ -141,13 +141,13 @@ int Client::connectToServer() {
 	struct sockaddr_in serv_addr;
 	struct hostent *server;
 
-	Log::instance()->append("Intentamos establecer conexion", Log::INFO);
+	Log::ins()->add("Intentamos establecer conexion", Log::INFO);
 
 	server = gethostbyname(host);
 	if (server == NULL) {
 		msg = "No existe el host ";
 		msg += host;
-		Log::instance()->append(msg, Log::ERROR);
+		Log::ins()->add(msg, Log::ERROR);
 		return CLIENT_ERROR;
 	}
 
@@ -156,14 +156,14 @@ int Client::connectToServer() {
 	bcopy((char *) server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
 	serv_addr.sin_port = htons(port);
 	if (connect(sock, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
-		Log::instance()->append(
+		Log::ins()->add(
 				"No se pudo establecer conexion con el servidor", Log::WARNING);
 		return CLIENT_ERROR;
 	}
 
 	msg = "Conexion establecida con el host ";
 	msg += host;
-	Log::instance()->append(msg, Log::INFO);
+	Log::ins()->add(msg, Log::INFO);
 	return CLIENT_OK;
 }
 
@@ -180,14 +180,15 @@ int Client::initialize() {
 		recvall(sock, &entro, sizeof(int));
 
 		if (entro == SRV_ERROR) {
-			Log::instance()->append("Servidor rechazo la conexion", Log::ERROR);
+			Log::ins()->add("Servidor rechazo la conexion", Log::ERROR);
 			return CLIENT_ERROR;
 		} else {
-			Log::instance()->append("Servidor acepto la conexion", Log::INFO);
+			Log::ins()->add("Servidor acepto la conexion", Log::INFO);
 		}
 
 		//Recibimos la cantidad de objetos creados en el juego
 		recvall(sock, &gameDetails_, sizeof(firstConnectionDetails_t));
+
 
 		//Recibimos la cantidad de objetos creados
 		recibirEstaticos(estaticos_);
@@ -209,7 +210,6 @@ int Client::initialize() {
 		return CLIENT_ERROR;
 	}
 
-	std::cout << "Terminamos de recibir datos de ini" << std::endl;
 	return CLIENT_OK;
 }
 
@@ -246,7 +246,7 @@ void Client::enviarAlServer() {
 
 	} catch (const sendException& e) {
 		running_ = false;
-		Log::instance()->append(CLIENT_MSG_ERROR_WHEN_SENDING, Log::ERROR);
+		Log::ins()->add(CLIENT_MSG_ERROR_WHEN_SENDING, Log::ERROR);
 		return;
 	}
 
@@ -277,9 +277,9 @@ void Client::recibirDelServer() {
 
 		}
 
-	} catch (const sendException& e) {
+	} catch (const receiveException& e) {
 		running_ = false;
-		Log::instance()->append(CLIENT_MSG_ERROR_WHEN_RECEIVING, Log::ERROR);
+		Log::ins()->add(CLIENT_MSG_ERROR_WHEN_RECEIVING, Log::ERROR);
 		return;
 	}
 
@@ -317,28 +317,28 @@ void Client::onCleanup() {
 
 bool Client::validateParameters(int argc, char* argv[]) {
 
-	Log::instance()->append(CLIENT_MSG_VAL_PAR, Log::INFO);
+	Log::ins()->add(CLIENT_MSG_VAL_PAR, Log::INFO);
 
 	//Validamos cantidad de parametros. En caso de que no sean correctos, se
 	//comienza con un juego default
 	if (argc != 4) {
-		Log::instance()->append(CLIENT_MSG_CANT_PARAM, Log::WARNING);
+		Log::ins()->add(CLIENT_MSG_CANT_PARAM, Log::WARNING);
 		help();
 		return false;
 	}
 
-	Log::instance()->append("Cantidad de parametros correcta", Log::INFO);
+	Log::ins()->add("Cantidad de parametros correcta", Log::INFO);
 
 	//Leemos el nombre del host
 	host = argv[1];
 	port = atoi(argv[2]);
 	if (port == 0) {
-		Log::instance()->append(CLIENT_MSG_INVALID_PORT_ERROR, Log::WARNING);
+		Log::ins()->add(CLIENT_MSG_INVALID_PORT_ERROR, Log::WARNING);
 		return false;
 	}
 	name = argv[3];
 
-	Log::instance()->append("Parametros correctos!", Log::INFO);
+	Log::ins()->add("Parametros correctos!", Log::INFO);
 
 	return CLIENT_OK;
 }
@@ -388,7 +388,7 @@ void Client::sendall(int s, void* data, int len) throw (sendException) {
 
 		//Si aparece un error al enviar, lanzamos una excepcion
 		if (n == -1) {
-			Log::instance()->append("Error al escribir al servidor",
+			Log::ins()->add("Error al escribir al servidor",
 					Log::ERROR);
 			throw sendException();
 		}
@@ -413,7 +413,7 @@ void Client::recvall(int s, void *data, int len) throw (receiveException) {
 
 		//Si aparece un error al recibir, lanzamos una excepcion
 		if (n == -1 || n == 0) {
-			Log::instance()->append("Error al leer del servidor", Log::ERROR);
+			Log::ins()->add("Error al leer del servidor", Log::ERROR);
 			throw receiveException();
 		}
 

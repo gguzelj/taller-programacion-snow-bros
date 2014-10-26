@@ -2,7 +2,7 @@
 
 Log *Log::log = 0;
 
-Log* Log::instance() {
+Log* Log::ins() {
 	if (!log){
 		log = new Log;
 		log->printNewLogger();
@@ -18,7 +18,7 @@ void Log::closeLog() {
 	log = nullptr;
 }
 
-void Log::append(std::string msg, LOG_TYPE logType) {
+void Log::add(std::string msg, LOG_TYPE logType) {
 
 	std::string fileName("Client-Log.txt");
 	std::ofstream out(fileName, std::ios_base::app);

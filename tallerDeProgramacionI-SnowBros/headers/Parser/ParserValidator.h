@@ -20,11 +20,8 @@ public:
 	public:
 		int maximoJugadores;
 		double gravedad;
-		int altoPx;
-		int anchoPx;
 		double altoUn;
 		double anchoUn;
-		std::string imagenFondo;
 	};
 
 	class personaje_t{
@@ -57,11 +54,8 @@ private:
 	//Validaciones en el escenario
 	static int valMaximoJugadores(Json::Value esc);
 	static double valGravedad(Json::Value esc);
-	static int valAltoPx(Json::Value esc);
-	static int valAnchoPx(Json::Value esc);
 	static double valAltoUn(Json::Value esc);
 	static double valAnchoUn(Json::Value esc);
-	static std::string valImagenFondo(Json::Value esc);
 
 	//Validaciones de los objetos
 	static bool valTipoObjeto(Json::Value obj, std::string &tipo);

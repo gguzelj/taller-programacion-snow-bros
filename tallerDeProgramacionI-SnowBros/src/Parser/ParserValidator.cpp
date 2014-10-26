@@ -14,11 +14,8 @@ bool ParserValidator::validarEscenario(escenario_t* &escenario,
 	//sera reemplazado ese valor por uno default, y se guardara registro en el log
 	escenario->maximoJugadores = valMaximoJugadores(esc);
 	escenario->gravedad = valGravedad(esc);
-	escenario->altoPx = valAltoPx(esc);
-	escenario->anchoPx = valAnchoPx(esc);
 	escenario->altoUn = valAltoUn(esc);
 	escenario->anchoUn = valAnchoUn(esc);
-	escenario->imagenFondo = valImagenFondo(esc);
 
 	return false;
 }
@@ -115,64 +112,6 @@ double ParserValidator::valGravedad(Json::Value esc) {
 
 	return esc[GRAVEDAD].asDouble();
 }
-
-/**
- * Validaciones del alto en pixeles
- */
-int ParserValidator::valAltoPx(Json::Value esc) {
-
-	int altoPx;
-
-	if (!esc.isMember(ALTO_PX)) {
-		Log::ins()->add(PARSER_MSG_ESC_ALTO_PX, Log::WARNING);
-		return ALTO_PX_DEF;
-	}
-
-	if (!esc[ALTO_PX].isNumeric()) {
-		Log::ins()->add(PARSER_MSG_ESC_ALTO_PX_NO_NUMBER, Log::WARNING);
-		return ALTO_PX_DEF;
-	}
-
-	altoPx = esc[ALTO_PX].asInt();
-
-	if (altoPx > ALTO_PX_MAX || altoPx < ALTO_PX_MIN) {
-		Log::ins()->add(PARSER_MSG_ESC_ALTO_PX_FUERA_RANGO,
-				Log::WARNING);
-		return ALTO_PX_DEF;
-	}
-
-	return altoPx;
-}
-
-/**
- * Validaciones en el ancho en pixeles
- */
-int ParserValidator::valAnchoPx(Json::Value esc) {
-
-	int anchoPx;
-
-	if (!esc.isMember(ANCHO_PX)) {
-		Log::ins()->add(PARSER_MSG_ESC_ANCHO_PX, Log::WARNING);
-		return ANCHO_PX_DEF;
-	}
-
-	if (!esc[ANCHO_PX].isNumeric()) {
-		Log::ins()->add(PARSER_MSG_ESC_ANCHO_PX_NO_NUMBER,
-				Log::WARNING);
-		return ANCHO_PX_DEF;
-	}
-
-	anchoPx = esc[ANCHO_PX].asInt();
-
-	if (anchoPx > ANCHO_PX_MAX || anchoPx < ANCHO_PX_MIN) {
-		Log::ins()->add(PARSER_MSG_ESC_ANCHO_PX_FUERA_RANGO,
-				Log::WARNING);
-		return ANCHO_PX_DEF;
-	}
-
-	return anchoPx;
-}
-
 /**
  * Validaciones en el Alto en unidades
  */
@@ -230,35 +169,6 @@ double ParserValidator::valAnchoUn(Json::Value esc) {
 	return anchoUn;
 }
 
-/**
- * Validamos la imagen de fondo del escenario
- */
-std::string ParserValidator::valImagenFondo(Json::Value esc) {
-
-	std::string imagenFondo;
-
-	if (!esc.isMember(IMAGEN_FONDO)) {
-		Log::ins()->add(PARSER_MSG_ESC_IMAGEN_FONDO, Log::WARNING);
-		return IMAGEN_FONDO_DEF;
-	}
-
-	if (!esc[IMAGEN_FONDO].isString()) {
-		Log::ins()->add(PARSER_MSG_ESC_IMAGEN_FONDO_NO_STRING,
-				Log::WARNING);
-		return IMAGEN_FONDO_DEF;
-	}
-
-	imagenFondo = esc[IMAGEN_FONDO].asString();
-
-	std::ifstream file(imagenFondo);
-	if (!file.good()) {
-		Log::ins()->add(PARSER_MSG_ESC_IMAGEN_FONDO_NO_EXISTE,
-				Log::WARNING);
-		return IMAGEN_FONDO_DEF;
-	}
-
-	return imagenFondo;
-}
 /**
  * Validaciones en el tipo de objeto
  */

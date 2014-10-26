@@ -36,9 +36,8 @@
 #define GRAVEDAD_DEF			-10.0f
 #define ALTO_PX_DEF             720
 #define ANCHO_PX_DEF            1024
-#define ALTO_UN_DEF             24
-#define ANCHO_UN_DEF            34.13
-#define IMAGEN_FONDO_DEF        "resources/fondoMario.png"
+#define ALTO_UN_DEF             62.62
+#define ANCHO_UN_DEF            78.28
 #define COLOR_DEF               "#00FF00"
 #define ROT_DEF                 0
 #define MASA_DEF                1

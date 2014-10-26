@@ -49,11 +49,6 @@ public:
 	bool 		esObjetoEstatico(unsigned int index);
 	std::string getObjectDefinition(unsigned int index);
 
-	//Metodos utilizados por la vista
-	std::string getImagenFondo(){ return escenario_->imagenFondo;};
-	int 		getAltoPx(){ return escenario_->altoPx;};
-	int 		getAnchoPx(){ return escenario_->anchoPx;};
-
 private:
 
 	//atributos

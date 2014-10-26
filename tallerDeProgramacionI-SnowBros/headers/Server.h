@@ -65,6 +65,7 @@ typedef struct connection{
 	bool activa;
 	conn_id id;
 	int socket;
+	Threadsafe_queue<dataToSend_t>* dataQueue;
 } connection_t;
 
 
@@ -98,10 +99,7 @@ private:
 	std::thread newConnectionsThread_;
 
 	std::vector<connection_t*> connections_;
-	std::vector<std::thread> rcv_threads_;
-	std::vector<std::thread> snd_threads_;
 	Threadsafe_queue<receivedData_t*>* shared_rcv_queue_;
-	std::vector<Threadsafe_queue<dataToSend_t>*> per_thread_snd_queues_;	//No se toman referencias ya que es info que va a ser transmitida
 
 	//////////////////////////////////////////
 	//Thread para inicializar las conexiones//
@@ -120,9 +118,14 @@ private:
 	int acceptConnection (int newsockfd);
 
 	/**
-	 * Buscamos si existe lugar disponible para una nueva conexion
+	 * Manejamos el caso de un nuevo cliente
 	 */
-	bool searchPlaceForConnection(connection_t *conn, unsigned int &index);
+	int manejarNuevoCliente(connection_t *conn);
+
+	/**
+	 * Manejamos el caso de una reconexion
+	 */
+	int manejarReconexion(connection_t *conn);
 
 	/**
 	 * Metodo utilizado para enviar por primera vez todos los datos del juego
@@ -134,19 +137,19 @@ private:
 	 * Metodo encargado de crearle el personaje correspondiente al usuario que se acaba de conectar, referenciado
 	 * por el parametro connection
 	 */
-	void crearPersonaje(connection_t* connection, unsigned int index);
+	void crearPersonaje(connection_t* connection, bool reconexion);
 
 	/*
 	 * Determina si el usario conectado es nuevo (return true) o bien ya tiene un historial en el juego (return false)
 	 */
-	bool esNuevoCliente(unsigned int index);
+	bool esNuevoCliente(conn_id id);
 
 	//Lanza el thread para que el cliente pueda empezar a mandar eventos en forma paralela
 	void initReceivingThread(connection_t* connection);
 
 	//Crea la queue para el envio de datos del server al cliente y luego lanza el thread
 	//para que el server ya pueda mandarle info en forma paralela
-	void initSendingThread(connection_t* connection, unsigned int index);
+	void initSendingThread(connection_t* connection);
 
 	//////////////////////////////////
 	//Thread de recepcion de eventos//
@@ -170,7 +173,7 @@ private:
 	/**
 	 * Metodo encargado de enviarle al cliente los datos del modelo, encolados en la personal_queue
 	 */
-	void enviarAlCliente(connection_t *conn, Threadsafe_queue<dataToSend_t>* personal_queue);
+	void enviarAlCliente(connection_t *conn);
 
 	/*
 	 * Toma la informacion necesario del modelo para generar un struct que se enviara a los clientes.

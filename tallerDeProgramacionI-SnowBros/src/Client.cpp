@@ -363,7 +363,7 @@ bool Client::validateParameters(int argc, char* argv[]) {
 /**
  * Metodo para recibir los objetos dinamicos
  */
-void Client::recibirDinamicos(figura_t* &dinamicos) {
+void Client::recibirDinamicos(figura_t* &dinamicos) throw (sendException){
 
 	int size = sizeof(figura_t) * gameDetails_.cantObjDinamicos;
 	dinamicos = (figura_t*) malloc(size);
@@ -374,7 +374,7 @@ void Client::recibirDinamicos(figura_t* &dinamicos) {
 /**
  * Metodo para recibir los objetos estaticos
  */
-void Client::recibirEstaticos(figura_t* &estaticos) {
+void Client::recibirEstaticos(figura_t* &estaticos)throw (sendException){
 
 	int size = sizeof(figura_t) * gameDetails_.cantObjEstaticos;
 	estaticos = (figura_t*) malloc(size);
@@ -385,7 +385,7 @@ void Client::recibirEstaticos(figura_t* &estaticos) {
 /**
  * Metodo para recibir los personajes
  */
-void Client::recibirPersonajes(personaje_t* &personajes) {
+void Client::recibirPersonajes(personaje_t* &personajes)throw (sendException) {
 
 	int size = sizeof(personaje_t) * gameDetails_.cantPersonajes;
 	personajes = (personaje_t*) malloc(size);

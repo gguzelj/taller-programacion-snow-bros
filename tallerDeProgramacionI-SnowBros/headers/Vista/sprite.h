@@ -23,7 +23,7 @@
 #define FRAMES_SALTAR 5
 #define POS_X_SALTAR 120
 
-#define POS_X_STANDBY 0
+#define POS_X_STANDBY 3
 #define POS_Y_STANDBY 10
 
 #define POS_X_CAYENDO 112

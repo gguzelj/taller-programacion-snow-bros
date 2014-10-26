@@ -37,7 +37,13 @@
 
 #define SRV_NO_ERROR 0
 #define SRV_ERROR 1
-#define HB_TIMEOUT 1
+
+#define HB_TIMEOUT 600
+
+//Definimos los tipos de mensajes que pueden enviarse al server
+#define HB_MSG_TYPE 1
+#define EVENT_MSG_TYPE 2
+
 #define TAM 20
 
 //MENSAJES

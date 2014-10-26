@@ -298,7 +298,7 @@ void Drawer::drawFigura(figura_t objeto) {
 							coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
 							coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
 							ancho * un_to_px_x, alto * un_to_px_y, nullptr,
-							objeto.rotacion * -RADTODEG, &centro);
+							objeto.rotacion * -RADTODEG, nullptr);
         }
         //TODO arreglar como se muestra la imagen de paralelogramo
         if (objeto.id == PARALELOGRAMO_CODE) {

@@ -69,7 +69,7 @@ int Client::run() {
 	if (initialize() == CLIENT_ERROR)
 		return CLIENT_ERROR;
 
-	//hbTh = std::thread(&Client::enviarHeartBeat, this);
+	hbTh = std::thread(&Client::enviarHeartBeat, this);
 	sendTh = std::thread(&Client::enviarAlServer, this);
 	recvTh = std::thread(&Client::recibirDelServer, this);
 
@@ -84,6 +84,7 @@ int Client::run() {
 
 	recvTh.join();
 	sendTh.join();
+	hbTh.join();
 
 	//cleaning up
 	onCleanup();
@@ -114,20 +115,20 @@ int Client::createSocket() {
 		Log::ins()->add(CLIENT_MSG_SOCK, Log::ERROR);
 		return CLIENT_ERROR;
 	}
-	/*
-	 //Si el socket se creo correctamente, agregamos el timeout
-	 if (setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (char *) &timeout,
-	 sizeof(timeout)) < 0) {
-	 Log::instance()->append(CLIENT_MSG_SOCK_TIMEOUT, Log::ERROR);
-	 return CLIENT_ERROR;
-	 }
 
-	 if (setsockopt(sock, SOL_SOCKET, SO_SNDTIMEO, (char *) &timeout,
-	 sizeof(timeout)) < 0) {
-	 Log::instance()->append(CLIENT_MSG_SOCK_TIMEOUT, Log::ERROR);
-	 return CLIENT_ERROR;
-	 }
-	 */
+	//Si el socket se creo correctamente, agregamos el timeout
+	if (setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (char *) &timeout,
+			sizeof(timeout)) < 0) {
+		Log::ins()->add(CLIENT_MSG_SOCK_TIMEOUT, Log::ERROR);
+		return CLIENT_ERROR;
+	}
+
+	if (setsockopt(sock, SOL_SOCKET, SO_SNDTIMEO, (char *) &timeout,
+			sizeof(timeout)) < 0) {
+		Log::ins()->add(CLIENT_MSG_SOCK_TIMEOUT, Log::ERROR);
+		return CLIENT_ERROR;
+	}
+
 	Log::ins()->add("Socket creado!", Log::INFO);
 	return CLIENT_OK;
 }
@@ -156,8 +157,8 @@ int Client::connectToServer() {
 	bcopy((char *) server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
 	serv_addr.sin_port = htons(port);
 	if (connect(sock, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
-		Log::ins()->add(
-				"No se pudo establecer conexion con el servidor", Log::WARNING);
+		Log::ins()->add("No se pudo establecer conexion con el servidor",
+				Log::WARNING);
 		return CLIENT_ERROR;
 	}
 
@@ -189,7 +190,6 @@ int Client::initialize() {
 		//Recibimos la cantidad de objetos creados en el juego
 		recvall(sock, &gameDetails_, sizeof(firstConnectionDetails_t));
 
-
 		//Recibimos la cantidad de objetos creados
 		recibirEstaticos(estaticos_);
 		recibirDinamicos(dinamicos_);
@@ -218,8 +218,22 @@ int Client::initialize() {
  */
 void Client::enviarHeartBeat() {
 
-	int msgType = HB_MSG_TYPE;
-	int size = sizeof(msgType);
+	char heartBeatMsg = HB_MSG_TYPE;
+
+	try {
+
+			while (running_) {
+
+				sendall(sock, &heartBeatMsg, sizeof(heartBeatMsg));
+				usleep(HB_TIMEOUT);
+
+			}
+
+		} catch (const sendException& e) {
+			running_ = false;
+			Log::ins()->add(CLIENT_MSG_ERROR_WHEN_SENDING, Log::ERROR);
+			return;
+		}
 
 }
 
@@ -227,6 +241,8 @@ void Client::enviarHeartBeat() {
  * Metodo utilizado para enviar nuevos eventos al servidor
  */
 void Client::enviarAlServer() {
+
+	char eventMsg = EVENT_MSG_TYPE;
 
 	try {
 
@@ -238,6 +254,7 @@ void Client::enviarAlServer() {
 				continue;
 			}
 
+			sendall(sock, &eventMsg, sizeof(eventMsg));
 			sendall(sock, data, sizeof(dataToSend_t));
 
 			SDL_Delay(1);
@@ -388,8 +405,7 @@ void Client::sendall(int s, void* data, int len) throw (sendException) {
 
 		//Si aparece un error al enviar, lanzamos una excepcion
 		if (n == -1) {
-			Log::ins()->add("Error al escribir al servidor",
-					Log::ERROR);
+			Log::ins()->add("Error al escribir al servidor", Log::ERROR);
 			throw sendException();
 		}
 

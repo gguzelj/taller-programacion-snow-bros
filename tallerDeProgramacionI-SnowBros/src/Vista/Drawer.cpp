@@ -292,20 +292,18 @@ void Drawer::drawFigura(figura_t objeto) {
 						    objeto.rotacion * -RADTODEG, nullptr);
         }
 
-        //TODO arreglar como se muestra la imagen de trapecio
         if (objeto.id == TRAPECIO_CODE) {
 			trapexTexture.render(renderer,
-							coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
+							coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 1.6) + ox),
 							coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
-							ancho * un_to_px_x, alto * un_to_px_y, nullptr,
+							ancho * un_to_px_x*1.1, alto * un_to_px_y, nullptr,
 							objeto.rotacion * -RADTODEG, nullptr);
         }
-        //TODO arreglar como se muestra la imagen de paralelogramo
         if (objeto.id == PARALELOGRAMO_CODE) {
 			paralelogramTexture.render(renderer,
-							coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 1.47) + ox),
-							coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
-							ancho * un_to_px_x*1.33, alto * un_to_px_y, nullptr,
+							coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 1.61) + ox),
+							coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 1.2) + oy),
+							ancho * un_to_px_x*1.38, alto * un_to_px_y*1.33, nullptr,
 							objeto.rotacion * -RADTODEG, nullptr);
         }
 }

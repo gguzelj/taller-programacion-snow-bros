@@ -630,24 +630,26 @@ void Drawer::logSDLError(const std::string &msg) {
 }
 
 void Drawer::zoomIn() {
-	currentZoomFactor += factor;
-	int ancho_anterior = camera.w;
-	int alto_anterior = camera.h;
-	camera.h = alto_px / currentZoomFactor;
-	camera.w = ancho_px / currentZoomFactor;
+	if(currentZoomFactor < ZOOM_MAX){
+		currentZoomFactor += factor;
+		int ancho_anterior = camera.w;
+		int alto_anterior = camera.h;
+		camera.h = alto_px / currentZoomFactor;
+		camera.w = ancho_px / currentZoomFactor;
 
-	int dif_ancho = abs(ancho_anterior - camera.w);
-	int dif_alto = abs(alto_anterior - camera.h);
+		int dif_ancho = abs(ancho_anterior - camera.w);
+		int dif_alto = abs(alto_anterior - camera.h);
 
-	camera.x += dif_ancho / 2;
-	camera.y += dif_alto / 2;
+		camera.x += dif_ancho / 2;
+		camera.y += dif_alto / 2;
 
-	coordRel.x = currentZoomFactor * camera.x;
-	coordRel.y = currentZoomFactor * camera.y;
+		coordRel.x = currentZoomFactor * camera.x;
+		coordRel.y = currentZoomFactor * camera.y;
 
-	//Zoom in a la escala de las figuras
-	un_to_px_x = un_to_px_x_inicial * currentZoomFactor;
-	un_to_px_y = un_to_px_y_inicial * currentZoomFactor;
+		//Zoom in a la escala de las figuras
+		un_to_px_x = un_to_px_x_inicial * currentZoomFactor;
+		un_to_px_y = un_to_px_y_inicial * currentZoomFactor;
+	}
 }
 
 void Drawer::zoomOut() {

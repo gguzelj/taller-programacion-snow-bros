@@ -1,6 +1,7 @@
 #ifndef DRAWER_H_
 #define DRAWER_H_
 
+#define ZOOM_MAX 1.7
 #define CIRCULO_CODE 'c'
 #define PARALELOGRAMO_CODE 'p'
 #define RECTANGULO_CODE 'r'

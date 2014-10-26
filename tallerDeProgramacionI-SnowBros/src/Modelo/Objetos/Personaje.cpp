@@ -96,8 +96,9 @@ void Personaje::moveRight(){
 void Personaje::jump(){
 	if (this->jumpCooldown <= 0){
 		 this->jumpCooldown = 18;
-		 float potenciaDeSalto = this->body->GetMass() * 18;
-		 this->body->ApplyLinearImpulse( b2Vec2(0,potenciaDeSalto), this->body->GetWorldCenter(),true );
+		 b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
+		 velocidadActual.y = 18;
+		 this->body->SetLinearVelocity( velocidadActual );
 	};
 }
 

@@ -28,7 +28,7 @@
 #define SRV_NO_ERROR 0
 #define SRV_ERROR 1
 
-#define HB_TIMEOUT 500
+#define HB_TIMEOUT 50000
 
 //Definimos los tipos de mensajes que pueden enviarse al server
 #define HB_MSG_TYPE 1

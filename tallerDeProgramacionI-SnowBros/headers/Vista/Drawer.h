@@ -1,6 +1,23 @@
 #ifndef DRAWER_H_
 #define DRAWER_H_
 
+#include "../Log/Log.h"
+#include <iostream>
+#include <Box2D/Box2D.h>
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_image.h"
+#include <SDL2/SDL2_gfxPrimitives.h>
+#include <SDL2/SDL2_rotozoom.h>
+#include <SDL2/SDL_ttf.h>
+#include "../Exceptions/SDLError.h"
+#include "../Exceptions/ErrorFueraDeRango.h"
+#include "LTexture.h"
+#include <cmath>
+#include <typeinfo>
+#include <fstream>
+#include <iostream>
+#include <arpa/inet.h>
+
 #define ZOOM_MAX 1.7
 #define CIRCULO_CODE 'c'
 #define PARALELOGRAMO_CODE 'p'
@@ -16,7 +33,6 @@
 #define RADTODEG 57.295779513082320876f
 
 //defines de la camara
-
 #define FACTOR_CONVERSION_UN_A_PX 25
 #define COTA_INF_X -(ancho_px )/5
 #define COTA_INF_Y -(alto_px)/5
@@ -32,20 +48,6 @@
 #define STANDBY 's'
 #define WALKING 'w'
 #define FALLING 'f'
-
-#include "../Log/Log.h"
-#include <iostream>
-#include <Box2D/Box2D.h>
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_image.h"
-#include <SDL2/SDL2_gfxPrimitives.h>
-#include <SDL2/SDL2_rotozoom.h>
-#include <SDL2/SDL_ttf.h>
-#include "../Exceptions/SDLError.h"
-#include "../Exceptions/ErrorFueraDeRango.h"
-#include "LTexture.h"
-#include <cmath>
-#include <typeinfo>
 
 using namespace std;
 

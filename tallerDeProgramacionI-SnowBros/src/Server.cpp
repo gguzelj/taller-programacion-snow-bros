@@ -538,7 +538,7 @@ void Server::sendall(int s, void* data, int len) throw (sendException) {
 		n = send(s, data + total, bytesleft, 0);
 
 		//Si aparece un error al enviar, lanzamos una excepcion
-		if (n == -1) {
+		if (n == -1 || n == 0) {
 			Log::ins()->add("Ha ocurrido un error en la conexion con el cliente", Log::ERROR);
 			throw sendException();
 		}

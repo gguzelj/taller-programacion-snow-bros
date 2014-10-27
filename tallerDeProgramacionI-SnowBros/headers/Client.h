@@ -163,17 +163,17 @@ private:
 	/**
 	 * Metodo para recibir los objetos dinamicos
 	 */
-	void recibirDinamicos(figura_t* &dinamicos)throw (sendException);
+	void recibirDinamicos(figura_t* &dinamicos)throw (receiveException);
 
 	/**
 	 * Metodo para recibir los objetos estaticos
 	 */
-	void recibirEstaticos(figura_t* &estaticos)throw (sendException);
+	void recibirEstaticos(figura_t* &estaticos)throw (receiveException);
 
 	/**
 	 * Metodo para recibir los personajes
 	 */
-	void recibirPersonajes(personaje_t* &personajes)throw (sendException);
+	void recibirPersonajes(personaje_t* &personajes)throw (receiveException);
 
 	/*
      * Metodo de bajo nivel de sockets para recibir hasta una cierta

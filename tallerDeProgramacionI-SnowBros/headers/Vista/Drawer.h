@@ -160,7 +160,7 @@ private:
 
 	//Drawing methods
 	void drawBackground();
-	void drawScenary(dataFromClient_t data);
+	void drawScenary(dataFromClient_t data, char* name);
 	void drawFigura(figura_t objeto);
 	void drawCharacter(personaje_t person, int index, int connectionState);
 	void drawMessages();

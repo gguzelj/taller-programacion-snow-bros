@@ -166,7 +166,7 @@ void Drawer::updateView(dataFromClient_t data,char* name) {
 
 	this->clearScenary();
 	this->drawBackground();
-	this->drawScenary(data);
+	this->drawScenary(data, name);
 	this->drawMessages();
 	this->presentScenary();
 }
@@ -215,7 +215,7 @@ void Drawer::drawBackground() {
 	renderTexture(image, renderer, 0, 0, &camera);
 }
 
-void Drawer::drawScenary(dataFromClient_t data) {
+void Drawer::drawScenary(dataFromClient_t data, char* name) {
 
 	//Dibujamos los objetos estaticos
 	for (unsigned int i = 0; i < data.cantObjEstaticos; i++)
@@ -228,7 +228,15 @@ void Drawer::drawScenary(dataFromClient_t data) {
 	//dibujar cada personaje con su sprite correspondiente
 	for(unsigned int i = 0 ; i< data.cantPersonajes ; i++){
 		//Dibujo normal
-		if(data.personajes[i].connectionState >= 0)
+		if(data.personajes[i].connectionState >= 0){
+			if(strcmp(data.personajes[i].id, name) == 0)
+				continue;
+			drawCharacter(data.personajes[i],i, data.personajes[i].connectionState);
+		}
+	}
+	//Dibujo ultimo el personaje del cliente para que se vea arriba de los demas.
+	for(unsigned int i = 0 ; i< data.cantPersonajes ; i++){
+		if(strcmp(data.personajes[i].id, name) == 0)
 			drawCharacter(data.personajes[i],i, data.personajes[i].connectionState);
 	}
 }

@@ -37,7 +37,7 @@ Personaje::Personaje(float x, float y,conn_id id, b2World* world){
 	this->alto = MITAD_ALTO_PERSONAJE;
 
 	b2PolygonShape shapeDelPersonaje;						//esto va a ser si queremos que sea una caja...
-	shapeDelPersonaje.SetAsBox(ancho,alto);		//...con las siguientes dimensiones
+	shapeDelPersonaje.SetAsBox(ancho,alto);					//...con las siguientes dimensiones
 	b2FixtureDef fixtureDelPersonaje;						//creo el fixture
 	fixtureDelPersonaje.shape = &shapeDelPersonaje;			//le asigno la forma que determine antes
 	fixtureDelPersonaje.density = 1;						//una densidad cualquiera
@@ -79,7 +79,7 @@ Personaje::~Personaje(){
 
 void Personaje::moveLeft(){
 	if(this->cantidadDeContactosIzquierda == 0){
-    	b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
+    	b2Vec2 velocidadActual = this->body->GetLinearVelocity();
     	velocidadActual.x = -aceleracion;
     	this->body->SetLinearVelocity( velocidadActual );
 	};
@@ -87,7 +87,7 @@ void Personaje::moveLeft(){
 
 void Personaje::moveRight(){
 	if (this->cantidadDeContactosDerecha == 0){
-		b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
+		b2Vec2 velocidadActual = this->body->GetLinearVelocity();
 		velocidadActual.x = aceleracion;
 		this->body->SetLinearVelocity( velocidadActual );
 	};
@@ -96,14 +96,14 @@ void Personaje::moveRight(){
 void Personaje::jump(){
 	if (this->jumpCooldown <= 0){
 		 this->jumpCooldown = 18;
-		 b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
-		 velocidadActual.y = 18;
-		 this->body->SetLinearVelocity( velocidadActual );
+			b2Vec2 velocidadActual = this->body->GetLinearVelocity();
+			velocidadActual.y = 18;
+			this->body->SetLinearVelocity( velocidadActual );
 	};
 }
 
 void Personaje::stop(){
-		b2Vec2 velocidadActual = this->body->GetLinearVelocity(); //va a servir para cambiarla
+		b2Vec2 velocidadActual = this->body->GetLinearVelocity();
 		velocidadActual.x = velocidadActual.x * 0;
 		this->body->SetLinearVelocity( velocidadActual );
 }

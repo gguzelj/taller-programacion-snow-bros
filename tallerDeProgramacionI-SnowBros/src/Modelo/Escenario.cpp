@@ -231,8 +231,8 @@ void obtenerAltoAnchoIdFigura(Figura* figura,float &alto, float &ancho,char& id)
 	if(figura->type == "paralelogramo"){
 		Paralelogramo* paralelogramo = static_cast<Paralelogramo *> (figura);
 
-		ancho = paralelogramo->getAncho();
 		alto = paralelogramo->getAlto();
+		ancho = paralelogramo->getAncho() + alto / tan(M_PI / 6);
 		id = PARALELOGRAMO_CODE;
 		return;
 	}

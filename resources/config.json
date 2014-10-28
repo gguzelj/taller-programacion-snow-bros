@@ -14,6 +14,16 @@
                        "rot":0,
                        "masa":3,
                        "estatico":true
+                     },                 
+                     {
+                       "tipo":"paralelogramo",
+                       "x":-31.5,
+                       "y":-22.0,
+                       "alto":0.9,
+                       "ancho":30,
+                       "rot":-30,
+                       "masa":5,
+                       "estatico":true
                      },
                      {
                        "tipo":"rectangulo",
@@ -21,6 +31,16 @@
                        "y":-30,
                        "alto":1,
                        "ancho":34.95,
+                       "rot":0,
+                       "masa":3,
+                       "estatico":true
+                     },
+                     {
+                       "tipo":"rectangulo",
+                       "x":-18.45,
+                       "y":-30.02,
+                       "alto":0.96,
+                       "ancho":1.9,
                        "rot":0,
                        "masa":3,
                        "estatico":true
@@ -277,256 +297,6 @@
                      },
                      {
                        "tipo":"rectangulo",
-                       "x":-18,
-                       "y":-29,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-19,
-                       "y":-28,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-20,
-                       "y":-27,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-21,
-                       "y":-26,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-22,
-                       "y":-25,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-23,
-                       "y":-24,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-24,
-                       "y":-23,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-25,
-                       "y":-22,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-26,
-                       "y":-21,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-27,
-                       "y":-20,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-28,
-                       "y":-19,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-29,
-                       "y":-18,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-30,
-                       "y":-17,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-31,
-                       "y":-16,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-32,
-                       "y":-15,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-33,
-                       "y":-14,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-34,
-                       "y":-13,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-35,
-                       "y":-12,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-36,
-                       "y":-11,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-37,
-                       "y":-10,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-38,
-                       "y":-9,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-39,
-                       "y":-8,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-40,
-                       "y":-7,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-41,
-                       "y":-6,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-42,
-                       "y":-5,
-                       "ancho":0.98,
-                       "alto":0.98,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
                        "x":43,
                        "y":0.5,
                        "ancho":0.98,
@@ -537,10 +307,10 @@
                      },
                      {
                        "tipo":"rectangulo",
-                       "x":-43,
-                       "y":0.5,
-                       "ancho":0.98,
-                       "alto":9.98,
+                       "x":-44.5,
+                       "y":-4.95,
+                       "ancho":1.9,
+                       "alto":18.98,
                        "rot":0,
                        "masa":3,
                        "estatico":true
@@ -554,11 +324,21 @@
                        "rot":0,
                        "masa":3,
                        "estatico":true
+                     },                   
+                     {
+                       "tipo":"paralelogramo",
+                       "x":-31.2,
+                       "y":-12.63,
+                       "alto":0.7,
+                       "ancho":10,
+                       "rot":30,
+                       "masa":5,
+                       "estatico":true
                      },
                      {
                        "tipo":"rectangulo",
                        "x":-15,
-                       "y":-13,
+                       "y":-10,
                        "ancho":22.98,
                        "alto":0.98,
                        "rot":0,
@@ -577,11 +357,31 @@
                      },
                      {
                        "tipo":"rectangulo",
-                       "x":-28,
-                       "y":2,
-                       "ancho":22.98,
-                       "alto":0.98,
+                       "x":-38,
+                       "y":-10,
+                       "ancho":5,
+                       "alto":1,
+                       "rot":-30,
+                       "masa":3,
+                       "estatico":true
+                     },
+                     {
+                       "tipo":"rectangulo",
+                       "x":-30,
+                       "y":-6.5,
+                       "ancho":5,
+                       "alto":1,
                        "rot":30,
+                       "masa":3,
+                       "estatico":true
+                     },
+                     {
+                       "tipo":"rectangulo",
+                       "x":-38,
+                       "y":-3,
+                       "ancho":5,
+                       "alto":1,
+                       "rot":-30,
                        "masa":3,
                        "estatico":true
                      },

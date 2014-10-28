@@ -305,9 +305,9 @@ void Drawer::drawFigura(Figura* figura) {
 		float ancho = paralelogramo->getAncho();
 		float alto = paralelogramo->getAlto();
 
-		paralelogramTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-ancho/2-alto/4) + ox),
+		paralelogramTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (p.x-ancho/2-alto/2/tan(M_PI/6)) + ox),
 								   	   	     coord_relativa(coordRel.y, -un_to_px_y * (p.y+alto/2) + oy),
-								   	   	     (ancho+alto/2)*un_to_px_x, alto*un_to_px_y,
+								   	   	     (ancho+alto/tan(M_PI/6))*un_to_px_x, alto*un_to_px_y,
 								   	   	     nullptr, paralelogramo->getAngulo()*-RADTODEG, nullptr);
 	}
 

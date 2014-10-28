@@ -320,9 +320,9 @@ void Drawer::drawFigura(figura_t objeto) {
         }
         if (objeto.id == PARALELOGRAMO_CODE) {
 			paralelogramTexture.render(renderer,
-							coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 1.61) + ox),
-							coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 1.2) + oy),
-							ancho * un_to_px_x*1.38, alto * un_to_px_y*1.33, nullptr,
+							coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
+							coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
+							ancho * un_to_px_x, alto * un_to_px_y, nullptr,
 							objeto.rotacion * -RADTODEG, nullptr);
         }
 }

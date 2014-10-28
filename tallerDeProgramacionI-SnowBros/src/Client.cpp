@@ -297,6 +297,8 @@ void Client::recibirDelServer() {
 	} catch (const receiveException& e) {
 		running_ = false;
 		Log::ins()->add(CLIENT_MSG_ERROR_WHEN_RECEIVING, Log::ERROR);
+		//close(sock);
+		//exit(0);
 		return;
 	}
 

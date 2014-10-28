@@ -48,6 +48,8 @@ Personaje::Personaje(float x, float y,conn_id id, b2World* world){
 	this->body->SetFixedRotation(true);		//Evito que rote
 	body->CreateFixture(&fixtureDelPersonaje);
 
+	body->SetLinearDamping(0.5);
+
 	//Partes laterales para que se deslice por las paredes y no se pegue a ellas
 	shapeDelPersonaje.SetAsBox(0.0000001f, alto-0.00405f, b2Vec2(-ancho+0.00000005,0.0045f),0);	//a la izquierda
 	fixtureDelPersonaje.friction = 0.0019f;		//Le invento de 0 para que no se pegue a las paredes
@@ -109,7 +111,9 @@ void Personaje::jump(){
 
 void Personaje::stop(){
 		b2Vec2 velocidadActual = this->body->GetLinearVelocity();
-		velocidadActual.x = velocidadActual.x * 0;
+		velocidadActual.x = 0;
+		if(state == &Personaje::walking)
+			velocidadActual.x = 0;
 		this->body->SetLinearVelocity( velocidadActual );
 }
 

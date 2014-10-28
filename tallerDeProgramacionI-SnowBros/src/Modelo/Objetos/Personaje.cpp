@@ -49,14 +49,19 @@ Personaje::Personaje(float x, float y,conn_id id, b2World* world){
 	body->CreateFixture(&fixtureDelPersonaje);
 
 	//Partes laterales para que se deslice por las paredes y no se pegue a ellas
-	shapeDelPersonaje.SetAsBox(0.0000001f, alto-0.004f, b2Vec2(-ancho+0.00000005,0.0045f),0);	//a la izquierda
+	shapeDelPersonaje.SetAsBox(0.0000001f, alto-0.00405f, b2Vec2(-ancho+0.00000005,0.0045f),0);	//a la izquierda
 	fixtureDelPersonaje.friction = 0.0019f;		//Le invento de 0 para que no se pegue a las paredes
 	b2Fixture* paredIzquierda = this->body->CreateFixture(&fixtureDelPersonaje);
-	shapeDelPersonaje.SetAsBox(0.0000001f, alto-0.004f, b2Vec2(ancho-0.00000005,0.0045f),0);	//a la derecha
+	shapeDelPersonaje.SetAsBox(0.0000001f, alto-0.00405f, b2Vec2(ancho-0.00000005,0.0045f),0);	//a la derecha
 	b2Fixture* paredDerecha = this->body->CreateFixture(&fixtureDelPersonaje);
 
+
+	shapeDelPersonaje.SetAsBox(ancho, 0.0001f, b2Vec2(0,-alto),0);	//a la izquierda
+	fixtureDelPersonaje.friction = 0.0019f;		//Le invento de 0 para que no se pegue a las paredes
+	this->body->CreateFixture(&fixtureDelPersonaje);
+
 	//Foot sensor
-	shapeDelPersonaje.SetAsBox(ancho*19.0f/20,alto/10,b2Vec2(0,-alto),0);
+	shapeDelPersonaje.SetAsBox(ancho*19.5f/20,alto/10,b2Vec2(0,-alto),0);
 	fixtureDelPersonaje.isSensor = true;
 	b2Fixture* footSensorFixture = this->body->CreateFixture(&fixtureDelPersonaje);
 	footSensorFixture->SetUserData( (void*)ID_FOOT_SENSOR );

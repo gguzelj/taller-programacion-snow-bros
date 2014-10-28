@@ -113,7 +113,7 @@ void Personaje::stop(){
 		b2Vec2 velocidadActual = this->body->GetLinearVelocity();
 		velocidadActual.x = 0;
 		if(state == &Personaje::walking)
-			velocidadActual.x = 0;
+			velocidadActual.y = 0;
 		this->body->SetLinearVelocity( velocidadActual );
 }
 

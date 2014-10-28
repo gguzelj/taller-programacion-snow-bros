@@ -77,7 +77,10 @@ int Client::run() {
 	while (running_) {
 
 		//Update the view
-		onRender(shared_rcv_queue_->wait_and_pop());
+		dataFromServer_t data;
+		bool hayData = shared_rcv_queue_->try_pop(data);
+		if (hayData)
+			onRender(data);
 
 		SDL_Delay(1);
 	}
@@ -296,9 +299,9 @@ void Client::recibirDelServer() {
 
 	} catch (const receiveException& e) {
 		running_ = false;
-		Log::ins()->add(CLIENT_MSG_ERROR_WHEN_RECEIVING, Log::ERROR);
-		//close(sock);
-		//exit(0);
+		Log::ins()->add("Fallo la conexion con el server", Log::ERROR);
+//		close(sock);
+//		exit(0);
 		return;
 	}
 

@@ -482,8 +482,8 @@ int Server::validateParameters(int argc, char *argv[]) {
  * Asignamos una posicion inicial para un personaje que se esta creando
  */
 float Server::getInitialX() {
-	float LO = -(model_->getAnchoUn() / 2) + 4;
-	float HI = (model_->getAnchoUn() / 2) - 4;
+	float LO = -(model_->getAnchoUn() / 2) + 10;
+	float HI = (model_->getAnchoUn() / 2) - 10;
 
 	//This will generate a number from some arbitrary LO to some arbitrary HI
 	return (LO

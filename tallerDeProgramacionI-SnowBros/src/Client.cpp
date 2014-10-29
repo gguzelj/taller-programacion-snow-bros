@@ -267,6 +267,7 @@ void Client::enviarAlServer() {
 	} catch (const sendException& e) {
 		running_ = false;
 		Log::ins()->add(CLIENT_MSG_ERROR_WHEN_SENDING, Log::ERROR);
+
 		return;
 	}
 
@@ -286,13 +287,11 @@ void Client::recibirDelServer() {
 		//La cant de bytes a recibir esta definida por la cantidad de
 		//personajes y la cantidad de objetos dinamicos:
 		while (running_) {
-
 			//Recibimos los personajes
 			recibirPersonajes(data.personajes);
 
 			//Recibimos los objetos dinamicos
 			recibirDinamicos(data.dinamicos);
-
 			shared_rcv_queue_->push(data);
 
 		}
@@ -300,8 +299,6 @@ void Client::recibirDelServer() {
 	} catch (const receiveException& e) {
 		running_ = false;
 		Log::ins()->add("Fallo la conexion con el server", Log::ERROR);
-//		close(sock);
-//		exit(0);
 		return;
 	}
 

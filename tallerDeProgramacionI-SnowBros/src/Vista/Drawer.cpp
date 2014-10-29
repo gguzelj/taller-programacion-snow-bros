@@ -679,12 +679,6 @@ void Drawer::zoomOut() {
 	int dif_ancho = abs(ancho_anterior - camera.w);
 	int dif_alto = abs(alto_anterior - camera.h);
 
-	camera.x -= dif_ancho / 2;
-	camera.y -= dif_alto / 2;
-
-	coordRel.x = currentZoomFactor * camera.x;
-	coordRel.y = currentZoomFactor * camera.y;
-
 	//Me fijo que no se expanda mas de lo que deberia
 	int proximo_x_maximo = ancho_un * FACTOR_CONVERSION_UN_A_PX - 2 * camera.w
 			+ ancho_anterior;
@@ -693,17 +687,24 @@ void Drawer::zoomOut() {
 
 	if (proximo_x_maximo <= 0 || proximo_y_maximo <= 0) {
 		currentZoomFactor += factor;
+		camera.h = alto_px / currentZoomFactor;
+		camera.w = ancho_px / currentZoomFactor;
 		return;
 	}
 
+	camera.x -= dif_ancho / 2;
+	camera.y -= dif_alto / 2;
+
+
 	if (camera.x >= proximo_x_maximo) {
 		camera.x = proximo_x_maximo;
-
 	}
 	if (camera.y >= proximo_y_maximo) {
 		camera.y = proximo_y_maximo;
-
 	}
+
+	coordRel.x = currentZoomFactor * camera.x;
+	coordRel.y = currentZoomFactor * camera.y;
 
 	//Zoom out a la escala de las figuras
 	un_to_px_x = un_to_px_x_inicial * currentZoomFactor;

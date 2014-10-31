@@ -338,7 +338,7 @@ void Client::onCleanup() {
 	delete controller_;
 }
 
-bool Client::validateParameters(int argc, char* argv[]) {
+int Client::validateParameters(int argc, char* argv[]) {
 
 	Log::ins()->add(CLIENT_MSG_VAL_PAR, Log::INFO);
 
@@ -347,7 +347,7 @@ bool Client::validateParameters(int argc, char* argv[]) {
 	if (argc != 4) {
 		Log::ins()->add(CLIENT_MSG_CANT_PARAM, Log::WARNING);
 		help();
-		return false;
+		return CLIENT_ERROR;
 	}
 
 	Log::ins()->add("Cantidad de parametros correcta", Log::INFO);
@@ -357,7 +357,7 @@ bool Client::validateParameters(int argc, char* argv[]) {
 	port = atoi(argv[2]);
 	if (port == 0) {
 		Log::ins()->add(CLIENT_MSG_INVALID_PORT_ERROR, Log::WARNING);
-		return false;
+		return CLIENT_ERROR;
 	}
 	name = argv[3];
 

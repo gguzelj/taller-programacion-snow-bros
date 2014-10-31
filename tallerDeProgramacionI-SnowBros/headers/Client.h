@@ -158,7 +158,7 @@ private:
 	/*
 	 * Validamos los parametros recibidos por consola
 	 */
-	bool validateParameters(int argc, char* argv[]);
+	int validateParameters(int argc, char* argv[]);
 
 	/**
 	 * Metodo para recibir los objetos dinamicos

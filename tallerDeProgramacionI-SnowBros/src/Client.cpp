@@ -79,10 +79,14 @@ int Client::run() {
 		//Update the view
 		dataFromServer_t data;
 		bool hayData = shared_rcv_queue_->try_pop(data);
-		if (hayData)
+		if (hayData){
 			onRender(data);
+			free(data.dinamicos);
+			free(data.personajes);
+		}
 
 		SDL_Delay(1);
+
 	}
 
 	recvTh.join();

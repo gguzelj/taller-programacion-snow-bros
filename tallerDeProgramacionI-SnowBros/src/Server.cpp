@@ -91,7 +91,7 @@ int Server::createSocket() {
 	return SRV_NO_ERROR;
 }
 
-/**
+/*
  * Bindeamos el socket
  */
 int Server::bindSocket() {
@@ -117,7 +117,7 @@ int Server::bindSocket() {
 	return SRV_NO_ERROR;
 }
 
-/**
+/*
  * Thread Principal
  */
 void Server::run() {
@@ -302,6 +302,7 @@ void Server::enviarDatosJuego(int sockfd) {
 	try {
 
 		datos_.cantPersonajes = model_->getCantPersonajes();
+		datos_.cantEnemigos = model_->getCantEnemigos();
 		datos_.cantObjDinamicos = model_->getCantObjDinamicos();
 		datos_.cantObjEstaticos = model_->getCantObjEstaticos();
 
@@ -312,6 +313,7 @@ void Server::enviarDatosJuego(int sockfd) {
 		enviarEstaticos(sockfd, model_->getObjetosEstaticos());
 		enviarDinamicos(sockfd, model_->getObjetosDinamicos());
 		enviarPersonajes(sockfd, model_->getPersonajesParaEnvio());
+		enviarEnemigos(sockfd, model_->getEnemigosParaEnvio());
 
 		Log::ins()->add(SRV_MSG_INIT_DATA, Log::INFO);
 
@@ -366,12 +368,10 @@ void Server::recibirDelCliente(connection_t *conn) {
 			recibirDelCliente = false;
 
 		}
-
 	}
-
 }
 
-/**
+/*
  * Metodo encargado de enviar los datos a los distintos clientes.
  * Insertamos la informacion en una cola que utilizan los distintos
  * threads
@@ -381,6 +381,7 @@ void Server::enviarAClientes() {
 	dataToSend_t dataToBeSent;
 
 	dataToBeSent.personajes = model_->getPersonajesParaEnvio();
+	dataToBeSent.enemigos = model_->getEnemigosParaEnvio();
 	dataToBeSent.dinamicos = model_->getObjetosDinamicos();
 
 	for (unsigned int i = 0; i < connections_.size(); i++) {
@@ -409,6 +410,7 @@ void Server::enviarAlCliente(connection_t *conn) {
 		try {
 
 			enviarPersonajes(conn->socket, dataToBeSent.personajes);
+			enviarEnemigos(conn->socket, dataToBeSent.enemigos);
 			enviarDinamicos(conn->socket, dataToBeSent.dinamicos);
 
 		} catch (const sendException& e) {
@@ -422,12 +424,10 @@ void Server::enviarAlCliente(connection_t *conn) {
 			enviarAlCliente = false;
 
 		}
-
 	}
-
 }
 
-/**
+/*
  * Metodo encargado de hacer el step del gameloop
  */
 void Server::step() {
@@ -452,7 +452,7 @@ void Server::step() {
 	SDL_Delay(30);
 }
 
-/**
+/*
  * Validaciones de parametros.
  * Por ahora solo se toma el nro de puerto. En caso de ser necesarias
  * mas validaciones, modificamos este metodo
@@ -478,9 +478,6 @@ int Server::validateParameters(int argc, char *argv[]) {
 	return SRV_NO_ERROR;
 }
 
-/**
- * Asignamos una posicion inicial para un personaje que se esta creando
- */
 float Server::getInitialX() {
 	float LO = -(model_->getAnchoUn() / 2) + 10;
 	float HI = (model_->getAnchoUn() / 2) - 10;
@@ -491,44 +488,34 @@ float Server::getInitialX() {
 					/ (static_cast<float>(RAND_MAX / (HI - LO))));
 }
 
-/**
- * Asignamos una posicion incial para un personaje que se esta creando
- */
 float Server::getInitialY() {
 	return 0.0;
 }
 
-/**
- * Metodo para enviar los objetos dinamicos
- */
 void Server::enviarDinamicos(int sock, figura_t* dinamicos) {
 
 	int size = sizeof(figura_t) * datos_.cantObjDinamicos;
 	sendall(sock, dinamicos, size);
-
 }
 
-/**
- * Metodo para enviar los objetos estaticos
- */
 void Server::enviarEstaticos(int sock, figura_t* estaticos) {
 
 	int size = sizeof(figura_t) * datos_.cantObjEstaticos;
 	sendall(sock, estaticos, size);
 }
 
-/**
- * Metodo para enviar los personajes
- */
 void Server::enviarPersonajes(int sock, personaje_t* personajes) {
 
 	int size = sizeof(personaje_t) * datos_.cantPersonajes;
 	sendall(sock, personajes, size);
 }
 
-/**
- * Metodo encargado de hacer el envio de informacion
- */
+void Server::enviarEnemigos(int sock, enemigo_t* enemigos) {
+
+	int size = sizeof(enemigo_t) * datos_.cantPersonajes;
+	sendall(sock, enemigos, size);
+}
+
 void Server::sendall(int s, void* data, int len) throw (sendException) {
 	int total = 0;
 	int bytesleft = len;
@@ -549,9 +536,6 @@ void Server::sendall(int s, void* data, int len) throw (sendException) {
 	return;
 }
 
-/**
- * Metodo encargado de recibir la informacion
- */
 void Server::recvall(int s, void *data, int len) throw (receiveException) {
 
 	int total = 0;
@@ -574,7 +558,7 @@ void Server::recvall(int s, void *data, int len) throw (receiveException) {
 	return;
 }
 
-/**
+/*
  * Rutina para crear un personaje:
  * -Si es un nuevo cliente, se crea un nuevo personaje
  * -Si es una reconexion, se setea el personaje como conectado

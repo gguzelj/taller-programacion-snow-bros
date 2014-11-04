@@ -86,12 +86,14 @@ typedef struct receivedData {
 
 typedef struct firstConnectionDetails {
 	unsigned int cantPersonajes;
+	unsigned int cantEnemigos;
 	unsigned int cantObjDinamicos;
 	unsigned int cantObjEstaticos;
 } firstConnectionDetails_t;
 
 typedef struct dataToSend {
 	personaje_t* personajes;
+	enemigo_t* enemigos;
 	figura_t* dinamicos;
 } dataToSend_t;
 
@@ -147,22 +149,22 @@ private:
 	 */
 	void newConnectionsManager();
 
-	/**
+	/*
 	 * Metodo encargado de negociar la conexion con el cliente
 	 */
 	int acceptConnection(int newsockfd);
 
-	/**
+	/*
 	 * Manejamos el caso de un nuevo cliente
 	 */
 	int manejarNuevoCliente(connection_t *conn);
 
-	/**
+	/*
 	 * Manejamos el caso de una reconexion
 	 */
 	int manejarReconexion(connection_t *conn);
 
-	/**
+	/*
 	 * Metodo utilizado para enviar por primera vez todos los datos del juego
 	 * a un nuevo cliente
 	 */
@@ -179,11 +181,15 @@ private:
 	 */
 	bool esNuevoCliente(conn_id id);
 
-	//Lanza el thread para que el cliente pueda empezar a mandar eventos en forma paralela
+	/*
+	 * Lanza el thread para que el cliente pueda empezar a mandar eventos en forma paralela
+	 */
 	void initReceivingThread(connection_t* connection);
 
-	//Crea la queue para el envio de datos del server al cliente y luego lanza el thread
-	//para que el server ya pueda mandarle info en forma paralela
+	/*
+	 * Crea la queue para el envio de datos del server al cliente y luego lanza el thread
+	 * para que el server ya pueda mandarle info en forma paralela
+	 */
 	void initSendingThread(connection_t* connection);
 
 	//////////////////////////////////
@@ -205,7 +211,7 @@ private:
 	//Thread de envio de info//
 	///////////////////////////
 
-	/**
+	/*
 	 * Metodo encargado de enviarle al cliente los datos del modelo, encolados en la personal_queue
 	 */
 	void enviarAlCliente(connection_t *conn);
@@ -217,20 +223,25 @@ private:
 	 */
 	void enviarAClientes();
 
-	/**
+	/*
 	 * Metodo para enviar los objetos dinamicos
 	 */
 	void enviarDinamicos(int sock, figura_t* dinamicos);
 
-	/**
+	/*
 	 * Metodo para enviar los objetos estaticos
 	 */
 	void enviarEstaticos(int sock, figura_t* estaticos);
 
-	/**
+	/*
 	 * Metodo para enviar los personajes
 	 */
 	void enviarPersonajes(int sock, personaje_t* personajes);
+
+	/*
+	 * Metodo para enviar los enemigos
+	 */
+	void enviarEnemigos(int sock, enemigo_t* enemigos);
 
 	/*
 	 * Metodo de bajo nivel de sockets para enviar hasta una cierta
@@ -243,19 +254,19 @@ private:
 	////////////////////////////////////////////////////////////////////////////
 	void step();
 
-	/**
+	/*
 	 * Metodo para crear el socket que va a utilizar el server
 	 * Devuelve 0 si no hubo error, 1 en otro caso
 	 */
 	int createSocket();
 
-	/**
+	/*
 	 * Metodo para bindear el socket creado.
 	 * Devuelve 0 si no hubo error, 1 en otro caso
 	 */
 	int bindSocket();
 
-	/**
+	/*
 	 * Metodo para Validar parametros con los que se ejecuta el server
 	 */
 	int validateParameters(int argc, char *argv[]);

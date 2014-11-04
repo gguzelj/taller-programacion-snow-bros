@@ -13,8 +13,11 @@ Escenario::Escenario(JsonParser *parser) {
 	figurasDinamicas_ = new std::vector<Figura*>;
 	muros_ = new std::list<Muro*>;
 	personajes_ = new std::list<Personaje*>;
+	enemigos_ = new std::list<Enemigo*>;
 
 	cantidadMaximaDePersonajes = parser->getConnectionsLimit();
+	//TODO esto deberia ser la longitud del arreglo de enemigos del parser.
+	cantidadMaximaDeEnemigos = 10;
 	contactos.setPersonaje(personajes_);
 
 	Figura* figura_i;

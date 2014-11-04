@@ -297,6 +297,8 @@ personaje_t* Escenario::getPersonajesParaEnvio(){
 		pers[i].centro.x = (*personaje)->getX();
 		pers[i].centro.y = (*personaje)->getY();
 		pers[i].connectionState = (*personaje)->getConnectionState();
+		pers[i].points = (*personaje)->getPoints();
+		pers[i].lives = (*personaje)->getLives();
 		i++;
 	}
 

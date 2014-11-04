@@ -15,15 +15,13 @@ Personaje::Personaje(float x, float y,conn_id id, b2World* world){
 	this->movimientoLateralIzquierda = false;
 	this->debeSaltar = false;
 	this->connectionState = CONECTADO;
+	this->points = 0;
+	this->lives = 3;
 
 	//Parametros para controlar los contactos
-	//this->contactos.setPersonaje(this);
 	this->cantidadDeContactosActuales = 0; //Comienza en el aire
 	this->cantidadDeContactosIzquierda = 0;
 	this->cantidadDeContactosDerecha = 0;
-	//this->contactos.updateContacto(&cantidadDeContactosActuales,&cantidadDeContactosIzquierda,&cantidadDeContactosDerecha);
-	//this->world->SetContactListener(&contactos);
-
 
 	//definiendo el body del personaje
 	b2BodyDef cuerpoDelPersonaje;
@@ -57,7 +55,6 @@ Personaje::Personaje(float x, float y,conn_id id, b2World* world){
 	shapeDelPersonaje.SetAsBox(0.0000001f, alto-0.00405f, b2Vec2(ancho-0.00000005,0.0045f),0);	//a la derecha
 	b2Fixture* paredDerecha = this->body->CreateFixture(&fixtureDelPersonaje);
 
-
 	shapeDelPersonaje.SetAsBox(ancho, 0.0001f, b2Vec2(0,-alto),0);	//a la izquierda
 	fixtureDelPersonaje.friction = 0.0019f;		//Le invento de 0 para que no se pegue a las paredes
 	this->body->CreateFixture(&fixtureDelPersonaje);
@@ -77,7 +74,6 @@ Personaje::Personaje(float x, float y,conn_id id, b2World* world){
 	fixtureDelPersonaje.isSensor = true;
 	this->body->CreateFixture(&fixtureDelPersonaje);
 	paredDerecha->SetUserData((void*)ID_RIGHT_WALL_SENSOR);
-
 }
 
 Personaje::~Personaje(){
@@ -136,14 +132,12 @@ void Personaje::setOrientacion(char orientacion){
 }
 
 int Personaje::getCantidadDeContactosActuales(){
-
 	return this->cantidadDeContactosActuales;
 }
 
 b2Vec2 Personaje::getVelocity(){
 	return this->body->GetLinearVelocity();
 }
-
 
 void Personaje::handleInput(SDL_Keycode input,Uint32 input_type){
 	this->state->handleInput(*this,input,input_type);

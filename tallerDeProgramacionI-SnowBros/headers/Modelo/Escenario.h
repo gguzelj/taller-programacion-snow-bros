@@ -39,6 +39,8 @@ typedef struct personaje{
 	char estado;
 	char orientacion;
 	char connectionState;
+	int points;
+	int lives;
 }personaje_t;
 
 typedef struct figura{

@@ -31,6 +31,8 @@ class Personaje : public Figura{
 		int jumpCooldown;
 		float ancho;
 		float alto;
+		int points;
+		int lives;
 
 	public:
 
@@ -62,6 +64,12 @@ class Personaje : public Figura{
 		}
 		float getAlto(){
 			return alto;
+		}
+		int getPoints(){
+			return points;
+		}
+		int getLives(){
+			return lives;
 		}
 		char getConnectionState(){
 			return connectionState;

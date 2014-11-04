@@ -48,8 +48,6 @@ bool Client::init(int argc, char* argv[]) {
 		Log::ins()->add("Creando vista y controlador", Log::INFO);
 		view_ = new Drawer();
 		controller_ = new Controlador(view_);
-		//TODO cambiar el modelo por lo que reciba del server
-		//view_->inicializarCamara(model_->getPersonaje());
 		Log::ins()->add("Vista y controlador creados", Log::INFO);
 
 		return CLIENT_OK;

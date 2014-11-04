@@ -25,23 +25,10 @@ void Drawer::loadFont() {
 	if (TTF_Init() == -1) {
 		manageSDL_ttfError();
 	}
-	int sizeOfTheFont = 20;
+	int sizeOfTheFont = 15;
 	fontToBeUsed = TTF_OpenFont(this->fontPath.c_str(), sizeOfTheFont);
 	if (fontToBeUsed == nullptr)
 		manageSDL_ttfLoadFontError();
-	SDL_Color textColor = { 0, 0, 0 };
-	SDL_Surface* surface1 = TTF_RenderText_Solid(fontToBeUsed, "1000 Puntos",
-			textColor);
-	SDL_Surface* surface2 = TTF_RenderText_Solid(fontToBeUsed, "3 vidas ",
-			textColor);
-
-	if ((surface1 == nullptr) || (surface2 == nullptr))
-		manageDrawMessagesError();
-
-	messageAboutPoints = SDL_CreateTextureFromSurface(renderer, surface1);
-	messageAboutLifes = SDL_CreateTextureFromSurface(renderer, surface2);
-	SDL_FreeSurface(surface1);
-	SDL_FreeSurface(surface2);
 }
 
 bool Drawer::loadMedia() {
@@ -97,6 +84,10 @@ Drawer::Drawer() {
 	this->messageAboutLifes = nullptr;
 	this->messageAboutPoints = nullptr;
 	this->fontToBeUsed = nullptr;
+	//Tamaños para dibujar el texto en pantalla.
+	this->altoText = 0;
+	this->anchoPoints = 0;
+	this->anchoLives = 0;
 
 	//Paths
 	this->imagePath = "resources/snowBackground.png";
@@ -109,6 +100,10 @@ Drawer::Drawer() {
 	this->hexagonImagePath = "resources/textures/hexagon.png";
 	this->trapexImagePath = "resources/textures/trapecio.png";
 	this->paralelogramImagePath = "resources/textures/paralelogramo.png";
+
+	//Text
+	this->points = "Points: ";
+	this->lives = "Lives: ";
 
 	//Hardcodeo esto por ahora.
 	this->ancho_px = 1024;
@@ -167,7 +162,7 @@ void Drawer::updateView(dataFromClient_t data,char* name) {
 	this->clearScenary();
 	this->drawBackground();
 	this->drawScenary(data, name);
-	this->drawMessages();
+	this->drawMessages(personajePrincipal);
 	this->presentScenary();
 }
 
@@ -367,20 +362,23 @@ void Drawer::drawCharacter(personaje_t person, int index, int connectionState) {
 	}
 }
 
-void Drawer::drawMessages() {
+void Drawer::drawMessages(personaje_t personaje) {
 
 	//Set the coordinates which we want to draw to
-	float coordXDelMensaje = ancho_px / 2 - 1 * un_to_px_x_inicial; //Centro en x
-	float coordYDelMensaje = 1 * un_to_px_y_inicial; //Parte superior de la pantalla
+	float coordXDelMensaje = 10; //Por ahora lo puse asi, despues lo acomodamos bien con los demas mensajes.
+	float coordYDelMensaje = 10; //Parte superior de la pantalla
+
+	SDL_Color textColor = { 0, 0, 0, 0xFF };
+
+	pointsT.loadFromRenderedText( renderer, fontToBeUsed, points+std::to_string(personaje.points), textColor, &anchoPoints, &altoText );
+	livesT.loadFromRenderedText( renderer, fontToBeUsed, lives+std::to_string(personaje.lives), textColor, &anchoLives, &altoText );
 
 	//Render the first message
-	renderTexture(messageAboutPoints, renderer, coordXDelMensaje,
-			coordYDelMensaje);
+	pointsT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoPoints, altoText);
 
 	//Render the other message
-	coordXDelMensaje += 10 * un_to_px_x_inicial;
-	renderTexture(messageAboutLifes, renderer, coordXDelMensaje,
-			coordYDelMensaje);
+	coordYDelMensaje += altoText + 5;
+	livesT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoLives, altoText);
 }
 
 void Drawer::presentScenary() {
@@ -603,6 +601,7 @@ void Drawer::manageLoadCharacterError() {
 			"Error al utilizar IMG_LoadTexture. Verifique el path de la imagen.");
 	throw SDLError();
 }
+
 void Drawer::manageSDL_ttfError() {
 	SDL_DestroyTexture(image);
 	SDL_DestroyTexture(imagenPersonaje);
@@ -642,6 +641,7 @@ SDL_Texture* Drawer::loadTexture(const std::string &file, SDL_Renderer *ren) {
 	SDL_Texture *texture = IMG_LoadTexture(ren, file.c_str());
 	return texture;
 }
+
 void Drawer::logSDLError(const std::string &msg) {
 	Log::ins()->add(msg + SDL_GetError(), Log::ERROR);
 }

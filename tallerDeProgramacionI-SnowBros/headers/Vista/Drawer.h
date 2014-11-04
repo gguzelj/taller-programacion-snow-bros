@@ -77,6 +77,8 @@ typedef struct personaje{
 	char estado;
 	char orientacion;
 	char connectionState;
+	int points;
+	int lives;
 }personaje_t;
 
 typedef struct dataFromClient{
@@ -126,6 +128,9 @@ private:
 	LTexture hexagonTexture;
 	LTexture trapexTexture;
 	LTexture paralelogramTexture;
+	//Ahora los puntos y vidas son LTextures.
+	LTexture pointsT;
+	LTexture livesT;
 
 	//Paths Attributes
 	string fontPath;
@@ -138,6 +143,9 @@ private:
 	string hexagonImagePath;
 	string trapexImagePath;
 	string paralelogramImagePath;
+	//Texto de puntos y vidas.
+	string points;
+	string lives;
 
 	//General Attributes
 	int ancho_px;
@@ -149,6 +157,9 @@ private:
 	float un_to_px_x_inicial;
 	float un_to_px_y_inicial;
 	float currentZoomFactor;
+	int anchoLives;
+	int anchoPoints;
+	int altoText;
 
 	//Private Methods
 	//General purpose methods
@@ -163,7 +174,7 @@ private:
 	void drawScenary(dataFromClient_t data, char* name);
 	void drawFigura(figura_t objeto);
 	void drawCharacter(personaje_t person, int index, int connectionState);
-	void drawMessages();
+	void drawMessages(personaje_t personaje);
 	void presentScenary();
 	void clearScenary();
 

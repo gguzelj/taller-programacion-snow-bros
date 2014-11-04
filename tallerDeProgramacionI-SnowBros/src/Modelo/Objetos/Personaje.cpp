@@ -117,14 +117,8 @@ b2Fixture* Personaje::GetFixtureList(){
 	return this->body->GetFixtureList();
 }
 
-
 b2Vec2 Personaje::GetWorldPoint(const b2Vec2& localPoint){
 	return body->GetWorldPoint(localPoint);
-}
-
-
-char Personaje::getOrientacion(){
-	return this->orientacion;
 }
 
 void Personaje::setOrientacion(char orientacion){
@@ -156,19 +150,10 @@ void Personaje::decreaseJumpCooldown(){
 	this->jumpCooldown -= 1;
 }
 
-int Personaje::getJumpCooldown(){
-	return (this->jumpCooldown);
-}
-
 void Personaje::updateLeftContact(int numero){
 	this->cantidadDeContactosIzquierda = numero;
 }
 
 void Personaje::updateRightContact(int numero){
 	this->cantidadDeContactosDerecha = numero;
-}
-
-void Personaje::printContactosLR(){
-	printf("contactosLEFT %d\n", this->cantidadDeContactosIzquierda);
-	printf("contactosRIGHT %d\n", this->cantidadDeContactosDerecha);
 }

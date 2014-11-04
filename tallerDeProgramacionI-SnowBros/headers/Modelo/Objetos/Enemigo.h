@@ -1,23 +1,17 @@
-#ifndef PERSONAJE_H_
-#define PERSONAJE_H_
+#ifndef ENEMIGO_H_
+#define ENEMIGO_H_
 
 #include <cstdint>
-#include "../Objetos/Figuras/Figura.h"
 #include "../../Controlador/ControladorDeContactos.h"
+#include "../Objetos/Figuras/Figura.h"
 #include "../Estados/Estados.h"
 
-#define MITAD_ANCHO_PERSONAJE 0.5f
-#define MITAD_ALTO_PERSONAJE 0.85
+#define MITAD_ANCHO_ENEMIGO 0.6f
+#define MITAD_ALTO_ENEMIGO 0.85
 #define IZQUIERDA 'l'
 #define DERECHA 'r'
 
-#define DESCONECTADO -1
-#define ESPERANDO 0
-#define CONECTADO 1
-
-typedef char conn_id[20];
-
-class Personaje : public Figura{
+class Enemigo : Figura{
 	private:
 		b2Vec2 posicion;
 		b2World* world;
@@ -25,15 +19,11 @@ class Personaje : public Figura{
 
 		int aceleracion;
 		char orientacion;
-		char connectionState;
-		int jumpCooldown;
 		float ancho;
 		float alto;
-		int points;
-		int lives;
+		int jumpCooldown;
 
 	public:
-
 		bool movimientoLateralDerecha,
 			 movimientoLateralIzquierda,
 			 debeSaltar;
@@ -44,11 +34,10 @@ class Personaje : public Figura{
 		static FallingState falling;
 		static WalkingState walking;
 		static StandByState standby;
-		PersonajeState* state;
-		conn_id id;
+		Personaje* state;
 
-		Personaje(float x, float y,char id[], b2World* world);
-		~Personaje();
+		Enemigo(float x, float y, b2World* world);
+		~Enemigo();
 
 		b2Vec2 Posicion();
 		b2Fixture* GetFixtureList();
@@ -56,29 +45,17 @@ class Personaje : public Figura{
 
 		float getX();
 		float getY();
-		//Y estos por que estan definidos aca?
+
 		float getAncho(){
 			return ancho;
 		}
 		float getAlto(){
 			return alto;
 		}
-		int getPoints(){
-			return points;
-		}
-		int getLives(){
-			return lives;
-		}
-		char getConnectionState(){
-			return connectionState;
-		}
-		void setConnectionState(char state){
-			connectionState = state;
-		}
-
 		b2Body* getb2Body(){
 			return this->body;
 		}
+
 		b2Vec2 getVelocity();
 		int getCantidadDeContactosActuales();
 
@@ -93,7 +70,6 @@ class Personaje : public Figura{
 		void moveLeft();
 		void moveRight();
 		void jump();
-		void stop();
 		void decreaseJumpCooldown();
 
 		int getJumpCooldown(){
@@ -102,7 +78,7 @@ class Personaje : public Figura{
 
 		void updateLeftContact(int);
 		void updateRightContact(int);
+
 };
 
-
-#endif /* PERSONAJE_H_ */
+#endif /* ENEMIGO_H_ */

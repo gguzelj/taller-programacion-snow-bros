@@ -117,13 +117,11 @@ bool Escenario::crearPersonaje(float x, float y,conn_id id){
 	return true;
 }
 
-
 void Escenario::setPersonajeConnectionState(conn_id id, char state){
 	for(auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje){
 			if(strcmp((*personaje)->id,id) == 0)
 				(*personaje)->setConnectionState(state);
 	}
-
 }
 
 void acomodarEstadoPersonaje(Personaje* personaje){
@@ -159,6 +157,9 @@ void Escenario::step() {
 
 unsigned int Escenario::getCantPersonajes(){
 	return cantidadMaximaDePersonajes;
+}
+unsigned int Escenario::getCantEnemigos(){
+	return cantidadMaximaDeEnemigos;
 }
 
 unsigned int Escenario::getCantObjDinamicos() {
@@ -303,18 +304,46 @@ personaje_t* Escenario::getPersonajesParaEnvio(){
 	}
 
 	//Rellena con basura
-	for(unsigned int j = i ; j < cantidadMaximaDePersonajes ; j++){
-		pers[j].alto = 0;
-		pers[j].ancho = 0;
-		strcpy(pers[j].id,"no");
-		pers[j].orientacion = 'n';
-		pers[j].estado = 'n';
-		pers[j].centro.x = 0;
-		pers[j].centro.y = 0;
-		pers[j].connectionState = DESCONECTADO;
+	for(; i < cantidadMaximaDePersonajes ; i++){
+		pers[i].alto = 0;
+		pers[i].ancho = 0;
+		strcpy(pers[i].id,"no");
+		pers[i].orientacion = 'n';
+		pers[i].estado = 'n';
+		pers[i].centro.x = 0;
+		pers[i].centro.y = 0;
+		pers[i].connectionState = DESCONECTADO;
 	}
 
 	return pers;
+}
+
+enemigo_t* Escenario::getEnemigosParaEnvio(){
+	enemigo_t* enems =(enemigo_t*) malloc( sizeof(enemigo_t)* cantidadMaximaDeEnemigos );
+
+	int i = 0;
+	for(auto enemigo = enemigos_->begin(); enemigo != enemigos_->end(); ++enemigo){
+		enems[i].alto = (*enemigo)->getAlto();
+		enems[i].ancho = (*enemigo)->getAncho();
+		enems[i].orientacion = (*enemigo)->getOrientacion();
+		//enems[i].estado = (*enemigo)->state->getCode();
+		enems[i].estado = 'n';
+		enems[i].centro.x = (*enemigo)->getX();
+		enems[i].centro.y = (*enemigo)->getY();
+		i++;
+	}
+
+	//Rellena con basura
+	for(; i < cantidadMaximaDeEnemigos ; i++){
+		enems[i].alto = 0;
+		enems[i].ancho = 0;
+		enems[i].orientacion = 'n';
+		enems[i].estado = 'n';
+		enems[i].centro.x = 0;
+		enems[i].centro.y = 0;
+	}
+
+	return enems;
 }
 
 Personaje* Escenario::getPersonaje(conn_id id){
@@ -324,7 +353,6 @@ Personaje* Escenario::getPersonaje(conn_id id){
 	}
 	return nullptr;
 }
-
 
 float Escenario::getAnchoUn(){
 	return this->ancho_un;

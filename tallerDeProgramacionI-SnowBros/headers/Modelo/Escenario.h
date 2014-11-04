@@ -21,6 +21,7 @@
 #include "Objetos/Figuras/Poligono.h"
 #include "Objetos/Figuras/Trapecio.h"
 #include "Objetos/Personaje.h"
+#include "Objetos/Enemigo.h"
 #include "Objetos/Muro.h"
 #include "../Exceptions/ErrorTipoDeObjeto.h"
 
@@ -35,13 +36,20 @@ typedef struct personaje{
 	char id[20];
 	float ancho;
 	float alto;
-	float rotacion;
 	char estado;
 	char orientacion;
 	char connectionState;
 	int points;
 	int lives;
 }personaje_t;
+
+typedef struct enemigo{
+	punto_t centro;
+	float ancho;
+	float alto;
+	char estado;
+	char orientacion;
+}enemigo_t;
 
 typedef struct figura{
 	punto_t centro;
@@ -70,8 +78,10 @@ public:
 	unsigned int getCantObjDinamicos();
 	unsigned int getCantObjEstaticos();
 	unsigned int getCantPersonajes();
+	unsigned int getCantEnemigos();
 
 	personaje_t* getPersonajesParaEnvio();
+	enemigo_t* getEnemigosParaEnvio();
 
 	figura_t* getObjetosEstaticos();
 	figura_t* getObjetosDinamicos();
@@ -99,10 +109,12 @@ private:
 	std::vector<Figura*>* figurasDinamicas_;
 	std::list<Muro*>* muros_;
 	std::list<Personaje*>* personajes_;
+	std::list<Enemigo*>* enemigos_;
 
 	float ancho_un;
 	float alto_un;
 	unsigned int cantidadMaximaDePersonajes;
+	unsigned int cantidadMaximaDeEnemigos;
 };
 
 #endif /* ESCENARIO_H_ */

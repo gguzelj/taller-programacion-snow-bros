@@ -73,13 +73,20 @@ typedef struct personaje{
 	char id[20];
 	float ancho;
 	float alto;
-	float rotacion;
 	char estado;
 	char orientacion;
 	char connectionState;
 	int points;
 	int lives;
 }personaje_t;
+
+typedef struct enemigo{
+	punto_t centro;
+	float ancho;
+	float alto;
+	char estado;
+	char orientacion;
+}enemigo_t;
 
 typedef struct dataFromClient{
 	unsigned int cantPersonajes;

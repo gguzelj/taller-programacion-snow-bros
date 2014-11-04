@@ -101,7 +101,7 @@ int Client::run() {
 // ##### Private methods #### //
 // ########################## //
 
-/**
+/*
  * Creamos el socket utilizado para conectarnos con el servidor
  * Tambien seteamos el HeartBeat Timeout. Esto hara que las funciones
  * send y recv devuelvan un error si no se pudo enviar/recibir un mensaje
@@ -138,9 +138,6 @@ int Client::createSocket() {
 	return CLIENT_OK;
 }
 
-/**
- * Metodo utilizado para establecer conexion con el servidor
- */
 int Client::connectToServer() {
 
 	std::string msg;
@@ -199,6 +196,7 @@ int Client::initialize() {
 		recibirEstaticos(estaticos_);
 		recibirDinamicos(dinamicos_);
 		recibirPersonajes(personajes_);
+		recibirEnemigos(enemigos_);
 
 		//Inicializamos la vista para el personaje principal
 		for (unsigned int i = 0; i < gameDetails_.cantPersonajes; i++) {
@@ -218,9 +216,6 @@ int Client::initialize() {
 	return CLIENT_OK;
 }
 
-/**
- * Metodo utilizado para enviar señales de vida al servidor.
- */
 void Client::enviarHeartBeat() {
 
 	char heartBeatMsg = HB_MSG_TYPE;
@@ -242,9 +237,6 @@ void Client::enviarHeartBeat() {
 
 }
 
-/**
- * Metodo utilizado para enviar nuevos eventos al servidor
- */
 void Client::enviarAlServer() {
 
 	char eventMsg = EVENT_MSG_TYPE;
@@ -275,9 +267,9 @@ void Client::enviarAlServer() {
 
 }
 
-/**
+/*
  * Metodo para recibir mensajes del servidor con la informacion de
- * los personajes y los objetos dinamicos. Los objetos estaticos nunca
+ * los personajes, enemigos y los objetos dinamicos. Los objetos estaticos nunca
  * cambian, por lo que no son necesarios
  */
 void Client::recibirDelServer() {
@@ -291,6 +283,9 @@ void Client::recibirDelServer() {
 		while (running_) {
 			//Recibimos los personajes
 			recibirPersonajes(data.personajes);
+
+			//Recibimos los enemigos
+			recibirEnemigos(data.enemigos);
 
 			//Recibimos los objetos dinamicos
 			recibirDinamicos(data.dinamicos);
@@ -364,9 +359,6 @@ int Client::validateParameters(int argc, char* argv[]) {
 	return CLIENT_OK;
 }
 
-/**
- * Metodo para recibir los objetos dinamicos
- */
 void Client::recibirDinamicos(figura_t* &dinamicos) throw (receiveException){
 
 	int size = sizeof(figura_t) * gameDetails_.cantObjDinamicos;
@@ -375,9 +367,6 @@ void Client::recibirDinamicos(figura_t* &dinamicos) throw (receiveException){
 	recvall(sock, dinamicos, size);
 }
 
-/**
- * Metodo para recibir los objetos estaticos
- */
 void Client::recibirEstaticos(figura_t* &estaticos)throw (receiveException){
 
 	int size = sizeof(figura_t) * gameDetails_.cantObjEstaticos;
@@ -386,9 +375,6 @@ void Client::recibirEstaticos(figura_t* &estaticos)throw (receiveException){
 	recvall(sock, estaticos, size);
 }
 
-/**
- * Metodo para recibir los personajes
- */
 void Client::recibirPersonajes(personaje_t* &personajes)throw (receiveException) {
 
 	int size = sizeof(personaje_t) * gameDetails_.cantPersonajes;
@@ -397,9 +383,15 @@ void Client::recibirPersonajes(personaje_t* &personajes)throw (receiveException)
 	recvall(sock, personajes, size);
 }
 
-/**
- * Metodo encargado de hacer el envio de informacion
- */
+void Client::recibirEnemigos(enemigo_t* &enemigos)throw (receiveException) {
+
+	int size = sizeof(enemigo_t) * gameDetails_.cantPersonajes;
+	enemigos = (enemigo_t*) malloc(size);
+
+	recvall(sock, enemigos, size);
+
+}
+
 void Client::sendall(int s, void* data, int len) throw (sendException) {
 	int total = 0; 			// how many bytes we've sent
 	int bytesleft = len; 	// how many we have left to send
@@ -419,9 +411,6 @@ void Client::sendall(int s, void* data, int len) throw (sendException) {
 	return;
 }
 
-/**
- * Metodo encargado de recibir la informacion
- */
 void Client::recvall(int s, void *data, int len) throw (receiveException) {
 
 	int total = 0;

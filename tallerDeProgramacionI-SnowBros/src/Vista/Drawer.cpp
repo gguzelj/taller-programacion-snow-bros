@@ -84,7 +84,7 @@ Drawer::Drawer() {
 	this->messageAboutLifes = nullptr;
 	this->messageAboutPoints = nullptr;
 	this->fontToBeUsed = nullptr;
-	//Tamaños para dibujar el texto en pantalla.
+	//Tamaños para dibujar el texto en pantalla. Los inicializo en 0, despues se modifican.
 	this->altoText = 0;
 	this->anchoPoints = 0;
 	this->anchoLives = 0;

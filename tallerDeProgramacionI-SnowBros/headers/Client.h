@@ -54,12 +54,14 @@ using namespace std;
 //Estructuras necesarias para conectarse con el servidor
 typedef struct firstConnectionDetails{
 	unsigned int cantPersonajes;
+	unsigned int cantEnemigos;
 	unsigned int cantObjDinamicos;
 	unsigned int cantObjEstaticos;
 } firstConnectionDetails_t;
 
 typedef struct dataFromServer{
 	personaje_t* personajes;
+	enemigo_t* enemigos;
 	figura_t* dinamicos;
 } dataFromServer_t;
 
@@ -106,6 +108,7 @@ private:
 	figura_t* estaticos_;
 	figura_t* dinamicos_;
 	personaje_t* personajes_;
+	enemigo_t* enemigos_;
 
 	/**
 	 * Metodo para crear el socket con el que va a trabajar el server
@@ -140,7 +143,7 @@ private:
 	 */
 	void onCleanup();
 
-	/**
+	/*
 	 * Metodo para enviar heartBeats al servidor
 	 */
 	void enviarHeartBeat();
@@ -160,20 +163,25 @@ private:
 	 */
 	int validateParameters(int argc, char* argv[]);
 
-	/**
+	/*
 	 * Metodo para recibir los objetos dinamicos
 	 */
 	void recibirDinamicos(figura_t* &dinamicos)throw (receiveException);
 
-	/**
+	/*
 	 * Metodo para recibir los objetos estaticos
 	 */
 	void recibirEstaticos(figura_t* &estaticos)throw (receiveException);
 
-	/**
+	/*
 	 * Metodo para recibir los personajes
 	 */
 	void recibirPersonajes(personaje_t* &personajes)throw (receiveException);
+
+	/*
+	 * Metodo para recibir los enemigos
+	 */
+	void recibirEnemigos(enemigo_t* &enemigos)throw (receiveException);
 
 	/*
      * Metodo de bajo nivel de sockets para recibir hasta una cierta

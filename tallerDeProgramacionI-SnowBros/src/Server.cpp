@@ -7,6 +7,7 @@ Server::Server() {
 
 	acceptNewClients_ = true;
 	running_ = false;
+	paused_ = true;
 	sockfd_ = 0;
 	port_ = 0;
 	connectionsLimit_ = 0;
@@ -131,8 +132,10 @@ void Server::run() {
 
 	running_ = true;
 	while (running_) {
+
 		step();
 		enviarAClientes();
+
 	}
 
 	Log::ins()->add(SRV_MSG_END_GAME, Log::INFO);
@@ -158,6 +161,10 @@ void Server::newConnectionsManager() {
 		}
 		//Validamos si es posible aceptar la nueva conexion
 		if (acceptConnection(newsockfd) == SRV_ERROR)
+			continue;
+
+		//Si la conexion se acepto, validamos si puede comenzar el juego
+		if (validarComienzoJuego() == SRV_ERROR)
 			continue;
 	}
 }
@@ -294,6 +301,23 @@ int Server::manejarReconexion(connection_t *conn) {
 }
 
 /**
+ * Si se llama este metodo es porque se acepto un nuevo cliente.
+ * Eso significa que no se llego al limite maximo de jugadores, y que
+ * por lo tanto, el juego estaba pausado.
+ * Validamos el limite de jugadores, y empezamos a correr el juego si
+ * corresponde
+ */
+int Server::validarComienzoJuego() {
+
+	if (connections_.size() == connectionsLimit_) {
+		paused_ = false;
+		return SRV_NO_ERROR;
+	}
+
+	return SRV_ERROR;
+}
+
+/**
  * Metodo utilizado para enviar por primera vez todos los datos del juego
  * a un nuevo cliente
  */
@@ -362,8 +386,9 @@ void Server::recibirDelCliente(connection_t *conn) {
 			conn->activa = false;
 			model_->setPersonajeConnectionState(conn->id, ESPERANDO);
 
-			Log::ins()->add(SRV_MSG_RECEIVE_ERROR + std::string(conn->id) + ". Se desactiva la conexion",
-					Log::WARNING);
+			Log::ins()->add(
+					SRV_MSG_RECEIVE_ERROR + std::string(conn->id)
+							+ ". Se desactiva la conexion", Log::WARNING);
 
 			recibirDelCliente = false;
 
@@ -435,20 +460,28 @@ void Server::step() {
 
 	if (shared_rcv_queue_->try_pop(data)) {
 
-		//Buscamos el personaje y procesamos sus eventos
-		Personaje* personaje = model_->getPersonaje(data->id);
+		//Descartamos los eventos mientras el juego esta pausado
+		if (!paused_) {
 
-		if (!personaje) {
-			Log::ins()->add(SRV_MSG_PER_MAP + std::string(data->id),
-					Log::WARNING);
-		} else {
-			personaje->handleInput(data->keycode_1, data->type_1);
-			personaje->handleInput(data->keycode_2, data->type_2);
+			//Buscamos el personaje y procesamos sus eventos
+			Personaje* personaje = model_->getPersonaje(data->id);
+
+			if (!personaje) {
+				Log::ins()->add(SRV_MSG_PER_MAP + std::string(data->id),
+						Log::WARNING);
+			} else {
+				personaje->handleInput(data->keycode_1, data->type_1);
+				personaje->handleInput(data->keycode_2, data->type_2);
+			}
+
 		}
 
 	}
 
-	model_->step();
+	//Solo simulamos mientras el juego no esta pausado
+	if (!paused_)
+		model_->step();
+
 	SDL_Delay(30);
 }
 
@@ -526,7 +559,9 @@ void Server::sendall(int s, void* data, int len) throw (sendException) {
 
 		//Si aparece un error al enviar, lanzamos una excepcion
 		if (n == -1 || n == 0) {
-			Log::ins()->add("Ha ocurrido un error en la conexion con el cliente", Log::ERROR);
+			Log::ins()->add(
+					"Ha ocurrido un error en la conexion con el cliente",
+					Log::ERROR);
 			throw sendException();
 		}
 
@@ -547,7 +582,9 @@ void Server::recvall(int s, void *data, int len) throw (receiveException) {
 
 		//Si aparece un error al recibir, lanzamos una excepcion
 		if (n == -1 || n == 0) {
-			Log::ins()->add("Ha ocurrido un error en la conexion con el cliente", Log::ERROR);
+			Log::ins()->add(
+					"Ha ocurrido un error en la conexion con el cliente",
+					Log::ERROR);
 			throw receiveException();
 		}
 

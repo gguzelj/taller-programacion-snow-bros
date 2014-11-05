@@ -123,6 +123,7 @@ public:
 private:
 
 	bool running_;
+	bool paused_;
 	int port_;
 	int sockfd_;
 	unsigned int connectionsLimit_;
@@ -163,6 +164,11 @@ private:
 	 * Manejamos el caso de una reconexion
 	 */
 	int manejarReconexion(connection_t *conn);
+
+	/**
+	 * Validamos si con la ultima conexion el juego puede comenzar
+	 */
+	int validarComienzoJuego();
 
 	/*
 	 * Metodo utilizado para enviar por primera vez todos los datos del juego

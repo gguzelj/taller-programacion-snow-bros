@@ -7,7 +7,6 @@ Controlador::Controlador(Drawer *view ){
 dataToSend_t* Controlador::handleEvents(bool* running){
 	SDL_Event event;
 	cantEventos = 0;
-
 	int size = sizeof(dataToSend_t);
 	dataToSend_t* data = (dataToSend_t*) malloc(size);
 	bzero(data, size);
@@ -71,6 +70,12 @@ void Controlador::handleEvent(SDL_Event* evento,bool* running, int32_t *code, Ui
 					break;
 				}
 				case SDLK_UP:{
+					*type = SDL_KEYDOWN;
+					*code= evento->key.keysym.sym;
+					cantEventos++;
+					break;
+				}
+				case SDLK_SPACE:{
 					*type = SDL_KEYDOWN;
 					*code= evento->key.keysym.sym;
 					cantEventos++;

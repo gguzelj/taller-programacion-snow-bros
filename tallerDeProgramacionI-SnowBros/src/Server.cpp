@@ -352,6 +352,8 @@ void Server::enviarDatosJuego(int sockfd) {
  *
  * -HeartBeat: 	Mensaje para avisar al cliente que sigue conectado
  * -Eventos:	Eventos para que se actualice el personaje en el juego
+ *
+ * Si no recibimos datos de algun cliente, pausamos el juego
  */
 void Server::recibirDelCliente(connection_t *conn) {
 
@@ -382,6 +384,8 @@ void Server::recibirDelCliente(connection_t *conn) {
 
 			if (data)
 				free(data);
+
+			gameData_.paused = true;
 
 			conn->activa = false;
 			model_->setPersonajeConnectionState(conn->id, ESPERANDO);

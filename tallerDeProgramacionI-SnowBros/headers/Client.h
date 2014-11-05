@@ -59,7 +59,10 @@ typedef struct firstConnectionDetails{
 	unsigned int cantObjEstaticos;
 } firstConnectionDetails_t;
 
+
+
 typedef struct dataFromServer{
+	gameData_t* gameData;
 	personaje_t* personajes;
 	enemigo_t* enemigos;
 	figura_t* dinamicos;
@@ -182,6 +185,11 @@ private:
 	 * Metodo para recibir los enemigos
 	 */
 	void recibirEnemigos(enemigo_t* &enemigos)throw (receiveException);
+
+	/*
+	 * Metodo para recibir info general del juego
+	 */
+	void recibirGameData(gameData_t* &gameData)throw (receiveException);
 
 	/*
      * Metodo de bajo nivel de sockets para recibir hasta una cierta

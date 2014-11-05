@@ -18,6 +18,7 @@ Client::Client() {
 	estaticos_ = nullptr;
 	dinamicos_ = nullptr;
 	personajes_ = nullptr;
+	enemigos_ = nullptr;
 
 	port = 0;
 	sock = 0;
@@ -281,6 +282,10 @@ void Client::recibirDelServer() {
 		//La cant de bytes a recibir esta definida por la cantidad de
 		//personajes y la cantidad de objetos dinamicos:
 		while (running_) {
+
+			//Recibimos los datos del juego (estadisticas, etc..)
+			recibirGameData(data.gameData);
+
 			//Recibimos los personajes
 			recibirPersonajes(data.personajes);
 
@@ -318,6 +323,7 @@ void Client::onRender(dataFromServer_t data) {
 	dataToBeDraw.cantPersonajes = gameDetails_.cantPersonajes;
 	dataToBeDraw.cantObjDinamicos = gameDetails_.cantObjDinamicos;
 	dataToBeDraw.cantObjEstaticos = gameDetails_.cantObjEstaticos;
+	dataToBeDraw.gameData = data.gameData;
 	dataToBeDraw.personajes = data.personajes;
 	dataToBeDraw.dinamicos = data.dinamicos;
 	dataToBeDraw.estaticos = estaticos_;
@@ -389,6 +395,15 @@ void Client::recibirEnemigos(enemigo_t* &enemigos)throw (receiveException) {
 	enemigos = (enemigo_t*) malloc(size);
 
 	recvall(sock, enemigos, size);
+
+}
+
+void Client::recibirGameData(gameData_t* &gameData)throw (receiveException) {
+
+	int size = sizeof(gameData_t);
+	gameData = (gameData_t*) malloc(size);
+
+	recvall(sock, gameData, size);
 
 }
 

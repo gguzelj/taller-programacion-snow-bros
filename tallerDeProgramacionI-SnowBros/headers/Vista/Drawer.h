@@ -88,10 +88,15 @@ typedef struct enemigo{
 	char orientacion;
 }enemigo_t;
 
+typedef struct gameData{
+	bool paused;
+}gameData_t;
+
 typedef struct dataFromClient{
 	unsigned int cantPersonajes;
 	unsigned int cantObjDinamicos;
 	unsigned int cantObjEstaticos;
+	gameData_t* gameData;
 	personaje_t* personajes;
 	figura_t* dinamicos;
 	figura_t* estaticos;
@@ -138,6 +143,7 @@ private:
 	//Ahora los puntos y vidas son LTextures.
 	LTexture pointsT;
 	LTexture livesT;
+	LTexture waitingScreenT;
 
 	//Paths Attributes
 	string fontPath;
@@ -181,7 +187,8 @@ private:
 	void drawScenary(dataFromClient_t data, char* name);
 	void drawFigura(figura_t objeto);
 	void drawCharacter(personaje_t person, int index, int connectionState);
-	void drawMessages(personaje_t personaje);
+	void drawMessages(dataFromClient_t data, personaje_t personaje);
+	void drawWaitingScreen();
 	void presentScenary();
 	void clearScenary();
 

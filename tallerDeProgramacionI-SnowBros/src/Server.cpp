@@ -7,7 +7,6 @@ Server::Server() {
 
 	acceptNewClients_ = true;
 	running_ = false;
-	paused_ = true;
 	sockfd_ = 0;
 	port_ = 0;
 	connectionsLimit_ = 0;
@@ -15,6 +14,8 @@ Server::Server() {
 	parser_ = nullptr;
 	jsonPath_ = "";
 	shared_rcv_queue_ = new Threadsafe_queue<receivedData_t*>();
+
+	gameData_.paused = true;
 
 	//Inicializo el generador de randoms
 	srand(static_cast<unsigned>(time(0)));
@@ -155,10 +156,9 @@ void Server::newConnectionsManager() {
 		//Aceptamos una nueva conexion
 		int newsockfd = accept(sockfd_, (struct sockaddr *) &cli_addr, &clilen);
 
-		if (newsockfd < 0) {
-			Log::ins()->add(SRV_MSG_CONN_ERROR, Log::ERROR);
+		if (newsockfd < 0)
 			continue;
-		}
+
 		//Validamos si es posible aceptar la nueva conexion
 		if (acceptConnection(newsockfd) == SRV_ERROR)
 			continue;
@@ -310,7 +310,7 @@ int Server::manejarReconexion(connection_t *conn) {
 int Server::validarComienzoJuego() {
 
 	if (connections_.size() == connectionsLimit_) {
-		paused_ = false;
+		gameData_.paused = false;
 		return SRV_NO_ERROR;
 	}
 
@@ -405,6 +405,7 @@ void Server::enviarAClientes() {
 
 	dataToSend_t dataToBeSent;
 
+	dataToBeSent.gameData = &gameData_;
 	dataToBeSent.personajes = model_->getPersonajesParaEnvio();
 	dataToBeSent.enemigos = model_->getEnemigosParaEnvio();
 	dataToBeSent.dinamicos = model_->getObjetosDinamicos();
@@ -433,7 +434,7 @@ void Server::enviarAlCliente(connection_t *conn) {
 		conn->dataQueue->wait_and_pop(dataToBeSent);
 
 		try {
-
+			enviarGameData(conn->socket, dataToBeSent.gameData);
 			enviarPersonajes(conn->socket, dataToBeSent.personajes);
 			enviarEnemigos(conn->socket, dataToBeSent.enemigos);
 			enviarDinamicos(conn->socket, dataToBeSent.dinamicos);
@@ -461,7 +462,7 @@ void Server::step() {
 	if (shared_rcv_queue_->try_pop(data)) {
 
 		//Descartamos los eventos mientras el juego esta pausado
-		if (!paused_) {
+		if (!gameData_.paused) {
 
 			//Buscamos el personaje y procesamos sus eventos
 			Personaje* personaje = model_->getPersonaje(data->id);
@@ -479,7 +480,7 @@ void Server::step() {
 	}
 
 	//Solo simulamos mientras el juego no esta pausado
-	if (!paused_)
+	if (!gameData_.paused)
 		model_->step();
 
 	SDL_Delay(30);
@@ -526,25 +527,25 @@ float Server::getInitialY() {
 }
 
 void Server::enviarDinamicos(int sock, figura_t* dinamicos) {
-
 	int size = sizeof(figura_t) * datos_.cantObjDinamicos;
 	sendall(sock, dinamicos, size);
 }
 
 void Server::enviarEstaticos(int sock, figura_t* estaticos) {
-
 	int size = sizeof(figura_t) * datos_.cantObjEstaticos;
 	sendall(sock, estaticos, size);
 }
 
-void Server::enviarPersonajes(int sock, personaje_t* personajes) {
+void Server::enviarGameData(int sock, gameData_t* gameData) {
+	sendall(sock, gameData, sizeof(gameData_t));
+}
 
+void Server::enviarPersonajes(int sock, personaje_t* personajes) {
 	int size = sizeof(personaje_t) * datos_.cantPersonajes;
 	sendall(sock, personajes, size);
 }
 
 void Server::enviarEnemigos(int sock, enemigo_t* enemigos) {
-
 	int size = sizeof(enemigo_t) * datos_.cantPersonajes;
 	sendall(sock, enemigos, size);
 }

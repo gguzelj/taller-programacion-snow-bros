@@ -51,6 +51,10 @@ typedef struct enemigo{
 	char orientacion;
 }enemigo_t;
 
+typedef struct gameData{
+	bool paused;
+}gameData_t;
+
 typedef struct figura{
 	punto_t centro;
 	char id;

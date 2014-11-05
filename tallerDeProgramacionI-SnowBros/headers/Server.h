@@ -92,6 +92,7 @@ typedef struct firstConnectionDetails {
 } firstConnectionDetails_t;
 
 typedef struct dataToSend {
+	gameData_t* gameData;
 	personaje_t* personajes;
 	enemigo_t* enemigos;
 	figura_t* dinamicos;
@@ -123,12 +124,12 @@ public:
 private:
 
 	bool running_;
-	bool paused_;
 	int port_;
 	int sockfd_;
 	unsigned int connectionsLimit_;
 	bool acceptNewClients_;
 	firstConnectionDetails_t datos_;
+	gameData_t gameData_;
 
 	Escenario *model_;
 	JsonParser *parser_;
@@ -238,6 +239,11 @@ private:
 	 * Metodo para enviar los objetos estaticos
 	 */
 	void enviarEstaticos(int sock, figura_t* estaticos);
+
+	/*
+	 * Enviamos informacion del juego
+	 */
+	void enviarGameData(int sock, gameData_t* gameData);
 
 	/*
 	 * Metodo para enviar los personajes

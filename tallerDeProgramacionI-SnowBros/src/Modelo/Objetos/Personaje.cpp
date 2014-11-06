@@ -1,10 +1,11 @@
 #include "../../../headers/Modelo/Objetos/Personaje.h"
 #define ORIENTACION_INICIAL 'l'
 
-Personaje::Personaje(float x, float y, conn_id id, b2World* world) {
+Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	//Parametros generales
+	this->escenario_ = escenario;
 	this->jumpCooldown = 0;
-	this->world = world;
+	this->world = escenario->getWorld();
 	this->aceleracion = 10.0f;
 	this->x = x;
 	this->y = y;
@@ -116,16 +117,18 @@ void Personaje::stop() {
 
 void Personaje::tirarBolaNieve() {
 
-	BolaNieve *bola = new BolaNieve(this->world);
+	BolaNieve *bola = new BolaNieve(getX(), getY(), this->world);
 
 	b2Vec2 vel = this->body->GetLinearVelocity();
 
 	if(orientacion == IZQUIERDA)
-		vel.x -= aceleracion;
+		vel.x -= aceleracion * 1.5 ;
 	else
-		vel.x += aceleracion;
+		vel.x += aceleracion * 1.5 ;
 
 	bola->setVelocidad(vel);
+
+	this->escenario_->agregarProyectil(bola);
 
 }
 

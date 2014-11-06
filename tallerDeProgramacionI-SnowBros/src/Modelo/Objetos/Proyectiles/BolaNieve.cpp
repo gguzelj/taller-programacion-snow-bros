@@ -1,10 +1,10 @@
 #include "../../../../headers/Modelo/Objetos/Proyectiles/BolaNieve.h"
 
-BolaNieve::BolaNieve(b2World* world) {
+BolaNieve::BolaNieve(float x, float y, b2World* world) {
 	 this->type = "bolaNieve";
 
-	 this->x = 0;
-	 this->y = 0;
+	 this->x = x;
+	 this->y = y;
 	 this->radio = RADIO_BOLA_NIEVE;
 	 this->masa = MASA_BOLA_NIEVE;
 	 this->angulo = 0;
@@ -38,3 +38,6 @@ void BolaNieve::setVelocidad(b2Vec2 velocidad){
 	this->body->SetLinearVelocity(velocidad);
 }
 
+float BolaNieve::getRadio(){
+        return radio;
+}

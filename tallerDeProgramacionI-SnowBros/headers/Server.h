@@ -96,6 +96,7 @@ typedef struct dataToSend {
 	personaje_t* personajes;
 	enemigo_t* enemigos;
 	figura_t* dinamicos;
+	proyectil_t* proyectiles;
 } dataToSend_t;
 
 typedef char conn_id[TAM];
@@ -229,6 +230,11 @@ private:
 	 * de envio, el dato a mandar
 	 */
 	void enviarAClientes();
+
+	/*
+	 * Metodo para enviar proyectiles al cliente
+	 */
+	void enviarProyectiles(int sock, proyectil_t* dinamicos);
 
 	/*
 	 * Metodo para enviar los objetos dinamicos

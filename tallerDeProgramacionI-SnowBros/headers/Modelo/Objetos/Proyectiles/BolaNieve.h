@@ -14,10 +14,11 @@ private:
 
 public:
 
-	BolaNieve(b2World* world);
+	BolaNieve(float x, float y, b2World* world);
 	virtual ~BolaNieve();
 
 	void setVelocidad(b2Vec2 velocidad);
+	float getRadio();
 };
 
 #endif /* BOLANIEVE_H_ */

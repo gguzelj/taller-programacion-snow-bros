@@ -6,6 +6,7 @@
 #include "Figuras/Figura.h"
 #include "../../Controlador/ControladorDeContactos.h"
 #include "../Estados/Estados.h"
+#include "../Escenario.h"
 
 #define MITAD_ANCHO_PERSONAJE 0.5f
 #define MITAD_ALTO_PERSONAJE 0.85
@@ -18,11 +19,15 @@
 
 typedef char conn_id[20];
 
+struct Escenario;
+
 class Personaje : public Figura{
 	private:
 		b2Vec2 posicion;
 		b2World* world;
 		b2Body* body;
+
+		Escenario *escenario_;
 
 		int aceleracion;
 		char orientacion;
@@ -49,7 +54,7 @@ class Personaje : public Figura{
 		PersonajeState* state;
 		conn_id id;
 
-		Personaje(float x, float y,char id[], b2World* world);
+		Personaje(float x, float y,char id[], Escenario* escenario);
 		~Personaje();
 
 		b2Vec2 Posicion();

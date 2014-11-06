@@ -1,6 +1,7 @@
 #ifndef ESCENARIO_H_
 #define ESCENARIO_H_
 
+#define BOLA_NIEVE_CODE 'b'
 #define CIRCULO_CODE 'c'
 #define PARALELOGRAMO_CODE 'p'
 #define RECTANGULO_CODE 'r'
@@ -53,6 +54,7 @@ typedef struct enemigo{
 
 typedef struct gameData{
 	bool paused;
+	int cantProyectiles;
 }gameData_t;
 
 typedef struct figura{
@@ -62,6 +64,14 @@ typedef struct figura{
 	float alto;
 	float rotacion;
 } figura_t;
+
+typedef struct proyectil{
+	punto_t centro;
+	char id;
+	float ancho;
+	float alto;
+	float rotacion;
+} proyectil_t;
 
 class Escenario {
 public:
@@ -83,12 +93,14 @@ public:
 	unsigned int getCantObjEstaticos();
 	unsigned int getCantPersonajes();
 	unsigned int getCantEnemigos();
+	unsigned int getCantProyectiles();
 
 	personaje_t* getPersonajesParaEnvio();
 	enemigo_t* getEnemigosParaEnvio();
 
 	figura_t* getObjetosEstaticos();
 	figura_t* getObjetosDinamicos();
+	proyectil_t* getProyectiles();
 
 	/*
 	 * Devuelve la lista de Personajes
@@ -102,6 +114,8 @@ public:
 
 	float getAnchoUn();
 
+	void agregarProyectil(Proyectil* proy);
+
 private:
 	Contacto contactos;
 	const float32 timeStep = 1 / 40.0; //the length of time passed to simulate (seconds)
@@ -111,6 +125,7 @@ private:
 	b2World* world_;
 	std::vector<Figura*>* figurasEstaticas_;
 	std::vector<Figura*>* figurasDinamicas_;
+	std::vector<Proyectil*>* proyectiles_;
 	std::list<Muro*>* muros_;
 	std::list<Personaje*>* personajes_;
 	std::list<Enemigo*>* enemigos_;

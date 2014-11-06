@@ -9,3 +9,10 @@ Proyectil::~Proyectil() {
 	// TODO Auto-generated destructor stub
 }
 
+b2Vec2 Proyectil::GetCenter(){
+	return body->GetWorldCenter();
+}
+
+float Proyectil::getAngulo() {
+	return this->body->GetAngle();
+}

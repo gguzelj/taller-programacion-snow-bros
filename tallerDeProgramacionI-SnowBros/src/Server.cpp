@@ -409,10 +409,13 @@ void Server::enviarAClientes() {
 
 	dataToSend_t dataToBeSent;
 
+	gameData_.cantProyectiles = model_->getCantProyectiles();
+
 	dataToBeSent.gameData = &gameData_;
 	dataToBeSent.personajes = model_->getPersonajesParaEnvio();
 	dataToBeSent.enemigos = model_->getEnemigosParaEnvio();
 	dataToBeSent.dinamicos = model_->getObjetosDinamicos();
+	dataToBeSent.proyectiles = model_->getProyectiles();
 
 	for (unsigned int i = 0; i < connections_.size(); i++) {
 
@@ -442,6 +445,7 @@ void Server::enviarAlCliente(connection_t *conn) {
 			enviarPersonajes(conn->socket, dataToBeSent.personajes);
 			enviarEnemigos(conn->socket, dataToBeSent.enemigos);
 			enviarDinamicos(conn->socket, dataToBeSent.dinamicos);
+			enviarProyectiles(conn->socket, dataToBeSent.proyectiles);
 
 		} catch (const sendException& e) {
 
@@ -528,6 +532,11 @@ float Server::getInitialX() {
 
 float Server::getInitialY() {
 	return 0.0;
+}
+
+void Server::enviarProyectiles(int sock, proyectil_t* dinamicos) {
+	int size = sizeof(proyectil_t) * gameData_.cantProyectiles;
+	sendall(sock, dinamicos, size);
 }
 
 void Server::enviarDinamicos(int sock, figura_t* dinamicos) {

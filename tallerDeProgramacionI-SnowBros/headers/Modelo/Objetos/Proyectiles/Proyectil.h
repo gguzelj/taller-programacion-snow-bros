@@ -21,6 +21,10 @@ public:
 
 	Proyectil();
 	virtual ~Proyectil();
+
+	b2Vec2 GetCenter();
+	float getRadio();
+	float getAngulo();
 };
 
 #endif /* PROYECTIL_H_ */

@@ -187,7 +187,12 @@ void ShootingState::handleInput(Character &character, SDL_Keycode input, Uint32 
 
 	switch (input_type) {
 	case SDL_KEYUP:
-		character.state = &Character::standby;
+		detenerMovimientoHorizontal(&character, input);
+		if(input == SDLK_SPACE)
+			if (character.movimientoLateralDerecha == false && character.movimientoLateralIzquierda == false)
+				character.state = &Character::standby;
+			else
+				character.state = &Character::walking;
 	}
 
 }

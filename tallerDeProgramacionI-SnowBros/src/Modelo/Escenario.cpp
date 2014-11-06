@@ -11,7 +11,7 @@ Escenario::Escenario(JsonParser *parser) {
 
 	figurasEstaticas_ = new std::vector<Figura*>;
 	figurasDinamicas_ = new std::vector<Figura*>;
-	proyectiles_ = new std::vector<Proyectil*>;
+	proyectiles_ = new std::list<Proyectil*>;
 	muros_ = new std::list<Muro*>;
 	personajes_ = new std::list<Personaje*>;
 	enemigos_ = new std::list<Enemigo*>;
@@ -146,7 +146,17 @@ void Escenario::step() {
 		if (strcmp((*personaje)->id, "sin asignar") != 0)
 			acomodarEstadoPersonaje(*personaje);
 	}
-
+	for (auto proy = proyectiles_->begin(); proy != proyectiles_->end(); ++proy){
+		b2Body* body = (*proy)->getb2Body();
+		for( b2ContactEdge *ce = body->GetContactList(); ce; ce = ce->next ){
+			b2Contact* c = ce->contact;
+			if(c->IsTouching()){
+				world_->DestroyBody((*proy)->getb2Body());
+				proyectiles_->erase(proy++);
+				break;
+			}
+		}
+	}
 	getWorld()->Step(timeStep, velocityIterations, positionIterations);
 }
 
@@ -302,19 +312,18 @@ figura_t* Escenario::getObjetosDinamicos() {
 proyectil_t* Escenario::getProyectiles() {
 
 	proyectil_t* p;
-	Proyectil* proy;
 	p = (proyectil_t*) malloc(sizeof(proyectil_t) * proyectiles_->size());
 
-	for (unsigned int i = 0; i < proyectiles_->size(); i++) {
+	int i = 0;
+	for (auto proy = proyectiles_->begin(); proy != proyectiles_->end(); ++proy){
 
-		proy = (*proyectiles_)[i];
+		obtenerAltoAnchoIdProyectil((*proy), p[i].alto, p[i].ancho, p[i].id);
 
-		obtenerAltoAnchoIdProyectil(proy, p[i].alto, p[i].ancho, p[i].id);
-
-		p[i].rotacion = proy->getAngulo();
-		b2Vec2 center = proy->GetCenter();
+		p[i].rotacion = (*proy)->getAngulo();
+		b2Vec2 center = (*proy)->GetCenter();
 		p[i].centro.x = center.x;
 		p[i].centro.y = center.y;
+		i++;
 	}
 	return p;
 }

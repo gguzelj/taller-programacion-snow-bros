@@ -25,6 +25,7 @@ public:
 	b2Vec2 GetCenter();
 	float getRadio();
 	float getAngulo();
+	b2Body* getb2Body();
 };
 
 #endif /* PROYECTIL_H_ */

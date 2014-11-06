@@ -33,7 +33,7 @@ BolaNieve::BolaNieve(float x, float y, b2World* world) {
 }
 
 BolaNieve::~BolaNieve() {
-	this->world->DestroyBody(this->body);
+
 }
 
 void BolaNieve::setVelocidad(b2Vec2 velocidad){

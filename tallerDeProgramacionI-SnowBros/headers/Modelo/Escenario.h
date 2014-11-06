@@ -125,7 +125,7 @@ private:
 	b2World* world_;
 	std::vector<Figura*>* figurasEstaticas_;
 	std::vector<Figura*>* figurasDinamicas_;
-	std::vector<Proyectil*>* proyectiles_;
+	std::list<Proyectil*>* proyectiles_;
 	std::list<Muro*>* muros_;
 	std::list<Personaje*>* personajes_;
 	std::list<Enemigo*>* enemigos_;

@@ -16,3 +16,7 @@ b2Vec2 Proyectil::GetCenter(){
 float Proyectil::getAngulo() {
 	return this->body->GetAngle();
 }
+
+b2Body* Proyectil::getb2Body(){
+	return this->body;
+}

@@ -8,7 +8,7 @@
 #ifndef ESTADOS_H_
 #define ESTADOS_H_
 #include "Box2D/Box2D.h"
-#include "PersonajeState.h"
+#include "CharacterState.h"
 #define JUMPING 'j'
 #define STANDBY 's'
 #define WALKING 'w'
@@ -16,7 +16,7 @@
 #define SHOOTING 'd'
 
 
-class OnAirState: public PersonajeState{
+class OnAirState: public CharacterState{
 public:
 	void handleInput(Personaje &personaje,SDL_Keycode input,Uint32 input_type);
 };
@@ -36,7 +36,7 @@ public:
 	}
 };
 
-class StandByState: public PersonajeState{
+class StandByState: public CharacterState{
 public:
 	void handleInput(Personaje &personaje,SDL_Keycode input,Uint32 input_type);
 	char getCode(){
@@ -44,7 +44,7 @@ public:
 	}
 };
 
-class WalkingState: public PersonajeState{
+class WalkingState: public CharacterState{
 public:
 	void handleInput(Personaje &personaje,SDL_Keycode input,Uint32 input_type);
 	char getCode(){
@@ -56,7 +56,7 @@ public:
 	//movimientoLateralIzquierda;
 };
 
-class ShootingState: public PersonajeState{
+class ShootingState: public CharacterState{
 public:
 	void handleInput(Personaje &personaje,SDL_Keycode input,Uint32 input_type);
 	char getCode(){

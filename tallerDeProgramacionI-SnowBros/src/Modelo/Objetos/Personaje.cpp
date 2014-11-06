@@ -1,4 +1,5 @@
 #include "../../../headers/Modelo/Objetos/Personaje.h"
+#include "../../../headers/Modelo/Escenario.h"
 #define ORIENTACION_INICIAL 'l'
 
 Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
@@ -82,38 +83,6 @@ Personaje::~Personaje() {
 	this->world->DestroyBody(this->body);
 }
 
-void Personaje::moveLeft() {
-	if (this->cantidadDeContactosIzquierda == 0) {
-		b2Vec2 velocidadActual = this->body->GetLinearVelocity();
-		velocidadActual.x = -aceleracion;
-		this->body->SetLinearVelocity(velocidadActual);
-	};
-}
-
-void Personaje::moveRight() {
-	if (this->cantidadDeContactosDerecha == 0) {
-		b2Vec2 velocidadActual = this->body->GetLinearVelocity();
-		velocidadActual.x = aceleracion;
-		this->body->SetLinearVelocity(velocidadActual);
-	};
-}
-
-void Personaje::jump() {
-	if (this->jumpCooldown <= 0) {
-		this->jumpCooldown = 18;
-		b2Vec2 velocidadActual = this->body->GetLinearVelocity();
-		velocidadActual.y = 18;
-		this->body->SetLinearVelocity(velocidadActual);
-	};
-}
-
-void Personaje::stop() {
-	b2Vec2 velocidadActual = this->body->GetLinearVelocity();
-	velocidadActual.x = 0;
-	if (state == &Personaje::walking)
-		velocidadActual.y = 0;
-	this->body->SetLinearVelocity(velocidadActual);
-}
 
 void Personaje::tirarBolaNieve() {
 
@@ -132,47 +101,9 @@ void Personaje::tirarBolaNieve() {
 
 }
 
-b2Fixture* Personaje::GetFixtureList() {
-	return this->body->GetFixtureList();
-}
 
-b2Vec2 Personaje::GetWorldPoint(const b2Vec2& localPoint) {
-	return body->GetWorldPoint(localPoint);
-}
 
-void Personaje::setOrientacion(char orientacion) {
-	this->orientacion = orientacion;
-}
-
-int Personaje::getCantidadDeContactosActuales() {
-	return this->cantidadDeContactosActuales;
-}
-
-b2Vec2 Personaje::getVelocity() {
-	return this->body->GetLinearVelocity();
-}
 
 void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
-	this->state->handleInput(*this, input, input_type);
-}
-
-float Personaje::getX() {
-	return (this->body->GetPosition().x);
-}
-
-float Personaje::getY() {
-	return (this->body->GetPosition().y);
-}
-
-void Personaje::decreaseJumpCooldown() {
-	if (this->jumpCooldown > 0)
-		this->jumpCooldown -= 1;
-}
-
-void Personaje::updateLeftContact(int numero) {
-	this->cantidadDeContactosIzquierda = numero;
-}
-
-void Personaje::updateRightContact(int numero) {
-	this->cantidadDeContactosDerecha = numero;
+        this->state->handleInput(*this, input, input_type);
 }

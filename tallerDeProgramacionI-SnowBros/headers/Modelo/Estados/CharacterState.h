@@ -12,10 +12,10 @@
 class Personaje;
 
 
-class PersonajeState {
+class CharacterState {
 public:
-	PersonajeState();
-	virtual ~PersonajeState();
+	CharacterState();
+	virtual ~CharacterState();
 	virtual void handleInput(Personaje &personaje,SDL_Keycode input,Uint32 input_type) = 0;
 	//cada estado tiene un codigo.
 	virtual char getCode() = 0;

@@ -1,12 +1,10 @@
 #ifndef PERSONAJE_H_
 #define PERSONAJE_H_
 
-#include <cstdint>
+
 #include "Proyectiles/BolaNieve.h"
-#include "Figuras/Figura.h"
-#include "../../Controlador/ControladorDeContactos.h"
-#include "../Estados/Estados.h"
-#include "../Escenario.h"
+#include "Character.h"
+
 
 #define MITAD_ANCHO_PERSONAJE 0.5f
 #define MITAD_ALTO_PERSONAJE 0.85
@@ -19,39 +17,20 @@
 
 typedef char conn_id[20];
 
-struct Escenario;
+class Escenario;
 
-class Personaje : public Figura{
+class Personaje : public Character {
 	private:
-		b2Vec2 posicion;
-		b2World* world;
-		b2Body* body;
 
 		Escenario *escenario_;
 
-		int aceleracion;
-		char orientacion;
 		char connectionState;
-		int jumpCooldown;
-		float ancho;
-		float alto;
 		int points;
 		int lives;
 
 	public:
 
-		bool movimientoLateralDerecha,
-			 movimientoLateralIzquierda,
-			 debeSaltar;
-		int cantidadDeContactosActuales;
-		int cantidadDeContactosIzquierda;
-		int cantidadDeContactosDerecha;
-		static JumpingState jumping;
-		static FallingState falling;
-		static WalkingState walking;
-		static StandByState standby;
-		static ShootingState shooting;
-		PersonajeState* state;
+
 		conn_id id;
 
 		Personaje(float x, float y,char id[], Escenario* escenario);
@@ -61,15 +40,6 @@ class Personaje : public Figura{
 		b2Fixture* GetFixtureList();
 		b2Vec2 GetWorldPoint(const b2Vec2& localPoint);
 
-		float getX();
-		float getY();
-		//Y estos por que estan definidos aca?
-		float getAncho(){
-			return ancho;
-		}
-		float getAlto(){
-			return alto;
-		}
 		int getPoints(){
 			return points;
 		}
@@ -83,33 +53,13 @@ class Personaje : public Figura{
 			connectionState = state;
 		}
 
-		b2Body* getb2Body(){
-			return this->body;
-		}
-		b2Vec2 getVelocity();
-		int getCantidadDeContactosActuales();
 
-		char getOrientacion(){
-			return this->orientacion;
-		}
-
-		void setOrientacion(char orientacion);
 
 		void handleInput(SDL_Keycode input,Uint32 input_type);
 
-		void moveLeft();
-		void moveRight();
-		void jump();
-		void stop();
+
 		void tirarBolaNieve();
-		void decreaseJumpCooldown();
 
-		int getJumpCooldown(){
-			return (this->jumpCooldown);
-		}
-
-		void updateLeftContact(int);
-		void updateRightContact(int);
 };
 
 

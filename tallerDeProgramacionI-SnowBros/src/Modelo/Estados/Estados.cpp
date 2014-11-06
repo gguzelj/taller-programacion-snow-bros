@@ -2,11 +2,11 @@
 #include "../../../headers/Modelo/Estados/Estados.h"
 #include "../../../headers/Modelo/Objetos/Personaje.h"
 
-StandByState Personaje::standby;
-JumpingState Personaje::jumping;
-WalkingState Personaje::walking;
-FallingState Personaje::falling;
-ShootingState Personaje::shooting;
+StandByState Character::standby;
+JumpingState Character::jumping;
+WalkingState Character::walking;
+FallingState Character::falling;
+ShootingState Character::shooting;
 
 void cambiarOrientacionAlDejarDePresionarUnaTecla(Personaje &personaje) {
 	switch (personaje.getOrientacion()) {

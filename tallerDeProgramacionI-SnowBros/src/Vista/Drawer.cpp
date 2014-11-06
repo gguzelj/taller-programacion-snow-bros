@@ -68,6 +68,10 @@ bool Drawer::loadMedia() {
 		printf("Failed to load paralelogram texture!\n");
 		success = false;
 	}
+	if (!snowballTexture.loadFromFile(snowballImagePath, renderer)) {
+		printf("Failed to load paralelogram texture!\n");
+		success = false;
+	}
 
 	return success;
 }
@@ -100,6 +104,7 @@ Drawer::Drawer() {
 	this->hexagonImagePath = "resources/textures/hexagon.png";
 	this->trapexImagePath = "resources/textures/trapecio.png";
 	this->paralelogramImagePath = "resources/textures/paralelogramo.png";
+	this->snowballImagePath = "resources/textures/snowball.png";
 
 	//Text
 	this->points = "Points: ";
@@ -363,7 +368,7 @@ void Drawer::drawProyectil(proyectil_t proy) {
 	if (proy.id == BOLA_NIEVE_CODE) {
 		float radio = proy.alto / 2;
 
-		circleTexture.render(renderer,
+		snowballTexture.render(renderer,
 				coord_relativa(coordRel.x,
 						un_to_px_x * (proy.centro.x - radio) + ox),
 				coord_relativa(coordRel.y,

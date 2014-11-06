@@ -151,6 +151,7 @@ private:
 	LTexture hexagonTexture;
 	LTexture trapexTexture;
 	LTexture paralelogramTexture;
+	LTexture snowballTexture;
 	//Ahora los puntos y vidas son LTextures.
 	LTexture pointsT;
 	LTexture livesT;
@@ -167,6 +168,7 @@ private:
 	string hexagonImagePath;
 	string trapexImagePath;
 	string paralelogramImagePath;
+	string snowballImagePath;
 	//Texto de puntos y vidas.
 	string points;
 	string lives;

@@ -2,7 +2,8 @@
 #define PERSONAJE_H_
 
 #include <cstdint>
-#include "../Objetos/Figuras/Figura.h"
+#include "Proyectiles/BolaNieve.h"
+#include "Figuras/Figura.h"
 #include "../../Controlador/ControladorDeContactos.h"
 #include "../Estados/Estados.h"
 
@@ -44,6 +45,7 @@ class Personaje : public Figura{
 		static FallingState falling;
 		static WalkingState walking;
 		static StandByState standby;
+		static ShootingState shooting;
 		PersonajeState* state;
 		conn_id id;
 
@@ -94,6 +96,7 @@ class Personaje : public Figura{
 		void moveRight();
 		void jump();
 		void stop();
+		void tirarBolaNieve();
 		void decreaseJumpCooldown();
 
 		int getJumpCooldown(){

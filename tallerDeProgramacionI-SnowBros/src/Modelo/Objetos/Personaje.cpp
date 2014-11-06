@@ -86,7 +86,12 @@ Personaje::~Personaje() {
 
 void Personaje::tirarBolaNieve() {
 
-	BolaNieve *bola = new BolaNieve(getX(), getY(), this->world);
+	BolaNieve *bola;
+
+	if (orientacion == 'l')
+		bola = new BolaNieve(getX()-1/20.0, getY(), this->world);
+	else
+		bola = new BolaNieve(getX(), getY(), this->world);
 
 	b2Vec2 vel = this->body->GetLinearVelocity();
 

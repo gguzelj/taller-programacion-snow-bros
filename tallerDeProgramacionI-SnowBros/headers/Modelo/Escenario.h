@@ -112,6 +112,10 @@ public:
 	 */
 	void step();
 
+	bool crearEnemigo(float x, float y);
+
+	void actualizarEnemigos();
+
 	float getAnchoUn();
 
 	void agregarProyectil(Proyectil* proy);

@@ -16,10 +16,16 @@ Escenario::Escenario(JsonParser *parser) {
 	personajes_ = new std::list<Personaje*>;
 	enemigos_ = new std::list<Enemigo*>;
 
+	crearEnemigo(10,10);
+	crearEnemigo(20,20);
+
+
 	cantidadMaximaDePersonajes = parser->getConnectionsLimit();
 	//TODO esto deberia ser la longitud del arreglo de enemigos del parser.
 	cantidadMaximaDeEnemigos = 10;
 	contactos.setPersonaje(personajes_);
+	contactos.setEnemigos(enemigos_);
+	contactos.setCharacters();
 
 	Figura* figura_i;
 	Muro* muro_i;
@@ -121,7 +127,7 @@ void Escenario::setPersonajeConnectionState(conn_id id, char state) {
 	}
 }
 
-void acomodarEstadoPersonaje(Personaje* personaje) {
+void acomodarEstadoCharacter(Character* personaje) {
 	personaje->decreaseJumpCooldown();
 	//chequeo para cambiar el estado jumping a falling o el estado cuando cae de una plataforma
 	//esta implementado aca para que cambie cuando tiene que hacerlo
@@ -144,8 +150,13 @@ void acomodarEstadoPersonaje(Personaje* personaje) {
 void Escenario::step() {
 	for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
 		if (strcmp((*personaje)->id, "sin asignar") != 0)
-			acomodarEstadoPersonaje(*personaje);
+			acomodarEstadoCharacter(*personaje);
 	}
+
+	for (auto enemigo= enemigos_->begin(); enemigo != enemigos_->end(); ++enemigo) {
+					acomodarEstadoCharacter(*enemigo);
+	}
+
 	for (auto proy = proyectiles_->begin(); proy != proyectiles_->end(); ++proy){
 		b2Body* body = (*proy)->getb2Body();
 		for( b2ContactEdge *ce = body->GetContactList(); ce; ce = ce->next ){
@@ -403,4 +414,32 @@ float Escenario::getAnchoUn() {
 
 void Escenario::agregarProyectil(Proyectil* proy) {
 	proyectiles_->push_back(proy);
+}
+
+
+void Escenario::actualizarEnemigos(){
+	for(auto enemigo = enemigos_->begin();enemigo != enemigos_->end();enemigo++){
+		int v1 = rand() % 100;
+		if(v1 <= 25)
+			(*enemigo)->handleInput(SDLK_LEFT,SDL_KEYDOWN);
+		else{
+			if(v1 <= 50)
+				(*enemigo)->handleInput(SDLK_RIGHT,SDL_KEYDOWN);
+			else{
+				if(v1 <= 75)
+					(*enemigo)->handleInput(SDLK_RIGHT,SDL_KEYUP);
+				else
+					(*enemigo)->handleInput(SDLK_LEFT,SDL_KEYUP);
+			}
+
+		}
+	}
+}
+
+bool Escenario::crearEnemigo(float x, float y) {
+	Enemigo* nuevoEnemigo = new Enemigo(x, y, this->world_);
+	if (!nuevoEnemigo)
+		return false;
+	enemigos_->push_back(nuevoEnemigo);
+	return true;
 }

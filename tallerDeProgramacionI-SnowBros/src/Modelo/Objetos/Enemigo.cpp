@@ -8,7 +8,7 @@ Enemigo::Enemigo(float x, float y, b2World* world){
 	this->aceleracion = 7.0f;
 	this->x = x;
 	this->y = y;
-	//this->state = &Enemigo::standby;
+	this->state = &Enemigo::standby;
 	this->state = nullptr;
 	this->orientacion = ORIENTACION_INICIAL;
 	this->movimientoLateralDerecha = false;
@@ -77,72 +77,13 @@ Enemigo::~Enemigo(){
 	this->world->DestroyBody(this->body);
 }
 
-void Enemigo::moveLeft(){
-	if(this->cantidadDeContactosIzquierda == 0){
-    	b2Vec2 velocidadActual = this->body->GetLinearVelocity();
-    	velocidadActual.x = -aceleracion;
-    	this->body->SetLinearVelocity( velocidadActual );
-	};
+void Enemigo::disparar(){
+
 }
 
-void Enemigo::moveRight(){
-	if (this->cantidadDeContactosDerecha == 0){
-		b2Vec2 velocidadActual = this->body->GetLinearVelocity();
-		velocidadActual.x = aceleracion;
-		this->body->SetLinearVelocity( velocidadActual );
-	};
-}
 
-void Enemigo::jump(){
-	if (this->jumpCooldown <= 0){
-		 this->jumpCooldown = 18;
-			b2Vec2 velocidadActual = this->body->GetLinearVelocity();
-			velocidadActual.y = 18;
-			this->body->SetLinearVelocity( velocidadActual );
-	};
-}
-
-b2Fixture* Enemigo::GetFixtureList(){
-	return this->body->GetFixtureList();
-}
-
-b2Vec2 Enemigo::GetWorldPoint(const b2Vec2& localPoint){
-	return body->GetWorldPoint(localPoint);
-}
-
-void Enemigo::setOrientacion(char orientacion){
-	this->orientacion = orientacion;
-}
-
-int Enemigo::getCantidadDeContactosActuales(){
-	return this->cantidadDeContactosActuales;
-}
-
-b2Vec2 Enemigo::getVelocity(){
-	return this->body->GetLinearVelocity();
-}
-/* Ojo con esto. Lo comento en el mail.
 void Enemigo::handleInput(SDL_Keycode input,Uint32 input_type){
-	this->state->handleInput(*this,input,input_type);
-}*/
-
-float Enemigo::getX(){
-	return (this->body->GetPosition().x);
+		(this->state)->handleInput(*this,input,input_type);
 }
 
-float Enemigo::getY(){
-	return (this->body->GetPosition().y);
-}
 
-void Enemigo::decreaseJumpCooldown(){
-	if (this->jumpCooldown > 0)
-	this->jumpCooldown -= 1;
-}
-
-void Enemigo::updateLeftContact(int numero){
-	this->cantidadDeContactosIzquierda = numero;
-}
-
-void Enemigo::updateRightContact(int numero){
-	this->cantidadDeContactosDerecha = numero;
-}

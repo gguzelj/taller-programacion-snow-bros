@@ -1,4 +1,5 @@
 #include "../../../headers/Modelo/Objetos/Personaje.h"
+#include "../../../headers/Modelo/Escenario.h"
 
 #define ORIENTACION_INICIAL 'l'
 

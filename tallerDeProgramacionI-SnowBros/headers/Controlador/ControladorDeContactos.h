@@ -6,6 +6,8 @@
 #include <list>
 
 class Personaje;
+class Enemigo;
+class Character;
 
 const int ID_FOOT_SENSOR = 3;
 const int ID_LEFT_WALL_SENSOR = 4;
@@ -19,12 +21,22 @@ private:
 	int* contactosLeftSensor;
 	int* contactosRightSensor;
 
+	std::list<Character*>* characters;
 	std::list<Personaje*>* personajes;
+	std::list<Enemigo*>* enemigos;
+
+	void actualizarCharacters(std::list<Enemigo*> enemigos, std::list<Personaje*> personajes);
 
 public:
 	int* contactosSensor;
 	void setPersonaje(std::list<Personaje*>* personajes){
 		this->personajes = personajes;
+	}
+	void setEnemigos(std::list<Enemigo*>* enemigos){
+		this->enemigos = enemigos;
+	}
+	void setCharacters(){
+		characters = new std::list<Character*>();
 	}
 
 	void updateContacto(int* contactosDelSensor, int* contactosDelSensorL, int* contactosDelSensorR){

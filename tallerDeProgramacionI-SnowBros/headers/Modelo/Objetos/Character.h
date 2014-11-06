@@ -57,11 +57,11 @@ public:
 	void updateRightContact(int);
 	virtual void handleInput(SDL_Keycode input,Uint32 input_type){
 
-	}
+	};
 
 	b2Body* getb2Body(){
 		return this->body;
-	}
+	};
 	b2Vec2 getVelocity();
 	int getCantidadDeContactosActuales();
 	char getOrientacion();

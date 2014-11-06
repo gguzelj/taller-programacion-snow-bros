@@ -8,8 +8,6 @@
 
 #define MITAD_ANCHO_PERSONAJE 0.5f
 #define MITAD_ALTO_PERSONAJE 0.85
-#define IZQUIERDA 'l'
-#define DERECHA 'r'
 
 #define DESCONECTADO -1
 #define ESPERANDO 0
@@ -29,8 +27,6 @@ class Personaje : public Character {
 		int lives;
 
 	public:
-
-
 		conn_id id;
 
 		Personaje(float x, float y,char id[], Escenario* escenario);
@@ -52,13 +48,9 @@ class Personaje : public Character {
 		void setConnectionState(char state){
 			connectionState = state;
 		}
-
-
-
 		void handleInput(SDL_Keycode input,Uint32 input_type);
 
-
-		void tirarBolaNieve();
+		void disparar();
 
 };
 

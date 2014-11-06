@@ -83,15 +83,14 @@ Personaje::~Personaje() {
 	this->world->DestroyBody(this->body);
 }
 
-
-void Personaje::tirarBolaNieve() {
+void Personaje::disparar() {
 
 	BolaNieve *bola;
 
-	if (orientacion == 'l')
-		bola = new BolaNieve(getX()-1/20.0, getY(), this->world);
+	if (orientacion == IZQUIERDA)
+		bola = new BolaNieve(getX()-1/2.0, getY(), this->world);
 	else
-		bola = new BolaNieve(getX(), getY(), this->world);
+		bola = new BolaNieve(getX()+1/2.0, getY(), this->world);
 
 	b2Vec2 vel = this->body->GetLinearVelocity();
 
@@ -99,15 +98,13 @@ void Personaje::tirarBolaNieve() {
 		vel.x -= aceleracion * 1.5 ;
 	else
 		vel.x += aceleracion * 1.5 ;
+	vel.y += 10;
 
 	bola->setVelocidad(vel);
 
 	this->escenario_->agregarProyectil(bola);
 
 }
-
-
-
 
 void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
         this->state->handleInput(*this, input, input_type);

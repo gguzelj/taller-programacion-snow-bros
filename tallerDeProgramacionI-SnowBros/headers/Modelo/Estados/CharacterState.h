@@ -9,14 +9,14 @@
 #define PERSONAJESTATE_H_
 #include "SDL2/SDL.h"
 
-class Personaje;
+class Character;
 
 
 class CharacterState {
 public:
 	CharacterState();
 	virtual ~CharacterState();
-	virtual void handleInput(Personaje &personaje,SDL_Keycode input,Uint32 input_type) = 0;
+	virtual void handleInput(Character &character,SDL_Keycode input,Uint32 input_type) = 0;
 	//cada estado tiene un codigo.
 	virtual char getCode() = 0;
 };

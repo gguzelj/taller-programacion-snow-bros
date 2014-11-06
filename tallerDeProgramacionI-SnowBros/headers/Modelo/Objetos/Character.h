@@ -1,11 +1,13 @@
+#ifndef CHARACTER_H_
+#define CHARACTER_H_
+
 #include "Figuras/Figura.h"
 #include <cstdint>
 #include "../../Controlador/ControladorDeContactos.h"
 #include "../Estados/Estados.h"
 
-#ifndef CHARACTER_H_
-#define CHARACTER_H_
-
+#define IZQUIERDA 'l'
+#define DERECHA 'r'
 
 class Character : public Figura {
 protected:
@@ -18,12 +20,7 @@ protected:
 	int aceleracion;
 	char orientacion;
 
-
-
 public:
-
-
-
 	bool movimientoLateralDerecha,
 	movimientoLateralIzquierda,
 	debeSaltar;
@@ -36,13 +33,7 @@ public:
 	static StandByState standby;
 	static ShootingState shooting;
 	CharacterState* state;
-
-
-	virtual ~Character(){
-
-	}
-
-
+	virtual ~Character(){}
 	b2Vec2 Posicion();
 	b2Fixture* GetFixtureList();
 	b2Vec2 GetWorldPoint(const b2Vec2& localPoint);
@@ -76,8 +67,7 @@ public:
 	char getOrientacion();
 	void setOrientacion(char orientacion);
 
-
-
+	virtual void disparar(){};
 };
 
 #endif /* CHARACTER_H_ */

@@ -1,14 +1,9 @@
-/*
- * Estados.h
- *
- *  Created on: 18/9/2014
- *      Author: anonimo
- */
-
 #ifndef ESTADOS_H_
 #define ESTADOS_H_
+
 #include "Box2D/Box2D.h"
 #include "CharacterState.h"
+
 #define JUMPING 'j'
 #define STANDBY 's'
 #define WALKING 'w'
@@ -18,7 +13,7 @@
 
 class OnAirState: public CharacterState{
 public:
-	void handleInput(Personaje &personaje,SDL_Keycode input,Uint32 input_type);
+	void handleInput(Character &character,SDL_Keycode input,Uint32 input_type);
 };
 
 class JumpingState: public OnAirState{
@@ -38,7 +33,7 @@ public:
 
 class StandByState: public CharacterState{
 public:
-	void handleInput(Personaje &personaje,SDL_Keycode input,Uint32 input_type);
+	void handleInput(Character &character,SDL_Keycode input,Uint32 input_type);
 	char getCode(){
 		return STANDBY;
 	}
@@ -46,11 +41,11 @@ public:
 
 class WalkingState: public CharacterState{
 public:
-	void handleInput(Personaje &personaje,SDL_Keycode input,Uint32 input_type);
+	void handleInput(Character &character,SDL_Keycode input,Uint32 input_type);
 	char getCode(){
 		return WALKING;
 	}
-	void caminar(Personaje &personaje);
+	void caminar(Character &character);
 
 	//bool movimientoLateralDerecha,
 	//movimientoLateralIzquierda;
@@ -58,7 +53,7 @@ public:
 
 class ShootingState: public CharacterState{
 public:
-	void handleInput(Personaje &personaje,SDL_Keycode input,Uint32 input_type);
+	void handleInput(Character &character,SDL_Keycode input,Uint32 input_type);
 	char getCode(){
 		return WALKING;
 	}

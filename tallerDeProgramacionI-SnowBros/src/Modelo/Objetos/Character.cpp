@@ -1,8 +1,5 @@
 #include "../../../headers/Modelo/Objetos/Character.h"
 
-
-
-
 void Character::moveLeft(){
 	if(this->cantidadDeContactosIzquierda == 0){
 		b2Vec2 velocidadActual = this->body->GetLinearVelocity();
@@ -40,11 +37,9 @@ b2Fixture* Character::GetFixtureList(){
 	return this->body->GetFixtureList();
 }
 
-
 b2Vec2 Character::GetWorldPoint(const b2Vec2& localPoint){
 	return body->GetWorldPoint(localPoint);
 }
-
 
 char Character::getOrientacion(){
 	return this->orientacion;
@@ -55,14 +50,12 @@ void Character::setOrientacion(char orientacion){
 }
 
 int Character::getCantidadDeContactosActuales(){
-
 	return this->cantidadDeContactosActuales;
 }
 
 b2Vec2 Character::getVelocity(){
 	return this->body->GetLinearVelocity();
 }
-
 
 float Character::getX(){
 	return (this->body->GetPosition().x);

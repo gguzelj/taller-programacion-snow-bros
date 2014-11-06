@@ -1,5 +1,5 @@
 #include "../../../headers/Modelo/Objetos/Personaje.h"
-#include "../../../headers/Modelo/Escenario.h"
+
 #define ORIENTACION_INICIAL 'l'
 
 Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {

@@ -15,7 +15,7 @@ Server::Server() {
 	jsonPath_ = "";
 	shared_rcv_queue_ = new Threadsafe_queue<receivedData_t*>();
 
-	gameData_.paused = true;
+	gameData_.paused = false;
 
 	//Inicializo el generador de randoms
 	srand(static_cast<unsigned>(time(0)));

@@ -4,7 +4,7 @@
 
 #include "Proyectiles/BolaNieve.h"
 #include "Character.h"
-
+#include "../../../headers/Modelo/Escenario.h"
 
 #define MITAD_ANCHO_PERSONAJE 0.5f
 #define MITAD_ALTO_PERSONAJE 0.85

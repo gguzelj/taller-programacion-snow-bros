@@ -49,6 +49,7 @@
 #define STANDBY 's'
 #define WALKING 'w'
 #define FALLING 'f'
+#define SHOOTING 'd'
 
 using namespace std;
 

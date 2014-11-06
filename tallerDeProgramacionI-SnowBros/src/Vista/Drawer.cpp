@@ -402,7 +402,7 @@ void Drawer::drawCharacter(personaje_t person, int index, int connectionState) {
 
 	switch (codigo_estado) {
 	case JUMPING:
-		drawPersonajeSaltando(this->renderer, textura, orientacion, pos_x,
+		drawPersonajeJumping(this->renderer, textura, orientacion, pos_x,
 				pos_y, anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
 		break;
 	case STANDBY:
@@ -410,11 +410,15 @@ void Drawer::drawCharacter(personaje_t person, int index, int connectionState) {
 				anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
 		break;
 	case WALKING:
-		drawPersonajeCaminando(renderer, textura, orientacion, pos_x, pos_y,
+		drawPersonajeWalking(renderer, textura, orientacion, pos_x, pos_y,
 				anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
 		break;
 	case FALLING:
-		drawPersonajeCayendo(renderer, textura, orientacion, pos_x, pos_y,
+		drawPersonajeFalling(renderer, textura, orientacion, pos_x, pos_y,
+				anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
+		break;
+	case SHOOTING:
+		drawPersonajeShooting(renderer, textura, orientacion, pos_x, pos_y,
 				anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
 		break;
 	}
@@ -612,26 +616,22 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 
 	imagenPersonaje2 = this->loadTexture(SPRITE2_PATH, this->renderer);
 	if (imagenPersonaje == nullptr) {
-		logSDLError(
-				"Error al utilizar IMG_LoadTexture. Verifique el path de la imagen.");
+		manageLoadCharacterError();
 	}
 
 	imagenPersonaje3 = this->loadTexture(SPRITE3_PATH, this->renderer);
 	if (imagenPersonaje == nullptr) {
-		logSDLError(
-				"Error al utilizar IMG_LoadTexture. Verifique el path de la imagen.");
+		manageLoadCharacterError();
 	}
 
 	imagenPersonaje4 = this->loadTexture(SPRITE4_PATH, this->renderer);
 	if (imagenPersonaje == nullptr) {
-		logSDLError(
-				"Error al utilizar IMG_LoadTexture. Verifique el path de la imagen.");
+		manageLoadCharacterError();
 	}
 
 	imagenPersonaje5 = this->loadTexture(SPRITE5_PATH, this->renderer);
 	if (imagenPersonaje == nullptr) {
-		logSDLError(
-				"Error al utilizar IMG_LoadTexture. Verifique el path de la imagen.");
+		manageLoadCharacterError();
 	}
 
 	//Initialize SDL_ttf

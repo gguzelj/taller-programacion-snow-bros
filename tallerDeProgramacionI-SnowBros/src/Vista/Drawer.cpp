@@ -218,7 +218,12 @@ void Drawer::drawScenary(dataFromClient_t data, char* name) {
 
 	//Dibujamos los objetos dinamicos
 	for (unsigned int i = 0; i < data.cantObjDinamicos; i++)
-		drawFigura(data.dinamicos[i]);
+			drawFigura(data.dinamicos[i]);
+
+	//Dibujamos los proyectiles
+	for (unsigned int i = 0; i < data.gameData->cantProyectiles; i++)
+			drawProyectil(data.proyectiles[i]);
+
 
 	//dibujar cada personaje con su sprite correspondiente
 	for (unsigned int i = 0; i < data.cantPersonajes; i++) {
@@ -341,6 +346,33 @@ void Drawer::drawFigura(figura_t objeto) {
 	}
 }
 
+/*
+ * Dibujo los proyectiles
+ */
+void Drawer::drawProyectil(proyectil_t proy) {
+
+	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
+	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);
+
+	int ox = (ancho_imagen * currentZoomFactor) / 2;
+	int oy = (alto_imagen * currentZoomFactor) / 2;
+
+	float ancho = proy.ancho;
+	float alto = proy.alto;
+
+	if (proy.id == BOLA_NIEVE_CODE) {
+		float radio = proy.alto / 2;
+
+		circleTexture.render(renderer,
+				coord_relativa(coordRel.x,
+						un_to_px_x * (proy.centro.x - radio) + ox),
+				coord_relativa(coordRel.y,
+						-un_to_px_y * (proy.centro.y + radio) + oy),
+				ancho * un_to_px_x, alto * un_to_px_y, nullptr,
+				proy.rotacion * -RADTODEG, nullptr);
+	}
+
+}
 void Drawer::drawCharacter(personaje_t person, int index, int connectionState) {
 	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
 	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);

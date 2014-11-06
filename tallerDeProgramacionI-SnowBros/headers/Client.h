@@ -66,6 +66,7 @@ typedef struct dataFromServer{
 	personaje_t* personajes;
 	enemigo_t* enemigos;
 	figura_t* dinamicos;
+	proyectil_t* proyectiles;
 } dataFromServer_t;
 
 class Client{
@@ -170,6 +171,11 @@ private:
 	 * Metodo para recibir los objetos dinamicos
 	 */
 	void recibirDinamicos(figura_t* &dinamicos)throw (receiveException);
+
+	/*
+	 * Recibimos los proyectiles del juego
+	 */
+	void recibirProyectiles(proyectil_t* &proyectiles, unsigned int cant)throw (receiveException);
 
 	/*
 	 * Metodo para recibir los objetos estaticos

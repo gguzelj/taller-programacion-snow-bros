@@ -19,6 +19,7 @@
 #include <arpa/inet.h>
 
 #define ZOOM_MAX 1.7
+#define BOLA_NIEVE_CODE 'b'
 #define CIRCULO_CODE 'c'
 #define PARALELOGRAMO_CODE 'p'
 #define RECTANGULO_CODE 'r'
@@ -68,6 +69,14 @@ typedef struct figura{
 	float rotacion;
 } figura_t;
 
+typedef struct proyectil{
+	punto_t centro;
+	char id;
+	float ancho;
+	float alto;
+	float rotacion;
+} proyectil_t;
+
 typedef struct personaje{
 	punto_t centro;
 	char id[20];
@@ -90,6 +99,7 @@ typedef struct enemigo{
 
 typedef struct gameData{
 	bool paused;
+	int cantProyectiles;
 }gameData_t;
 
 typedef struct dataFromClient{
@@ -100,6 +110,7 @@ typedef struct dataFromClient{
 	personaje_t* personajes;
 	figura_t* dinamicos;
 	figura_t* estaticos;
+	proyectil_t* proyectiles;
 } dataFromClient_t;
 
 class Drawer{
@@ -186,6 +197,7 @@ private:
 	void drawBackground();
 	void drawScenary(dataFromClient_t data, char* name);
 	void drawFigura(figura_t objeto);
+	void drawProyectil(proyectil_t proyectil);
 	void drawCharacter(personaje_t person, int index, int connectionState);
 	void drawMessages(dataFromClient_t data, personaje_t personaje);
 	void drawWaitingScreen();

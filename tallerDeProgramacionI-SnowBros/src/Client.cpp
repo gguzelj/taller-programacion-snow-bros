@@ -294,6 +294,10 @@ void Client::recibirDelServer() {
 
 			//Recibimos los objetos dinamicos
 			recibirDinamicos(data.dinamicos);
+
+			//Recibimos los proyectiles del juego
+			recibirProyectiles(data.proyectiles, data.gameData->cantProyectiles);
+
 			shared_rcv_queue_->push(data);
 
 		}
@@ -326,6 +330,7 @@ void Client::onRender(dataFromServer_t data) {
 	dataToBeDraw.gameData = data.gameData;
 	dataToBeDraw.personajes = data.personajes;
 	dataToBeDraw.dinamicos = data.dinamicos;
+	dataToBeDraw.proyectiles = data.proyectiles;
 	dataToBeDraw.estaticos = estaticos_;
 
 	view_->updateView(dataToBeDraw, name);
@@ -371,6 +376,14 @@ void Client::recibirDinamicos(figura_t* &dinamicos) throw (receiveException){
 	dinamicos = (figura_t*) malloc(size);
 
 	recvall(sock, dinamicos, size);
+}
+
+void Client::recibirProyectiles(proyectil_t* &proyectiles, unsigned int cant) throw (receiveException){
+
+	int size = sizeof(proyectil_t) * cant;
+	proyectiles = (proyectil_t*) malloc(size);
+
+	recvall(sock, proyectiles, size);
 }
 
 void Client::recibirEstaticos(figura_t* &estaticos)throw (receiveException){

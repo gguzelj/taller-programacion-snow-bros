@@ -410,6 +410,7 @@ void Server::enviarAClientes() {
 	dataToSend_t dataToBeSent;
 
 	gameData_.cantProyectiles = model_->getCantProyectiles();
+	gameData_.cantEnemigos = model_->getCantEnemigos();
 
 	dataToBeSent.gameData = &gameData_;
 	dataToBeSent.personajes = model_->getPersonajesParaEnvio();
@@ -562,7 +563,7 @@ void Server::enviarPersonajes(int sock, personaje_t* personajes) {
 }
 
 void Server::enviarEnemigos(int sock, enemigo_t* enemigos) {
-	int size = sizeof(enemigo_t) * datos_.cantPersonajes;
+	int size = sizeof(enemigo_t) * gameData_.cantEnemigos;
 	sendall(sock, enemigos, size);
 }
 

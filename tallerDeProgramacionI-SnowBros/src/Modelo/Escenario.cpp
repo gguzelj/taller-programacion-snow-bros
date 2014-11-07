@@ -175,7 +175,7 @@ unsigned int Escenario::getCantPersonajes() {
 	return cantidadMaximaDePersonajes;
 }
 unsigned int Escenario::getCantEnemigos() {
-	return cantidadMaximaDeEnemigos;
+	return enemigos_->size();
 }
 
 unsigned int Escenario::getCantProyectiles() {
@@ -342,7 +342,7 @@ proyectil_t* Escenario::getProyectiles() {
 personaje_t* Escenario::getPersonajesParaEnvio() {
 	personaje_t* pers = (personaje_t*) malloc(sizeof(personaje_t) * cantidadMaximaDePersonajes);
 
-	int i = 0;
+	unsigned int i = 0;
 	for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
 		pers[i].alto = (*personaje)->getAlto();
 		pers[i].ancho = (*personaje)->getAncho();
@@ -377,24 +377,13 @@ enemigo_t* Escenario::getEnemigosParaEnvio() {
 
 	int i = 0;
 	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end(); ++enemigo) {
-		enems[i].alto = (*enemigo)->getAlto();
-		enems[i].ancho = (*enemigo)->getAncho();
+		enems[i].alto = (*enemigo)->getAlto()*2;
+		enems[i].ancho = (*enemigo)->getAncho()*2;
 		enems[i].orientacion = (*enemigo)->getOrientacion();
-		//enems[i].estado = (*enemigo)->state->getCode();
-		enems[i].estado = 'n';
+		enems[i].estado = (*enemigo)->state->getCode();
 		enems[i].centro.x = (*enemigo)->getX();
 		enems[i].centro.y = (*enemigo)->getY();
 		i++;
-	}
-
-	//Rellena con basura
-	for (; i < cantidadMaximaDeEnemigos; i++) {
-		enems[i].alto = 0;
-		enems[i].ancho = 0;
-		enems[i].orientacion = 'n';
-		enems[i].estado = 'n';
-		enems[i].centro.x = 0;
-		enems[i].centro.y = 0;
 	}
 
 	return enems;

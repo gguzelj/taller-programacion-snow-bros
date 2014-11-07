@@ -21,7 +21,6 @@ public:
 	char getCode(){
 		return JUMPING;
 	}
-	//bool debeSaltar;
 };
 
 class FallingState: public OnAirState{
@@ -46,16 +45,13 @@ public:
 		return WALKING;
 	}
 	void caminar(Character &character);
-
-	//bool movimientoLateralDerecha,
-	//movimientoLateralIzquierda;
 };
 
 class ShootingState: public CharacterState{
 public:
 	void handleInput(Character &character,SDL_Keycode input,Uint32 input_type);
 	char getCode(){
-		return WALKING;
+		return SHOOTING;
 	}
 };
 

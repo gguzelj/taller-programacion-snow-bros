@@ -54,7 +54,8 @@ typedef struct enemigo{
 
 typedef struct gameData{
 	bool paused;
-	int cantProyectiles;
+	unsigned int cantProyectiles;
+	unsigned int cantEnemigos;
 }gameData_t;
 
 typedef struct figura{

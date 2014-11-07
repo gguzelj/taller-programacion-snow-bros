@@ -229,8 +229,12 @@ void Drawer::drawScenary(dataFromClient_t data, char* name) {
 	for (unsigned int i = 0; i < data.gameData->cantProyectiles; i++)
 			drawProyectil(data.proyectiles[i]);
 
+	//Para probar el movimiento y demas de los enemigos los uso con el sprite de la pelota
+	for(unsigned int i = 0 ; i < data.gameData->cantEnemigos;i++){
+		drawEnemy(data.enemigos[i]);
+	}
 
-	//dibujar cada personaje con su sprite correspondiente
+	//Dibuja cada personaje con su sprite correspondiente
 	for (unsigned int i = 0; i < data.cantPersonajes; i++) {
 		//Dibujo normal
 		if (data.personajes[i].connectionState >= 0) {
@@ -240,24 +244,6 @@ void Drawer::drawScenary(dataFromClient_t data, char* name) {
 					data.personajes[i].connectionState);
 		}
 	}
-
-
-	//Para probar el movimiento y demas de los enemigos los uso con el sprite de la pelota
-
-	for(unsigned int i = 0 ; i < data.cantEnemigos;i++){
-		figura_t figuraEnemigo;
-		figuraEnemigo.centro = data.enemigos[i].centro;
-		figuraEnemigo.id = '6';
-		figuraEnemigo.rotacion = 0;
-		figuraEnemigo.alto = data.enemigos[i].alto;
-		figuraEnemigo.ancho = data.enemigos[i].ancho;
-		cerr << i <<"alto"<<data.enemigos[i].alto<<"ancho"<<data.enemigos[i].ancho<<endl;
-		drawFigura(figuraEnemigo);
-	}
-
-
-
-
 	//Dibujo ultimo el personaje del cliente para que se vea arriba de los demas.
 	for (unsigned int i = 0; i < data.cantPersonajes; i++) {
 		if (strcmp(data.personajes[i].id, name) == 0)
@@ -266,7 +252,9 @@ void Drawer::drawScenary(dataFromClient_t data, char* name) {
 	}
 }
 
-//Dibuja una figura
+/*
+ * Dibuja una figura
+ */
 void Drawer::drawFigura(figura_t objeto) {
 
 	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
@@ -396,6 +384,24 @@ void Drawer::drawProyectil(proyectil_t proy) {
 	}
 
 }
+
+void Drawer::drawEnemy(enemigo_t enemigo){
+
+	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
+	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);
+
+	int ox = (ancho_imagen * currentZoomFactor) / 2;
+	int oy = (alto_imagen * currentZoomFactor) / 2;
+
+	float ancho = enemigo.ancho;
+	float alto = enemigo.alto;
+
+	rectangleTexture.render(renderer, coord_relativa(coordRel.x,
+						 un_to_px_x * (enemigo.centro.x - ancho / 2) + ox),
+						 coord_relativa(coordRel.y, -un_to_px_y * (enemigo.centro.y + alto / 2) + oy),
+						 ancho * un_to_px_x, alto * un_to_px_y, nullptr, 0, nullptr);
+}
+
 void Drawer::drawCharacter(personaje_t person, int index, int connectionState) {
 	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
 	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);
@@ -479,12 +485,9 @@ void Drawer::drawWaitingScreen() {
 	int anchoT = 500;
 	int altoT = 100;
 
-	int ancho_juego = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
-	int alto_juego = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);
-
 	//Pense que esto lo dibujaba en medio de la pantall, pero no..
-	float ox = 300; //(ancho_juego * currentZoomFactor) / 2;
-	float oy = 300; //(alto_juego * currentZoomFactor) / 2;
+	float ox = 300;
+	float oy = 300;
 
 	SDL_Color textColor = { 0, 0, 0, 0xFF };
 

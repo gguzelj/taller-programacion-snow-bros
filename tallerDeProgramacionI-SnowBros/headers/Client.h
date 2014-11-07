@@ -190,7 +190,7 @@ private:
 	/*
 	 * Metodo para recibir los enemigos
 	 */
-	void recibirEnemigos(enemigo_t* &enemigos)throw (receiveException);
+	void recibirEnemigos(enemigo_t* &enemigos, unsigned int cant)throw (receiveException);
 
 	/*
 	 * Metodo para recibir info general del juego

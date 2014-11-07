@@ -100,14 +100,14 @@ typedef struct enemigo{
 
 typedef struct gameData{
 	bool paused;
-	int cantProyectiles;
+	unsigned int cantProyectiles;
+	unsigned int cantEnemigos;
 }gameData_t;
 
 typedef struct dataFromClient{
 	unsigned int cantPersonajes;
 	unsigned int cantObjDinamicos;
 	unsigned int cantObjEstaticos;
-	unsigned int cantEnemigos;
 	gameData_t* gameData;
 	personaje_t* personajes;
 	enemigo_t* enemigos;
@@ -204,6 +204,7 @@ private:
 	void drawFigura(figura_t objeto);
 	void drawProyectil(proyectil_t proyectil);
 	void drawCharacter(personaje_t person, int index, int connectionState);
+	void drawEnemy(enemigo_t enemigo);
 	void drawMessages(dataFromClient_t data, personaje_t personaje);
 	void drawWaitingScreen();
 	void presentScenary();

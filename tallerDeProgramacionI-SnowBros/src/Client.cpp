@@ -197,7 +197,7 @@ int Client::initialize() {
 		recibirEstaticos(estaticos_);
 		recibirDinamicos(dinamicos_);
 		recibirPersonajes(personajes_);
-		recibirEnemigos(enemigos_);
+		recibirEnemigos(enemigos_, gameDetails_.cantEnemigos);
 
 		//Inicializamos la vista para el personaje principal
 		for (unsigned int i = 0; i < gameDetails_.cantPersonajes; i++) {
@@ -290,7 +290,7 @@ void Client::recibirDelServer() {
 			recibirPersonajes(data.personajes);
 
 			//Recibimos los enemigos
-			recibirEnemigos(data.enemigos);
+			recibirEnemigos(data.enemigos, data.gameData->cantEnemigos);
 
 			//Recibimos los objetos dinamicos
 			recibirDinamicos(data.dinamicos);
@@ -327,8 +327,6 @@ void Client::onRender(dataFromServer_t data) {
 	dataToBeDraw.cantPersonajes = gameDetails_.cantPersonajes;
 	dataToBeDraw.cantObjDinamicos = gameDetails_.cantObjDinamicos;
 	dataToBeDraw.cantObjEstaticos = gameDetails_.cantObjEstaticos;
-	dataToBeDraw.cantEnemigos = gameDetails_.cantEnemigos;
-	cerr<<gameDetails_.cantEnemigos;
 	dataToBeDraw.gameData = data.gameData;
 	dataToBeDraw.personajes = data.personajes;
 	dataToBeDraw.enemigos = data.enemigos;
@@ -399,15 +397,15 @@ void Client::recibirEstaticos(figura_t* &estaticos)throw (receiveException){
 
 void Client::recibirPersonajes(personaje_t* &personajes)throw (receiveException) {
 
-	int size = sizeof(personaje_t) * gameDetails_.cantPersonajes;
+	int size = sizeof(personaje_t) * gameDetails_.cantEnemigos;
 	personajes = (personaje_t*) malloc(size);
 
 	recvall(sock, personajes, size);
 }
 
-void Client::recibirEnemigos(enemigo_t* &enemigos)throw (receiveException) {
+void Client::recibirEnemigos(enemigo_t* &enemigos, unsigned int cant)throw (receiveException) {
 
-	int size = sizeof(enemigo_t) * gameDetails_.cantPersonajes;
+	int size = sizeof(enemigo_t) * cant;
 	enemigos = (enemigo_t*) malloc(size);
 
 	recvall(sock, enemigos, size);

@@ -56,6 +56,13 @@ void OnAirState::handleInput(Character &character, SDL_Keycode input, Uint32 inp
 	case SDL_KEYDOWN:
 
 		switch (input) {
+
+		case SDLK_SPACE: {
+			character.state = &Character::shooting;
+			character.disparar();
+			break;
+		}
+
 		case SDLK_LEFT:
 			if (!character.movimientoLateralDerecha) {
 				character.moveLeft();
@@ -186,6 +193,34 @@ void WalkingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 void ShootingState::handleInput(Character &character, SDL_Keycode input, Uint32 input_type) {
 
 	switch (input_type) {
+	case SDL_KEYDOWN:
+
+			switch (input) {
+
+			case SDLK_SPACE: {
+				character.state = &Character::shooting;
+				character.disparar();
+				break;
+			}
+
+			case SDLK_LEFT:
+				if (!character.movimientoLateralDerecha) {
+					character.moveLeft();
+					character.setOrientacion(IZQUIERDA);
+				}
+				character.movimientoLateralIzquierda = true;
+				break;
+
+			case SDLK_RIGHT:
+				if (!character.movimientoLateralIzquierda) {
+					character.moveRight();
+					character.setOrientacion(DERECHA);
+				}
+				character.movimientoLateralDerecha = true;
+				break;
+			}
+			break;
+
 	case SDL_KEYUP:
 		detenerMovimientoHorizontal(&character, input);
 		if(input == SDLK_SPACE)

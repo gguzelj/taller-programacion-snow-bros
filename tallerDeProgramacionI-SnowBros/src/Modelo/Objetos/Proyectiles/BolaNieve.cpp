@@ -6,7 +6,7 @@ BolaNieve::BolaNieve(float x, float y, b2World* world) {
 	 this->x = x;
 	 this->y = y;
 	 this->radio = RADIO_BOLA_NIEVE;
-	 this->masa = MASA_BOLA_NIEVE*10;
+	 this->masa = MASA_BOLA_NIEVE*5;
 	 this->angulo = 0;
 	 this->estatico = false;
 	 this->world = world;
@@ -15,7 +15,7 @@ BolaNieve::BolaNieve(float x, float y, b2World* world) {
 	 b2BodyDef cuerpoDeCirculo;
 	 cuerpoDeCirculo.type = b2_dynamicBody;
 	 cuerpoDeCirculo.position.Set(x,y);
-	 cuerpoDeCirculo.gravityScale = 4;
+	 cuerpoDeCirculo.gravityScale = 6;
 	 this->body = this->world->CreateBody(&cuerpoDeCirculo);
 
 

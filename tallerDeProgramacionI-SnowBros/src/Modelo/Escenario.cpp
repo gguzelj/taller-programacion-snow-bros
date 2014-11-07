@@ -131,7 +131,7 @@ void acomodarEstadoCharacter(Character* personaje) {
 	personaje->decreaseJumpCooldown();
 	//chequeo para cambiar el estado jumping a falling o el estado cuando cae de una plataforma
 	//esta implementado aca para que cambie cuando tiene que hacerlo
-	if (personaje->getVelocity().y <= 0.0f && personaje->getCantidadDeContactosActuales() == 0) {
+	if (personaje->getVelocity().y <= 0.0f && personaje->getCantidadDeContactosActuales() == 0 && personaje->state != &Personaje::shooting) {
 		personaje->state = &Personaje::falling;
 	} else if (personaje->getVelocity().y <= 0.0f && personaje->state == &Personaje::jumping) {
 		personaje->state = &Personaje::standby;

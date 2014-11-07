@@ -70,11 +70,11 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	footSensorFixture->SetUserData((void*) ID_FOOT_SENSOR);
 
 	//Sensor de izquierda y derecha
-	shapeDelPersonaje.SetAsBox(0.0001f, alto - 0.4f, b2Vec2(-ancho - 0.9f, 0.9f), 0);
+	shapeDelPersonaje.SetAsBox(0.0001f, alto - 0.4f, b2Vec2(-ancho, 0.9f), 0);
 	fixtureDelPersonaje.isSensor = true;
 	this->body->CreateFixture(&fixtureDelPersonaje);
 	paredIzquierda->SetUserData((void*) ID_LEFT_WALL_SENSOR);
-	shapeDelPersonaje.SetAsBox(0.0001f, alto - 0.4f, b2Vec2(ancho + 0.9f, 0.9f), 0);
+	shapeDelPersonaje.SetAsBox(0.0001f, alto - 0.4f, b2Vec2(ancho, 0.9f), 0);
 	fixtureDelPersonaje.isSensor = true;
 	this->body->CreateFixture(&fixtureDelPersonaje);
 	paredDerecha->SetUserData((void*) ID_RIGHT_WALL_SENSOR);
@@ -89,9 +89,9 @@ void Personaje::disparar() {
 	BolaNieve *bola;
 
 	if (orientacion == IZQUIERDA)
-		bola = new BolaNieve(getX()-0, getY()+MITAD_ALTO_PERSONAJE+0.40, this->world);
+		bola = new BolaNieve(getX()-1, getY()+MITAD_ALTO_PERSONAJE-0.40, this->world);
 	else
-		bola = new BolaNieve(getX()+0, getY()+MITAD_ALTO_PERSONAJE+0.40, this->world);
+		bola = new BolaNieve(getX()+1, getY()+MITAD_ALTO_PERSONAJE-0.40, this->world);
 
 	b2Vec2 vel = this->body->GetLinearVelocity();
 
@@ -99,7 +99,7 @@ void Personaje::disparar() {
 		vel.x -= aceleracion * 2.0 ;
 	else
 		vel.x += aceleracion * 2.0 ;
-	vel.y += 10;
+	vel.y += 4;
 
 	bola->setVelocidad(vel);
 

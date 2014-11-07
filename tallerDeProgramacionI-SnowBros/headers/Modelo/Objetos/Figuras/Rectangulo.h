@@ -1,7 +1,7 @@
 #ifndef RECTANGULO_H_
 #define RECTANGULO_H_
 
-#include "Figura.h"
+#include "../Figura.h"
 
 class Rectangulo : public Figura {
 private:

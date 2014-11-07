@@ -15,15 +15,15 @@
 #include <vector>
 #include <Box2D/Box2D.h>
 #include "../Parser/JsonParser.h"
-#include "Objetos/Figuras/Figura.h"
+#include "Objetos/Figura.h"
 #include "Objetos/Figuras/Circulo.h"
 #include "Objetos/Figuras/Paralelogramo.h"
 #include "Objetos/Figuras/Rectangulo.h"
 #include "Objetos/Figuras/Poligono.h"
 #include "Objetos/Figuras/Trapecio.h"
-#include "Objetos/Personaje.h"
-#include "Objetos/Enemigo.h"
-#include "Objetos/Muro.h"
+#include "Objetos/Figuras/Muro.h"
+#include "Objetos/Personajes/Personaje.h"
+#include "Objetos/Personajes/Enemigo.h"
 #include "../Exceptions/ErrorTipoDeObjeto.h"
 
 typedef char conn_id[20];

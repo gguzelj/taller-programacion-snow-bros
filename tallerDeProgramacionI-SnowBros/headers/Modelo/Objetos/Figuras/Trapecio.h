@@ -1,7 +1,7 @@
 #ifndef TRAPECIO_H_
 #define TRAPECIO_H_
 
-#include "Figura.h"
+#include "../Figura.h"
 
 class Trapecio : public Figura{
 private:

@@ -1,7 +1,7 @@
 #ifndef PARALELOGRAMO_H_
 #define PARALELOGRAMO_H_
 
-#include "Figura.h"
+#include "../Figura.h"
 
 
 

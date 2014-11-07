@@ -1,4 +1,4 @@
-#include "../../../../headers/Modelo/Objetos/Figuras/Figura.h"
+#include "../../../headers/Modelo/Objetos/Figura.h"
 
 b2Fixture* Figura::GetFixtureList() {
 	return body->GetFixtureList();

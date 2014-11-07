@@ -1,7 +1,7 @@
 #ifndef CIRCULO_H_
 #define CIRCULO_H_
 
-#include "Figura.h"
+#include "../Figura.h"
 
 
 

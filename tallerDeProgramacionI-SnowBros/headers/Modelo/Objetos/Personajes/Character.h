@@ -1,10 +1,10 @@
 #ifndef CHARACTER_H_
 #define CHARACTER_H_
 
-#include "Figuras/Figura.h"
+#include "../Figura.h"
 #include <cstdint>
-#include "../../Controlador/ControladorDeContactos.h"
-#include "../Estados/Estados.h"
+#include "../../../Controlador/ControladorDeContactos.h"
+#include "../../Estados/Estados.h"
 
 #define IZQUIERDA 'l'
 #define DERECHA 'r'

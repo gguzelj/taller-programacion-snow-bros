@@ -1,4 +1,4 @@
-#include "../../../headers/Modelo/Objetos/Muro.h"
+#include "../../../../headers/Modelo/Objetos/Figuras/Muro.h"
 
 Muro::Muro(float ancho_esc, float alto_esc, int rot, b2World* world, float pos_x){
 	//float friction = 0;

@@ -1,7 +1,7 @@
 #ifndef POLIGONO_H_
 #define POLIGONO_H_
 
-#include "Figura.h"
+#include "../Figura.h"
 #include "math.h"
 
 class Poligono : public Figura{

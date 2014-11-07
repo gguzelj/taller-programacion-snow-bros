@@ -1,4 +1,4 @@
-#include "../../../headers/Modelo/Objetos/Character.h"
+#include "../../../../headers/Modelo/Objetos/Personajes/Character.h"
 
 void Character::moveLeft(){
 	if(this->cantidadDeContactosIzquierda == 0){

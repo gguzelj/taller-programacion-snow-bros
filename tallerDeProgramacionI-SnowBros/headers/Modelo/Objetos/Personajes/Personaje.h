@@ -2,7 +2,7 @@
 #define PERSONAJE_H_
 
 
-#include "Proyectiles/BolaNieve.h"
+#include "../Proyectiles/BolaNieve.h"
 #include "Character.h"
 
 #define MITAD_ANCHO_PERSONAJE 0.5f

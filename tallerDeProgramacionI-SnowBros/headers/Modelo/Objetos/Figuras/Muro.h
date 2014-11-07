@@ -6,7 +6,7 @@
 #include <Box2D/Box2D.h>
 #include <list>
 #include <math.h>
-#include "../../Parser/JsonParser.h"
+#include "../../../Parser/JsonParser.h"
 
 class Muro {
 private:

@@ -1,6 +1,6 @@
 #define VEL_POR_DEFAULT 10.0f
 #include "../../../headers/Modelo/Estados/Estados.h"
-#include "../../../headers/Modelo/Objetos/Character.h"
+#include "../../../headers/Modelo/Objetos/Personajes/Character.h"
 
 StandByState Character::standby;
 JumpingState Character::jumping;

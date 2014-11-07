@@ -1,7 +1,7 @@
 #include "../../headers/Controlador/ControladorDeContactos.h"
-#include "../../headers/Modelo/Objetos/Personaje.h"
+#include "../../headers/Modelo/Objetos/Personajes/Personaje.h"
 #include "../../headers/Modelo/Estados/Estados.h"
-#include "../../headers/Modelo/Objetos/Enemigo.h"
+#include "../../headers/Modelo/Objetos/Personajes/Enemigo.h"
 
 void cambiarEstadoAlAterrizar(Character* character){
 	if(character->movimientoLateralDerecha == true || character->movimientoLateralIzquierda == true)

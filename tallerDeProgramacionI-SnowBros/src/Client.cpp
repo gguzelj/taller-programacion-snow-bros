@@ -327,8 +327,11 @@ void Client::onRender(dataFromServer_t data) {
 	dataToBeDraw.cantPersonajes = gameDetails_.cantPersonajes;
 	dataToBeDraw.cantObjDinamicos = gameDetails_.cantObjDinamicos;
 	dataToBeDraw.cantObjEstaticos = gameDetails_.cantObjEstaticos;
+	dataToBeDraw.cantEnemigos = gameDetails_.cantEnemigos;
+	cerr<<gameDetails_.cantEnemigos;
 	dataToBeDraw.gameData = data.gameData;
 	dataToBeDraw.personajes = data.personajes;
+	dataToBeDraw.enemigos = data.enemigos;
 	dataToBeDraw.dinamicos = data.dinamicos;
 	dataToBeDraw.proyectiles = data.proyectiles;
 	dataToBeDraw.estaticos = estaticos_;

@@ -107,8 +107,10 @@ typedef struct dataFromClient{
 	unsigned int cantPersonajes;
 	unsigned int cantObjDinamicos;
 	unsigned int cantObjEstaticos;
+	unsigned int cantEnemigos;
 	gameData_t* gameData;
 	personaje_t* personajes;
+	enemigo_t* enemigos;
 	figura_t* dinamicos;
 	figura_t* estaticos;
 	proyectil_t* proyectiles;

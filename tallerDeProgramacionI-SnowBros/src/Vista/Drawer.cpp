@@ -240,6 +240,24 @@ void Drawer::drawScenary(dataFromClient_t data, char* name) {
 					data.personajes[i].connectionState);
 		}
 	}
+
+
+	//Para probar el movimiento y demas de los enemigos los uso con el sprite de la pelota
+
+	for(unsigned int i = 0 ; i < data.cantEnemigos;i++){
+		figura_t figuraEnemigo;
+		figuraEnemigo.centro = data.enemigos[i].centro;
+		figuraEnemigo.id = '6';
+		figuraEnemigo.rotacion = 0;
+		figuraEnemigo.alto = data.enemigos[i].alto;
+		figuraEnemigo.ancho = data.enemigos[i].ancho;
+		cerr << i <<"alto"<<data.enemigos[i].alto<<"ancho"<<data.enemigos[i].ancho<<endl;
+		drawFigura(figuraEnemigo);
+	}
+
+
+
+
 	//Dibujo ultimo el personaje del cliente para que se vea arriba de los demas.
 	for (unsigned int i = 0; i < data.cantPersonajes; i++) {
 		if (strcmp(data.personajes[i].id, name) == 0)

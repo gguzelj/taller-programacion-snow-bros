@@ -24,6 +24,10 @@ class Personaje : public Character {
 		int points;
 		int lives;
 
+		b2Fixture* paredIzquierda;
+		b2Fixture* paredDerecha;
+		b2Fixture* piso;
+
 	public:
 		conn_id id;
 
@@ -56,6 +60,10 @@ class Personaje : public Character {
 		void disparar();
 
 		void reaccionarConEnemigo(Enemigo* enemigo);
+
+		//Metodos para controlar el estado del personaje
+		void empiezoContacto(b2Fixture* fixture);
+		void terminoContacto(b2Fixture* fixture);
 
 };
 

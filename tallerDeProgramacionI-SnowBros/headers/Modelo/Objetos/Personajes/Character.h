@@ -26,9 +26,9 @@ public:
 	bool movimientoLateralDerecha,
 	movimientoLateralIzquierda,
 	debeSaltar;
-	int cantidadDeContactosActuales;
-	int cantidadDeContactosIzquierda;
-	int cantidadDeContactosDerecha;
+	int contactosActuales;
+	int contactosIzquierda;
+	int contactosDerecha;
 	static JumpingState jumping;
 	static FallingState falling;
 	static WalkingState walking;

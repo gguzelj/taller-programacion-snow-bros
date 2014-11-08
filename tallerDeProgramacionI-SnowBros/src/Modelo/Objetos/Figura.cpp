@@ -12,6 +12,14 @@ b2Vec2 Figura::GetCenter(){
 	return body->GetWorldCenter();
 }
 
+b2Body* Figura::getBody(){
+	return this->body;
+}
+
+bool Figura::esEstatico(){
+	return estatico;
+}
+
 float Figura::getAngulo() {
 	return this->body->GetAngle();
 }

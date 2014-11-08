@@ -127,11 +127,12 @@ void Escenario::setPersonajeConnectionState(conn_id id, char state) {
 }
 
 void acomodarEstadoCharacter(Character* personaje) {
-	personaje->decreaseJumpCooldown();
 	//chequeo para cambiar el estado jumping a falling o el estado cuando cae de una plataforma
+	personaje->decreaseJumpCooldown();
 	//esta implementado aca para que cambie cuando tiene que hacerlo
 	if (personaje->getVelocity().y <= 0.0f && personaje->getCantidadDeContactosActuales() == 0 && personaje->state != &Personaje::shooting) {
 		personaje->state = &Personaje::falling;
+
 	} else if (personaje->getVelocity().y <= 0.0f && personaje->state == &Personaje::jumping) {
 		personaje->state = &Personaje::standby;
 	}
@@ -405,6 +406,7 @@ void Escenario::agregarProyectil(Proyectil* proy) {
 }
 
 void Escenario::actualizarEnemigos() {
+
 	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end(); enemigo++) {
 		int v1 = rand() % 100;
 		if (v1 <= 25)

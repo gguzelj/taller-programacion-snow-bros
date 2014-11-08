@@ -17,9 +17,9 @@ Enemigo::Enemigo(float x, float y, b2World* world){
 	this->type = "ENEMIGO";
 
 	//Parametros para controlar los contactos
-	this->cantidadDeContactosActuales = 0; //Comienza en el aire
-	this->cantidadDeContactosIzquierda = 0;
-	this->cantidadDeContactosDerecha = 0;
+	this->contactosActuales = 0; //Comienza en el aire
+	this->contactosIzquierda = 0;
+	this->contactosDerecha = 0;
 
 	//definiendo el body del personaje
 	b2BodyDef cuerpoDelEnemigo;
@@ -45,9 +45,9 @@ Enemigo::Enemigo(float x, float y, b2World* world){
 
 	fix->SetUserData(this);
 
-	/*
-	body->SetLinearDamping(0.5);
 
+	body->SetLinearDamping(0.5);
+/*
 	//Partes laterales para que se deslice por las paredes y no se pegue a ellas
 	shapeDelEnemigo.SetAsBox(0.0000001f, alto-0.00405f, b2Vec2(-ancho+0.00000005,0.0045f),0);	//a la izquierda
 	fixtureDelEnemigo.friction = 0.0019f;		//Le invento de 0 para que no se pegue a las paredes
@@ -66,11 +66,11 @@ Enemigo::Enemigo(float x, float y, b2World* world){
 	footSensorFixture->SetUserData(this);
 
 	//Sensor de izquierda y derecha
-	shapeDelEnemigo.SetAsBox(0.0001f, alto-0.4f, b2Vec2(-ancho-0.9f,0.9f),0);
+	shapeDelEnemigo.SetAsBox(0.0001f, alto - 0.4f, b2Vec2(-ancho - 0.9f, 0.9f), 0);
 	fixtureDelEnemigo.isSensor = true;
 	this->body->CreateFixture(&fixtureDelEnemigo);
 	paredIzquierda->SetUserData(this);
-	shapeDelEnemigo.SetAsBox(0.0001f, alto-0.4f, b2Vec2(ancho+0.9f,0.9f),0);
+	shapeDelEnemigo.SetAsBox(0.0001f, alto - 0.4f, b2Vec2(ancho + 0.9f, 0.9f), 0);
 	fixtureDelEnemigo.isSensor = true;
 	this->body->CreateFixture(&fixtureDelEnemigo);
 	paredDerecha->SetUserData(this);

@@ -8,7 +8,6 @@
 #include <math.h>
 #include "../../Parser/JsonParser.h"
 
-
 class Enemigo;
 class Circulo;
 class Muro;
@@ -18,32 +17,7 @@ class Rectangulo;
 class Trapecio;
 class Personaje;
 class BolaNieve;
-/*
-class Reaccionable {
-public:
 
-	Reaccionable(){};
-	virtual ~Reaccionable(){};
-
-	virtual void reaccionarCon(Reaccionable*){};
-
-	virtual void reaccionarConCirculo(Circulo*){};
-	virtual void reaccionarConMuro(Muro*){};
-	virtual void reaccionarConParalelogramo(Paralelogramo*){};
-	virtual void reaccionarConPoligono(Poligono*){};
-	virtual void reaccionarConRectanguo(Rectangulo*){};
-	virtual void reaccionarConTrapecio(Trapecio*){};
-	virtual void reaccionarConEnemigo(Enemigo*){};
-	virtual void reaccionarConPersonaje(Personaje*){};
-	virtual void reaccionarConBolaNieve(BolaNieve*){};
-
-};
-
-#include "Personajes/Enemigo.h"
-#include "Personajes/Personaje.h"
-#include "Figuras/Rectangulo.h"
-
-*/
 /*
  * Clase abstracta de la cual van a heredar todos los tipos de figuras (Rectangulo, Poligono, Circulo, Parelelogramo)
  * Dejamos la idea de si Personaje deberia heredar de Figura o no. Osea, en realidad es un figura dinamica?
@@ -69,6 +43,7 @@ public:
 	b2Fixture* GetFixtureList();
 	b2Vec2 GetWorldPoint(const b2Vec2& localPoint);
 	b2Vec2 GetCenter();
+	b2Body* getBody();
 	float getX();
 	float getY();
 	float getAngulo();

@@ -168,6 +168,7 @@ void Escenario::step() {
 			}
 		}
 	}
+
 	getWorld()->Step(timeStep, velocityIterations, positionIterations);
 }
 

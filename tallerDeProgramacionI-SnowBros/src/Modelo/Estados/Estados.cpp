@@ -102,6 +102,7 @@ void saltar(Character& character) {
 }
 
 void StandByState::handleInput(Character &character, SDL_Keycode input, Uint32 input_type) {
+
 	switch (input_type) {
 	case SDL_KEYDOWN: {
 		switch (input) {

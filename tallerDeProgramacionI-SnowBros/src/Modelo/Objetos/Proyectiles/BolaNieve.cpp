@@ -28,7 +28,9 @@ BolaNieve::BolaNieve(float x, float y, b2World* world) {
 
 	 fixture.shape = &circleShape;
 	 fixture.friction = 1.0f;
-	 this->body->CreateFixture(&fixture);
+	 b2Fixture *fix = this->body->CreateFixture(&fixture);
+
+	 fix->SetUserData(this);
 
 }
 

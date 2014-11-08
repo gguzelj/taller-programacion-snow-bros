@@ -79,13 +79,11 @@ int Server::createSocket() {
 	}
 
 	//Si el socket se creo correctamente, agregamos el timeout
-	if (setsockopt(sockfd_, SOL_SOCKET, SO_RCVTIMEO, (char *) &timeout,
-			sizeof(timeout)) < 0) {
+	if (setsockopt(sockfd_, SOL_SOCKET, SO_RCVTIMEO, (char *) &timeout, sizeof(timeout)) < 0) {
 		return SRV_ERROR;
 	}
 
-	if (setsockopt(sockfd_, SOL_SOCKET, SO_SNDTIMEO, (char *) &timeout,
-			sizeof(timeout)) < 0) {
+	if (setsockopt(sockfd_, SOL_SOCKET, SO_SNDTIMEO, (char *) &timeout, sizeof(timeout)) < 0) {
 		return SRV_ERROR;
 	}
 
@@ -273,8 +271,7 @@ int Server::manejarReconexion(connection_t *conn) {
 				aviso = SRV_NO_ERROR;
 				sendall(conn->socket, &aviso, sizeof(int));
 
-				Log::ins()->add(SRV_MSG_RECONN + std::string(conn->id),
-						Log::INFO);
+				Log::ins()->add(SRV_MSG_RECONN + std::string(conn->id), Log::INFO);
 
 				connections_[i] = conn;
 
@@ -285,8 +282,7 @@ int Server::manejarReconexion(connection_t *conn) {
 				aviso = SRV_ERROR;
 				sendall(conn->socket, &aviso, sizeof(int));
 
-				Log::ins()->add(SRV_MSG_RECONN_ERROR + std::string(conn->id),
-						Log::WARNING);
+				Log::ins()->add(SRV_MSG_RECONN_ERROR + std::string(conn->id), Log::WARNING);
 
 				return SRV_ERROR;
 			}
@@ -391,8 +387,7 @@ void Server::recibirDelCliente(connection_t *conn) {
 			model_->setPersonajeConnectionState(conn->id, ESPERANDO);
 
 			Log::ins()->add(
-					SRV_MSG_RECEIVE_ERROR + std::string(conn->id)
-							+ ". Se desactiva la conexion", Log::WARNING);
+			SRV_MSG_RECEIVE_ERROR + std::string(conn->id) + ". Se desactiva la conexion", Log::WARNING);
 
 			recibirDelCliente = false;
 
@@ -453,8 +448,7 @@ void Server::enviarAlCliente(connection_t *conn) {
 			conn->activa = false;
 			model_->setPersonajeConnectionState(conn->id, ESPERANDO);
 
-			Log::ins()->add(SRV_MSG_SEND_ERROR + std::string(conn->id),
-					Log::WARNING);
+			Log::ins()->add(SRV_MSG_SEND_ERROR + std::string(conn->id), Log::WARNING);
 
 			enviarAlCliente = false;
 
@@ -477,11 +471,12 @@ void Server::step() {
 			Personaje* personaje = model_->getPersonaje(data->id);
 
 			if (!personaje) {
-				Log::ins()->add(SRV_MSG_PER_MAP + std::string(data->id),
-						Log::WARNING);
+				Log::ins()->add(SRV_MSG_PER_MAP + std::string(data->id), Log::WARNING);
 			} else {
-				personaje->handleInput(data->keycode_1, data->type_1);
-				personaje->handleInput(data->keycode_2, data->type_2);
+				if (data != nullptr) {
+					personaje->handleInput(data->keycode_1, data->type_1);
+					personaje->handleInput(data->keycode_2, data->type_2);
+				}
 			}
 
 		}
@@ -489,7 +484,7 @@ void Server::step() {
 	}
 
 	//Solo simulamos mientras el juego no esta pausado
-	if (!gameData_.paused){
+	if (!gameData_.paused) {
 
 		model_->step();
 		model_->actualizarEnemigos();
@@ -529,9 +524,7 @@ float Server::getInitialX() {
 	float HI = (model_->getAnchoUn() / 2) - 10;
 
 	//This will generate a number from some arbitrary LO to some arbitrary HI
-	return (LO
-			+ static_cast<float>(rand())
-					/ (static_cast<float>(RAND_MAX / (HI - LO))));
+	return (LO + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (HI - LO))));
 }
 
 float Server::getInitialY() {
@@ -577,9 +570,7 @@ void Server::sendall(int s, void* data, int len) throw (sendException) {
 
 		//Si aparece un error al enviar, lanzamos una excepcion
 		if (n == -1 || n == 0) {
-			Log::ins()->add(
-					"Ha ocurrido un error en la conexion con el cliente",
-					Log::ERROR);
+			Log::ins()->add("Ha ocurrido un error en la conexion con el cliente", Log::ERROR);
 			throw sendException();
 		}
 
@@ -600,9 +591,7 @@ void Server::recvall(int s, void *data, int len) throw (receiveException) {
 
 		//Si aparece un error al recibir, lanzamos una excepcion
 		if (n == -1 || n == 0) {
-			Log::ins()->add(
-					"Ha ocurrido un error en la conexion con el cliente",
-					Log::ERROR);
+			Log::ins()->add("Ha ocurrido un error en la conexion con el cliente", Log::ERROR);
 			throw receiveException();
 		}
 
@@ -648,8 +637,7 @@ void Server::initReceivingThread(connection_t* connection) {
 	std::thread t(&Server::recibirDelCliente, this, connection);
 	t.detach();
 
-	Log::ins()->add(SRV_MSG_RECEIVING_THREAD + std::string(connection->id),
-			Log::INFO);
+	Log::ins()->add(SRV_MSG_RECEIVING_THREAD + std::string(connection->id), Log::INFO);
 }
 
 /**
@@ -662,6 +650,5 @@ void Server::initSendingThread(connection_t* connection) {
 	std::thread t(&Server::enviarAlCliente, this, connection);
 	t.detach();
 
-	Log::ins()->add(SRV_MSG_SEND_THREAD + std::string(connection->id),
-			Log::INFO);
+	Log::ins()->add(SRV_MSG_SEND_THREAD + std::string(connection->id), Log::INFO);
 }

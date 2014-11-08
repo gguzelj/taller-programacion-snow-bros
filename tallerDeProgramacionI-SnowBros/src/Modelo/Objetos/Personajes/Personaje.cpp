@@ -12,6 +12,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->aceleracion = 10.0f;
 	this->x = x;
 	this->y = y;
+	this->posicionInicial = new b2Vec2(x,y);
 	strcpy(this->id, id);
 	this->state = &Personaje::standby;
 	this->orientacion = ORIENTACION_INICIAL;
@@ -82,7 +83,6 @@ Personaje::~Personaje() {
 }
 
 void Personaje::disparar() {
-
 	BolaNieve *bola;
 
 	if (orientacion == IZQUIERDA)
@@ -114,10 +114,25 @@ void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
  * El enemigo se pasa por parametro para que se pueda definir su comportamiento tambien
  */
 void Personaje::reaccionarConEnemigo(Enemigo* enemigo) {
-	sacarVida();
+	morir();
+}
 
-	enemigo->type;
-	//enemigo->sumarPuntos(???);
+void Personaje::morir(){
+	if (lives > 0){
+		entrarEnPeriodoDeInmunidad();
+		sacarVida();
+		volverAPosicionInicial();
+	}
+	// En caso que el personaje pierda todas sus vidas, el mismo no debe aparecer mas en la pantalla. Es decir,
+	// hay que sacarlo del modelo. TODO
+}
+
+void Personaje::volverAPosicionInicial(){
+//	this->body->SetTransform(*posicionInicial,body->GetAngle());
+}
+
+void Personaje::entrarEnPeriodoDeInmunidad(){
+
 }
 
 void cambiarEstadoAlAterrizar(Character* character) {

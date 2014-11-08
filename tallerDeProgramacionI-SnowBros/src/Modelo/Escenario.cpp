@@ -140,7 +140,7 @@ void acomodarEstadoCharacter(Character* personaje) {
 	if (personaje->movimientoLateralDerecha || personaje->movimientoLateralIzquierda)
 		Personaje::walking.caminar(*personaje);
 
-	if (personaje->debeSaltar && personaje->state->getCode() != JUMPING && personaje->state->getCode() != FALLING) {
+	if (personaje->debeSaltar && personaje->state->getCode() != JUMPING && personaje->state->getCode() != FALLING && personaje->getCantidadDeContactosActuales() !=0) {
 		personaje->jump();
 		personaje->state = &Personaje::jumping;
 	}
@@ -425,6 +425,7 @@ void Escenario::actualizarEnemigos() {
 		}
 	}
 }
+
 
 bool Escenario::crearEnemigo(float x, float y) {
 	Enemigo* nuevoEnemigo = new Enemigo(x, y, this->world_);

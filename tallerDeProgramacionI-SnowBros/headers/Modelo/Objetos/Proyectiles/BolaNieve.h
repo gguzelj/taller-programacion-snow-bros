@@ -6,7 +6,6 @@
 
 #include "Proyectil.h"
 
-
 class BolaNieve: public Proyectil {
 
 private:
@@ -19,6 +18,8 @@ public:
 
 	void setVelocidad(b2Vec2 velocidad);
 	float getRadio();
+
+	void reaccionarConEnemigo(Enemigo* enemy);
 
 };
 

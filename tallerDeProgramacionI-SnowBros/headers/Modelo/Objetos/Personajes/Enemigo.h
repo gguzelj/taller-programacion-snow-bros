@@ -21,6 +21,8 @@ class Enemigo : public Character{
 
 		void reaccionarCon(Figura* figura);
 
+		void reaccionarConBolaNieve(BolaNieve* bola);
+
 };
 
 #endif /* ENEMIGO_H_ */

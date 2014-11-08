@@ -22,7 +22,6 @@ class Personaje : public Character {
 
 		char connectionState;
 		int points;
-		int lives;
 
 	public:
 		conn_id id;

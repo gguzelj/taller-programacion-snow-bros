@@ -19,7 +19,7 @@ public:
 	void setVelocidad(b2Vec2 velocidad);
 	float getRadio();
 
-	void reaccionarConEnemigo(Enemigo* enemy);
+	void reaccionarCon(Figura* figura);
 
 };
 

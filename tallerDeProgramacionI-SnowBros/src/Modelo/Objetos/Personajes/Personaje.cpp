@@ -30,7 +30,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->contactosIzquierda = 0;
 	this->contactosDerecha = 0;
 
-	//definiendo el body del personaje
+	//Defino body del personaje
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.angle = 0;
@@ -49,7 +49,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	fixtureDef.filter.groupIndex = -1;
 	b2Fixture* fix = body->CreateFixture(&fixtureDef);
 
-	//Actualizamos informacion del
+	//Actualizamos informacion adicional
 	this->body->SetFixedRotation(true);
 	this->body->SetLinearDamping(0.5);
 

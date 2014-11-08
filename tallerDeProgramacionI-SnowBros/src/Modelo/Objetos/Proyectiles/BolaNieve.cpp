@@ -44,6 +44,6 @@ float BolaNieve::getRadio(){
         return radio;
 }
 
-void BolaNieve::reaccionarConEnemigo(Enemigo* enemy){
-	enemy->reaccionarConBolaNieve(this);
+void BolaNieve::reaccionarCon(Figura* figura){
+	figura->reaccionarConBolaNieve(this);
 }

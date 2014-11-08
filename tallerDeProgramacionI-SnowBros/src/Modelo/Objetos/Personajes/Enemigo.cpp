@@ -89,4 +89,20 @@ void Enemigo::reaccionarCon(Figura* figura){
 
 void Enemigo::reaccionarConBolaNieve(BolaNieve* bola){
 
+
+	//IF CORRESPONDE CONGELAR=>
+	std::thread t(&Enemigo::congelar, this);
+	t.detach();
+
+}
+
+
+void Enemigo::congelar(){
+
+	aceleracion = 0;
+
+	sleep(5);
+
+	aceleracion = 7.0f;
+
 }

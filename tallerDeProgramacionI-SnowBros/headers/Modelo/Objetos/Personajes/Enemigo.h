@@ -3,6 +3,9 @@
 
 #include "Character.h"
 
+#include <unistd.h>
+#include <thread>
+
 #define MITAD_ANCHO_ENEMIGO 0.6f
 #define MITAD_ALTO_ENEMIGO 0.85
 #define IZQUIERDA 'l'
@@ -24,6 +27,8 @@ public:
 	void reaccionarCon(Figura* figura);
 
 	void reaccionarConBolaNieve(BolaNieve* bola);
+
+	void congelar();
 
 };
 

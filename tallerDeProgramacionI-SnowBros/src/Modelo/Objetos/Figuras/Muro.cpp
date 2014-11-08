@@ -16,6 +16,7 @@ Muro::Muro(float ancho_esc, float alto_esc, int rot, b2World* world, float pos_x
 	this->angulo = rot * DEGTORAD;
 	this->estatico = true;
 	this->world = world;
+	this->type = "muro";
 
 	b2BodyDef cuerpo;
 	cuerpo.type = b2_staticBody;
@@ -28,11 +29,13 @@ Muro::Muro(float ancho_esc, float alto_esc, int rot, b2World* world, float pos_x
 	//definiendo ahora el fixture del rectangulo
 	b2PolygonShape shape;
 	shape.SetAsBox(ancho,ALTO_CERO);
-	b2FixtureDef fixture;					//creo el fixture
-	fixture.shape = &shape;					//le asigno la forma que determine antes
-	fixture.density = 1;
-	fixture.friction = 0.5f;
-	body->CreateFixture(&fixture);
+	b2FixtureDef fixtureDef;					//creo el fixture
+	fixtureDef.shape = &shape;					//le asigno la forma que determine antes
+	fixtureDef.density = 1;
+	fixtureDef.friction = 0.5f;
+
+	b2Fixture* fixture = body->CreateFixture(&fixtureDef);
+	fixture->SetUserData(this);
 }
 
 Muro::~Muro(){

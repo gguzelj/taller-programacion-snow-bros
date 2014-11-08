@@ -3,8 +3,6 @@
 
 #include "../Figura.h"
 
-
-
 class Circulo : public Figura{
 private:
         float radio;
@@ -14,6 +12,7 @@ public:
         float getRadio();
         float getCoordX();
         float getCoordY();
+        //void reaccionarCon(Figura* figura){ ; };
 };
 
 #endif /* CIRCULO_H_ */

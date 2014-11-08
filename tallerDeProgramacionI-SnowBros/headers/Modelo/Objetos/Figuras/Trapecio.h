@@ -14,6 +14,8 @@ public:
 	~Trapecio();
 	float getBaseMayor();
 	float getAlto();
+
+	void reaccionarCon(Figura* figura){ ; };
 };
 
 #endif /* TRAPECIO_H_ */

@@ -3,8 +3,6 @@
 
 #include "../Figura.h"
 
-
-
 class Paralelogramo : public Figura{
 private:
 	float ancho;
@@ -15,6 +13,8 @@ public:
 	~Paralelogramo();
 	float getAlto();
 	float getAncho();
+
+	void reaccionarCon(Figura* figura){ ; };
 
 };
 

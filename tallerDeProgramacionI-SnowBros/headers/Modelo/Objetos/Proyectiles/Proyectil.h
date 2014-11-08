@@ -4,8 +4,9 @@
 #include <math.h>
 #include <Box2D/Box2D.h>
 #include <Box2D/Collision/b2Collision.h>
+#include "../Figura.h"
 
-class Proyectil {
+class Proyectil : public Figura {
 
 protected:
 	float angulo;

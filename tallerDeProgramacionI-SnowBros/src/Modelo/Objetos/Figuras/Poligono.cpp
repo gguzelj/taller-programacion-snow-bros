@@ -35,12 +35,14 @@ Poligono::Poligono(JsonParser *parser, int index, b2World* world){
 
 	b2PolygonShape shape;
 	shape.Set(vertices,numVertices);
-	b2FixtureDef fixture;	//creo el fixture
-	fixture.shape = &shape;	//le asigno la forma que determine antes
+	b2FixtureDef fixtureDef;	//creo el fixture
+	fixtureDef.shape = &shape;	//le asigno la forma que determine antes
 	float area = pow(this->escala,2) * numVertices * tan(M_PI/numVertices);
-	fixture.density = masa / area;
-	fixture.friction = 0.7f;
-	body->CreateFixture(&fixture);
+	fixtureDef.density = masa / area;
+	fixtureDef.friction = 0.7f;
+
+	b2Fixture* fixture = body->CreateFixture(&fixtureDef);
+	fixture->SetUserData(this);
 
 }
 

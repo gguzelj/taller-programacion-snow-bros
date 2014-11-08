@@ -20,6 +20,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->connectionState = CONECTADO;
 	this->points = 0;
 	this->lives = 3;
+	this->type = "personaje";
 
 	//Parametros para controlar los contactos
 	this->cantidadDeContactosActuales = 0; //Comienza en el aire
@@ -46,38 +47,30 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	fixtureDelPersonaje.filter.groupIndex = -1;	//Setting the groupIndex to negative will cause no collision
 
 	this->body = this->world->CreateBody(&cuerpoDelPersonaje);
-	this->body->SetFixedRotation(true);		//Evito que rote
-	body->CreateFixture(&fixtureDelPersonaje);
+	this->body->SetFixedRotation(true);
+	b2Fixture* fix = body->CreateFixture(&fixtureDelPersonaje);
 
+	fix->SetUserData(this);
+/*
 	body->SetLinearDamping(0.5);
 
 	//Partes laterales para que se deslice por las paredes y no se pegue a ellas
-	shapeDelPersonaje.SetAsBox(0.0000001f, alto - 0.00405f, b2Vec2(-ancho + 0.00000005, 0.0045f),
-			0);	//a la izquierda
-	fixtureDelPersonaje.friction = 0.0019f;		//Le invento de 0 para que no se pegue a las paredes
+//	fixtureDelPersonaje.friction = 0.0019f;		//Le invento de 0 para que no se pegue a las paredes
 	b2Fixture* paredIzquierda = this->body->CreateFixture(&fixtureDelPersonaje);
-	shapeDelPersonaje.SetAsBox(0.0000001f, alto - 0.00405f, b2Vec2(ancho - 0.00000005, 0.0045f), 0);//a la derecha
 	b2Fixture* paredDerecha = this->body->CreateFixture(&fixtureDelPersonaje);
 
-	shapeDelPersonaje.SetAsBox(ancho, 0.0001f, b2Vec2(0, -alto), 0);	//a la izquierda
-	fixtureDelPersonaje.friction = 0.0019f;		//Le invento de 0 para que no se pegue a las paredes
-	this->body->CreateFixture(&fixtureDelPersonaje);
+	//fixtureDelPersonaje.friction = 0.0019f;		//Le invento de 0 para que no se pegue a las paredes
+	//this->body->CreateFixture(&fixtureDelPersonaje);
 
-	//Foot sensor
-	shapeDelPersonaje.SetAsBox(ancho * 19.5f / 20, alto / 10, b2Vec2(0, -alto), 0);
-	fixtureDelPersonaje.isSensor = true;
 	b2Fixture* footSensorFixture = this->body->CreateFixture(&fixtureDelPersonaje);
-	footSensorFixture->SetUserData((void*) ID_FOOT_SENSOR);
+	footSensorFixture->SetUserData((void*)ID_FOOT_SENSOR);
 
-	//Sensor de izquierda y derecha
-	shapeDelPersonaje.SetAsBox(0.0001f, alto - 0.4f, b2Vec2(-ancho, 0.9f), 0);
-	fixtureDelPersonaje.isSensor = true;
+	//this->body->CreateFixture(&fixtureDelPersonaje);
+	paredIzquierda->SetUserData((void*)ID_LEFT_WALL_SENSOR);
+
 	this->body->CreateFixture(&fixtureDelPersonaje);
-	paredIzquierda->SetUserData((void*) ID_LEFT_WALL_SENSOR);
-	shapeDelPersonaje.SetAsBox(0.0001f, alto - 0.4f, b2Vec2(ancho, 0.9f), 0);
-	fixtureDelPersonaje.isSensor = true;
-	this->body->CreateFixture(&fixtureDelPersonaje);
-	paredDerecha->SetUserData((void*) ID_RIGHT_WALL_SENSOR);
+	paredDerecha->SetUserData((void*)ID_RIGHT_WALL_SENSOR);*/
+
 }
 
 Personaje::~Personaje() {
@@ -89,17 +82,17 @@ void Personaje::disparar() {
 	BolaNieve *bola;
 
 	if (orientacion == IZQUIERDA)
-		bola = new BolaNieve(getX()-1, getY()+MITAD_ALTO_PERSONAJE-0.40, this->world);
+		bola = new BolaNieve(getX() - 1, getY() + MITAD_ALTO_PERSONAJE - 0.40, this->world);
 	else
-		bola = new BolaNieve(getX()+1, getY()+MITAD_ALTO_PERSONAJE-0.40, this->world);
+		bola = new BolaNieve(getX() + 1, getY() + MITAD_ALTO_PERSONAJE - 0.40, this->world);
 
 	b2Vec2 vel = this->body->GetLinearVelocity();
 
-	if(orientacion == IZQUIERDA)
-		vel.x -= aceleracion * 2.0 ;
+	if (orientacion == IZQUIERDA)
+		vel.x -= aceleracion * 2.0;
 	else
-		vel.x += aceleracion * 2.0 ;
-	vel.y += 4;
+		vel.x += aceleracion * 2.0;
+	vel.y += 10;
 
 	bola->setVelocidad(vel);
 
@@ -108,5 +101,17 @@ void Personaje::disparar() {
 }
 
 void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
-        this->state->handleInput(*this, input, input_type);
+	this->state->handleInput(*this, input, input_type);
+}
+
+/*
+ * Aca definimos como reacciona el personaje ante el contacto con el
+ * enemigo.
+ * El enemigo se pasa por parametro para que se pueda definir su comportamiento tambien
+ */
+void Personaje::reaccionarConEnemigo(Enemigo* enemigo){
+	sacarVida();
+
+	enemigo->type;
+	//enemigo->sumarPuntos(???);
 }

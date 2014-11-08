@@ -15,6 +15,8 @@ public:
 
 	int getLados();
 	float getEscala();
+
+	void reaccionarCon(Figura* figura){ ; };
 };
 
 #endif /* POLIGONO_H_ */

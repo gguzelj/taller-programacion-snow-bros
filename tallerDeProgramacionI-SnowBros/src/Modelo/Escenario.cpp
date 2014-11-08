@@ -16,9 +16,8 @@ Escenario::Escenario(JsonParser *parser) {
 	personajes_ = new std::list<Personaje*>;
 	enemigos_ = new std::list<Enemigo*>;
 
-	crearEnemigo(10,10);
-	crearEnemigo(20,20);
-
+	crearEnemigo(10, 10);
+	crearEnemigo(20, 20);
 
 	cantidadMaximaDePersonajes = parser->getConnectionsLimit();
 	//TODO esto deberia ser la longitud del arreglo de enemigos del parser.
@@ -153,15 +152,15 @@ void Escenario::step() {
 			acomodarEstadoCharacter(*personaje);
 	}
 
-	for (auto enemigo= enemigos_->begin(); enemigo != enemigos_->end(); ++enemigo) {
-					acomodarEstadoCharacter(*enemigo);
+	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end(); ++enemigo) {
+		acomodarEstadoCharacter(*enemigo);
 	}
 
-	for (auto proy = proyectiles_->begin(); proy != proyectiles_->end(); ++proy){
+	for (auto proy = proyectiles_->begin(); proy != proyectiles_->end(); ++proy) {
 		b2Body* body = (*proy)->getb2Body();
-		for( b2ContactEdge *ce = body->GetContactList(); ce; ce = ce->next ){
+		for (b2ContactEdge *ce = body->GetContactList(); ce; ce = ce->next) {
 			b2Contact* c = ce->contact;
-			if(c->IsTouching()){
+			if (c->IsTouching()) {
 				world_->DestroyBody((*proy)->getb2Body());
 				proyectiles_->erase(proy++);
 				break;
@@ -326,7 +325,7 @@ proyectil_t* Escenario::getProyectiles() {
 	p = (proyectil_t*) malloc(sizeof(proyectil_t) * proyectiles_->size());
 
 	int i = 0;
-	for (auto proy = proyectiles_->begin(); proy != proyectiles_->end(); ++proy){
+	for (auto proy = proyectiles_->begin(); proy != proyectiles_->end(); ++proy) {
 
 		obtenerAltoAnchoIdProyectil((*proy), p[i].alto, p[i].ancho, p[i].id);
 
@@ -377,8 +376,8 @@ enemigo_t* Escenario::getEnemigosParaEnvio() {
 
 	int i = 0;
 	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end(); ++enemigo) {
-		enems[i].alto = (*enemigo)->getAlto()*2;
-		enems[i].ancho = (*enemigo)->getAncho()*2;
+		enems[i].alto = (*enemigo)->getAlto() * 2;
+		enems[i].ancho = (*enemigo)->getAncho() * 2;
 		enems[i].orientacion = (*enemigo)->getOrientacion();
 		enems[i].estado = (*enemigo)->state->getCode();
 		enems[i].centro.x = (*enemigo)->getX();
@@ -405,20 +404,19 @@ void Escenario::agregarProyectil(Proyectil* proy) {
 	proyectiles_->push_back(proy);
 }
 
-
-void Escenario::actualizarEnemigos(){
-	for(auto enemigo = enemigos_->begin();enemigo != enemigos_->end();enemigo++){
+void Escenario::actualizarEnemigos() {
+	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end(); enemigo++) {
 		int v1 = rand() % 100;
-		if(v1 <= 25)
-			(*enemigo)->handleInput(SDLK_LEFT,SDL_KEYDOWN);
-		else{
-			if(v1 <= 50)
-				(*enemigo)->handleInput(SDLK_RIGHT,SDL_KEYDOWN);
-			else{
-				if(v1 <= 75)
-					(*enemigo)->handleInput(SDLK_RIGHT,SDL_KEYUP);
+		if (v1 <= 25)
+			(*enemigo)->handleInput(SDLK_LEFT, SDL_KEYDOWN);
+		else {
+			if (v1 <= 50)
+				(*enemigo)->handleInput(SDLK_RIGHT, SDL_KEYDOWN);
+			else {
+				if (v1 <= 75)
+					(*enemigo)->handleInput(SDLK_RIGHT, SDL_KEYUP);
 				else
-					(*enemigo)->handleInput(SDLK_LEFT,SDL_KEYUP);
+					(*enemigo)->handleInput(SDLK_LEFT, SDL_KEYUP);
 			}
 
 		}

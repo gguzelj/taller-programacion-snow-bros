@@ -19,7 +19,7 @@ class Enemigo : public Character{
 
 		void handleInput(SDL_Keycode input,Uint32 input_type);
 
-
+		void reaccionarCon(Figura* figura);
 
 };
 

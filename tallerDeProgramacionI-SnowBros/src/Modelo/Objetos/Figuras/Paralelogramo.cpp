@@ -33,11 +33,13 @@ Paralelogramo::Paralelogramo(JsonParser *parser, int index, b2World* world){
 
 	b2PolygonShape shape;
 	shape.Set(vertices,4);
-	b2FixtureDef fixture;					//creo el fixture
-	fixture.shape = &shape;					//le asigno la forma que determine antes
-	fixture.density = masa / (ancho * alto);
-	fixture.friction = 0.7f;
-	body->CreateFixture(&fixture);
+	b2FixtureDef fixtureDef;					//creo el fixture
+	fixtureDef.shape = &shape;					//le asigno la forma que determine antes
+	fixtureDef.density = masa / (ancho * alto);
+	fixtureDef.friction = 0.7f;
+
+	b2Fixture* fixture = body->CreateFixture(&fixtureDef);
+	fixture->SetUserData(this);
 
 }
 

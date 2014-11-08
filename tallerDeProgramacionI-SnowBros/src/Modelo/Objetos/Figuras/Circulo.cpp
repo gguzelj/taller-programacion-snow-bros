@@ -16,17 +16,18 @@ Circulo::Circulo(JsonParser *parser, int index, b2World* world){
 	cuerpoDeCirculo.position.Set(x,y);
 	this->body = this->world->CreateBody(&cuerpoDeCirculo);
 
-	b2FixtureDef fixture;                          //creo el fixture
-	fixture.density = masa / (radio*radio*M_PI);
+	b2FixtureDef fixtureDef;                          //creo el fixture
+	fixtureDef.density = masa / (radio*radio*M_PI);
 
 	b2CircleShape circleShape;
 	circleShape.m_p.Set(0,0);
 	circleShape.m_radius = radio;
 
-	fixture.shape = &circleShape;
-	fixture.friction = 1.0f;
-	this->body->CreateFixture(&fixture);
+	fixtureDef.shape = &circleShape;
+	fixtureDef.friction = 1.0f;
 
+	b2Fixture* fixture = this->body->CreateFixture(&fixtureDef);
+	fixture->SetUserData(this);
 }
 
 Circulo::~Circulo(){

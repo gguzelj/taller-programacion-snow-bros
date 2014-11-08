@@ -7,8 +7,9 @@
 #include <list>
 #include <math.h>
 #include "../../../Parser/JsonParser.h"
+#include "../Figura.h"
 
-class Muro {
+class Muro : public Figura{
 private:
 	float ancho;
 	float x;
@@ -23,6 +24,8 @@ public:
 	 */
 	Muro(float ancho_esc, float alto_esc, int rot, b2World* world, float pos_x);
 	~Muro();
+
+	void reaccionarCon(Figura* figura){ ; };
 };
 
 #endif /* PARED_H_ */

@@ -1,9 +1,8 @@
 #ifndef PERSONAJE_H_
 #define PERSONAJE_H_
 
-
-#include "../Proyectiles/BolaNieve.h"
 #include "Character.h"
+#include "Enemigo.h"
 
 #define MITAD_ANCHO_PERSONAJE 0.5f
 #define MITAD_ALTO_PERSONAJE 0.85
@@ -41,6 +40,11 @@ class Personaje : public Character {
 		int getLives(){
 			return lives;
 		}
+
+		void sacarVida(){
+			lives--;
+		}
+
 		char getConnectionState(){
 			return connectionState;
 		}
@@ -50,6 +54,8 @@ class Personaje : public Character {
 		void handleInput(SDL_Keycode input,Uint32 input_type);
 
 		void disparar();
+
+		void reaccionarConEnemigo(Enemigo* enemigo);
 
 };
 

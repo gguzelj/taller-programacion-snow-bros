@@ -19,6 +19,7 @@ public:
 
 	void setVelocidad(b2Vec2 velocidad);
 	float getRadio();
+
 };
 
 #endif /* BOLANIEVE_H_ */

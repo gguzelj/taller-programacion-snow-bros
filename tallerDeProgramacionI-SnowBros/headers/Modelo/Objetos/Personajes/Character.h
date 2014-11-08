@@ -1,10 +1,12 @@
 #ifndef CHARACTER_H_
 #define CHARACTER_H_
 
-#include "../Figura.h"
 #include <cstdint>
 #include "../../../Controlador/ControladorDeContactos.h"
 #include "../../Estados/Estados.h"
+#include "../Proyectiles/BolaNieve.h"
+
+#include "../Figura.h"
 
 #define IZQUIERDA 'l'
 #define DERECHA 'r'
@@ -68,6 +70,7 @@ public:
 	void setOrientacion(char orientacion);
 
 	virtual void disparar(){};
+	virtual void sacarVida(){};
 };
 
 #endif /* CHARACTER_H_ */

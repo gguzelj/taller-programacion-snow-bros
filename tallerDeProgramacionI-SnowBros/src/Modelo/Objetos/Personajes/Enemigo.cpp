@@ -14,6 +14,7 @@ Enemigo::Enemigo(float x, float y, b2World* world){
 	this->movimientoLateralDerecha = false;
 	this->movimientoLateralIzquierda = false;
 	this->debeSaltar = false;
+	this->type = "ENEMIGO";
 
 	//Parametros para controlar los contactos
 	this->cantidadDeContactosActuales = 0; //Comienza en el aire
@@ -37,12 +38,14 @@ Enemigo::Enemigo(float x, float y, b2World* world){
 	fixtureDelEnemigo.shape = &shapeDelEnemigo;			//le asigno la forma que determine antes
 	fixtureDelEnemigo.density = 1;						//una densidad cualquiera
 	fixtureDelEnemigo.friction = 1;						//Le invento una friccion
-	fixtureDelEnemigo.filter.groupIndex = -1;				//Setting the groupIndex to negative will cause no collision
 
 	this->body = this->world->CreateBody(&cuerpoDelEnemigo);
-	this->body->SetFixedRotation(true);		//Evito que rote
-	body->CreateFixture(&fixtureDelEnemigo);
+	this->body->SetFixedRotation(true);
+	b2Fixture* fix = body->CreateFixture(&fixtureDelEnemigo);
 
+	fix->SetUserData(this);
+
+	/*
 	body->SetLinearDamping(0.5);
 
 	//Partes laterales para que se deslice por las paredes y no se pegue a ellas
@@ -60,17 +63,18 @@ Enemigo::Enemigo(float x, float y, b2World* world){
 	shapeDelEnemigo.SetAsBox(ancho*19.5f/20,alto/10,b2Vec2(0,-alto),0);
 	fixtureDelEnemigo.isSensor = true;
 	b2Fixture* footSensorFixture = this->body->CreateFixture(&fixtureDelEnemigo);
-	footSensorFixture->SetUserData( (void*)ID_FOOT_SENSOR );
+	footSensorFixture->SetUserData(this);
 
 	//Sensor de izquierda y derecha
 	shapeDelEnemigo.SetAsBox(0.0001f, alto-0.4f, b2Vec2(-ancho-0.9f,0.9f),0);
 	fixtureDelEnemigo.isSensor = true;
 	this->body->CreateFixture(&fixtureDelEnemigo);
-	paredIzquierda->SetUserData((void*)ID_LEFT_WALL_SENSOR);
+	paredIzquierda->SetUserData(this);
 	shapeDelEnemigo.SetAsBox(0.0001f, alto-0.4f, b2Vec2(ancho+0.9f,0.9f),0);
 	fixtureDelEnemigo.isSensor = true;
 	this->body->CreateFixture(&fixtureDelEnemigo);
-	paredDerecha->SetUserData((void*)ID_RIGHT_WALL_SENSOR);
+	paredDerecha->SetUserData(this);
+	*/
 }
 
 Enemigo::~Enemigo(){
@@ -86,4 +90,6 @@ void Enemigo::handleInput(SDL_Keycode input,Uint32 input_type){
 		(this->state)->handleInput(*this,input,input_type);
 }
 
-
+void Enemigo::reaccionarCon(Figura* figura){
+	figura->reaccionarConEnemigo(this);
+}

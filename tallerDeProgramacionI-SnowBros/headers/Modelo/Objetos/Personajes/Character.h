@@ -21,6 +21,7 @@ protected:
 	float alto;
 	int aceleracion;
 	char orientacion;
+	int lives;
 
 public:
 	bool movimientoLateralDerecha,

@@ -22,7 +22,6 @@ class Personaje : public Character {
 
 		char connectionState;
 		int points;
-		int lives;
 
 		b2Fixture* paredIzquierda;
 		b2Fixture* paredDerecha;

@@ -15,6 +15,7 @@ Enemigo::Enemigo(float x, float y, b2World* world){
 	this->movimientoLateralIzquierda = false;
 	this->debeSaltar = false;
 	this->type = "ENEMIGO";
+	this->lives = 5;
 
 	//Parametros para controlar los contactos
 	this->contactosActuales = 0; //Comienza en el aire
@@ -85,11 +86,14 @@ void Enemigo::disparar(){
 
 }
 
-
 void Enemigo::handleInput(SDL_Keycode input,Uint32 input_type){
 		(this->state)->handleInput(*this,input,input_type);
 }
 
 void Enemigo::reaccionarCon(Figura* figura){
 	figura->reaccionarConEnemigo(this);
+}
+
+void Enemigo::reaccionarConBolaNieve(BolaNieve* bola){
+
 }

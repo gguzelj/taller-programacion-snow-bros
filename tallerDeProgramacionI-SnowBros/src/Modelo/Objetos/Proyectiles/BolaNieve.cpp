@@ -43,3 +43,7 @@ void BolaNieve::setVelocidad(b2Vec2 velocidad){
 float BolaNieve::getRadio(){
         return radio;
 }
+
+void BolaNieve::reaccionarConEnemigo(Enemigo* enemy){
+	enemy->reaccionarConBolaNieve(this);
+}

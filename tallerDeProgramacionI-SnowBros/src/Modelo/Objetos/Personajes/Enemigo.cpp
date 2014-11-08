@@ -18,6 +18,7 @@ Enemigo::Enemigo(float x, float y, b2World* world){
 	this->lives = 5;
 	this->ancho = MITAD_ANCHO_ENEMIGO;
 	this->alto = MITAD_ALTO_ENEMIGO;
+	this->estaCongelado = false;
 
 	//Parametros para controlar los contactos
 	this->contactosActuales = 0;
@@ -89,20 +90,20 @@ void Enemigo::reaccionarCon(Figura* figura){
 
 void Enemigo::reaccionarConBolaNieve(BolaNieve* bola){
 
-
 	//IF CORRESPONDE CONGELAR=>
-	std::thread t(&Enemigo::congelar, this);
-	t.detach();
+	tiempoDeImpactoDeLaUltimaBola = clock();
 
+	if (!estaCongelado){
+		std::thread t(&Enemigo::congelar, this);
+		t.detach();
+	}
 }
 
 
 void Enemigo::congelar(){
-
-	aceleracion = 0;
-
-	sleep(5);
-
+	float tiempoDeEsperaMaximo = 5.0f;
+	while ((( clock () - tiempoDeImpactoDeLaUltimaBola ) /  CLOCKS_PER_SEC) < tiempoDeEsperaMaximo){
+		aceleracion = 0;
+	}
 	aceleracion = 7.0f;
-
 }

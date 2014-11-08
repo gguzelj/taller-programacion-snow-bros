@@ -16,6 +16,8 @@ private:
 	b2Fixture* paredIzquierda;
 	b2Fixture* paredDerecha;
 	b2Fixture* piso;
+	bool estaCongelado;
+	clock_t tiempoDeImpactoDeLaUltimaBola;
 public:
 
 	Enemigo(float x, float y, b2World* world);

@@ -142,6 +142,20 @@ bool Enemigo::estaCongelado() {
 	return (nivelDeCongelamiento == NIVEL_CONGELAMIENTO_MAX);
 }
 
+
+void Enemigo::jump(){
+	if( this->nivelDeCongelamiento == 0){
+		if (this->jumpCooldown <= 0) {
+			this->jumpCooldown = 18;
+			b2Vec2 velocidadActual = this->body->GetLinearVelocity();
+			velocidadActual.y = 18;
+			this->body->SetLinearVelocity(velocidadActual);
+		}
+	}
+}
+
+
+
 void Enemigo::hacerAtravezable() {
 	this->cambiarFilterIndex(PERSONAJE_FILTER_INDEX);
 }

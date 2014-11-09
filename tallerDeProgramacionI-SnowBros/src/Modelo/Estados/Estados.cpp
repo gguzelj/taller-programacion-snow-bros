@@ -7,6 +7,7 @@ JumpingState Character::jumping;
 WalkingState Character::walking;
 FallingState Character::falling;
 ShootingState Character::shooting;
+DyingState Character::dying;
 
 void cambiarOrientacionAlDejarDePresionarUnaTecla(Character &character) {
 	switch (character.getOrientacion()) {

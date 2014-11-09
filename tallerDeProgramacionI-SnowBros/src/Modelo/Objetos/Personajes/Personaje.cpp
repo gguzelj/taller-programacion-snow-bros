@@ -129,13 +129,33 @@ void Personaje::reaccionarConEnemigo(Enemigo* enemigo) {
 		return;
 
 	//En otro caso, restamos vida
-	if (lives > 0 && !inmune){
+	if (lives > 0 && !inmune && this->state != &Personaje::dying){
+		this->state = &Personaje::dying;
 		sacarVida();
-		entrarEnPeriodoDeInmunidad();
-		this->esta_muerto = true;
+		std::thread t(&Personaje::morir, this);
+		t.detach();
 	}
 	// En caso que el personaje pierda todas sus vidas, el mismo no debe aparecer mas en la pantalla. Es decir,
 	// hay que sacarlo del modelo. TODO
+}
+
+
+
+void Personaje::morir(){
+	sleep(1);
+	entrarEnPeriodoDeInmunidad();
+	this->esta_muerto = true;
+}
+
+
+
+void Personaje::jump() {
+	if (this->jumpCooldown <= 0) {
+		this->jumpCooldown = 18;
+		b2Vec2 velocidadActual = this->body->GetLinearVelocity();
+		velocidadActual.y = 18;
+		this->body->SetLinearVelocity(velocidadActual);
+	}
 }
 
 
@@ -144,12 +164,9 @@ void Personaje::volverAPosicionInicial(){
 }
 
 void Personaje::entrarEnPeriodoDeInmunidad(){
-
 	inmune = true;
-
 	std::thread t(&Personaje::hacerInmune, this);
 	t.detach();
-
 }
 
 void Personaje::hacerInmune(){

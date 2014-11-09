@@ -32,7 +32,7 @@ public:
 	void congelar();
 
 	bool estaCongelado();
-
+	void jump();
 	int getNivelDeCongelamiento(){
 		return nivelDeCongelamiento;
 	}

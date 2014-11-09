@@ -37,7 +37,7 @@ class Personaje : public Character {
 
 		Personaje(float x, float y,char id[], Escenario* escenario);
 		~Personaje();
-
+		void jump();
 		b2Vec2 Posicion();
 		b2Fixture* GetFixtureList();
 		b2Vec2 GetWorldPoint(const b2Vec2& localPoint);
@@ -56,6 +56,8 @@ class Personaje : public Character {
 		void sacarVida(){
 			lives--;
 		}
+
+		void morir();
 
 		char getConnectionState(){
 			return connectionState;

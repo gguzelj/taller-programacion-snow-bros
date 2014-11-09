@@ -16,14 +16,6 @@ void Character::moveRight() {
 	};
 }
 
-void Character::jump() {
-	if (this->jumpCooldown <= 0) {
-		this->jumpCooldown = 18;
-		b2Vec2 velocidadActual = this->body->GetLinearVelocity();
-		velocidadActual.y = 18;
-		this->body->SetLinearVelocity(velocidadActual);
-	};
-}
 
 void Character::stop() {
 	b2Vec2 velocidadActual = this->body->GetLinearVelocity();
@@ -83,10 +75,12 @@ void Character::updateRightContact(int numero) {
 }
 
 void cambiarEstadoAlAterrizar(Character* character) {
-	if (character->movimientoLateralDerecha == true || character->movimientoLateralIzquierda == true)
-		character->state = &Character::walking;
-	else
-		character->state = &Character::standby;
+	if(character->state != &Character::dying){
+		if (character->movimientoLateralDerecha == true || character->movimientoLateralIzquierda == true)
+			character->state = &Character::walking;
+		else
+			character->state = &Character::standby;
+	}
 }
 
 

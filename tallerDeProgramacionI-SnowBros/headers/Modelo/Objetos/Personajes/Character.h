@@ -46,6 +46,7 @@ public:
 	static WalkingState walking;
 	static StandByState standby;
 	static ShootingState shooting;
+	static DyingState dying;
 	CharacterState* state;
 
 	virtual ~Character() {
@@ -64,7 +65,9 @@ public:
 	}
 	void moveLeft();
 	void moveRight();
-	void jump();
+	virtual void jump(){
+
+	}
 	void stop();
 	void decreaseJumpCooldown();
 	int getJumpCooldown();

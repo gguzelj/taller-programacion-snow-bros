@@ -127,22 +127,24 @@ void Escenario::setPersonajeConnectionState(conn_id id, char state) {
 }
 
 void acomodarEstadoCharacter(Character* personaje) {
-	//chequeo para cambiar el estado jumping a falling o el estado cuando cae de una plataforma
-	personaje->decreaseJumpCooldown();
-	//esta implementado aca para que cambie cuando tiene que hacerlo
-	if (personaje->getVelocity().y <= 0.0f && personaje->getCantidadDeContactosActuales() == 0 && personaje->state != &Personaje::shooting) {
-		personaje->state = &Personaje::falling;
+	if(personaje->state != &Personaje::dying){
+		//chequeo para cambiar el estado jumping a falling o el estado cuando cae de una plataforma
+		personaje->decreaseJumpCooldown();
+		//esta implementado aca para que cambie cuando tiene que hacerlo
+		if (personaje->getVelocity().y <= 0.0f && personaje->getCantidadDeContactosActuales() == 0 && personaje->state != &Personaje::shooting) {
+			personaje->state = &Personaje::falling;
 
-	} else if (personaje->getVelocity().y <= 0.0f && personaje->state == &Personaje::jumping) {
-		personaje->state = &Personaje::standby;
-	}
+		} else if (personaje->getVelocity().y <= 0.0f && personaje->state == &Personaje::jumping) {
+			personaje->state = &Personaje::standby;
+		}
 
-	if (personaje->movimientoLateralDerecha || personaje->movimientoLateralIzquierda)
-		Personaje::walking.caminar(*personaje);
+		if (personaje->movimientoLateralDerecha || personaje->movimientoLateralIzquierda)
+			Personaje::walking.caminar(*personaje);
 
-	if (personaje->debeSaltar && personaje->state->getCode() != JUMPING && personaje->state->getCode() != FALLING && personaje->getCantidadDeContactosActuales() !=0) {
-		personaje->jump();
-		personaje->state = &Personaje::jumping;
+		if (personaje->debeSaltar && personaje->state->getCode() != JUMPING && personaje->state->getCode() != FALLING && personaje->getCantidadDeContactosActuales() !=0) {
+			personaje->jump();
+			personaje->state = &Personaje::jumping;
+		}
 	}
 
 }
@@ -158,6 +160,7 @@ void Escenario::step() {
 				if((*personaje)->esta_muerto){
 					(*personaje)->volverAPosicionInicial();
 					(*personaje)->esta_muerto = false;
+					(*personaje)->state = &Personaje::standby;
 				}
 			}
 	}
@@ -429,7 +432,7 @@ void Escenario::actualizarEnemigos() {
 			(*enemigo)->hacerNoAtravezable();
 
 		int v1 = rand() % 100;
-		if(v1 > 60){
+		if(v1 < 45){
 			v1 = rand() % 100;
 			if (v1 <= 25)
 				(*enemigo)->handleInput(SDLK_LEFT, SDL_KEYDOWN);
@@ -445,6 +448,40 @@ void Escenario::actualizarEnemigos() {
 
 			}
 		}
+		else{
+			if(v1 < 50){
+		       int i=0;
+		        float posicionesX[4];
+		        float posicionesY[4];
+		        for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
+		                posicionesX[i] = (*personaje)->getX();
+		                posicionesY[i] = (*personaje)->getY();
+		                //printf("Pos %d// Per %d \n",(*personaje)->posicion.x,i);
+		                i++;
+		        }
+
+		        float posicionPersonajeX = posicionesX[0];
+		        float posicionPersonajeY = posicionesY[0];
+		        float posicionEnemigoX = (*enemigo)->getX();
+		        float posicionEnemigoY = (*enemigo)->getY();
+
+		        if(posicionPersonajeX < posicionEnemigoX ){
+		            (*enemigo)->handleInput(SDLK_RIGHT, SDL_KEYUP);
+		            (*enemigo)->handleInput(SDLK_LEFT, SDL_KEYDOWN);
+		        }
+		        if(posicionPersonajeX > posicionEnemigoX){
+		            (*enemigo)->handleInput(SDLK_LEFT, SDL_KEYUP);
+		            (*enemigo)->handleInput(SDLK_RIGHT, SDL_KEYDOWN);
+		        }
+		        if((posicionPersonajeY-3) > posicionEnemigoY){
+		            (*enemigo)->handleInput(SDLK_UP, SDL_KEYDOWN);
+		        }
+		        if((posicionPersonajeY+1) < posicionEnemigoY)
+		            (*enemigo)->handleInput(SDLK_UP, SDL_KEYUP);
+			}
+		}
+
+
 	}
 }
 

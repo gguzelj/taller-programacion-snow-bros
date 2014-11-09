@@ -18,6 +18,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->orientacion = ORIENTACION_INICIAL;
 	this->esta_muerto = false;
 
+
 	this->connectionState = CONECTADO;
 	this->points = 0;
 	this->lives = 3;
@@ -90,6 +91,7 @@ Personaje::~Personaje() {
 }
 
 void Personaje::disparar() {
+
 	BolaNieve *bola;
 
 	if (orientacion == IZQUIERDA)
@@ -154,50 +156,6 @@ void Personaje::hacerInmune(){
 	inmune = false;
 }
 
-void cambiarEstadoAlAterrizar(Character* character) {
-	if (character->movimientoLateralDerecha == true || character->movimientoLateralIzquierda == true)
-		character->state = &Character::walking;
-	else
-		character->state = &Character::standby;
-}
 
-void Personaje::empiezoContacto(b2Fixture* fixture) {
 
-	//contacto con derecha?
-	if (paredDerecha == fixture)
-		contactosDerecha++;
 
-	//Contacto con izquierda?
-	if (paredIzquierda == fixture)
-		contactosIzquierda++;
-
-	//Contacto con Piso?
-	if (fixture == piso) {
-
-		if (contactosActuales == 0)
-			cambiarEstadoAlAterrizar(this);
-
-		contactosActuales++;
-
-	}
-
-}
-
-void Personaje::terminoContacto(b2Fixture* fixture) {
-
-	if (paredDerecha == fixture)
-		contactosDerecha--;
-
-	if (paredIzquierda == fixture)
-		contactosIzquierda--;
-
-	if (piso == fixture) {
-
-		contactosActuales--;
-
-		if (contactosActuales == 0 && state->getCode() != JUMPING)
-			state = &Personaje::falling;
-
-	}
-
-}

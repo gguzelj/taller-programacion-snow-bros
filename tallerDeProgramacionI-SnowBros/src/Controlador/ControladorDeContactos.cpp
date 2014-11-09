@@ -27,11 +27,11 @@ void Contacto::BeginContact(b2Contact* contact) {
 	figuraB->reaccionarCon(figuraA);
 
 	//Controlo los contactos del personaje
-	if (figuraA->type == "personaje" && figuraB->esEstatico())
-		((Personaje*) figuraA)->empiezoContacto(contact->GetFixtureA());
+	if ((figuraA->type == "personaje" || figuraA->type == "enemigo" )&& figuraB->esEstatico())
+		((Character*) figuraA)->empiezoContacto(contact->GetFixtureA());
 
-	if (figuraB->type == "personaje" && figuraA->esEstatico())
-		((Personaje*) figuraB)->empiezoContacto(contact->GetFixtureB());
+	if ((figuraB->type == "personaje" || figuraB->type == "enemigo") && figuraA->esEstatico())
+		((Character*) figuraB)->empiezoContacto(contact->GetFixtureB());
 
 }
 
@@ -43,12 +43,12 @@ void Contacto::EndContact(b2Contact* contact) {
 	Figura *figuraB = (Figura*) contact->GetFixtureB()->GetUserData();
 
 	//Controlo los contactos del personaje
-	if (figuraA->type == "personaje" && figuraB->esEstatico()) {
-		((Personaje*) figuraA)->terminoContacto(contact->GetFixtureA());
+	if ((figuraA->type == "personaje" || figuraA->type == "enemigo" )&& figuraB->esEstatico()){
+		((Character*) figuraA)->terminoContacto(contact->GetFixtureA());
 	}
 
-	if (figuraB->type == "personaje" && figuraA->esEstatico()) {
-		((Personaje*) figuraB)->terminoContacto(contact->GetFixtureB());
+	if ((figuraB->type == "personaje" || figuraB->type == "enemigo") && figuraA->esEstatico()){
+		((Character*) figuraB)->terminoContacto(contact->GetFixtureB());
 	}
 }
 

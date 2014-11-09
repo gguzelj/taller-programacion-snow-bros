@@ -25,6 +25,9 @@ protected:
 	int aceleracion;
 	char orientacion;
 	int lives;
+	b2Fixture* paredIzquierda;
+	b2Fixture* paredDerecha;
+	b2Fixture* piso;
 
 public:
 	bool inmune;
@@ -79,6 +82,8 @@ public:
 
 	virtual void sacarVida() {
 	}
+	void terminoContacto(b2Fixture* fixture);
+	void empiezoContacto(b2Fixture* fixture);
 };
 
 #endif /* CHARACTER_H_ */

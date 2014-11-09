@@ -199,7 +199,7 @@ void ShootingState::handleInput(Character &character, SDL_Keycode input, Uint32 
 			switch (input) {
 
 			case SDLK_SPACE: {
-				character.state = &Character::shooting;
+				//character.state = &Character::shooting;
 				character.disparar();
 				break;
 			}

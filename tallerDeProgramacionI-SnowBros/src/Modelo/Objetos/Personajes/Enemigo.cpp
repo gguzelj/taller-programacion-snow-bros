@@ -14,10 +14,10 @@ Enemigo::Enemigo(float x, float y, b2World* world){
 	this->movimientoLateralDerecha = false;
 	this->movimientoLateralIzquierda = false;
 	this->debeSaltar = false;
-	this->type = "ENEMIGO";
+	this->type = "enemigo";
 	this->lives = 5;
-	this->ancho = MITAD_ANCHO_ENEMIGO;
-	this->alto = MITAD_ALTO_ENEMIGO;
+	this->ancho = MITAD_ANCHO_ENEMIGO*2;
+	this->alto = MITAD_ALTO_ENEMIGO*2;
 	this->estaCongelado = false;
 
 	//Parametros para controlar los contactos
@@ -101,9 +101,11 @@ void Enemigo::reaccionarConBolaNieve(BolaNieve* bola){
 
 
 void Enemigo::congelar(){
+	this->estaCongelado = true;
 	float tiempoDeEsperaMaximo = 5.0f;
 	while ((( clock () - tiempoDeImpactoDeLaUltimaBola ) /  CLOCKS_PER_SEC) < tiempoDeEsperaMaximo){
 		aceleracion = 0;
 	}
 	aceleracion = 7.0f;
+	this->estaCongelado = false;
 }

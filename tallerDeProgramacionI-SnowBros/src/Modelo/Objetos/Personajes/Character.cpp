@@ -81,3 +81,54 @@ void Character::updateLeftContact(int numero) {
 void Character::updateRightContact(int numero) {
 	this->contactosDerecha = numero;
 }
+
+void cambiarEstadoAlAterrizar(Character* character) {
+	if (character->movimientoLateralDerecha == true || character->movimientoLateralIzquierda == true)
+		character->state = &Character::walking;
+	else
+		character->state = &Character::standby;
+}
+
+
+void Character::empiezoContacto(b2Fixture* fixture) {
+
+	//contacto con derecha?
+	if (paredDerecha == fixture)
+		contactosDerecha++;
+
+	//Contacto con izquierda?
+	if (paredIzquierda == fixture)
+		contactosIzquierda++;
+
+	//Contacto con Piso?
+	if (fixture == piso) {
+
+		if (contactosActuales == 0)
+			cambiarEstadoAlAterrizar(this);
+
+		contactosActuales++;
+
+	}
+
+}
+
+void Character::terminoContacto(b2Fixture* fixture) {
+
+	if (paredDerecha == fixture)
+		contactosDerecha--;
+
+	if (paredIzquierda == fixture)
+		contactosIzquierda--;
+
+	if (piso == fixture) {
+
+		contactosActuales--;
+
+		if (contactosActuales == 0 && state->getCode() != JUMPING)
+			state = &Character::falling;
+
+	}
+
+}
+
+

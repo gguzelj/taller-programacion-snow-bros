@@ -25,9 +25,6 @@ class Personaje : public Character {
 		char connectionState;
 		int points;
 
-		b2Fixture* paredIzquierda;
-		b2Fixture* paredDerecha;
-		b2Fixture* piso;
 		b2Vec2* posicionInicial;
 
 		void hacerInmune();

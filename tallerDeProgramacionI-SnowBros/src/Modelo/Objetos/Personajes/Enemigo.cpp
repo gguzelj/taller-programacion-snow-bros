@@ -148,7 +148,7 @@ void Enemigo::congelar(){
 	while (nivelDeCongelamiento != 0 && !enMovimientoBola){
 		//En caso de que este hecho bola de nieve, lo hacemos
 		//No atravezable, para que pueda empujarlo
-		esAtravezable = (nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX)
+		esAtravezable = (nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX);
 		aceleracion = 0;
 		if( difftime(time(nullptr), tiempoDeImpactoDeLaUltimaBola )  > tiempoDeEsperaMaximo){
 			this->nivelDeCongelamiento -=2;

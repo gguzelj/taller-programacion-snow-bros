@@ -143,6 +143,7 @@ private:
 	std::list<Enemigo*>* enemigosAEliminar_;
 
 	void clean();
+	void movimientoDelEnemigo(Enemigo* enemigo);
 
 	float ancho_un;
 	float alto_un;

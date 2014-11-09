@@ -355,7 +355,10 @@ void Drawer::drawEnemy(enemigo_t enemigo) {
 	int pos_x = coord_relativa(coordRel.x, un_to_px_x * (enemigo.centro.x ) + ox);
 	int pos_y = coord_relativa(coordRel.y, -un_to_px_y * (enemigo.centro.y) + oy);
 
-	switch (codigo_estado) {
+	if(enemigo.nivelDeCongelamiento == 7)
+		drawCongelamiento(this->renderer, imagenEnemigos, orientacion, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y,enemigo.nivelDeCongelamiento);
+	else{
+		switch (codigo_estado) {
 		case JUMPING:
 			drawStandardEnemyJumping(this->renderer, imagenEnemigos, orientacion, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
 			break;
@@ -369,7 +372,9 @@ void Drawer::drawEnemy(enemigo_t enemigo) {
 			drawStandardEnemyFalling(renderer, imagenEnemigos, orientacion, pos_x, pos_y,  ancho * un_to_px_x, alto * un_to_px_y);
 			break;
 		}
+		drawCongelamiento(this->renderer, imagenEnemigos, orientacion, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y,enemigo.nivelDeCongelamiento);
 
+	}
 /*
 
 	rectangleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (enemigo.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (enemigo.centro.y + alto / 2) + oy),

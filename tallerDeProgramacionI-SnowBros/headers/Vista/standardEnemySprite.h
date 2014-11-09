@@ -27,6 +27,67 @@
 #define POS_Y_STANDBY_ES 0
 
 
+#define ALTO_STANDBY_ES 17
+#define ANCHO_STANDBY_ES 18
+#define POS_X_STANDBY_ES 40
+#define POS_Y_STANDBY_ES 0
+
+
+
+
+
+
+#define ALTO_CONGELAMIENTO_UNO 11
+#define ANCHO_CONGELAMIENTO 19
+#define POS_X_CONGELAMIENTO_UNO 196
+#define POS_Y_CONGELAMIENTO_UNO 313
+
+
+#define ALTO_CONGELAMIENTO_DOS 13
+#define ANCHO_CONGELAMIENTO 19
+#define POS_X_CONGELAMIENTO_DOS 176
+#define POS_Y_CONGELAMIENTO_DOS 311
+
+#define ALTO_CONGELAMIENTO_TRES 18
+#define ANCHO_CONGELAMIENTO 19
+#define POS_X_CONGELAMIENTO_TRES 222
+#define POS_Y_CONGELAMIENTO_TRES 308
+
+#define ALTO_CONGELAMIENTO_CUATRO 19
+#define ANCHO_CONGELAMIENTO 19
+#define POS_X_CONGELAMIENTO_CUATRO 205
+#define POS_Y_CONGELAMIENTO_CUATRO 263
+
+
+void drawCongelamiento(SDL_Renderer *renderer,SDL_Texture *texture,const char orientacion, int pos_x,int pos_y,int ancho,int alto,int nivel){
+	if(nivel >0){
+		if(nivel < 3){
+			SDL_Rect srcrect = { POS_X_CONGELAMIENTO_UNO  ,POS_Y_CONGELAMIENTO_UNO, ANCHO_CONGELAMIENTO, ALTO_CONGELAMIENTO_UNO };
+			SDL_Rect dstrect = { pos_x - ((3*ancho)/4), pos_y -( (alto)/2), ancho + ancho/2 , alto};
+			dibujarFrame(renderer,texture,'l',pos_x,pos_y,srcrect,dstrect);
+			return;
+		}
+		if( nivel <5){
+			SDL_Rect srcrect = { POS_X_CONGELAMIENTO_DOS  ,POS_Y_CONGELAMIENTO_DOS, ANCHO_CONGELAMIENTO, ALTO_CONGELAMIENTO_DOS };
+			SDL_Rect dstrect = { pos_x - ((3*ancho)/4), pos_y -( (alto)/2), ancho + ancho/2 , alto};
+			dibujarFrame(renderer,texture,'l',pos_x,pos_y,srcrect,dstrect);
+			return;
+		}
+		if( nivel < 7){
+			SDL_Rect srcrect = { POS_X_CONGELAMIENTO_TRES  ,POS_Y_CONGELAMIENTO_TRES, ANCHO_CONGELAMIENTO, ALTO_CONGELAMIENTO_TRES };
+			SDL_Rect dstrect = { pos_x - ((3*ancho)/4), pos_y -( (alto)/2), ancho + ancho/2 , alto};
+			dibujarFrame(renderer,texture,'l',pos_x,pos_y,srcrect,dstrect);
+			return;
+		}
+		if(nivel == 7){
+			SDL_Rect srcrect = { POS_X_CONGELAMIENTO_CUATRO  ,POS_Y_CONGELAMIENTO_CUATRO, ANCHO_CONGELAMIENTO, ALTO_CONGELAMIENTO_CUATRO };
+			SDL_Rect dstrect = { pos_x - ((3*ancho)/4), pos_y -( (alto)/2), ancho + ancho/2 , alto};
+			dibujarFrame(renderer,texture,'l',pos_x,pos_y,srcrect,dstrect);
+			return;
+		}
+	}
+
+}
 
 
 

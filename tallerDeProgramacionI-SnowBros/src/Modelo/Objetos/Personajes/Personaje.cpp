@@ -52,7 +52,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shapeDelPersonaje;
 	fixtureDef.density = 1;
-	fixtureDef.filter.groupIndex = -1;
+	fixtureDef.filter.groupIndex = PERSONAJE_FILTER_INDEX;
 	b2Fixture* fix = body->CreateFixture(&fixtureDef);
 
 	//Actualizamos informacion adicional
@@ -153,12 +153,6 @@ void Personaje::entrarEnPeriodoDeInmunidad(){
 }
 
 void Personaje::hacerInmune(){
-
 	sleep(TIEMPO_INMUNIDAD);
-
 	inmune = false;
 }
-
-
-
-

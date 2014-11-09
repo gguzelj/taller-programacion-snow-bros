@@ -14,10 +14,13 @@
 #define IZQUIERDA 'l'
 #define DERECHA 'r'
 
+#define PERSONAJE_FILTER_INDEX -1
+#define ENEMIGO_FILTER_INDEX -2
+
 class Character: public Figura {
 protected:
 	b2Vec2 posicion;
-	b2World* world;                         //Viene por parametro.
+	b2World* world;
 	b2Body* body;
 	int jumpCooldown;
 	float ancho;
@@ -28,6 +31,8 @@ protected:
 	b2Fixture* paredIzquierda;
 	b2Fixture* paredDerecha;
 	b2Fixture* piso;
+
+	void cambiarFilterIndex(int16 groupIndex);
 
 public:
 	bool inmune;

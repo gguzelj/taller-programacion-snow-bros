@@ -2,7 +2,7 @@
 #include <ctime>
 #define ORIENTACION_INICIAL 'l'
 
-Enemigo::Enemigo(float x, float y, b2World* world){
+Enemigo::Enemigo(float x, float y, b2World* world) {
 	//Parametros generales
 	this->jumpCooldown = 0;
 	this->world = world;
@@ -14,11 +14,12 @@ Enemigo::Enemigo(float x, float y, b2World* world){
 	this->orientacion = ORIENTACION_INICIAL;
 	this->movimientoLateralDerecha = false;
 	this->movimientoLateralIzquierda = false;
+	this->tiempoDeImpactoDeLaUltimaBola = 0.0f;
 	this->debeSaltar = false;
 	this->type = "enemigo";
 	this->lives = 5;
-	this->ancho = MITAD_ANCHO_ENEMIGO*2;
-	this->alto = MITAD_ALTO_ENEMIGO*2;
+	this->ancho = MITAD_ANCHO_ENEMIGO * 2;
+	this->alto = MITAD_ALTO_ENEMIGO * 2;
 	this->nivelDeCongelamiento = 0;
 
 	//Parametros para controlar los contactos
@@ -30,7 +31,7 @@ Enemigo::Enemigo(float x, float y, b2World* world){
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.angle = 0;
-	bodyDef.position.Set(x,y);
+	bodyDef.position.Set(x, y);
 	bodyDef.gravityScale = 4;
 	this->body = this->world->CreateBody(&bodyDef);
 
@@ -42,6 +43,7 @@ Enemigo::Enemigo(float x, float y, b2World* world){
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shapeDelEnemigo;
 	fixtureDef.density = 1;
+	fixtureDef.filter.groupIndex = ENEMIGO_FILTER_INDEX;
 	fixtureDef.friction = 1;
 	b2Fixture* fix = body->CreateFixture(&fixtureDef);
 
@@ -73,48 +75,58 @@ Enemigo::Enemigo(float x, float y, b2World* world){
 
 }
 
-Enemigo::~Enemigo(){
+Enemigo::~Enemigo() {
 	this->world->DestroyBody(this->body);
 }
 
-void Enemigo::disparar(){
+void Enemigo::disparar() {
 
 }
 
-void Enemigo::handleInput(SDL_Keycode input,Uint32 input_type){
-		(this->state)->handleInput(*this,input,input_type);
+void Enemigo::handleInput(SDL_Keycode input, Uint32 input_type) {
+	(this->state)->handleInput(*this, input, input_type);
 }
 
-void Enemigo::reaccionarCon(Figura* figura){
+void Enemigo::reaccionarCon(Figura* figura) {
 	figura->reaccionarConEnemigo(this);
 }
 
-void Enemigo::reaccionarConBolaNieve(BolaNieve* bola){
+void Enemigo::reaccionarConBolaNieve(BolaNieve* bola) {
 
 	time(&tiempoDeImpactoDeLaUltimaBola);
 
-	if(this->nivelDeCongelamiento > 0 ){
+	//Si estaba semicongelado, lo congelamos un poco mas
+	if (this->nivelDeCongelamiento > 0) {
 		this->nivelDeCongelamiento += bola->potencia;
-		if(this->nivelDeCongelamiento > NIVEL_CONGELAMIENTO_MAX)
+		if (this->nivelDeCongelamiento > NIVEL_CONGELAMIENTO_MAX)
 			this->nivelDeCongelamiento = NIVEL_CONGELAMIENTO_MAX;
 	}
 
-	if (this->nivelDeCongelamiento == 0){
+	//Si no estaba congelado, empezamos a congelar
+	if (this->nivelDeCongelamiento == 0) {
 		this->nivelDeCongelamiento += bola->potencia;
+
 		std::thread t(&Enemigo::congelar, this);
 		t.detach();
+
 	}
+
 }
 
+void Enemigo::congelar() {
 
-void Enemigo::congelar(){
 	float tiempoDeEsperaMaximo = 5.0f;
 
-	while (nivelDeCongelamiento != 0){
+	while (nivelDeCongelamiento != 0) {
+
+		//En caso de que este hecho bola de nieve, lo hacemos
+		//No atravezable, para que pueda empujarlo
+		esAtravezable = (nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX)
 		aceleracion = 0;
-		if( difftime(time(nullptr), tiempoDeImpactoDeLaUltimaBola )  > tiempoDeEsperaMaximo){
-			this->nivelDeCongelamiento -=2;
-			if(this->nivelDeCongelamiento < 0)
+
+		if (difftime(time(nullptr), tiempoDeImpactoDeLaUltimaBola) > tiempoDeEsperaMaximo) {
+			this->nivelDeCongelamiento -= 2;
+			if (this->nivelDeCongelamiento < 0)
 				this->nivelDeCongelamiento = 0;
 			time(&tiempoDeImpactoDeLaUltimaBola);
 		}
@@ -123,6 +135,14 @@ void Enemigo::congelar(){
 	aceleracion = 7.0f;
 }
 
-bool Enemigo::estaCongelado(){
+bool Enemigo::estaCongelado() {
 	return (nivelDeCongelamiento == NIVEL_CONGELAMIENTO_MAX);
+}
+
+void Enemigo::hacerAtravezable() {
+	this->cambiarFilterIndex(PERSONAJE_FILTER_INDEX);
+}
+
+void Enemigo::hacerNoAtravezable() {
+	this->cambiarFilterIndex(ENEMIGO_FILTER_INDEX);
 }

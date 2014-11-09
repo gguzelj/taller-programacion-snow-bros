@@ -13,14 +13,12 @@
 class Enemigo: public Character {
 private:
 
-	//bool estaCongelado;
 	int nivelDeCongelamiento;
-
-
 	time_t tiempoDeImpactoDeLaUltimaBola;
+
 public:
 
-
+	bool esAtravezable;
 	Enemigo(float x, float y, b2World* world);
 	~Enemigo();
 	void disparar();
@@ -38,6 +36,9 @@ public:
 	int getNivelDeCongelamiento(){
 		return nivelDeCongelamiento;
 	}
+
+	void hacerAtravezable();
+	void hacerNoAtravezable();
 
 };
 

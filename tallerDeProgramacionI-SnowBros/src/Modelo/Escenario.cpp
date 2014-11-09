@@ -421,6 +421,13 @@ void Escenario::agregarProyectil(Proyectil* proy) {
 void Escenario::actualizarEnemigos() {
 
 	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end(); enemigo++) {
+
+		//Analizamos si el enemigo es atravezable
+		if((*enemigo)->esAtravezable)
+			(*enemigo)->hacerAtravezable();
+		else
+			(*enemigo)->hacerNoAtravezable();
+
 		int v1 = rand() % 100;
 		if(v1 > 60){
 			v1 = rand() % 100;

@@ -131,4 +131,15 @@ void Character::terminoContacto(b2Fixture* fixture) {
 
 }
 
+void Character::cambiarFilterIndex(int16 groupIndex){
+
+	b2Filter filter;
+	filter.groupIndex = groupIndex;
+
+	//Recorremos todos los fixtures del objeto y cambiamos el filter
+	for (b2Fixture* fix = this->body->GetFixtureList(); fix; fix = fix->GetNext()) {
+		fix->SetFilterData(filter);
+	}
+
+}
 

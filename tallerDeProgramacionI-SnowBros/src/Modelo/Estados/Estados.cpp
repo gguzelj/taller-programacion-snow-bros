@@ -267,7 +267,6 @@ void PushingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 			break;
 
 	case SDL_KEYUP:
-		detenerMovimientoHorizontal(&character, input);
 		if(input == SDLK_SPACE){
 			if (character.movimientoLateralDerecha == false && character.movimientoLateralIzquierda == false){
 				if (character.getVelocity().y <= 0.0f && character.getCantidadDeContactosActuales() == 0)
@@ -277,6 +276,9 @@ void PushingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 			}
 			else
 				character.state = &Character::walking;
+		}
+		else if((input == SDLK_LEFT)||(input == SDLK_RIGHT)){
+			character.state = &Character::walking;
 		}
 	}
 

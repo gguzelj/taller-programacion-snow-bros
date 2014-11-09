@@ -173,8 +173,12 @@ void WalkingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 			character.movimientoLateralDerecha = true;
 			break;
 		case SDLK_SPACE: {
-			character.state = &Character::shooting;
-			character.disparar();
+			if (character.puedeEmpujar)
+				character.empujar();
+			else{
+				character.state = &Character::shooting;
+				character.disparar();
+			}
 			break;
 		}
 		}
@@ -200,8 +204,13 @@ void ShootingState::handleInput(Character &character, SDL_Keycode input, Uint32 
 			switch (input) {
 
 			case SDLK_SPACE: {
-				//character.state = &Character::shooting;
-				character.disparar();
+				if (character.puedeEmpujar){
+					character.empujar();
+				}
+				else{
+					//character.state = &Character::shooting;
+					character.disparar();
+				}
 				break;
 			}
 

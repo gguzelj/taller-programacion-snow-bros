@@ -17,6 +17,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->state = &Personaje::standby;
 	this->orientacion = ORIENTACION_INICIAL;
 	this->esta_muerto = false;
+	this->puedeEmpujar = false;
 
 
 	this->connectionState = CONECTADO;
@@ -113,6 +114,21 @@ void Personaje::disparar() {
 
 }
 
+void Personaje::empujar(){
+
+	//Iteramos con los contactos de nuestro personaje hasta encontrar al enemigo y luego lo matamos
+	for (b2ContactEdge *ce = this->body->GetContactList(); ce; ce = ce->next) {
+		b2Contact* c = ce->contact;
+		Figura *figuraA = (Figura*) c->GetFixtureA()->GetUserData();
+		if (figuraA->type == "enemigo" ){
+			((Enemigo*) figuraA)->morir();
+			points++;
+			return;
+		}
+	}
+
+}
+
 void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
 	this->state->handleInput(*this, input, input_type);
 }
@@ -125,8 +141,10 @@ void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
 void Personaje::reaccionarConEnemigo(Enemigo* enemigo) {
 
 	//Si el enemigo esta congelado, no nos sucede nada
-	if(enemigo->estaCongelado())
+	if(enemigo->estaCongelado()){
+		puedeEmpujar = true;
 		return;
+	}
 
 	//En otro caso, restamos vida
 	if (lives > 0 && !inmune && this->state != &Personaje::dying){
@@ -139,15 +157,11 @@ void Personaje::reaccionarConEnemigo(Enemigo* enemigo) {
 	// hay que sacarlo del modelo. TODO
 }
 
-
-
 void Personaje::morir(){
 	sleep(1);
 	entrarEnPeriodoDeInmunidad();
 	this->esta_muerto = true;
 }
-
-
 
 void Personaje::jump() {
 	if (this->jumpCooldown <= 0) {
@@ -158,18 +172,22 @@ void Personaje::jump() {
 	}
 }
 
-
 void Personaje::volverAPosicionInicial(){
 	this->body->SetTransform(*posicionInicial,body->GetAngle());
 }
 
 void Personaje::entrarEnPeriodoDeInmunidad(){
+
 	inmune = true;
+
 	std::thread t(&Personaje::hacerInmune, this);
 	t.detach();
+
 }
 
 void Personaje::hacerInmune(){
+
 	sleep(TIEMPO_INMUNIDAD);
+
 	inmune = false;
 }

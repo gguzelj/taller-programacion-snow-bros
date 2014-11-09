@@ -11,7 +11,6 @@
 #define SHOOTING 'd'
 #define DYING 'm'
 
-
 class OnAirState: public CharacterState{
 public:
 	void handleInput(Character &character,SDL_Keycode input,Uint32 input_type);
@@ -66,5 +65,4 @@ public:
 		return DYING;
 	}
 };
-
 #endif /* ESTADOS_H_ */

@@ -24,7 +24,6 @@ class Personaje : public Character {
 
 		char connectionState;
 		int points;
-
 		b2Vec2* posicionInicial;
 
 		void hacerInmune();
@@ -37,6 +36,7 @@ class Personaje : public Character {
 
 		Personaje(float x, float y,char id[], Escenario* escenario);
 		~Personaje();
+
 		void jump();
 		b2Vec2 Posicion();
 		b2Fixture* GetFixtureList();
@@ -68,6 +68,8 @@ class Personaje : public Character {
 		void handleInput(SDL_Keycode input,Uint32 input_type);
 
 		void disparar();
+
+		void empujar();
 
 		void reaccionarConEnemigo(Enemigo* enemigo);
 

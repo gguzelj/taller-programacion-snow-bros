@@ -136,4 +136,3 @@ void Character::cambiarFilterIndex(int16 groupIndex){
 	}
 
 }
-

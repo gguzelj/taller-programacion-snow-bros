@@ -62,6 +62,7 @@ public:
 	virtual void reaccionarConEnemigo(Enemigo*){};
 	virtual void reaccionarConPersonaje(Personaje*){};
 	virtual void reaccionarConBolaNieve(BolaNieve*){};
+	virtual void reaccionarConOtroEnemigo(Enemigo*){};
 
 };
 

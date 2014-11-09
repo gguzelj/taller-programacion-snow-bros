@@ -22,6 +22,9 @@ Enemigo::Enemigo(float x, float y, b2World* world) {
 	this->ancho = MITAD_ANCHO_ENEMIGO;
 	this->alto = MITAD_ALTO_ENEMIGO;
 	this->nivelDeCongelamiento = 0;
+	this->puedeEmpujar = false;
+	this->estaVivo = true;
+	this->enMovimientoBola = false;
 
 	//Parametros para controlar los contactos
 	this->contactosActuales = 0;
@@ -76,72 +79,98 @@ Enemigo::Enemigo(float x, float y, b2World* world) {
 
 }
 
-Enemigo::~Enemigo() {
+Enemigo::~Enemigo(){
 	this->world->DestroyBody(this->body);
 }
 
-void Enemigo::disparar() {
+void Enemigo::disparar(){
 
 }
 
-void Enemigo::handleInput(SDL_Keycode input, Uint32 input_type) {
-	(this->state)->handleInput(*this, input, input_type);
+void Enemigo::empujar(){
+
 }
 
-void Enemigo::reaccionarCon(Figura* figura) {
+void Enemigo::morir(){
+	enMovimientoBola = true;
+	std::thread t(&Enemigo::movimientoBola, this);
+	t.detach();
+}
+
+void Enemigo::movimientoBola(){
+	time_t tiempoDeCreacionDeBola;
+	time(&tiempoDeCreacionDeBola);
+	float tiempoDeEsperaMaximo = 5.0f;
+	time_t newTime = time(&newTime);
+	//Luego de 5 segs la bola se debe destruir
+	while( difftime(newTime, tiempoDeImpactoDeLaUltimaBola )  < tiempoDeEsperaMaximo){
+		newTime = time(&newTime);
+	}
+	estaVivo = false;
+}
+
+void Enemigo::handleInput(SDL_Keycode input,Uint32 input_type){
+		(this->state)->handleInput(*this,input,input_type);
+}
+
+void Enemigo::reaccionarCon(Figura* figura){
 	figura->reaccionarConEnemigo(this);
 }
 
-void Enemigo::reaccionarConBolaNieve(BolaNieve* bola) {
+void Enemigo::reaccionarConBolaNieve(BolaNieve* bola){
 
 	time(&tiempoDeImpactoDeLaUltimaBola);
 
 	//Si estaba semicongelado, lo congelamos un poco mas
-	if (this->nivelDeCongelamiento > 0) {
+	if(this->nivelDeCongelamiento > 0 ){
 		this->nivelDeCongelamiento += bola->potencia;
-		if (this->nivelDeCongelamiento > NIVEL_CONGELAMIENTO_MAX)
+		if(this->nivelDeCongelamiento > NIVEL_CONGELAMIENTO_MAX)
 			this->nivelDeCongelamiento = NIVEL_CONGELAMIENTO_MAX;
 	}
 
 	//Si no estaba congelado, empezamos a congelar
-	if (this->nivelDeCongelamiento == 0) {
+	if (this->nivelDeCongelamiento == 0){
 		this->nivelDeCongelamiento += bola->potencia;
-
 		std::thread t(&Enemigo::congelar, this);
 		t.detach();
-
 	}
-
 }
 
-void Enemigo::congelar() {
+void Enemigo::reaccionarConOtroEnemigo(Enemigo* enemigo){
+	if(enemigo->enMovimientoBola){
+		estaVivo = false;
+	}
+}
 
+void Enemigo::congelar(){
 	float tiempoDeEsperaMaximo = 5.0f;
 
-	while (nivelDeCongelamiento != 0) {
-
-		if (difftime(time(nullptr), tiempoDeImpactoDeLaUltimaBola) > tiempoDeEsperaMaximo) {
-			this->nivelDeCongelamiento -= 2;
-			if (this->nivelDeCongelamiento < 0)
+	while (nivelDeCongelamiento != 0 && !enMovimientoBola){
+		//En caso de que este hecho bola de nieve, lo hacemos
+		//No atravezable, para que pueda empujarlo
+		esAtravezable = (nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX)
+		aceleracion = 0;
+		if( difftime(time(nullptr), tiempoDeImpactoDeLaUltimaBola )  > tiempoDeEsperaMaximo){
+			this->nivelDeCongelamiento -=2;
+			if(this->nivelDeCongelamiento < 0)
 				this->nivelDeCongelamiento = 0;
 			time(&tiempoDeImpactoDeLaUltimaBola);
 		}
-
 		//En caso de que este hecho bola de nieve, lo hacemos
 		//No atravezable, para que pueda empujarlo
 		esAtravezable = (nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX);
 		aceleracion = 0;
-
 	}
-
 	esAtravezable = false;
-	aceleracion = 7.0f;
+	if (!enMovimientoBola)
+		aceleracion = 7.0f;
+	else
+		aceleracion = 20.0f;
 }
 
-bool Enemigo::estaCongelado() {
+bool Enemigo::estaCongelado(){
 	return (nivelDeCongelamiento == NIVEL_CONGELAMIENTO_MAX);
 }
-
 
 void Enemigo::jump(){
 	if( this->nivelDeCongelamiento == 0){
@@ -153,7 +182,6 @@ void Enemigo::jump(){
 		}
 	}
 }
-
 
 
 void Enemigo::hacerAtravezable() {

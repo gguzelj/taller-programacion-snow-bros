@@ -33,13 +33,13 @@ protected:
 	b2Fixture* piso;
 
 	void cambiarFilterIndex(int16 groupIndex);
-
 public:
 	bool inmune;
 	bool movimientoLateralDerecha, movimientoLateralIzquierda, debeSaltar;
 	int contactosActuales;
 	int contactosIzquierda;
 	int contactosDerecha;
+	bool puedeEmpujar;
 
 	static JumpingState jumping;
 	static FallingState falling;
@@ -90,6 +90,11 @@ public:
 
 	virtual void sacarVida() {
 	}
+
+	virtual void empujar(){
+
+	}
+
 	void terminoContacto(b2Fixture* fixture);
 	void empiezoContacto(b2Fixture* fixture);
 };

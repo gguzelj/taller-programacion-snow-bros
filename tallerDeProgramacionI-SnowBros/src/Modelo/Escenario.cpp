@@ -15,6 +15,7 @@ Escenario::Escenario(JsonParser *parser) {
 	muros_ = new std::list<Muro*>;
 	personajes_ = new std::list<Personaje*>;
 	enemigos_ = new std::list<Enemigo*>;
+	enemigosAEliminar_ = new std::list<Enemigo*>;
 
 	crearEnemigo(10, 10);
 	crearEnemigo(20, 20);
@@ -146,7 +147,30 @@ void acomodarEstadoCharacter(Character* personaje) {
 			personaje->state = &Personaje::jumping;
 		}
 	}
+}
 
+void Escenario::clean(){
+
+	for(auto enemigo = enemigosAEliminar_->begin();enemigo != enemigosAEliminar_->end();++enemigo){
+		//delete enemy... physics body is destroyed here
+		delete (*enemigo);
+		if(enemigo!=enemigosAEliminar_->end())
+			enemigos_->erase(enemigo);
+	}
+	//clear this list for next time
+	enemigosAEliminar_->clear();
+
+	for (auto proy = proyectiles_->begin(); proy != proyectiles_->end(); ++proy) {
+		b2Body* body = (*proy)->getb2Body();
+		for (b2ContactEdge *ce = body->GetContactList(); ce; ce = ce->next) {
+			b2Contact* c = ce->contact;
+			if (c->IsTouching()) {
+				world_->DestroyBody((*proy)->getb2Body());
+				proyectiles_->erase(proy++);
+				break;
+			}
+		}
+	}
 }
 
 void Escenario::step() {
@@ -166,22 +190,16 @@ void Escenario::step() {
 	}
 
 	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end(); ++enemigo) {
-		acomodarEstadoCharacter(*enemigo);
+		if(!(*enemigo)->estaVivo){
+			enemigosAEliminar_->push_back(*enemigo);
+		}else
+			acomodarEstadoCharacter(*enemigo);
 	}
 
-	for (auto proy = proyectiles_->begin(); proy != proyectiles_->end(); ++proy) {
-		b2Body* body = (*proy)->getb2Body();
-		for (b2ContactEdge *ce = body->GetContactList(); ce; ce = ce->next) {
-			b2Contact* c = ce->contact;
-			if (c->IsTouching()) {
-				world_->DestroyBody((*proy)->getb2Body());
-				proyectiles_->erase(proy++);
-				break;
-			}
-		}
-	}
+	clean();
 
 	getWorld()->Step(timeStep, velocityIterations, positionIterations);
+	cout<<"Paso el step"<<endl;
 }
 
 unsigned int Escenario::getCantPersonajes() {
@@ -421,67 +439,91 @@ void Escenario::agregarProyectil(Proyectil* proy) {
 	proyectiles_->push_back(proy);
 }
 
+void movimientoDeLaBola(Enemigo* enemigo){
+	int v1 = rand() % 100;
+	if(v1 > 10){
+		v1 = rand() % 100;
+		if (v1 <= 5)
+			enemigo->handleInput(SDLK_LEFT, SDL_KEYDOWN);
+		else {
+			if (v1 <= 50)
+				enemigo->handleInput(SDLK_RIGHT, SDL_KEYDOWN);
+			else {
+				if (v1 <= 75)
+					enemigo->handleInput(SDLK_RIGHT, SDL_KEYUP);
+				else
+					enemigo->handleInput(SDLK_LEFT, SDL_KEYUP);
+			}
+
+		}
+	}
+}
+
+void movimientoDelEnemigo(Enemigo* enemigo){
+	int v1 = rand() % 100;
+	if(v1 < 45){
+		v1 = rand() % 100;
+		if (v1 <= 25)
+			enemigo->handleInput(SDLK_LEFT, SDL_KEYDOWN);
+		else {
+			if (v1 <= 50)
+				enemigo->handleInput(SDLK_RIGHT, SDL_KEYDOWN);
+			else {
+				if (v1 <= 75)
+					enemigo->handleInput(SDLK_RIGHT, SDL_KEYUP);
+				else
+					enemigo->handleInput(SDLK_LEFT, SDL_KEYUP);
+			}
+		}
+	}
+	else{
+		if(v1 < 50){
+		   int i=0;
+		   float posicionesX[4];
+		   float posicionesY[4];
+		   for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
+			   posicionesX[i] = (*personaje)->getX();
+			   posicionesY[i] = (*personaje)->getY();
+			   //printf("Pos %d// Per %d \n",(*personaje)->posicion.x,i);
+			   i++;
+			}
+
+			float posicionPersonajeX = posicionesX[0];
+			float posicionPersonajeY = posicionesY[0];
+			float posicionEnemigoX = (*enemigo)->getX();
+			float posicionEnemigoY = (*enemigo)->getY();
+
+			if(posicionPersonajeX < posicionEnemigoX ){
+				(*enemigo)->handleInput(SDLK_RIGHT, SDL_KEYUP);
+				(*enemigo)->handleInput(SDLK_LEFT, SDL_KEYDOWN);
+			}
+			if(posicionPersonajeX > posicionEnemigoX){
+				(*enemigo)->handleInput(SDLK_LEFT, SDL_KEYUP);
+				(*enemigo)->handleInput(SDLK_RIGHT, SDL_KEYDOWN);
+			}
+			if((posicionPersonajeY-3) > posicionEnemigoY){
+				(*enemigo)->handleInput(SDLK_UP, SDL_KEYDOWN);
+			}
+			if((posicionPersonajeY+1) < posicionEnemigoY)
+				(*enemigo)->handleInput(SDLK_UP, SDL_KEYUP);
+		}
+	}
+}
+
 void Escenario::actualizarEnemigos() {
-
 	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end(); enemigo++) {
-
 		//Analizamos si el enemigo es atravezable
 		if((*enemigo)->esAtravezable)
 			(*enemigo)->hacerAtravezable();
 		else
 			(*enemigo)->hacerNoAtravezable();
 
-		int v1 = rand() % 100;
-		if(v1 < 45){
-			v1 = rand() % 100;
-			if (v1 <= 25)
-				(*enemigo)->handleInput(SDLK_LEFT, SDL_KEYDOWN);
-			else {
-				if (v1 <= 50)
-					(*enemigo)->handleInput(SDLK_RIGHT, SDL_KEYDOWN);
-				else {
-					if (v1 <= 75)
-						(*enemigo)->handleInput(SDLK_RIGHT, SDL_KEYUP);
-					else
-						(*enemigo)->handleInput(SDLK_LEFT, SDL_KEYUP);
-				}
-
-			}
+		if ((*enemigo)->enMovimientoBola){
+			movimientoDeLaBola(*enemigo);
 		}
 		else{
-			if(v1 < 50){
-		       int i=0;
-		        float posicionesX[4];
-		        float posicionesY[4];
-		        for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
-		                posicionesX[i] = (*personaje)->getX();
-		                posicionesY[i] = (*personaje)->getY();
-		                //printf("Pos %d// Per %d \n",(*personaje)->posicion.x,i);
-		                i++;
-		        }
-
-		        float posicionPersonajeX = posicionesX[0];
-		        float posicionPersonajeY = posicionesY[0];
-		        float posicionEnemigoX = (*enemigo)->getX();
-		        float posicionEnemigoY = (*enemigo)->getY();
-
-		        if(posicionPersonajeX < posicionEnemigoX ){
-		            (*enemigo)->handleInput(SDLK_RIGHT, SDL_KEYUP);
-		            (*enemigo)->handleInput(SDLK_LEFT, SDL_KEYDOWN);
-		        }
-		        if(posicionPersonajeX > posicionEnemigoX){
-		            (*enemigo)->handleInput(SDLK_LEFT, SDL_KEYUP);
-		            (*enemigo)->handleInput(SDLK_RIGHT, SDL_KEYDOWN);
-		        }
-		        if((posicionPersonajeY-3) > posicionEnemigoY){
-		            (*enemigo)->handleInput(SDLK_UP, SDL_KEYDOWN);
-		        }
-		        if((posicionPersonajeY+1) < posicionEnemigoY)
-		            (*enemigo)->handleInput(SDLK_UP, SDL_KEYUP);
-			}
+			movimientoDelEnemigo(*enemigo);
 		}
-
-
 	}
 }
 

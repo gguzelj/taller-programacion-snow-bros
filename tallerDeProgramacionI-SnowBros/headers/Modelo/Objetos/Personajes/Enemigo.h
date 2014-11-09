@@ -19,9 +19,16 @@ private:
 public:
 
 	bool esAtravezable;
+	bool estaVivo;
+	bool enMovimientoBola;
+
 	Enemigo(float x, float y, b2World* world);
 	~Enemigo();
 	void disparar();
+
+	void empujar();
+
+	void morir();
 
 	void handleInput(SDL_Keycode input, Uint32 input_type);
 
@@ -29,17 +36,19 @@ public:
 
 	void reaccionarConBolaNieve(BolaNieve* bola);
 
+	void reaccionarConOtroEnemigo(Enemigo* enemigo);
 	void congelar();
+	void movimientoBola();
 
 	bool estaCongelado();
+
 	void jump();
+
 	int getNivelDeCongelamiento(){
 		return nivelDeCongelamiento;
 	}
-
 	void hacerAtravezable();
 	void hacerNoAtravezable();
-
 };
 
 #endif /* ENEMIGO_H_ */

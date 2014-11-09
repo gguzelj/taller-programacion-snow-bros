@@ -395,6 +395,7 @@ enemigo_t* Escenario::getEnemigosParaEnvio() {
 		enems[i].estado = (*enemigo)->state->getCode();
 		enems[i].centro.x = (*enemigo)->getX();
 		enems[i].centro.y = (*enemigo)->getY();
+		enems[i].nivelDeCongelacion = (*enemigo)->getNivelDeCongelamiento();
 		i++;
 	}
 
@@ -421,18 +422,21 @@ void Escenario::actualizarEnemigos() {
 
 	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end(); enemigo++) {
 		int v1 = rand() % 100;
-		if (v1 <= 25)
-			(*enemigo)->handleInput(SDLK_LEFT, SDL_KEYDOWN);
-		else {
-			if (v1 <= 50)
-				(*enemigo)->handleInput(SDLK_RIGHT, SDL_KEYDOWN);
+		if(v1 > 60){
+			v1 = rand() % 100;
+			if (v1 <= 25)
+				(*enemigo)->handleInput(SDLK_LEFT, SDL_KEYDOWN);
 			else {
-				if (v1 <= 75)
-					(*enemigo)->handleInput(SDLK_RIGHT, SDL_KEYUP);
-				else
-					(*enemigo)->handleInput(SDLK_LEFT, SDL_KEYUP);
-			}
+				if (v1 <= 50)
+					(*enemigo)->handleInput(SDLK_RIGHT, SDL_KEYDOWN);
+				else {
+					if (v1 <= 75)
+						(*enemigo)->handleInput(SDLK_RIGHT, SDL_KEYUP);
+					else
+						(*enemigo)->handleInput(SDLK_LEFT, SDL_KEYUP);
+				}
 
+			}
 		}
 	}
 }

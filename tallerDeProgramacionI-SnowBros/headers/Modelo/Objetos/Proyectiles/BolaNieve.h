@@ -12,8 +12,9 @@ private:
 	float radio;
 
 public:
+	int potencia;
 
-	BolaNieve(float x, float y, b2World* world);
+	BolaNieve(float x, float y, int potencia, b2World* world);
 	virtual ~BolaNieve();
 
 	void setVelocidad(b2Vec2 velocidad);

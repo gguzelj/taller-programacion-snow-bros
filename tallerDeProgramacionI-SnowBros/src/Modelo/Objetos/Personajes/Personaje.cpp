@@ -95,9 +95,9 @@ void Personaje::disparar() {
 	BolaNieve *bola;
 
 	if (orientacion == IZQUIERDA)
-		bola = new BolaNieve(getX() - 1, getY() + MITAD_ALTO_PERSONAJE - 0.40, this->world);
+		bola = new BolaNieve(getX() - 1, getY() + MITAD_ALTO_PERSONAJE - 0.40,1, this->world);
 	else
-		bola = new BolaNieve(getX() + 1, getY() + MITAD_ALTO_PERSONAJE - 0.40, this->world);
+		bola = new BolaNieve(getX() + 1, getY() + MITAD_ALTO_PERSONAJE - 0.40,1, this->world);
 
 	b2Vec2 vel = this->body->GetLinearVelocity();
 

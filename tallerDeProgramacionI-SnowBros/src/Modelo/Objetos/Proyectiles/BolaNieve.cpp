@@ -1,8 +1,9 @@
 #include "../../../../headers/Modelo/Objetos/Proyectiles/BolaNieve.h"
 
-BolaNieve::BolaNieve(float x, float y, b2World* world) {
+BolaNieve::BolaNieve(float x, float y,int potencia, b2World* world) {
 	 this->type = "bolaNieve";
 
+	 this->potencia = potencia;
 	 this->x = x;
 	 this->y = y;
 	 this->radio = RADIO_BOLA_NIEVE;

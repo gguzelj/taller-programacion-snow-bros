@@ -1,4 +1,5 @@
 #include "../../../../headers/Modelo/Objetos/Personajes/Enemigo.h"
+#include <ctime>
 #define ORIENTACION_INICIAL 'l'
 
 Enemigo::Enemigo(float x, float y, b2World* world){
@@ -18,7 +19,7 @@ Enemigo::Enemigo(float x, float y, b2World* world){
 	this->lives = 5;
 	this->ancho = MITAD_ANCHO_ENEMIGO*2;
 	this->alto = MITAD_ALTO_ENEMIGO*2;
-	this->estaCongelado = false;
+	this->nivelDeCongelamiento = 0;
 
 	//Parametros para controlar los contactos
 	this->contactosActuales = 0;
@@ -91,9 +92,17 @@ void Enemigo::reaccionarCon(Figura* figura){
 void Enemigo::reaccionarConBolaNieve(BolaNieve* bola){
 
 	//IF CORRESPONDE CONGELAR=>
-	tiempoDeImpactoDeLaUltimaBola = clock();
+	time(&tiempoDeImpactoDeLaUltimaBola);
 
-	if (!estaCongelado){
+
+	if(this->nivelDeCongelamiento > 0 ){
+		this->nivelDeCongelamiento += bola->potencia;
+		if(this->nivelDeCongelamiento > 7)
+			this->nivelDeCongelamiento = 7;
+	}
+
+	if (this->nivelDeCongelamiento == 0){
+		this->nivelDeCongelamiento += bola->potencia;
 		std::thread t(&Enemigo::congelar, this);
 		t.detach();
 	}
@@ -101,11 +110,18 @@ void Enemigo::reaccionarConBolaNieve(BolaNieve* bola){
 
 
 void Enemigo::congelar(){
-	this->estaCongelado = true;
 	float tiempoDeEsperaMaximo = 5.0f;
-	while ((( clock () - tiempoDeImpactoDeLaUltimaBola ) /  CLOCKS_PER_SEC) < tiempoDeEsperaMaximo){
+
+	while (nivelDeCongelamiento != 0){
 		aceleracion = 0;
+		if( difftime(time(nullptr), tiempoDeImpactoDeLaUltimaBola )  > tiempoDeEsperaMaximo){
+			this->nivelDeCongelamiento -=2;
+			if(this->nivelDeCongelamiento < 0)
+				this->nivelDeCongelamiento = 0;
+			time(&tiempoDeImpactoDeLaUltimaBola);
+		}
+
 	}
 	aceleracion = 7.0f;
-	this->estaCongelado = false;
+
 }

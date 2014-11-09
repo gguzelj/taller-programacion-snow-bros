@@ -55,6 +55,7 @@ typedef struct enemigo{
 	float alto;
 	char estado;
 	char orientacion;
+	int nivelDeCongelacion;
 }enemigo_t;
 
 typedef struct gameData{

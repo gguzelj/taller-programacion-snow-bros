@@ -1,5 +1,5 @@
 #include "../../headers/Vista/Drawer.h"
-#include "../../headers/Vista/sprite.h"
+#include "../../headers/Vista/standardEnemySprite.h"
 
 void Drawer::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, SDL_Rect dst, SDL_Rect *clip = nullptr) {
 	SDL_RenderCopy(ren, tex, clip, &dst);
@@ -348,8 +348,34 @@ void Drawer::drawEnemy(enemigo_t enemigo) {
 	float ancho = enemigo.ancho;
 	float alto = enemigo.alto;
 
+	char codigo_estado = enemigo.estado;
+	char orientacion = enemigo.orientacion;
+
+
+	int pos_x = coord_relativa(coordRel.x, un_to_px_x * (enemigo.centro.x ) + ox);
+	int pos_y = coord_relativa(coordRel.y, -un_to_px_y * (enemigo.centro.y) + oy);
+
+	switch (codigo_estado) {
+		case JUMPING:
+			drawStandardEnemyJumping(this->renderer, imagenEnemigos, orientacion, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+			break;
+		case STANDBY:
+			drawStandardEnemyStandBy(renderer, imagenEnemigos, orientacion, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+			break;
+		case WALKING:
+			drawStandardEnemyWalking(renderer, imagenEnemigos, orientacion, pos_x, pos_y,  ancho * un_to_px_x, alto * un_to_px_y);
+			break;
+		case FALLING:
+			drawStandardEnemyFalling(renderer, imagenEnemigos, orientacion, pos_x, pos_y,  ancho * un_to_px_x, alto * un_to_px_y);
+			break;
+		}
+
+/*
+
 	rectangleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (enemigo.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (enemigo.centro.y + alto / 2) + oy),
 			ancho * un_to_px_x, alto * un_to_px_y, nullptr, 0, nullptr);
+			*/
+
 }
 
 bool Drawer::blinkCharacter(personaje_t person, int index) {
@@ -366,6 +392,10 @@ bool Drawer::blinkCharacter(personaje_t person, int index) {
 	return personajeOn[index];
 
 }
+
+
+
+
 
 void Drawer::drawCharacter(personaje_t person, int index, int connectionState) {
 
@@ -604,6 +634,11 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 	if (imagenPersonaje == nullptr) {
 		manageLoadCharacterError();
 	}
+
+	imagenEnemigos = this->loadTexture(ENEMY_SPRITE_PATH, this->renderer);
+		if (imagenEnemigos == nullptr) {
+			manageLoadCharacterError();
+		}
 
 //Initialize SDL_ttf
 	if (TTF_Init() == -1) {

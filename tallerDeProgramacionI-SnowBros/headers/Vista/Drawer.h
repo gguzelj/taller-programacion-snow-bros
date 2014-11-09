@@ -141,6 +141,7 @@ private:
 	SDL_Texture* imagenPersonaje3;
 	SDL_Texture* imagenPersonaje4;
 	SDL_Texture* imagenPersonaje5;
+	SDL_Texture* imagenEnemigos;
 	SDL_Texture* messageAboutPoints;
 	SDL_Texture* messageAboutLifes;
 	SDL_Rect camera;

@@ -11,6 +11,8 @@
 #define ESPERANDO 0
 #define CONECTADO 1
 
+#define TIEMPO_INMUNIDAD 5
+
 typedef char conn_id[20];
 
 class Escenario;
@@ -28,7 +30,7 @@ class Personaje : public Character {
 		b2Fixture* piso;
 		b2Vec2* posicionInicial;
 
-		void morir();
+		void hacerInmune();
 		void volverAPosicionInicial();
 		void entrarEnPeriodoDeInmunidad();
 

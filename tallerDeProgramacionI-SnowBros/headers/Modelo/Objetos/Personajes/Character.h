@@ -2,6 +2,9 @@
 #define CHARACTER_H_
 
 #include <cstdint>
+#include <unistd.h>
+#include <thread>
+
 #include "../../../Controlador/ControladorDeContactos.h"
 #include "../../Estados/Estados.h"
 #include "../Proyectiles/BolaNieve.h"
@@ -11,7 +14,7 @@
 #define IZQUIERDA 'l'
 #define DERECHA 'r'
 
-class Character : public Figura {
+class Character: public Figura {
 protected:
 	b2Vec2 posicion;
 	b2World* world;                         //Viene por parametro.
@@ -24,30 +27,31 @@ protected:
 	int lives;
 
 public:
-	bool movimientoLateralDerecha,
-	movimientoLateralIzquierda,
-	debeSaltar;
+	bool inmune;
+	bool movimientoLateralDerecha, movimientoLateralIzquierda, debeSaltar;
 	int contactosActuales;
 	int contactosIzquierda;
 	int contactosDerecha;
+
 	static JumpingState jumping;
 	static FallingState falling;
 	static WalkingState walking;
 	static StandByState standby;
 	static ShootingState shooting;
 	CharacterState* state;
-	virtual ~Character(){}
+
+	virtual ~Character() {
+	}
 	b2Vec2 Posicion();
 	b2Fixture* GetFixtureList();
 	b2Vec2 GetWorldPoint(const b2Vec2& localPoint);
 
 	float getX();
 	float getY();
-	//Y estos por que estan definidos aca?
-	float getAncho(){
+	float getAncho() {
 		return ancho;
 	}
-	float getAlto(){
+	float getAlto() {
 		return alto;
 	}
 	void moveLeft();
@@ -58,20 +62,23 @@ public:
 	int getJumpCooldown();
 	void updateLeftContact(int);
 	void updateRightContact(int);
-	virtual void handleInput(SDL_Keycode input,Uint32 input_type){
+	virtual void handleInput(SDL_Keycode input, Uint32 input_type) {
+	}
 
-	};
-
-	b2Body* getb2Body(){
+	b2Body* getb2Body() {
 		return this->body;
-	};
+	}
+	;
 	b2Vec2 getVelocity();
 	int getCantidadDeContactosActuales();
 	char getOrientacion();
 	void setOrientacion(char orientacion);
 
-	virtual void disparar(){};
-	virtual void sacarVida(){};
+	virtual void disparar() {
+	}
+
+	virtual void sacarVida() {
+	}
 };
 
 #endif /* CHARACTER_H_ */

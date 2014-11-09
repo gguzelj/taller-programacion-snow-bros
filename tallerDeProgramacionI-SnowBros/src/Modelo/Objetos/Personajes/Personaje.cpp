@@ -7,8 +7,8 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 
 	//Parametros generales
 	this->escenario_ = escenario;
-	this->jumpCooldown = 0;
 	this->world = escenario->getWorld();
+	this->jumpCooldown = 0;
 	this->aceleracion = 10.0f;
 	this->x = x;
 	this->y = y;
@@ -16,15 +16,18 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	strcpy(this->id, id);
 	this->state = &Personaje::standby;
 	this->orientacion = ORIENTACION_INICIAL;
-	this->movimientoLateralDerecha = false;
-	this->movimientoLateralIzquierda = false;
-	this->debeSaltar = false;
+
 	this->connectionState = CONECTADO;
 	this->points = 0;
 	this->lives = 3;
 	this->type = "personaje";
 	this->ancho = MITAD_ANCHO_PERSONAJE;
 	this->alto = MITAD_ALTO_PERSONAJE;
+
+	this->movimientoLateralDerecha = false;
+	this->movimientoLateralIzquierda = false;
+	this->debeSaltar = false;
+	this->inmune = false;
 
 	//Parametros para controlar los contactos
 	this->contactosActuales = 0;
@@ -76,6 +79,9 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	paredDerecha->SetUserData(this);
 	piso->SetUserData(this);
 
+	//Entramos en el periodo de inmunidad
+	entrarEnPeriodoDeInmunidad();
+
 }
 
 Personaje::~Personaje() {
@@ -114,18 +120,18 @@ void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
  * El enemigo se pasa por parametro para que se pueda definir su comportamiento tambien
  */
 void Personaje::reaccionarConEnemigo(Enemigo* enemigo) {
-	morir();
-}
 
-void Personaje::morir(){
-	if (lives > 0){
-		entrarEnPeriodoDeInmunidad();
+	if (lives > 0 && !inmune){
 		sacarVida();
+		entrarEnPeriodoDeInmunidad();
 		volverAPosicionInicial();
 	}
+
+
 	// En caso que el personaje pierda todas sus vidas, el mismo no debe aparecer mas en la pantalla. Es decir,
 	// hay que sacarlo del modelo. TODO
 }
+
 
 void Personaje::volverAPosicionInicial(){
 //	this->body->SetTransform(*posicionInicial,body->GetAngle());
@@ -133,6 +139,18 @@ void Personaje::volverAPosicionInicial(){
 
 void Personaje::entrarEnPeriodoDeInmunidad(){
 
+	inmune = true;
+
+	std::thread t(&Personaje::hacerInmune, this);
+	t.detach();
+
+}
+
+void Personaje::hacerInmune(){
+
+	sleep(TIEMPO_INMUNIDAD);
+
+	inmune = false;
 }
 
 void cambiarEstadoAlAterrizar(Character* character) {

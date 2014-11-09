@@ -124,13 +124,16 @@ void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
  */
 void Personaje::reaccionarConEnemigo(Enemigo* enemigo) {
 
+	//Si el enemigo esta congelado, no nos sucede nada
+	if(enemigo->estaCongelado())
+		return;
+
+	//En otro caso, restamos vida
 	if (lives > 0 && !inmune){
 		sacarVida();
 		entrarEnPeriodoDeInmunidad();
 		this->esta_muerto = true;
 	}
-
-
 	// En caso que el personaje pierda todas sus vidas, el mismo no debe aparecer mas en la pantalla. Es decir,
 	// hay que sacarlo del modelo. TODO
 }

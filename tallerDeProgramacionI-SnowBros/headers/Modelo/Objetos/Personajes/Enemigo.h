@@ -8,6 +8,8 @@
 #define IZQUIERDA 'l'
 #define DERECHA 'r'
 
+#define NIVEL_CONGELAMIENTO_MAX 7
+
 class Enemigo: public Character {
 private:
 
@@ -30,6 +32,8 @@ public:
 	void reaccionarConBolaNieve(BolaNieve* bola);
 
 	void congelar();
+
+	bool estaCongelado();
 
 	int getNivelDeCongelamiento(){
 		return nivelDeCongelamiento;

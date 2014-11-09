@@ -91,14 +91,12 @@ void Enemigo::reaccionarCon(Figura* figura){
 
 void Enemigo::reaccionarConBolaNieve(BolaNieve* bola){
 
-	//IF CORRESPONDE CONGELAR=>
 	time(&tiempoDeImpactoDeLaUltimaBola);
-
 
 	if(this->nivelDeCongelamiento > 0 ){
 		this->nivelDeCongelamiento += bola->potencia;
-		if(this->nivelDeCongelamiento > 7)
-			this->nivelDeCongelamiento = 7;
+		if(this->nivelDeCongelamiento > NIVEL_CONGELAMIENTO_MAX)
+			this->nivelDeCongelamiento = NIVEL_CONGELAMIENTO_MAX;
 	}
 
 	if (this->nivelDeCongelamiento == 0){
@@ -123,5 +121,8 @@ void Enemigo::congelar(){
 
 	}
 	aceleracion = 7.0f;
+}
 
+bool Enemigo::estaCongelado(){
+	return (nivelDeCongelamiento == NIVEL_CONGELAMIENTO_MAX);
 }

@@ -43,13 +43,13 @@ void Contacto::EndContact(b2Contact* contact) {
 	Figura *figuraB = (Figura*) contact->GetFixtureB()->GetUserData();
 
 	//Evaluo si el personaje dejo de estar en contacto con el enemigo congelado
-	if(((figuraA->type == "personaje") && (figuraB->type == "enemigo"))){
-		((Personaje*)figuraA)->puedeEmpujar = false;
+/*	if(((figuraA->type == "personaje") && (figuraB->type == "enemigo"))){
+		((Personaje*)figuraA)->state = &Personaje::walking;
 	}
 	if(((figuraB->type == "personaje") && (figuraA->type == "enemigo" ))){
-		((Personaje*)figuraB)->puedeEmpujar = false;
+		((Personaje*)figuraB)->state = &Personaje::walking;
 	}
-
+*/
 	//Controlo los contactos del personaje
 	if ((figuraA->type == "personaje" || figuraA->type == "enemigo" )&& figuraB->esEstatico()){
 		((Character*) figuraA)->terminoContacto(contact->GetFixtureA());

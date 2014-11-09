@@ -142,7 +142,7 @@ void Personaje::reaccionarConEnemigo(Enemigo* enemigo) {
 
 	//Si el enemigo esta congelado, no nos sucede nada
 	if(enemigo->estaCongelado()){
-		puedeEmpujar = true;
+		this->state = &Personaje::pushing;
 		return;
 	}
 

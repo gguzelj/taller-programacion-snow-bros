@@ -10,6 +10,7 @@
 #define FALLING 'f'
 #define SHOOTING 'd'
 #define DYING 'm'
+#define PUSHING 'p'
 
 class OnAirState: public CharacterState{
 public:
@@ -63,6 +64,14 @@ public:
 	}
 	char getCode(){
 		return DYING;
+	}
+};
+
+class PushingState: public CharacterState{
+public:
+	void handleInput(Character &character,SDL_Keycode input,Uint32 input_type);
+	char getCode(){
+		return PUSHING;
 	}
 };
 #endif /* ESTADOS_H_ */

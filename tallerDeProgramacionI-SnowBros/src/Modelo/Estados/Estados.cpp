@@ -8,6 +8,7 @@ WalkingState Character::walking;
 FallingState Character::falling;
 ShootingState Character::shooting;
 DyingState Character::dying;
+PushingState Character::pushing;
 
 void cambiarOrientacionAlDejarDePresionarUnaTecla(Character &character) {
 	switch (character.getOrientacion()) {
@@ -173,12 +174,8 @@ void WalkingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 			character.movimientoLateralDerecha = true;
 			break;
 		case SDLK_SPACE: {
-			if (character.puedeEmpujar)
-				character.empujar();
-			else{
-				character.state = &Character::shooting;
-				character.disparar();
-			}
+			character.state = &Character::shooting;
+			character.disparar();
 			break;
 		}
 		}
@@ -204,13 +201,50 @@ void ShootingState::handleInput(Character &character, SDL_Keycode input, Uint32 
 			switch (input) {
 
 			case SDLK_SPACE: {
-				if (character.puedeEmpujar){
-					character.empujar();
+				//character.state = &Character::shooting;
+				character.disparar();
+				break;
+			}
+
+			case SDLK_LEFT:
+				if (!character.movimientoLateralDerecha) {
+					character.moveLeft();
+					character.setOrientacion(IZQUIERDA);
 				}
-				else{
-					//character.state = &Character::shooting;
-					character.disparar();
+				character.movimientoLateralIzquierda = true;
+				break;
+
+			case SDLK_RIGHT:
+				if (!character.movimientoLateralIzquierda) {
+					character.moveRight();
+					character.setOrientacion(DERECHA);
 				}
+				character.movimientoLateralDerecha = true;
+				break;
+			}
+			break;
+
+	case SDL_KEYUP:
+		detenerMovimientoHorizontal(&character, input);
+		if(input == SDLK_SPACE){
+			if (character.movimientoLateralDerecha == false && character.movimientoLateralIzquierda == false){
+				if (character.getVelocity().y <= 0.0f && character.getCantidadDeContactosActuales() == 0)
+					character.state = &Character::falling;
+				else
+					character.state = &Character::standby;
+			}
+			else
+				character.state = &Character::walking;
+		}
+	}
+
+}
+void PushingState::handleInput(Character &character, SDL_Keycode input, Uint32 input_type) {
+	switch (input_type) {
+	case SDL_KEYDOWN:
+			switch (input) {
+			case SDLK_SPACE: {
+				character.empujar();
 				break;
 			}
 

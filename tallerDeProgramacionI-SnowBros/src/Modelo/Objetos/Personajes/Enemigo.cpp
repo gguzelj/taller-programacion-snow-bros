@@ -16,6 +16,7 @@ Enemigo::Enemigo(float x, float y, b2World* world) {
 	this->movimientoLateralIzquierda = false;
 	this->tiempoDeImpactoDeLaUltimaBola = 0.0f;
 	this->debeSaltar = false;
+	this->esAtravezable = false;
 	this->type = "enemigo";
 	this->lives = 5;
 	this->ancho = MITAD_ANCHO_ENEMIGO;
@@ -119,11 +120,6 @@ void Enemigo::congelar() {
 
 	while (nivelDeCongelamiento != 0) {
 
-		//En caso de que este hecho bola de nieve, lo hacemos
-		//No atravezable, para que pueda empujarlo
-		esAtravezable = (nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX)
-		aceleracion = 0;
-
 		if (difftime(time(nullptr), tiempoDeImpactoDeLaUltimaBola) > tiempoDeEsperaMaximo) {
 			this->nivelDeCongelamiento -= 2;
 			if (this->nivelDeCongelamiento < 0)
@@ -131,7 +127,14 @@ void Enemigo::congelar() {
 			time(&tiempoDeImpactoDeLaUltimaBola);
 		}
 
+		//En caso de que este hecho bola de nieve, lo hacemos
+		//No atravezable, para que pueda empujarlo
+		esAtravezable = (nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX);
+		aceleracion = 0;
+
 	}
+
+	esAtravezable = false;
 	aceleracion = 7.0f;
 }
 

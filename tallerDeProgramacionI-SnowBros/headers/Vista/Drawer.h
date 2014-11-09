@@ -13,6 +13,7 @@
 #include "../Exceptions/ErrorFueraDeRango.h"
 #include "LTexture.h"
 #include <cmath>
+#include <vector>
 #include <typeinfo>
 #include <fstream>
 #include <iostream>
@@ -88,6 +89,7 @@ typedef struct personaje{
 	char connectionState;
 	int points;
 	int lives;
+	bool inmune;
 }personaje_t;
 
 typedef struct enemigo{
@@ -177,6 +179,8 @@ private:
 	string lives;
 
 	//General Attributes
+	std::vector<bool> personajeOn;
+	std::vector<int> contadorOn;
 	int ancho_px;
 	int alto_px;
 	float alto_un;
@@ -209,6 +213,7 @@ private:
 	void drawWaitingScreen();
 	void presentScenary();
 	void clearScenary();
+	bool blinkCharacter(personaje_t person, int index);
 
 	//Exception management methods
 	void logSDLError( const std::string &msg);

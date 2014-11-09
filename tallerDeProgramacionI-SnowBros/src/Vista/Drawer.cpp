@@ -1,13 +1,11 @@
 #include "../../headers/Vista/Drawer.h"
 #include "../../headers/Vista/sprite.h"
 
-void Drawer::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, SDL_Rect dst,
-		SDL_Rect *clip = nullptr) {
+void Drawer::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, SDL_Rect dst, SDL_Rect *clip = nullptr) {
 	SDL_RenderCopy(ren, tex, clip, &dst);
 }
 
-void Drawer::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y,
-		SDL_Rect *clip = nullptr) {
+void Drawer::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, SDL_Rect *clip = nullptr) {
 	SDL_Rect dst;
 	dst.x = x;
 	dst.y = y;
@@ -77,6 +75,10 @@ bool Drawer::loadMedia() {
 }
 
 Drawer::Drawer() {
+
+	this->personajeOn = {true,true,true,true,true};
+	this->contadorOn = {5,5,5,5,5};
+
 	this->renderer = nullptr;
 	this->window = nullptr;
 	this->image = nullptr;
@@ -124,17 +126,15 @@ Drawer::Drawer() {
 	width = ntohl(width);
 	height = ntohl(height);
 
-	this->alto_un = height / FACTOR_CONVERSION_UN_A_PX; //Alto de la imagen dividido factor de conversion
-	this->ancho_un = width / FACTOR_CONVERSION_UN_A_PX; //Ancho de la imagen dividido factor de conversion
+	this->alto_un = height / FACTOR_CONVERSION_UN_A_PX;//Alto de la imagen dividido factor de conversion
+	this->ancho_un = width / FACTOR_CONVERSION_UN_A_PX;//Ancho de la imagen dividido factor de conversion
 
 	this->currentZoomFactor = 1.0;
 	this->camera = {0,0,ancho_px,alto_px};
 	this->coordRel = {0,0,ancho_px,alto_px};
 
-	this->un_to_px_x = this->un_to_px_x_inicial = currentZoomFactor
-			* FACTOR_CONVERSION_UN_A_PX;
-	this->un_to_px_y = this->un_to_px_y_inicial = currentZoomFactor
-			* FACTOR_CONVERSION_UN_A_PX;
+	this->un_to_px_x = this->un_to_px_x_inicial = currentZoomFactor * FACTOR_CONVERSION_UN_A_PX;
+	this->un_to_px_y = this->un_to_px_y_inicial = currentZoomFactor * FACTOR_CONVERSION_UN_A_PX;
 
 	this->runWindow(ancho_px, alto_px, imagePath);
 }
@@ -223,14 +223,14 @@ void Drawer::drawScenary(dataFromClient_t data, char* name) {
 
 	//Dibujamos los objetos dinamicos
 	for (unsigned int i = 0; i < data.cantObjDinamicos; i++)
-			drawFigura(data.dinamicos[i]);
+		drawFigura(data.dinamicos[i]);
 
 	//Dibujamos los proyectiles
 	for (unsigned int i = 0; i < data.gameData->cantProyectiles; i++)
-			drawProyectil(data.proyectiles[i]);
+		drawProyectil(data.proyectiles[i]);
 
 	//Para probar el movimiento y demas de los enemigos los uso con el sprite de la pelota
-	for(unsigned int i = 0 ; i < data.gameData->cantEnemigos;i++){
+	for (unsigned int i = 0; i < data.gameData->cantEnemigos; i++) {
 		drawEnemy(data.enemigos[i]);
 	}
 
@@ -240,15 +240,13 @@ void Drawer::drawScenary(dataFromClient_t data, char* name) {
 		if (data.personajes[i].connectionState >= 0) {
 			if (strcmp(data.personajes[i].id, name) == 0)
 				continue;
-			drawCharacter(data.personajes[i], i,
-					data.personajes[i].connectionState);
+			drawCharacter(data.personajes[i], i, data.personajes[i].connectionState);
 		}
 	}
 	//Dibujo ultimo el personaje del cliente para que se vea arriba de los demas.
 	for (unsigned int i = 0; i < data.cantPersonajes; i++) {
 		if (strcmp(data.personajes[i].id, name) == 0)
-			drawCharacter(data.personajes[i], i,
-					data.personajes[i].connectionState);
+			drawCharacter(data.personajes[i], i, data.personajes[i].connectionState);
 	}
 }
 
@@ -267,25 +265,15 @@ void Drawer::drawFigura(figura_t objeto) {
 	float alto = objeto.alto;
 
 	if (objeto.id == RECTANGULO_CODE) {
-		rectangleTexture.render(renderer,
-				coord_relativa(coordRel.x,
-						un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
-				coord_relativa(coordRel.y,
-						-un_to_px_y * (objeto.centro.y + alto / 2) + oy),
-				ancho * un_to_px_x, alto * un_to_px_y, nullptr,
-				objeto.rotacion * -RADTODEG, nullptr);
+		rectangleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
+				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
 
 	if (objeto.id == CIRCULO_CODE) {
 		float radio = objeto.alto / 2;
 
-		circleTexture.render(renderer,
-				coord_relativa(coordRel.x,
-						un_to_px_x * (objeto.centro.x - radio) + ox),
-				coord_relativa(coordRel.y,
-						-un_to_px_y * (objeto.centro.y + radio) + oy),
-				ancho * un_to_px_x, alto * un_to_px_y, nullptr,
-				objeto.rotacion * -RADTODEG, nullptr);
+		circleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - radio) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + radio) + oy),
+				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
 
 	if (objeto.id == TRIANGULO_CODE) {
@@ -293,23 +281,13 @@ void Drawer::drawFigura(figura_t objeto) {
 		centro.x = ancho / 2 * un_to_px_x;
 		centro.y = alto * un_to_px_y / 1.5;
 
-		triangleTexture.render(renderer,
-				coord_relativa(coordRel.x,
-						un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
-				coord_relativa(coordRel.y,
-						-un_to_px_y * (objeto.centro.y + alto / 1.5) + oy),
-				ancho * un_to_px_x, alto * un_to_px_y, nullptr,
-				objeto.rotacion * -RADTODEG, &centro);
+		triangleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 1.5) + oy),
+				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, &centro);
 	}
 
 	if (objeto.id == CUADRADO_CODE) {
-		squareTexture.render(renderer,
-				coord_relativa(coordRel.x,
-						un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
-				coord_relativa(coordRel.y,
-						-un_to_px_y * (objeto.centro.y + alto / 2) + oy),
-				ancho * un_to_px_x, alto * un_to_px_y, nullptr,
-				objeto.rotacion * -RADTODEG, nullptr);
+		squareTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
+				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
 
 	if (objeto.id == PENTAGONO_CODE) {
@@ -317,43 +295,22 @@ void Drawer::drawFigura(figura_t objeto) {
 		centro.x = (ancho * un_to_px_x) / 2;
 		centro.y = (ancho * un_to_px_y) / 1.91;
 
-		pentagonTexture.render(renderer,
-				coord_relativa(coordRel.x,
-						un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
-				coord_relativa(coordRel.y,
-						-un_to_px_y
-								* (objeto.centro.y + alto / (1 + cos(M_PI / 5)))
-								+ oy), ancho * un_to_px_x, alto * un_to_px_y,
-				nullptr, objeto.rotacion * -RADTODEG, &centro);
+		pentagonTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
+				coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / (1 + cos(M_PI / 5))) + oy), ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, &centro);
 	}
 
 	if (objeto.id == HEXAGONO_CODE) {
-		hexagonTexture.render(renderer,
-				coord_relativa(coordRel.x,
-						un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
-				coord_relativa(coordRel.y,
-						-un_to_px_y * (objeto.centro.y + alto / 2) + oy),
-				ancho * un_to_px_x, alto * un_to_px_y, nullptr,
-				objeto.rotacion * -RADTODEG, nullptr);
+		hexagonTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
+				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
 
 	if (objeto.id == TRAPECIO_CODE) {
-		trapexTexture.render(renderer,
-				coord_relativa(coordRel.x,
-						un_to_px_x * (objeto.centro.x - ancho / 1.6) + ox),
-				coord_relativa(coordRel.y,
-						-un_to_px_y * (objeto.centro.y + alto / 2) + oy),
-				ancho * un_to_px_x * 1.1, alto * un_to_px_y, nullptr,
-				objeto.rotacion * -RADTODEG, nullptr);
+		trapexTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 1.6) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
+				ancho * un_to_px_x * 1.1, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
 	if (objeto.id == PARALELOGRAMO_CODE) {
-		paralelogramTexture.render(renderer,
-				coord_relativa(coordRel.x,
-						un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
-				coord_relativa(coordRel.y,
-						-un_to_px_y * (objeto.centro.y + alto / 2) + oy),
-				ancho * un_to_px_x, alto * un_to_px_y, nullptr,
-				objeto.rotacion * -RADTODEG, nullptr);
+		paralelogramTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
+				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
 }
 
@@ -374,18 +331,13 @@ void Drawer::drawProyectil(proyectil_t proy) {
 	if (proy.id == BOLA_NIEVE_CODE) {
 		float radio = proy.alto / 2;
 
-		snowballTexture.render(renderer,
-				coord_relativa(coordRel.x,
-						un_to_px_x * (proy.centro.x - radio) + ox),
-				coord_relativa(coordRel.y,
-						-un_to_px_y * (proy.centro.y + radio) + oy),
-				ancho * un_to_px_x, alto * un_to_px_y, nullptr,
-				proy.rotacion * -RADTODEG, nullptr);
+		snowballTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (proy.centro.x - radio) + ox), coord_relativa(coordRel.y, -un_to_px_y * (proy.centro.y + radio) + oy),
+				ancho * un_to_px_x, alto * un_to_px_y, nullptr, proy.rotacion * -RADTODEG, nullptr);
 	}
 
 }
 
-void Drawer::drawEnemy(enemigo_t enemigo){
+void Drawer::drawEnemy(enemigo_t enemigo) {
 
 	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
 	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);
@@ -396,13 +348,32 @@ void Drawer::drawEnemy(enemigo_t enemigo){
 	float ancho = enemigo.ancho;
 	float alto = enemigo.alto;
 
-	rectangleTexture.render(renderer, coord_relativa(coordRel.x,
-						 un_to_px_x * (enemigo.centro.x - ancho / 2) + ox),
-						 coord_relativa(coordRel.y, -un_to_px_y * (enemigo.centro.y + alto / 2) + oy),
-						 ancho * un_to_px_x, alto * un_to_px_y, nullptr, 0, nullptr);
+	rectangleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (enemigo.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (enemigo.centro.y + alto / 2) + oy),
+			ancho * un_to_px_x, alto * un_to_px_y, nullptr, 0, nullptr);
+}
+
+bool Drawer::blinkCharacter(personaje_t person, int index) {
+
+	if (!person.inmune)
+		return false;
+
+	contadorOn[index]--;
+	if (contadorOn[index] == 0) {
+		personajeOn[index] = !personajeOn[index];
+		contadorOn[index] = 5;
+	}
+
+	return personajeOn[index];
+
 }
 
 void Drawer::drawCharacter(personaje_t person, int index, int connectionState) {
+
+	if (blinkCharacter(person, index))
+		return;
+
+	//insert framebreak for constant framerate here
+
 	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
 	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);
 
@@ -426,53 +397,43 @@ void Drawer::drawCharacter(personaje_t person, int index, int connectionState) {
 
 	switch (codigo_estado) {
 	case JUMPING:
-		drawPersonajeJumping(this->renderer, textura, orientacion, pos_x,
-				pos_y, anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
+		drawPersonajeJumping(this->renderer, textura, orientacion, pos_x, pos_y, anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
 		break;
 	case STANDBY:
-		drawPersonajeStandBy(renderer, textura, orientacion, pos_x, pos_y,
-				anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
+		drawPersonajeStandBy(renderer, textura, orientacion, pos_x, pos_y, anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
 		break;
 	case WALKING:
-		drawPersonajeWalking(renderer, textura, orientacion, pos_x, pos_y,
-				anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
+		drawPersonajeWalking(renderer, textura, orientacion, pos_x, pos_y, anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
 		break;
 	case FALLING:
-		drawPersonajeFalling(renderer, textura, orientacion, pos_x, pos_y,
-				anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
+		drawPersonajeFalling(renderer, textura, orientacion, pos_x, pos_y, anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
 		break;
 	case SHOOTING:
-		drawPersonajeShooting(renderer, textura, orientacion, pos_x, pos_y,
-				anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
+		drawPersonajeShooting(renderer, textura, orientacion, pos_x, pos_y, anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
 		break;
 	}
+
 }
 
 void Drawer::drawMessages(dataFromClient_t data, personaje_t personaje) {
 
-	//Set the coordinates which we want to draw to
+//Set the coordinates which we want to draw to
 	float coordXDelMensaje = 10; //Por ahora lo puse asi, despues lo acomodamos bien con los demas mensajes.
 	float coordYDelMensaje = 10; //Parte superior de la pantalla
 
 	SDL_Color textColor = { 0, 0, 0, 0xFF };
 
-	pointsT.loadFromRenderedText(renderer, fontToBeUsed,
-			points + std::to_string(personaje.points), textColor, &anchoPoints,
-			&altoText);
-	livesT.loadFromRenderedText(renderer, fontToBeUsed,
-			lives + std::to_string(personaje.lives), textColor, &anchoLives,
-			&altoText);
+	pointsT.loadFromRenderedText(renderer, fontToBeUsed, points + std::to_string(personaje.points), textColor, &anchoPoints, &altoText);
+	livesT.loadFromRenderedText(renderer, fontToBeUsed, lives + std::to_string(personaje.lives), textColor, &anchoLives, &altoText);
 
-	//Render the first message
-	pointsT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoPoints,
-			altoText);
+//Render the first message
+	pointsT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoPoints, altoText);
 
-	//Render the other message
+//Render the other message
 	coordYDelMensaje += altoText + 5;
-	livesT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoLives,
-			altoText);
+	livesT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoLives, altoText);
 
-	//Dibujamos la pantalla de espera
+//Dibujamos la pantalla de espera
 	if (data.gameData->paused)
 		drawWaitingScreen();
 
@@ -485,7 +446,7 @@ void Drawer::drawWaitingScreen() {
 	int anchoT = 500;
 	int altoT = 100;
 
-	//Pense que esto lo dibujaba en medio de la pantall, pero no..
+//Pense que esto lo dibujaba en medio de la pantall, pero no..
 	float ox = 300;
 	float oy = 300;
 
@@ -500,8 +461,7 @@ void Drawer::presentScenary() {
 	SDL_RenderPresent(this->renderer);
 }
 
-void ajusteFueraDeLimite(SDL_Rect &rect, int limIzq, int limDer, int limInf,
-		int limSup) {
+void ajusteFueraDeLimite(SDL_Rect &rect, int limIzq, int limDer, int limInf, int limSup) {
 	if (rect.y < limInf)
 		rect.y = limInf;
 	if (rect.y > limSup)
@@ -534,16 +494,12 @@ void Drawer::inicializarCamara(personaje_t personaje) {
 	int limSupCamera = alto_imagen - camera.h;
 
 	int limiteIzquierdo = 0;
-	int limiteDerecho = ancho_imagen - coordRel.w
-			+ (currentZoomFactor - 1) * (ancho_imagen);
+	int limiteDerecho = ancho_imagen - coordRel.w + (currentZoomFactor - 1) * (ancho_imagen);
 	int limiteInferior = 0;
-	int limiteSuperior = alto_imagen - coordRel.h
-			+ (currentZoomFactor - 1) * (alto_imagen);
+	int limiteSuperior = alto_imagen - coordRel.h + (currentZoomFactor - 1) * (alto_imagen);
 
-	ajusteFueraDeLimite(camera, limIzqCamera, limDerCamera, limInfCamera,
-			limSupCamera);
-	ajusteFueraDeLimite(coordRel, limiteIzquierdo, limiteDerecho,
-			limiteInferior, limiteSuperior);
+	ajusteFueraDeLimite(camera, limIzqCamera, limDerCamera, limInfCamera, limSupCamera);
+	ajusteFueraDeLimite(coordRel, limiteIzquierdo, limiteDerecho, limiteInferior, limiteSuperior);
 
 }
 
@@ -566,11 +522,9 @@ void Drawer::actualizarCamara(personaje_t personaje) {
 	int limSupCamera = alto_imagen - camera.h;
 
 	int limiteIzquierdo = 0;
-	int limiteDerecho = ancho_imagen - coordRel.w
-			+ (currentZoomFactor - 1) * (ancho_imagen);
+	int limiteDerecho = ancho_imagen - coordRel.w + (currentZoomFactor - 1) * (ancho_imagen);
 	int limiteInferior = 0;
-	int limiteSuperior = alto_imagen - coordRel.h
-			+ (currentZoomFactor - 1) * (alto_imagen);
+	int limiteSuperior = alto_imagen - coordRel.h + (currentZoomFactor - 1) * (alto_imagen);
 
 	if (x_relativa <= COTA_INF_X) {
 		if (camera.x > limIzqCamera)
@@ -593,38 +547,34 @@ void Drawer::actualizarCamara(personaje_t personaje) {
 		coordRel.y = camera.y * currentZoomFactor;
 	}
 
-	ajusteFueraDeLimite(camera, limIzqCamera, limDerCamera, limInfCamera,
-			limSupCamera);
-	ajusteFueraDeLimite(coordRel, limiteIzquierdo, limiteDerecho,
-			limiteInferior, limiteSuperior);
+	ajusteFueraDeLimite(camera, limIzqCamera, limDerCamera, limInfCamera, limSupCamera);
+	ajusteFueraDeLimite(coordRel, limiteIzquierdo, limiteDerecho, limiteInferior, limiteSuperior);
 }
 
 void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-		logSDLError(
-				"Error al inicializar SDL2. Verifique la instalacion de la libreria");
+		logSDLError("Error al inicializar SDL2. Verifique la instalacion de la libreria");
 		throw SDLError();
 	}
-	//Starting SDL2_IMAGE
+//Starting SDL2_IMAGE
 	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG) {
 		manageSDL2_imageError();
 	}
 
-	//Opening a window
+//Opening a window
 	window = SDL_CreateWindow("Snow Bros", SDL_WINDOWPOS_CENTERED,
 	SDL_WINDOWPOS_CENTERED, ancho_px, alto_px, SDL_WINDOW_SHOWN);
 	if (window == nullptr) {
 		manageCreateWindowError();
 	}
 
-	//Creating a renderer
-	renderer = SDL_CreateRenderer(window, -1,
-			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+//Creating a renderer
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (renderer == nullptr) {
 		manageCreateRendererError();
 	}
 
-	//Loading the image
+//Loading the image
 	image = this->loadTexture(this->imagePath, renderer);
 	if (image == nullptr) {
 		manageLoadBackgroundError();
@@ -655,7 +605,7 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 		manageLoadCharacterError();
 	}
 
-	//Initialize SDL_ttf
+//Initialize SDL_ttf
 	if (TTF_Init() == -1) {
 		manageSDL_ttfError();
 	}
@@ -665,10 +615,10 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 		manageSDL_ttfLoadFontError();
 	}
 
-	//Aca se carga la fuente
+//Aca se carga la fuente
 	loadFont();
 
-	//Aca se cargan las imagenes de las figuras.
+//Aca se cargan las imagenes de las figuras.
 	loadMedia();
 }
 
@@ -689,8 +639,7 @@ void Drawer::manageCreateRendererError() {
 	SDL_DestroyWindow(window);
 	IMG_Quit();
 	SDL_Quit();
-	logSDLError(
-			"Error al utilizar SDL_CreateRenderer() renderer devolvio nullptr");
+	logSDLError("Error al utilizar SDL_CreateRenderer() renderer devolvio nullptr");
 	throw SDLError();
 }
 
@@ -700,8 +649,7 @@ void Drawer::manageLoadBackgroundError() {
 	SDL_DestroyWindow(window);
 	IMG_Quit();
 	SDL_Quit();
-	logSDLError(
-			"Error al utilizar IMG_LoadTexture. Verifique el path de la imagen.");
+	logSDLError("Error al utilizar IMG_LoadTexture. Verifique el path de la imagen.");
 	throw SDLError();
 }
 
@@ -712,8 +660,7 @@ void Drawer::manageLoadCharacterError() {
 	SDL_DestroyWindow(window);
 	IMG_Quit();
 	SDL_Quit();
-	logSDLError(
-			"Error al utilizar IMG_LoadTexture. Verifique el path de la imagen.");
+	logSDLError("Error al utilizar IMG_LoadTexture. Verifique el path de la imagen.");
 	throw SDLError();
 }
 
@@ -794,11 +741,9 @@ void Drawer::zoomOut() {
 	int dif_ancho = abs(ancho_anterior - camera.w);
 	int dif_alto = abs(alto_anterior - camera.h);
 
-	//Me fijo que no se expanda mas de lo que deberia
-	int proximo_x_maximo = ancho_un * FACTOR_CONVERSION_UN_A_PX - 2 * camera.w
-			+ ancho_anterior;
-	int proximo_y_maximo = alto_un * FACTOR_CONVERSION_UN_A_PX - 2 * camera.h
-			+ alto_anterior;
+//Me fijo que no se expanda mas de lo que deberia
+	int proximo_x_maximo = ancho_un * FACTOR_CONVERSION_UN_A_PX - 2 * camera.w + ancho_anterior;
+	int proximo_y_maximo = alto_un * FACTOR_CONVERSION_UN_A_PX - 2 * camera.h + alto_anterior;
 
 	if (proximo_x_maximo <= 0 || proximo_y_maximo <= 0) {
 		currentZoomFactor += factor;
@@ -820,7 +765,7 @@ void Drawer::zoomOut() {
 	coordRel.x = currentZoomFactor * camera.x;
 	coordRel.y = currentZoomFactor * camera.y;
 
-	//Zoom out a la escala de las figuras
+//Zoom out a la escala de las figuras
 	un_to_px_x = un_to_px_x_inicial * currentZoomFactor;
 	un_to_px_y = un_to_px_y_inicial * currentZoomFactor;
 }

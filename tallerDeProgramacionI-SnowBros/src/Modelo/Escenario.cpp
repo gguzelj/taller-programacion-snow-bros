@@ -153,6 +153,15 @@ void Escenario::step() {
 			acomodarEstadoCharacter(*personaje);
 	}
 
+	for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
+			if (strcmp((*personaje)->id, "sin asignar") != 0){
+				if((*personaje)->esta_muerto){
+					(*personaje)->volverAPosicionInicial();
+					(*personaje)->esta_muerto = false;
+				}
+			}
+	}
+
 	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end(); ++enemigo) {
 		acomodarEstadoCharacter(*enemigo);
 	}

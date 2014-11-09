@@ -31,11 +31,12 @@ class Personaje : public Character {
 		b2Vec2* posicionInicial;
 
 		void hacerInmune();
-		void volverAPosicionInicial();
+
 		void entrarEnPeriodoDeInmunidad();
 
 	public:
 		conn_id id;
+		bool esta_muerto;
 
 		Personaje(float x, float y,char id[], Escenario* escenario);
 		~Personaje();
@@ -74,6 +75,7 @@ class Personaje : public Character {
 		//Metodos para controlar el estado del personaje
 		void empiezoContacto(b2Fixture* fixture);
 		void terminoContacto(b2Fixture* fixture);
+		void volverAPosicionInicial();
 
 };
 

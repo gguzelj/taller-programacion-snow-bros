@@ -16,6 +16,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	strcpy(this->id, id);
 	this->state = &Personaje::standby;
 	this->orientacion = ORIENTACION_INICIAL;
+	this->esta_muerto = false;
 
 	this->connectionState = CONECTADO;
 	this->points = 0;
@@ -124,7 +125,7 @@ void Personaje::reaccionarConEnemigo(Enemigo* enemigo) {
 	if (lives > 0 && !inmune){
 		sacarVida();
 		entrarEnPeriodoDeInmunidad();
-		volverAPosicionInicial();
+		this->esta_muerto = true;
 	}
 
 
@@ -134,7 +135,7 @@ void Personaje::reaccionarConEnemigo(Enemigo* enemigo) {
 
 
 void Personaje::volverAPosicionInicial(){
-//	this->body->SetTransform(*posicionInicial,body->GetAngle());
+	this->body->SetTransform(*posicionInicial,body->GetAngle());
 }
 
 void Personaje::entrarEnPeriodoDeInmunidad(){

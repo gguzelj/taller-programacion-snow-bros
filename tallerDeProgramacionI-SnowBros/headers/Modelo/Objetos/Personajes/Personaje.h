@@ -51,6 +51,10 @@ class Personaje : public Character {
 			return lives;
 		}
 
+		bool getInmune(){
+			return inmune;
+		}
+
 		void sacarVida(){
 			lives--;
 		}

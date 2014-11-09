@@ -355,6 +355,7 @@ personaje_t* Escenario::getPersonajesParaEnvio() {
 		pers[i].connectionState = (*personaje)->getConnectionState();
 		pers[i].points = (*personaje)->getPoints();
 		pers[i].lives = (*personaje)->getLives();
+		pers[i].inmune = (*personaje)->getInmune();
 		i++;
 	}
 
@@ -368,6 +369,7 @@ personaje_t* Escenario::getPersonajesParaEnvio() {
 		pers[i].centro.x = 0;
 		pers[i].centro.y = 0;
 		pers[i].connectionState = DESCONECTADO;
+		pers[i].inmune = true;
 	}
 
 	return pers;

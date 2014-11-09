@@ -46,6 +46,7 @@ typedef struct personaje{
 	char connectionState;
 	int points;
 	int lives;
+	bool inmune;
 }personaje_t;
 
 typedef struct enemigo{

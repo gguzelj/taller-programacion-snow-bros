@@ -17,8 +17,8 @@ Enemigo::Enemigo(float x, float y, b2World* world){
 	this->debeSaltar = false;
 	this->type = "enemigo";
 	this->lives = 5;
-	this->ancho = MITAD_ANCHO_ENEMIGO*2;
-	this->alto = MITAD_ALTO_ENEMIGO*2;
+	this->ancho = MITAD_ANCHO_ENEMIGO;
+	this->alto = MITAD_ALTO_ENEMIGO;
 	this->nivelDeCongelamiento = 0;
 
 	//Parametros para controlar los contactos

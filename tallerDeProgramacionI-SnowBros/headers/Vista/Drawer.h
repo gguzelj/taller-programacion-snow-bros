@@ -51,6 +51,7 @@
 #define WALKING 'w'
 #define FALLING 'f'
 #define SHOOTING 'd'
+#define DYING 'm'
 
 using namespace std;
 

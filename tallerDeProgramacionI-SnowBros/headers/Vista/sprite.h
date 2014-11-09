@@ -33,6 +33,13 @@
 #define POS_X_CAYENDO 112
 #define POS_Y_CAYENDO 10
 
+#define ANCHO_MURIENDO 40
+#define ALTO_MURIENDO 32
+#define FRAMES_MURIENDO 7
+#define POS_X_MURIENDO 0
+#define POS_Y_MURIENDO 200
+
+
 
 
 void dibujarFrame(SDL_Renderer *renderer,SDL_Texture *texture,char orientacion, int pos_x,int pos_y,SDL_Rect srcrect, SDL_Rect dstrect){
@@ -106,6 +113,18 @@ void drawPersonajeShooting(SDL_Renderer *renderer,SDL_Texture *texture,const cha
 }
 
 
+void drawPersonajeMuriendo(SDL_Renderer *renderer,SDL_Texture *texture,const char orientacion, int pos_x,int pos_y,int ancho,int alto){
 
+	//Get ticks te da el tiempo en milisegundo desde el arranque de la ejecucion.
+	Uint32 ticks = SDL_GetTicks();
+	//con 150 me parece que se ve bien, aumentar para verlo mas lendo o disminuir el parametro para verlo mas rapido.
+	Uint32 sprite = (ticks / 120  ) % FRAMES_MURIENDO;
+
+	SDL_Rect srcrect = { POS_X_MURIENDO + (sprite * ANCHO_MURIENDO) ,POS_Y_MURIENDO, ANCHO_MURIENDO, ALTO_MURIENDO };
+	SDL_Rect dstrect = { pos_x - (ancho/2), pos_y -( alto/2), ancho, alto};
+
+	dibujarFrame(renderer,texture,orientacion,pos_x,pos_y,srcrect,dstrect);
+
+}
 
 

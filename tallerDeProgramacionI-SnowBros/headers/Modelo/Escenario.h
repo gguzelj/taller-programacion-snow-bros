@@ -140,7 +140,6 @@ private:
 	std::list<Muro*>* muros_;
 	std::list<Personaje*>* personajes_;
 	std::list<Enemigo*>* enemigos_;
-	std::list<Enemigo*>* enemigosAEliminar_;
 
 	void clean();
 	void movimientoDelEnemigo(Enemigo* enemigo);

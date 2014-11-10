@@ -15,13 +15,9 @@ Escenario::Escenario(JsonParser *parser) {
 	muros_ = new std::list<Muro*>;
 	personajes_ = new std::list<Personaje*>;
 	enemigos_ = new std::list<Enemigo*>;
-	enemigosAEliminar_ = new std::list<Enemigo*>;
 
 	crearEnemigo(10, 10);
 	crearEnemigo(20, 20);
-	//crearEnemigo(30, 30);
-//crearEnemigo(40, 40);
-	//crearEnemigo(50, 50);
 
 	cantidadMaximaDePersonajes = parser->getConnectionsLimit();
 
@@ -149,21 +145,16 @@ void acomodarEstadoCharacter(Character* personaje) {
 			personaje->state = &Personaje::jumping;
 		}
 	}
+	if( Personaje* pers = dynamic_cast< Personaje* >( personaje ) ){
+		if(pers->esta_muerto){
+			pers->volverAPosicionInicial();
+			pers->esta_muerto = false;
+			pers->state = &Personaje::standby;
+		}
+	}
 }
 
 void Escenario::clean(){
-
-	for(auto enemigo = enemigosAEliminar_->begin();enemigo != enemigosAEliminar_->end();++enemigo){
-		//delete enemy... physics body is destroyed here
-		delete (*enemigo);
-		if(enemigo!=enemigosAEliminar_->end()){
-			enemigos_->erase(enemigo);
-		}
-
-	}
-	//clear this list for next time
-	enemigosAEliminar_->clear();
-
 	for (auto proy = proyectiles_->begin(); proy != proyectiles_->end(); ++proy) {
 		b2Body* body = (*proy)->getb2Body();
 		for (b2ContactEdge *ce = body->GetContactList(); ce; ce = ce->next) {
@@ -182,20 +173,16 @@ void Escenario::step() {
 		if (strcmp((*personaje)->id, "sin asignar") != 0)
 			acomodarEstadoCharacter(*personaje);
 	}
-
+/*
 	for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
 			if (strcmp((*personaje)->id, "sin asignar") != 0){
-				if((*personaje)->esta_muerto){
-					(*personaje)->volverAPosicionInicial();
-					(*personaje)->esta_muerto = false;
-					(*personaje)->state = &Personaje::standby;
-				}
 			}
-	}
+	}*/
 
 	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end(); ++enemigo) {
 		if(!(*enemigo)->estaVivo){
-			enemigosAEliminar_->push_back(*enemigo);
+			world_->DestroyBody((*enemigo)->getb2Body());
+			enemigos_->erase(enemigo++);
 		}else
 			acomodarEstadoCharacter(*enemigo);
 	}

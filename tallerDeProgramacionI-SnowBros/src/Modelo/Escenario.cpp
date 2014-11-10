@@ -145,6 +145,7 @@ void acomodarEstadoCharacter(Character* personaje) {
 			personaje->state = &Personaje::jumping;
 		}
 	}
+	//Seteamos esto aca que me parece lo mas facil, e intuitivo.
 	if( Personaje* pers = dynamic_cast< Personaje* >( personaje ) ){
 		if(pers->esta_muerto){
 			pers->volverAPosicionInicial();
@@ -173,12 +174,6 @@ void Escenario::step() {
 		if (strcmp((*personaje)->id, "sin asignar") != 0)
 			acomodarEstadoCharacter(*personaje);
 	}
-/*
-	for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
-			if (strcmp((*personaje)->id, "sin asignar") != 0){
-			}
-	}*/
-
 	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end(); ++enemigo) {
 		if(!(*enemigo)->estaVivo){
 			world_->DestroyBody((*enemigo)->getb2Body());

@@ -397,7 +397,7 @@ void Client::recibirEstaticos(figura_t* &estaticos)throw (receiveException){
 
 void Client::recibirPersonajes(personaje_t* &personajes)throw (receiveException) {
 
-	int size = sizeof(personaje_t) * gameDetails_.cantEnemigos;
+	int size = sizeof(personaje_t) * gameDetails_.cantPersonajes;
 	personajes = (personaje_t*) malloc(size);
 
 	recvall(sock, personajes, size);

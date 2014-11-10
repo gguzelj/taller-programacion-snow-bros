@@ -157,6 +157,7 @@ Drawer::~Drawer() {
 }
 
 void Drawer::updateView(dataFromClient_t data, char* name) {
+
 	personaje_t personajePrincipal;
 	for (unsigned int i = 0; i < data.cantPersonajes; i++) {
 		if (strcmp((data.personajes[i]).id, name) == 0)

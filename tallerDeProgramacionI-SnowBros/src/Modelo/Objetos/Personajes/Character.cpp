@@ -16,6 +16,17 @@ void Character::moveRight() {
 	};
 }
 
+void Character::pushLeft() {
+	b2Vec2 velocidadActual = this->body->GetLinearVelocity();
+	velocidadActual.x = -aceleracion;
+	this->body->SetLinearVelocity(velocidadActual);
+}
+
+void Character::pushRight() {
+	b2Vec2 velocidadActual = this->body->GetLinearVelocity();
+	velocidadActual.x = aceleracion;
+	this->body->SetLinearVelocity(velocidadActual);
+}
 
 void Character::stop() {
 	b2Vec2 velocidadActual = this->body->GetLinearVelocity();

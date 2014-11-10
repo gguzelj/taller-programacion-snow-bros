@@ -12,13 +12,12 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->aceleracion = 10.0f;
 	this->x = x;
 	this->y = y;
-	this->posicionInicial = new b2Vec2(x,y);
+	this->posicionInicial = new b2Vec2(x, y);
 	strcpy(this->id, id);
 	this->state = &Personaje::standby;
 	this->orientacion = ORIENTACION_INICIAL;
 	this->esta_muerto = false;
 	this->puedeEmpujar = false;
-
 
 	this->connectionState = CONECTADO;
 	this->points = 0;
@@ -63,17 +62,20 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	fix->SetUserData(this);
 
 	//Pared Izquierda
-	shapeDelPersonaje.SetAsBox(0.0000001f, alto - 0.00405f, b2Vec2(-ancho + 0.00000005, 0.0045f), 0);
+	shapeDelPersonaje.SetAsBox(0.0000001f, alto - 0.00405f,
+			b2Vec2(-ancho + 0.00000005, 0.0045f), 0);
 	fixtureDef.friction = 0.0019f;
 	paredIzquierda = this->body->CreateFixture(&fixtureDef);
 
 	//ParedDerecha
-	shapeDelPersonaje.SetAsBox(0.0000001f, alto - 0.00405f, b2Vec2(ancho - 0.00000005, 0.0045f), 0);
+	shapeDelPersonaje.SetAsBox(0.0000001f, alto - 0.00405f,
+			b2Vec2(ancho - 0.00000005, 0.0045f), 0);
 	fixtureDef.friction = 0.0019f;
 	paredDerecha = this->body->CreateFixture(&fixtureDef);
 
 	//Piso
-	shapeDelPersonaje.SetAsBox(ancho * 19.5f / 20, alto / 10, b2Vec2(0, -alto), 0);
+	shapeDelPersonaje.SetAsBox(ancho * 19.5f / 20, alto / 10, b2Vec2(0, -alto),
+			0);
 	fixtureDef.friction = 0.0019f;
 	piso = this->body->CreateFixture(&fixtureDef);
 
@@ -96,9 +98,11 @@ void Personaje::disparar() {
 	BolaNieve *bola;
 
 	if (orientacion == IZQUIERDA)
-		bola = new BolaNieve(getX() - 1, getY() + MITAD_ALTO_PERSONAJE - 0.40,1, this->world);
+		bola = new BolaNieve(getX() - 1, getY() + MITAD_ALTO_PERSONAJE - 0.40,
+				1, this->world);
 	else
-		bola = new BolaNieve(getX() + 1, getY() + MITAD_ALTO_PERSONAJE - 0.40,1, this->world);
+		bola = new BolaNieve(getX() + 1, getY() + MITAD_ALTO_PERSONAJE - 0.40,
+				1, this->world);
 
 	b2Vec2 vel = this->body->GetLinearVelocity();
 
@@ -114,13 +118,13 @@ void Personaje::disparar() {
 
 }
 
-void Personaje::empujar(){
+void Personaje::empujar() {
 
 	//Iteramos con los contactos de nuestro personaje hasta encontrar al enemigo y luego lo matamos
 	for (b2ContactEdge *ce = this->body->GetContactList(); ce; ce = ce->next) {
 		b2Contact* c = ce->contact;
 		Figura *figuraA = (Figura*) c->GetFixtureA()->GetUserData();
-		if (figuraA->type == "enemigo" ){
+		if (figuraA->type == "enemigo") {
 			((Enemigo*) figuraA)->morir();
 			points++;
 			return;
@@ -141,13 +145,13 @@ void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
 void Personaje::reaccionarConEnemigo(Enemigo* enemigo) {
 
 	//Si el enemigo esta congelado, no nos sucede nada
-	if(enemigo->estaCongelado()){
+	if (enemigo->estaCongelado()) {
 		this->state = &Personaje::pushing;
 		return;
 	}
 
 	//En otro caso, restamos vida
-	if (lives > 0 && !inmune && this->state != &Personaje::dying){
+	if (lives > 0 && !inmune && this->state != &Personaje::dying) {
 		this->state = &Personaje::dying;
 		sacarVida();
 		std::thread t(&Personaje::morir, this);
@@ -157,7 +161,7 @@ void Personaje::reaccionarConEnemigo(Enemigo* enemigo) {
 	// hay que sacarlo del modelo. TODO
 }
 
-void Personaje::morir(){
+void Personaje::morir() {
 	sleep(1);
 	entrarEnPeriodoDeInmunidad();
 	this->esta_muerto = true;
@@ -172,11 +176,11 @@ void Personaje::jump() {
 	}
 }
 
-void Personaje::volverAPosicionInicial(){
-	this->body->SetTransform(*posicionInicial,body->GetAngle());
+void Personaje::volverAPosicionInicial() {
+	this->body->SetTransform(*posicionInicial, body->GetAngle());
 }
 
-void Personaje::entrarEnPeriodoDeInmunidad(){
+void Personaje::entrarEnPeriodoDeInmunidad() {
 
 	inmune = true;
 
@@ -185,7 +189,7 @@ void Personaje::entrarEnPeriodoDeInmunidad(){
 
 }
 
-void Personaje::hacerInmune(){
+void Personaje::hacerInmune() {
 
 	sleep(TIEMPO_INMUNIDAD);
 

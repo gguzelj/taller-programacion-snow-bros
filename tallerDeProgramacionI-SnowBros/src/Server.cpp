@@ -437,6 +437,7 @@ void Server::enviarAlCliente(connection_t *conn) {
 		conn->dataQueue->wait_and_pop(dataToBeSent);
 
 		try {
+
 			enviarGameData(conn->socket, dataToBeSent.gameData);
 			enviarPersonajes(conn->socket, dataToBeSent.personajes);
 			enviarEnemigos(conn->socket, dataToBeSent.enemigos);

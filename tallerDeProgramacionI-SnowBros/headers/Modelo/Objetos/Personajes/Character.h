@@ -66,6 +66,8 @@ public:
 	}
 	void moveLeft();
 	void moveRight();
+	void pushLeft();
+	void pushRight();
 	virtual void jump(){
 
 	}

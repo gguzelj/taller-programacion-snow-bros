@@ -250,7 +250,7 @@ void PushingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 
 			case SDLK_LEFT:
 				if (!character.movimientoLateralDerecha) {
-					character.moveLeft();
+					character.pushLeft();
 					character.setOrientacion(IZQUIERDA);
 				}
 				character.movimientoLateralIzquierda = true;
@@ -258,7 +258,7 @@ void PushingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 
 			case SDLK_RIGHT:
 				if (!character.movimientoLateralIzquierda) {
-					character.moveRight();
+					character.pushRight();
 					character.setOrientacion(DERECHA);
 				}
 				character.movimientoLateralDerecha = true;

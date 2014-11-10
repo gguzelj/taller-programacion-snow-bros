@@ -19,10 +19,12 @@ Escenario::Escenario(JsonParser *parser) {
 
 	crearEnemigo(10, 10);
 	crearEnemigo(20, 20);
+	//crearEnemigo(30, 30);
+//crearEnemigo(40, 40);
+	//crearEnemigo(50, 50);
 
 	cantidadMaximaDePersonajes = parser->getConnectionsLimit();
-	//TODO esto deberia ser la longitud del arreglo de enemigos del parser.
-	cantidadMaximaDeEnemigos = 10;
+
 	contactos.setPersonaje(personajes_);
 	contactos.setEnemigos(enemigos_);
 	contactos.setCharacters();
@@ -154,8 +156,10 @@ void Escenario::clean(){
 	for(auto enemigo = enemigosAEliminar_->begin();enemigo != enemigosAEliminar_->end();++enemigo){
 		//delete enemy... physics body is destroyed here
 		delete (*enemigo);
-		if(enemigo!=enemigosAEliminar_->end())
+		if(enemigo!=enemigosAEliminar_->end()){
 			enemigos_->erase(enemigo);
+		}
+
 	}
 	//clear this list for next time
 	enemigosAEliminar_->clear();
@@ -195,11 +199,9 @@ void Escenario::step() {
 		}else
 			acomodarEstadoCharacter(*enemigo);
 	}
-
 	clean();
 
 	getWorld()->Step(timeStep, velocityIterations, positionIterations);
-	cout<<"Paso el step"<<endl;
 }
 
 unsigned int Escenario::getCantPersonajes() {
@@ -406,7 +408,7 @@ personaje_t* Escenario::getPersonajesParaEnvio() {
 }
 
 enemigo_t* Escenario::getEnemigosParaEnvio() {
-	enemigo_t* enems = (enemigo_t*) malloc(sizeof(enemigo_t) * cantidadMaximaDeEnemigos);
+	enemigo_t* enems = (enemigo_t*) malloc(sizeof(enemigo_t) * enemigos_->size());
 
 	int i = 0;
 	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end(); ++enemigo) {
@@ -511,6 +513,7 @@ void Escenario::movimientoDelEnemigo(Enemigo* enemigo){
 }
 
 void Escenario::actualizarEnemigos() {
+
 	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end(); enemigo++) {
 		//Analizamos si el enemigo es atravezable
 		if((*enemigo)->esAtravezable)

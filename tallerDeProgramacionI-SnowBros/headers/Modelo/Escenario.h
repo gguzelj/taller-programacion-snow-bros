@@ -148,7 +148,6 @@ private:
 	float ancho_un;
 	float alto_un;
 	unsigned int cantidadMaximaDePersonajes;
-	unsigned int cantidadMaximaDeEnemigos;
 };
 
 #endif /* ESCENARIO_H_ */

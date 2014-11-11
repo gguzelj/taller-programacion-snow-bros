@@ -137,14 +137,6 @@ void Character::terminoContacto(b2Fixture* fixture) {
 
 void Character::atravezarPlataformas(){
 	cambiarFilterIndex(FIGURA_FILTER_INDEX);
-	std::thread t(&Character::test, this);
-	t.detach();
-}
-
-void Character::test(){
-	unsigned int microseconds = 500000;
-	usleep(microseconds);
-	cambiarFilterIndex(PERSONAJE_FILTER_INDEX);
 }
 
 void Character::cambiarFilterIndex(int16 groupIndex){

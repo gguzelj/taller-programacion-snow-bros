@@ -7,7 +7,7 @@ Rectangulo::~Rectangulo(){
  * ESte constructor se va a usar para todas las figuras rectangulo que vengan del json.
  */
 Rectangulo::Rectangulo(JsonParser *parser, int index, b2World* world){
-	this->type = "rectangulo";
+	this->type = ID_RECTANGULO;
 	this->x = parser->getCoorXObjeto(index);
 	this->y = parser->getCoorYObjeto(index);
 	this->alto = parser->getAltoObjeto(index);

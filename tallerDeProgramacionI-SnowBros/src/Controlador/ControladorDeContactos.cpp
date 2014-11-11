@@ -27,10 +27,10 @@ void Contacto::BeginContact(b2Contact* contact) {
 	figuraB->reaccionarCon(figuraA);
 
 	//Controlo los contactos del personaje
-	if ((figuraA->type == "personaje" || figuraA->type == "enemigo" )&& figuraB->esEstatico())
+	if ((figuraA->type == ID_PERSONAJE || figuraA->type == ID_ENEMIGO )&& figuraB->esEstatico())
 		((Character*) figuraA)->empiezoContacto(contact->GetFixtureA());
 
-	if ((figuraB->type == "personaje" || figuraB->type == "enemigo") && figuraA->esEstatico())
+	if ((figuraB->type == ID_PERSONAJE || figuraB->type == ID_ENEMIGO) && figuraA->esEstatico())
 		((Character*) figuraB)->empiezoContacto(contact->GetFixtureB());
 
 }
@@ -42,20 +42,12 @@ void Contacto::EndContact(b2Contact* contact) {
 	Figura *figuraA = (Figura*) contact->GetFixtureA()->GetUserData();
 	Figura *figuraB = (Figura*) contact->GetFixtureB()->GetUserData();
 
-	//Evaluo si el personaje dejo de estar en contacto con el enemigo congelado
-/*	if(((figuraA->type == "personaje") && (figuraB->type == "enemigo"))){
-		((Personaje*)figuraA)->state = &Personaje::walking;
-	}
-	if(((figuraB->type == "personaje") && (figuraA->type == "enemigo" ))){
-		((Personaje*)figuraB)->state = &Personaje::walking;
-	}
-*/
 	//Controlo los contactos del personaje
-	if ((figuraA->type == "personaje" || figuraA->type == "enemigo" )&& figuraB->esEstatico()){
+	if ((figuraA->type == ID_PERSONAJE || figuraA->type == ID_ENEMIGO )&& figuraB->esEstatico()){
 		((Character*) figuraA)->terminoContacto(contact->GetFixtureA());
 	}
 
-	if ((figuraB->type == "personaje" || figuraB->type == "enemigo") && figuraA->esEstatico()){
+	if ((figuraB->type == ID_PERSONAJE || figuraB->type == ID_ENEMIGO) && figuraA->esEstatico()){
 		((Character*) figuraB)->terminoContacto(contact->GetFixtureB());
 	}
 }

@@ -5,7 +5,7 @@ Poligono::~Poligono(){
 }
 
 Poligono::Poligono(JsonParser *parser, int index, b2World* world){
-	this->type = "poligono";
+	this->type = ID_POLIGONO;
 	this->x = parser->getCoorXObjeto(index);
 	this->y = parser->getCoorYObjeto(index);
 	this->lados = parser->getLadosObjeto(index);

@@ -5,7 +5,7 @@ Paralelogramo::~Paralelogramo(){
 }
 
 Paralelogramo::Paralelogramo(JsonParser *parser, int index, b2World* world){
-	this->type = "paralelogramo";
+	this->type = ID_PARALELOGRAMO;
 	this->x = parser->getCoorXObjeto(index);
 	this->y = parser->getCoorYObjeto(index);
 	this->alto = parser->getAltoObjeto(index);

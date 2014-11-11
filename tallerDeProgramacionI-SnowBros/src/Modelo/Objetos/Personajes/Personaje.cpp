@@ -23,7 +23,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->connectionState = CONECTADO;
 	this->points = 0;
 	this->lives = 5;
-	this->type = "personaje";
+	this->type = ID_PERSONAJE;
 	this->ancho = MITAD_ANCHO_PERSONAJE;
 	this->alto = MITAD_ALTO_PERSONAJE;
 
@@ -128,7 +128,7 @@ void Personaje::empujar() {
 	for (b2ContactEdge *ce = this->body->GetContactList(); ce; ce = ce->next) {
 		b2Contact* c = ce->contact;
 		Figura *figuraA = (Figura*) c->GetFixtureA()->GetUserData();
-		if (figuraA->type == "enemigo") {
+		if (figuraA->type == ID_ENEMIGO) {
 			((Enemigo*) figuraA)->morir();
 			points++;
 			return;
@@ -142,8 +142,7 @@ void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
 }
 
 /*
- * Aca definimos como reacciona el personaje ante el contacto con el
- * enemigo.
+ * Aca definimos como reacciona el personaje ante el contacto con el enemigo.
  * El enemigo se pasa por parametro para que se pueda definir su comportamiento tambien
  */
 void Personaje::reaccionarConEnemigo(Enemigo* enemigo) {

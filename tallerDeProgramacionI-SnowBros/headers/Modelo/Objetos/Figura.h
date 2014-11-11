@@ -1,7 +1,19 @@
 #ifndef FIGURA_H_
 #define FIGURA_H_
 
+
+#define ID_CIRCULO 1
+#define ID_MURO 2
+#define ID_PARALELOGRAMO 3
+#define ID_POLIGONO 4
+#define ID_RECTANGULO 5
+#define ID_TRAPECIO 6
+#define ID_ENEMIGO 7
+#define ID_PERSONAJE 8
+#define ID_BOLA_NIEVE 9
+
 #define FIGURA_WARNING_OVERLAP "El siguiente objeto se esta superponiendo con otros ya creados \n"
+
 #include <Box2D/Box2D.h>
 #include <Box2D/Collision/b2Collision.h>
 #include <list>
@@ -32,12 +44,10 @@ protected:
 	b2Body* body;
 
 public:
-	std::string type;
+	int type;
 	float x;
 	float y;
-	virtual ~Figura(){
-        //this->world->DestroyBody(this->body);
-	}
+	virtual ~Figura(){}
 
 	bool validarOverlap();
 	b2Fixture* GetFixtureList();

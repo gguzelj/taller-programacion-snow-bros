@@ -1,7 +1,7 @@
 #include "../../../../headers/Modelo/Objetos/Figuras/Circulo.h"
 
 Circulo::Circulo(JsonParser *parser, int index, b2World* world){
-	this->type = "circulo";
+	this->type = ID_CIRCULO;
 	this->x = parser->getCoorXObjeto(index);
 	this->y = parser->getCoorYObjeto(index);
 	this->radio = parser->getEscalaObjeto(index);

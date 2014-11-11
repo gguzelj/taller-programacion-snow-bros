@@ -5,7 +5,7 @@ Trapecio::~Trapecio(){
 }
 
 Trapecio::Trapecio(JsonParser *parser, int index, b2World* world){
-	this->type = "trapecio";
+	this->type = ID_TRAPECIO;
 	this->x = parser->getCoorXObjeto(index);
 	this->y = parser->getCoorYObjeto(index);
 	this->inclinacion = 90;

@@ -201,14 +201,14 @@ unsigned int Escenario::getCantObjEstaticos() {
 
 void obtenerAltoAnchoIdFigura(Figura* figura, float &alto, float &ancho, char& id) {
 
-	if (figura->type == "rectangulo") {
+	if (figura->type == ID_RECTANGULO) {
 		Rectangulo* rect = static_cast<Rectangulo *>(figura);
 		alto = rect->getAlto();
 		ancho = rect->getAncho();
 		id = RECTANGULO_CODE;
 		return;
 	}
-	if (figura->type == "circulo") {
+	if (figura->type == ID_CIRCULO) {
 		Circulo* circ = static_cast<Circulo *>(figura);
 		alto = circ->getRadio() * 2;
 		ancho = alto;
@@ -216,7 +216,7 @@ void obtenerAltoAnchoIdFigura(Figura* figura, float &alto, float &ancho, char& i
 		return;
 	}
 
-	if (figura->type == "poligono") {
+	if (figura->type == ID_POLIGONO) {
 		Poligono* polygon = static_cast<Poligono *>(figura);
 		float escala = polygon->getEscala();
 		int lados = polygon->getLados();
@@ -250,7 +250,7 @@ void obtenerAltoAnchoIdFigura(Figura* figura, float &alto, float &ancho, char& i
 		}
 	}
 
-	if (figura->type == "trapecio") {
+	if (figura->type == ID_TRAPECIO) {
 		Trapecio* trap = static_cast<Trapecio *>(figura);
 		ancho = trap->getBaseMayor();
 		alto = trap->getAlto();
@@ -258,7 +258,7 @@ void obtenerAltoAnchoIdFigura(Figura* figura, float &alto, float &ancho, char& i
 		return;
 	}
 
-	if (figura->type == "paralelogramo") {
+	if (figura->type == ID_PARALELOGRAMO) {
 		Paralelogramo* paralelogramo = static_cast<Paralelogramo *>(figura);
 
 		alto = paralelogramo->getAlto();

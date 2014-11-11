@@ -93,10 +93,10 @@ void Enemigo::empujar(){
 
 void Enemigo::morir(){
 	enMovimientoBola = true;
-	std::thread t(&Enemigo::movimientoBola, this);
-	t.detach();
+//	std::thread t(&Enemigo::movimientoBola, this);
+//	t.detach();
 }
-
+/*
 void Enemigo::movimientoBola(){
 	time_t tiempoDeCreacionDeBola;
 	time(&tiempoDeCreacionDeBola);
@@ -108,7 +108,7 @@ void Enemigo::movimientoBola(){
 	}
 	estaVivo = false;
 }
-
+*/
 void Enemigo::handleInput(SDL_Keycode input,Uint32 input_type){
 	if(nivelDeCongelamiento > 0) return;
 	state->handleInput(*this,input,input_type);

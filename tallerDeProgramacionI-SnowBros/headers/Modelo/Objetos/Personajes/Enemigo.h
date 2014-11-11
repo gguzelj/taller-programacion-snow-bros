@@ -21,6 +21,7 @@ public:
 	bool esAtravezable;
 	bool estaVivo;
 	bool enMovimientoBola;
+	int cantidadDeRebotesParaDestruccion = 0;
 
 	Enemigo(float x, float y, b2World* world);
 	~Enemigo();

@@ -20,6 +20,10 @@ public:
 	void setVelocidad(b2Vec2 velocidad);
 	float getRadio();
 
+	float getAlto();
+	float getAncho();
+	char getId();
+
 	void reaccionarCon(Figura* figura);
 
 };

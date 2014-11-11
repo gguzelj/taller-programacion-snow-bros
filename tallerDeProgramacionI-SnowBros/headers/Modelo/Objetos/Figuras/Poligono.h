@@ -16,6 +16,10 @@ public:
 	int getLados();
 	float getEscala();
 
+	float getAlto();
+	float getAncho();
+	char getId();
+
 	void reaccionarCon(Figura* figura){ ; };
 };
 

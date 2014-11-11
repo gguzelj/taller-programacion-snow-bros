@@ -47,3 +47,13 @@ float Circulo::getCoordY(){
         b2Vec2 vec = this->body->GetPosition();
         return vec.y;
 }
+
+float Circulo::getAlto(){
+	return radio * 2;
+}
+float Circulo::getAncho(){
+	return radio * 2;
+}
+char Circulo::getId(){
+	return CIRCULO_CODE;
+}

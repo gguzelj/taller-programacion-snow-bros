@@ -1,16 +1,6 @@
 #ifndef ESCENARIO_H_
 #define ESCENARIO_H_
 
-#define BOLA_NIEVE_CODE 'b'
-#define CIRCULO_CODE 'c'
-#define PARALELOGRAMO_CODE 'p'
-#define RECTANGULO_CODE 'r'
-#define TRAPECIO_CODE 't'
-#define TRIANGULO_CODE '3'
-#define CUADRADO_CODE '4'
-#define PENTAGONO_CODE '5'
-#define HEXAGONO_CODE '6'
-
 #include <list>
 #include <vector>
 #include <Box2D/Box2D.h>

@@ -39,3 +39,15 @@ Muro::Muro(float ancho_esc, float alto_esc, int rot, b2World* world, float pos_x
 Muro::~Muro(){
 	this->world->DestroyBody(this->body);
 }
+
+float Muro::getAlto(){
+	//TODO Revisar si esto es lo que deberia devolver
+	return ancho * 2;
+}
+float Muro::getAncho(){
+	return ancho;
+}
+
+char Muro::getId(){
+	return MURO_CODE;
+}

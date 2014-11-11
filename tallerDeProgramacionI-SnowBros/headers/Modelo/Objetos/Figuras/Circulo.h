@@ -12,7 +12,9 @@ public:
         float getRadio();
         float getCoordX();
         float getCoordY();
-        //void reaccionarCon(Figura* figura){ ; };
+    	float getAlto();
+    	float getAncho();
+    	char getId();
 };
 
 #endif /* CIRCULO_H_ */

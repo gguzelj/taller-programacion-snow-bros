@@ -50,3 +50,16 @@ float BolaNieve::getRadio(){
 void BolaNieve::reaccionarCon(Figura* figura){
 	figura->reaccionarConBolaNieve(this);
 }
+
+
+float BolaNieve::getAlto(){
+	return radio * 2;
+}
+
+float BolaNieve::getAncho(){
+	return radio * 2;
+}
+
+char BolaNieve::getId(){
+	return BOLA_NIEVE_CODE;
+}

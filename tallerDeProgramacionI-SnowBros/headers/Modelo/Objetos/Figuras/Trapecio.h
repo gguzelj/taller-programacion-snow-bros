@@ -14,6 +14,8 @@ public:
 	~Trapecio();
 	float getBaseMayor();
 	float getAlto();
+	float getAncho();
+	char getId();
 
 	void reaccionarCon(Figura* figura){ ; };
 };

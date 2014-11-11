@@ -199,86 +199,6 @@ unsigned int Escenario::getCantObjEstaticos() {
 	return figurasEstaticas_->size();
 }
 
-void obtenerAltoAnchoIdFigura(Figura* figura, float &alto, float &ancho, char& id) {
-
-	if (figura->type == ID_RECTANGULO) {
-		Rectangulo* rect = static_cast<Rectangulo *>(figura);
-		alto = rect->getAlto();
-		ancho = rect->getAncho();
-		id = RECTANGULO_CODE;
-		return;
-	}
-	if (figura->type == ID_CIRCULO) {
-		Circulo* circ = static_cast<Circulo *>(figura);
-		alto = circ->getRadio() * 2;
-		ancho = alto;
-		id = CIRCULO_CODE;
-		return;
-	}
-
-	if (figura->type == ID_POLIGONO) {
-		Poligono* polygon = static_cast<Poligono *>(figura);
-		float escala = polygon->getEscala();
-		int lados = polygon->getLados();
-
-		if (lados == 3) {
-			ancho = 1.732050808 * escala;
-			alto = escala * 3 / 2;
-			id = TRIANGULO_CODE;
-			return;
-		}
-
-		if (lados == 4) {
-			ancho = 2 * escala;
-			alto = ancho;
-			id = CUADRADO_CODE;
-			return;
-		}
-
-		if (lados == 5) {
-			ancho = (2 * escala * sin(M_PI / 5) * (1 + 2 * cos(72 * DEGTORAD)));
-			alto = escala * (1 + cos(M_PI / 5));
-			id = PENTAGONO_CODE;
-			return;
-		}
-
-		if (lados == 6) {
-			ancho = 2 * escala * cos(M_PI / 6);
-			alto = 2 * escala;
-			id = HEXAGONO_CODE;
-			return;
-		}
-	}
-
-	if (figura->type == ID_TRAPECIO) {
-		Trapecio* trap = static_cast<Trapecio *>(figura);
-		ancho = trap->getBaseMayor();
-		alto = trap->getAlto();
-		id = TRAPECIO_CODE;
-		return;
-	}
-
-	if (figura->type == ID_PARALELOGRAMO) {
-		Paralelogramo* paralelogramo = static_cast<Paralelogramo *>(figura);
-
-		alto = paralelogramo->getAlto();
-		ancho = paralelogramo->getAncho() + alto / tan(M_PI / 6);
-		id = PARALELOGRAMO_CODE;
-		return;
-	}
-}
-
-void obtenerAltoAnchoIdProyectil(Proyectil* proy, float &alto, float &ancho, char& id) {
-
-	if (proy->type == "bolaNieve") {
-		BolaNieve* bola = static_cast<BolaNieve *>(proy);
-		alto = bola->getRadio() * 2;
-		ancho = alto;
-		id = BOLA_NIEVE_CODE;
-		return;
-	}
-}
-
 /*
  * Devolvemos un vector con objetos Estaticos
  */
@@ -292,14 +212,17 @@ figura_t* Escenario::getObjetosEstaticos() {
 
 		fig = (*figurasEstaticas_)[i];
 
-		obtenerAltoAnchoIdFigura(fig, obj[i].alto, obj[i].ancho, obj[i].id);
-
+		obj[i].id = fig->getId();
+		obj[i].alto = fig->getAlto();
+		obj[i].ancho = fig->getAncho();
 		obj[i].rotacion = fig->getAngulo();
-		b2Vec2 center = fig->GetCenter();
-		obj[i].centro.x = center.x;
-		obj[i].centro.y = center.y;
+		obj[i].centro.x = fig->GetCenter().x;
+		obj[i].centro.y = fig->GetCenter().y;
+
 	}
+
 	return obj;
+
 }
 
 /*
@@ -315,12 +238,13 @@ figura_t* Escenario::getObjetosDinamicos() {
 
 		fig = (*figurasDinamicas_)[i];
 
-		obtenerAltoAnchoIdFigura(fig, obj[i].alto, obj[i].ancho, obj[i].id);
-
+		obj[i].id = fig->getId();
+		obj[i].alto = fig->getAlto();
+		obj[i].ancho = fig->getAncho();
 		obj[i].rotacion = fig->getAngulo();
-		b2Vec2 center = fig->GetCenter();
-		obj[i].centro.x = center.x;
-		obj[i].centro.y = center.y;
+		obj[i].centro.x = fig->GetCenter().x;
+		obj[i].centro.y = fig->GetCenter().y;
+
 	}
 	return obj;
 }
@@ -336,12 +260,12 @@ proyectil_t* Escenario::getProyectiles() {
 	int i = 0;
 	for (auto proy = proyectiles_->begin(); proy != proyectiles_->end(); ++proy) {
 
-		obtenerAltoAnchoIdProyectil((*proy), p[i].alto, p[i].ancho, p[i].id);
-
+		p[i].id = (*proy)->getId();
+		p[i].alto = (*proy)->getAlto();
+		p[i].ancho = (*proy)->getAncho();
 		p[i].rotacion = (*proy)->getAngulo();
-		b2Vec2 center = (*proy)->GetCenter();
-		p[i].centro.x = center.x;
-		p[i].centro.y = center.y;
+		p[i].centro.x = (*proy)->GetCenter().x;
+		p[i].centro.y = (*proy)->GetCenter().y;
 		i++;
 	}
 	return p;

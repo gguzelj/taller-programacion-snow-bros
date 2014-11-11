@@ -1,6 +1,16 @@
 #ifndef FIGURA_H_
 #define FIGURA_H_
 
+#define BOLA_NIEVE_CODE 'b'
+#define CIRCULO_CODE 'c'
+#define MURO_CODE 'm'
+#define PARALELOGRAMO_CODE 'p'
+#define RECTANGULO_CODE 'r'
+#define TRAPECIO_CODE 't'
+#define TRIANGULO_CODE '3'
+#define CUADRADO_CODE '4'
+#define PENTAGONO_CODE '5'
+#define HEXAGONO_CODE '6'
 
 #define ID_CIRCULO 1
 #define ID_MURO 2
@@ -59,7 +69,9 @@ public:
 	float getAngulo();
 	float getMasa();
 	bool esEstatico();
-
+	virtual float getAlto() = 0;
+	virtual float getAncho() = 0;
+	virtual char getId() = 0;
 
 	virtual void reaccionarCon(Figura*){};
 

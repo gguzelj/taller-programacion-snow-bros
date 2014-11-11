@@ -25,6 +25,10 @@ public:
 	Muro(float ancho_esc, float alto_esc, int rot, b2World* world, float pos_x);
 	~Muro();
 
+	float getAlto();
+	float getAncho();
+	char getId();
+
 	void reaccionarCon(Figura* figura){ ; };
 };
 

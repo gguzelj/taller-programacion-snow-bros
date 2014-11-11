@@ -3,7 +3,7 @@
 
 #include "../Figura.h"
 
-class Rectangulo : public Figura {
+class Rectangulo: public Figura {
 
 private:
 	float ancho;
@@ -14,6 +14,7 @@ public:
 	~Rectangulo();
 	float getAncho();
 	float getAlto();
+	char getId();
 
 };
 

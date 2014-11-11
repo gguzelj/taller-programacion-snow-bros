@@ -44,9 +44,13 @@ Paralelogramo::Paralelogramo(JsonParser *parser, int index, b2World* world){
 }
 
 float Paralelogramo::getAncho(){
-	return ancho;
+	return (ancho + alto / tan(M_PI / 6));
 }
 
 float Paralelogramo::getAlto(){
 	return alto;
+}
+
+char Paralelogramo::getId(){
+	return PARALELOGRAMO_CODE;
 }

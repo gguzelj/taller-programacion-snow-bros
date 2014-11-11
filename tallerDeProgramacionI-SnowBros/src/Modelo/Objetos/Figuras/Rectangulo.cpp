@@ -42,3 +42,7 @@ float Rectangulo::getAncho(){
 float Rectangulo::getAlto(){
 	return alto;
 }
+
+char Rectangulo::getId(){
+	return RECTANGULO_CODE;
+}

@@ -61,3 +61,10 @@ float Trapecio::getBaseMayor(){
 float Trapecio::getAlto(){
 	return alto;
 }
+
+float Trapecio::getAncho(){
+	return getBaseMayor();
+}
+char Trapecio::getId(){
+	return TRAPECIO_CODE;
+}

@@ -23,6 +23,7 @@ protected:
 	b2World* world;
 	b2Body* body;
 	int jumpCooldown;
+	int shootCooldown;
 	float ancho;
 	float alto;
 	int aceleracion;
@@ -56,13 +57,23 @@ public:
 	b2Fixture* GetFixtureList();
 	b2Vec2 GetWorldPoint(const b2Vec2& localPoint);
 
-	float getX();
-	float getY();
+	float getX(){
+		return (this->body->GetPosition().x);
+	}
+
+	float getY(){
+		return (this->body->GetPosition().y);
+	}
+
 	float getAncho() {
 		return ancho;
 	}
 	float getAlto() {
 		return alto;
+	}
+
+	b2Body* getb2Body() {
+		return this->body;
 	}
 	void moveLeft();
 	void moveRight();
@@ -73,15 +84,14 @@ public:
 	}
 	void stop();
 	void decreaseJumpCooldown();
+	void decreaseShootCooldown();
 	int getJumpCooldown();
+	int getShootCooldown();
 	void updateLeftContact(int);
 	void updateRightContact(int);
 	virtual void handleInput(SDL_Keycode input, Uint32 input_type) {
 	}
 
-	b2Body* getb2Body() {
-		return this->body;
-	}
 	;
 	b2Vec2 getVelocity();
 	int getCantidadDeContactosActuales();

@@ -1,14 +1,20 @@
 #ifndef PARSERVALIDATOR_H_
 #define PARSERVALIDATOR_H_
 
-#include "JsonParser_C.h"
-#include <json/json.h>
 #include <string>
 #include <iostream>
 #include <sstream>
 #include <fstream>
 #include <streambuf>
+#include <typeinfo>
+#include <arpa/inet.h>
+
+#include "JsonParser_C.h"
+#include <json/json.h>
 #include "../Log/Log.h"
+
+#define FACTOR_CONVERSION_UN_A_PX 25
+#define imagePath "resources/snowBackground.png"
 
 /**
  * Clase encargada de hacer validaciones para el json

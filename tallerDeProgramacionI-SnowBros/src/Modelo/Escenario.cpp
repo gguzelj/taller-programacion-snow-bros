@@ -58,18 +58,10 @@ Escenario::Escenario(JsonParser *parser) {
 		else
 			throw ErrorTipoDeObjeto();
 
-		//Validamos si esta definicion del objeto no se superpone con alguna otra.
-		//En ese caso, se elimina el objeto y se guarda en el log
-		if (figura_i->validarOverlap()) {
-
-			Log::ins()->add(
-			FIGURA_WARNING_OVERLAP + parser->getObjectDefinition(index), Log::WARNING);
-		} else {
-			if (parser->esObjetoEstatico(index))
-				figurasEstaticas_->push_back(figura_i);
-			else
-				figurasDinamicas_->push_back(figura_i);
-		}
+		if (parser->esObjetoEstatico(index))
+			figurasEstaticas_->push_back(figura_i);
+		else
+			figurasDinamicas_->push_back(figura_i);
 	}
 }
 
@@ -127,9 +119,11 @@ void Escenario::setPersonajeConnectionState(conn_id id, char state) {
 
 void acomodarEstadoCharacter(Character* personaje) {
 	if(personaje->state != &Personaje::dying){
-		//chequeo para cambiar el estado jumping a falling o el estado cuando cae de una plataforma
+		//Chequeo para cambiar el estado jumping a falling o el estado cuando cae de una plataforma
 		personaje->decreaseJumpCooldown();
-		//esta implementado aca para que cambie cuando tiene que hacerlo
+		//Chequeo si puedo disparar.
+		personaje->decreaseShootCooldown();
+		//Esta implementado aca para que cambie cuando tiene que hacerlo
 		if (personaje->getVelocity().y <= 0.0f && personaje->getCantidadDeContactosActuales() == 0 && personaje->state != &Personaje::shooting) {
 			personaje->state = &Personaje::falling;
 

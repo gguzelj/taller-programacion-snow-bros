@@ -9,6 +9,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->escenario_ = escenario;
 	this->world = escenario->getWorld();
 	this->jumpCooldown = 0;
+	this->shootCooldown = 0;
 	this->aceleracion = 10.0f;
 	this->x = x;
 	this->y = y;
@@ -95,6 +96,10 @@ Personaje::~Personaje() {
 
 void Personaje::disparar() {
 
+	if(shootCooldown > 0) return;
+
+	shootCooldown = 10;
+
 	BolaNieve *bola;
 
 	if (orientacion == IZQUIERDA)
@@ -130,7 +135,6 @@ void Personaje::empujar() {
 			return;
 		}
 	}
-
 }
 
 void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {

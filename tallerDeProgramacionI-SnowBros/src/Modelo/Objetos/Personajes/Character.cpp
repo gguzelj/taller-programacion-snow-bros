@@ -60,20 +60,21 @@ b2Vec2 Character::getVelocity() {
 	return this->body->GetLinearVelocity();
 }
 
-float Character::getX() {
-	return (this->body->GetPosition().x);
-}
-
-float Character::getY() {
-	return (this->body->GetPosition().y);
-}
-
 void Character::decreaseJumpCooldown() {
 	if (this->jumpCooldown > 0)
 		this->jumpCooldown -= 1;
 }
 
+void Character::decreaseShootCooldown() {
+	if (this->shootCooldown > 0)
+		this->shootCooldown -= 1;
+}
+
 int Character::getJumpCooldown() {
+	return (this->jumpCooldown);
+}
+
+int Character::getShootCooldown() {
 	return (this->jumpCooldown);
 }
 

@@ -14,13 +14,24 @@ bool ParserValidator::validarEscenario(escenario_t* &escenario,
 	//sera reemplazado ese valor por uno default, y se guardara registro en el log
 	escenario->maximoJugadores = valMaximoJugadores(esc);
 	escenario->gravedad = valGravedad(esc);
-	escenario->altoUn = valAltoUn(esc);
-	escenario->anchoUn = valAnchoUn(esc);
+
+	std::ifstream in(imagePath);
+	unsigned int width, height;
+
+	in.seekg(16);
+	in.read((char *) &width, 4);
+	in.read((char *) &height, 4);
+
+	width = ntohl(width);
+	height = ntohl(height);
+
+	escenario->altoUn = height / FACTOR_CONVERSION_UN_A_PX;//Alto de la imagen dividido factor de conversion
+	escenario->anchoUn = width / FACTOR_CONVERSION_UN_A_PX;//Ancho de la imagen dividido factor de conversion
 
 	return false;
 }
 
-/**
+/*
  * Realizamos todas las validaciones del objeto del escenario.
  * En caso de encontrar algun error en algun atributo, se lo
  * modifica con un valor valido (de ser posible). En otro caso
@@ -60,7 +71,7 @@ bool ParserValidator::validarObjeto(objeto_t* &objeto, Json::Value obj,
 	return false;
 }
 
-/**
+/*
  * Validaciones de la cantidad de jugadores
  */
 int ParserValidator::valMaximoJugadores(Json::Value esc) {
@@ -89,7 +100,7 @@ int ParserValidator::valMaximoJugadores(Json::Value esc) {
 
 }
 
-/**
+/*
  * Validaciones de la gravedad
  */
 double ParserValidator::valGravedad(Json::Value esc) {
@@ -112,64 +123,8 @@ double ParserValidator::valGravedad(Json::Value esc) {
 
 	return esc[GRAVEDAD].asDouble();
 }
-/**
- * Validaciones en el Alto en unidades
- */
-double ParserValidator::valAltoUn(Json::Value esc) {
 
-	double altoUn;
-
-	if (!esc.isMember(ALTO_UN)) {
-		Log::ins()->add(PARSER_MSG_ESC_ALTO_UN, Log::WARNING);
-		return ALTO_UN_DEF;
-	}
-
-	if (!esc[ALTO_UN].isNumeric()) {
-		Log::ins()->add(PARSER_MSG_ESC_ALTO_UN_NO_NUMBER, Log::WARNING);
-		return ALTO_UN_DEF;
-	}
-
-	altoUn = esc[ALTO_UN].asDouble();
-
-	if (altoUn > ALTO_UN_MAX || altoUn < ALTO_UN_MIN) {
-		Log::ins()->add(PARSER_MSG_ESC_ALTO_UN_FUERA_RANGO,
-				Log::WARNING);
-		return ALTO_UN_DEF;
-	}
-
-	return altoUn;
-}
-
-/**
- * Validaciones en el ancho en unidades
- */
-double ParserValidator::valAnchoUn(Json::Value esc) {
-
-	double anchoUn;
-
-	if (!esc.isMember(ANCHO_UN)) {
-		Log::ins()->add(PARSER_MSG_ESC_ANCHO_UN, Log::WARNING);
-		return ANCHO_UN_DEF;
-	}
-
-	if (!esc[ANCHO_UN].isNumeric()) {
-		Log::ins()->add(PARSER_MSG_ESC_ANCHO_UN_NO_NUMBER,
-				Log::WARNING);
-		return ANCHO_UN_DEF;
-	}
-
-	anchoUn = esc[ANCHO_UN].asDouble();
-
-	if (anchoUn > ANCHO_UN_MAX || anchoUn < ANCHO_UN_MIN) {
-		Log::ins()->add(PARSER_MSG_ESC_ANCHO_UN_FUERA_RANGO,
-				Log::WARNING);
-		return ANCHO_UN_DEF;
-	}
-
-	return anchoUn;
-}
-
-/**
+/*
  * Validaciones en el tipo de objeto
  */
 bool ParserValidator::valTipoObjeto(Json::Value obj, std::string &tipo) {

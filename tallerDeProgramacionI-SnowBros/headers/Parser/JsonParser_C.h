@@ -8,8 +8,6 @@
 #define GRAVEDAD 			   "gravedad"
 #define ALTO_PX                "alto-px"
 #define ANCHO_PX               "ancho-px"
-#define ALTO_UN                "alto-un"
-#define ANCHO_UN               "ancho-un"
 #define IMAGEN_FONDO           "imagen_fondo"
 #define PERSONAJE              "personaje"
 #define X_COOR                 "x"
@@ -34,10 +32,6 @@
 //Valores Default para el juego
 #define MAXIMO_JUGADORES_DEF	4
 #define GRAVEDAD_DEF			-10.0f
-#define ALTO_PX_DEF             720
-#define ANCHO_PX_DEF            1024
-#define ALTO_UN_DEF             62.62
-#define ANCHO_UN_DEF            78.28
 #define COLOR_DEF               "#00FF00"
 #define ROT_DEF                 0
 #define MASA_DEF                1
@@ -46,26 +40,18 @@
 #define PERSONAJE_Y_DEF			 0
 
 //Rangos de valores validos para el juego
-#define MAXIMO_JUGADORES_MAX	20
+#define MAXIMO_JUGADORES_MAX	4
 #define MAXIMO_JUGADORES_MIN	2
-#define ALTO_PX_MAX				720
-#define ALTO_PX_MIN             200
-#define ANCHO_PX_MAX            1366
-#define ANCHO_PX_MIN            200
-#define ANCHO_UN_MAX            136
-#define ANCHO_UN_MIN            10
-#define ALTO_UN_MAX             90
-#define ALTO_UN_MIN             10
 #define ESCALA_MAX              50
 #define ESCALA_MIN              0.1
-#define ANCHO_MAX               50
+#define ANCHO_MAX               90
 #define ANCHO_MIN               0.1
-#define ALTO_MAX                50
+#define ALTO_MAX                75
 #define ALTO_MIN                0.1
 #define ROT_MIN                 -359
 #define ROT_MAX                 359
 #define BASE_MIN       		    0.2
-#define BASE_MAX       		    50
+#define BASE_MAX       		    75
 #define MASA_MIN                1
 #define MASA_MAX                100
 #define LADOS_MIN               3

@@ -22,7 +22,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 
 	this->connectionState = CONECTADO;
 	this->points = 0;
-	this->lives = 3;
+	this->lives = 5;
 	this->type = "personaje";
 	this->ancho = MITAD_ANCHO_PERSONAJE;
 	this->alto = MITAD_ALTO_PERSONAJE;
@@ -75,8 +75,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	paredDerecha = this->body->CreateFixture(&fixtureDef);
 
 	//Piso
-	shapeDelPersonaje.SetAsBox(ancho * 19.5f / 20, alto / 10, b2Vec2(0, -alto),
-			0);
+	shapeDelPersonaje.SetAsBox(ancho * 19.5f / 20, alto / 10, b2Vec2(0, -alto), 0);
 	fixtureDef.friction = 0.0019f;
 	piso = this->body->CreateFixture(&fixtureDef);
 
@@ -138,7 +137,8 @@ void Personaje::empujar() {
 }
 
 void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
-	this->state->handleInput(*this, input, input_type);
+	if(state == &Personaje::dying) return;
+	state->handleInput(*this, input, input_type);
 }
 
 /*
@@ -148,15 +148,17 @@ void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
  */
 void Personaje::reaccionarConEnemigo(Enemigo* enemigo) {
 
+	if(state == &Personaje::dying) return;
+
 	//Si el enemigo esta congelado, no nos sucede nada
 	if (enemigo->estaCongelado()) {
-		this->state = &Personaje::pushing;
+		state = &Personaje::pushing;
 		return;
 	}
 
 	//En otro caso, restamos vida
-	if (lives > 0 && !inmune && this->state != &Personaje::dying) {
-		this->state = &Personaje::dying;
+	if (lives > 0 && !inmune) {
+		state = &Personaje::dying;
 		sacarVida();
 		std::thread t(&Personaje::morir, this);
 		t.detach();
@@ -175,7 +177,7 @@ void Personaje::jump() {
 	if (this->jumpCooldown <= 0) {
 		this->jumpCooldown = 18;
 		b2Vec2 velocidadActual = this->body->GetLinearVelocity();
-		velocidadActual.y = 18;
+		velocidadActual.y = 25;
 		this->body->SetLinearVelocity(velocidadActual);
 	}
 }

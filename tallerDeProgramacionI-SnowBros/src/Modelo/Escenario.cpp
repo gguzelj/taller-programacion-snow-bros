@@ -277,10 +277,9 @@ void obtenerAltoAnchoIdProyectil(Proyectil* proy, float &alto, float &ancho, cha
 		id = BOLA_NIEVE_CODE;
 		return;
 	}
-
 }
 
-/**
+/*
  * Devolvemos un vector con objetos Estaticos
  */
 figura_t* Escenario::getObjetosEstaticos() {
@@ -303,7 +302,7 @@ figura_t* Escenario::getObjetosEstaticos() {
 	return obj;
 }
 
-/**
+/*
  * Devolvemos un vector con objetos dinamicos
  */
 figura_t* Escenario::getObjetosDinamicos() {
@@ -326,7 +325,7 @@ figura_t* Escenario::getObjetosDinamicos() {
 	return obj;
 }
 
-/**
+/*
  * Devolvemos un vector con proyectiles
  */
 proyectil_t* Escenario::getProyectiles() {
@@ -379,7 +378,6 @@ personaje_t* Escenario::getPersonajesParaEnvio() {
 		pers[i].connectionState = DESCONECTADO;
 		pers[i].inmune = true;
 	}
-
 	return pers;
 }
 
@@ -397,7 +395,6 @@ enemigo_t* Escenario::getEnemigosParaEnvio() {
 		enems[i].nivelDeCongelacion = (*enemigo)->getNivelDeCongelamiento();
 		i++;
 	}
-
 	return enems;
 }
 
@@ -432,7 +429,6 @@ void movimientoDeLaBola(Enemigo* enemigo){
 				else
 					enemigo->handleInput(SDLK_LEFT, SDL_KEYUP);
 			}
-
 		}
 	}
 }
@@ -462,7 +458,6 @@ void Escenario::movimientoDelEnemigo(Enemigo* enemigo){
 		   for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
 			   posicionesX[i] = (*personaje)->getX();
 			   posicionesY[i] = (*personaje)->getY();
-			   //printf("Pos %d// Per %d \n",(*personaje)->posicion.x,i);
 			   i++;
 			}
 
@@ -505,7 +500,6 @@ void Escenario::actualizarEnemigos() {
 		}
 	}
 }
-
 
 bool Escenario::crearEnemigo(float x, float y) {
 	Enemigo* nuevoEnemigo = new Enemigo(x, y, this->world_);

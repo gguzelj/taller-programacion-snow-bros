@@ -95,7 +95,6 @@ void cambiarEstadoAlAterrizar(Character* character) {
 	}
 }
 
-
 void Character::empiezoContacto(b2Fixture* fixture) {
 
 	//contacto con derecha?
@@ -113,9 +112,7 @@ void Character::empiezoContacto(b2Fixture* fixture) {
 			cambiarEstadoAlAterrizar(this);
 
 		contactosActuales++;
-
 	}
-
 }
 
 void Character::terminoContacto(b2Fixture* fixture) {
@@ -132,9 +129,7 @@ void Character::terminoContacto(b2Fixture* fixture) {
 
 		if (contactosActuales == 0 && state->getCode() != JUMPING)
 			state = &Character::falling;
-
 	}
-
 }
 
 void Character::cambiarFilterIndex(int16 groupIndex){
@@ -146,5 +141,4 @@ void Character::cambiarFilterIndex(int16 groupIndex){
 	for (b2Fixture* fix = this->body->GetFixtureList(); fix; fix = fix->GetNext()) {
 		fix->SetFilterData(filter);
 	}
-
 }

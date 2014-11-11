@@ -23,7 +23,9 @@ class Personaje : public Character {
 		Escenario *escenario_;
 
 		char connectionState;
+
 		int points;
+
 		b2Vec2* posicionInicial;
 
 		void hacerInmune();
@@ -32,6 +34,7 @@ class Personaje : public Character {
 
 	public:
 		conn_id id;
+
 		bool esta_muerto;
 
 		Personaje(float x, float y,char id[], Escenario* escenario);

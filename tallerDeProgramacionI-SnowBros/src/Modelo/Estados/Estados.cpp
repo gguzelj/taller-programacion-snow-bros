@@ -90,9 +90,7 @@ void OnAirState::handleInput(Character &character, SDL_Keycode input, Uint32 inp
 		if (character.movimientoLateralIzquierda || character.movimientoLateralDerecha)
 			cambiarOrientacionAlDejarDePresionarUnaTecla(character);
 		break;
-
 	}
-
 }
 
 void saltar(Character& character) {

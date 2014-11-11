@@ -110,7 +110,8 @@ void Enemigo::movimientoBola(){
 }
 
 void Enemigo::handleInput(SDL_Keycode input,Uint32 input_type){
-		(this->state)->handleInput(*this,input,input_type);
+	if(nivelDeCongelamiento > 0) return;
+	state->handleInput(*this,input,input_type);
 }
 
 void Enemigo::reaccionarCon(Figura* figura){
@@ -177,7 +178,7 @@ void Enemigo::jump(){
 		if (this->jumpCooldown <= 0) {
 			this->jumpCooldown = 18;
 			b2Vec2 velocidadActual = this->body->GetLinearVelocity();
-			velocidadActual.y = 18;
+			velocidadActual.y = 25;
 			this->body->SetLinearVelocity(velocidadActual);
 		}
 	}

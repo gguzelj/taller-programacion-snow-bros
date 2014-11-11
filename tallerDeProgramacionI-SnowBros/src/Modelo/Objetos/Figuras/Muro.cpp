@@ -30,6 +30,7 @@ Muro::Muro(float ancho_esc, float alto_esc, int rot, b2World* world, float pos_x
 	b2FixtureDef fixtureDef;					//creo el fixture
 	fixtureDef.shape = &shape;					//le asigno la forma que determine antes
 	fixtureDef.density = 1;
+	fixtureDef.filter.groupIndex = FIGURA_FILTER_INDEX;
 	fixtureDef.friction = 0.5f;
 
 	b2Fixture* fixture = body->CreateFixture(&fixtureDef);

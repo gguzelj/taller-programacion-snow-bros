@@ -84,7 +84,6 @@ public:
 	void pushLeft();
 	void pushRight();
 	virtual void jump(){
-
 	}
 	void stop();
 	void decreaseJumpCooldown();
@@ -114,6 +113,11 @@ public:
 
 	void terminoContacto(b2Fixture* fixture);
 	void empiezoContacto(b2Fixture* fixture);
+
+	virtual void atravezarPlataformas();
+	virtual void noAtravezarPlataformas(){};
+
+	void test();
 };
 
 #endif /* CHARACTER_H_ */

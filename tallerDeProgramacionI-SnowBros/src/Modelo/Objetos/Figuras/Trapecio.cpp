@@ -42,9 +42,10 @@ Trapecio::Trapecio(JsonParser *parser, int index, b2World* world){
 
 	b2PolygonShape shape;
 	shape.Set(vertices,4);
-	b2FixtureDef fixtureDef;					//creo el fixture
-	fixtureDef.shape = &shape;					//le asigno la forma que determine antes
+	b2FixtureDef fixtureDef;
+	fixtureDef.shape = &shape;
 	fixtureDef.density = (float) masa / ((base_inf+base_sup)/2 * alto);
+	fixtureDef.filter.groupIndex = FIGURA_FILTER_INDEX;
 	fixtureDef.friction = 0.7f;
 
 	b2Fixture* fixture = body->CreateFixture(&fixtureDef);

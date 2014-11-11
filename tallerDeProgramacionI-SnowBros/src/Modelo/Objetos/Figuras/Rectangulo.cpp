@@ -26,9 +26,10 @@ Rectangulo::Rectangulo(JsonParser *parser, int index, b2World* world){
 	//definiendo ahora el fixture del rectangulo
 	b2PolygonShape shape;
 	shape.SetAsBox(ancho/2,alto/2); 		//Esto es porque me hace el rectangulo el doble de ancho de lo que le pongo.
-	b2FixtureDef fixtureDef;					//creo el fixture
-	fixtureDef.shape = &shape;					//le asigno la forma que determine antes
+	b2FixtureDef fixtureDef;
+	fixtureDef.shape = &shape;
 	fixtureDef.density = (float) masa / (alto*ancho);
+	fixtureDef.filter.groupIndex = FIGURA_FILTER_INDEX;
 	fixtureDef.friction = 0.7f;
 
 	b2Fixture* fixture = body->CreateFixture(&fixtureDef);

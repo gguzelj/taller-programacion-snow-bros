@@ -178,6 +178,7 @@ void Personaje::jump() {
 		b2Vec2 velocidadActual = this->body->GetLinearVelocity();
 		velocidadActual.y = 25;
 		this->body->SetLinearVelocity(velocidadActual);
+		atravezarPlataformas();
 	}
 }
 
@@ -199,4 +200,8 @@ void Personaje::hacerInmune() {
 	sleep(TIEMPO_INMUNIDAD);
 
 	inmune = false;
+}
+
+void Personaje::noAtravezarPlataformas(){
+	cambiarFilterIndex(PERSONAJE_FILTER_INDEX);
 }

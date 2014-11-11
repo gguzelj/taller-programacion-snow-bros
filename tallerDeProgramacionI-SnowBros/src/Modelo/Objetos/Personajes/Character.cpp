@@ -127,9 +127,24 @@ void Character::terminoContacto(b2Fixture* fixture) {
 
 		contactosActuales--;
 
-		if (contactosActuales == 0 && state->getCode() != JUMPING)
+		if (contactosActuales == 0 && state->getCode() != JUMPING){
 			state = &Character::falling;
+			noAtravezarPlataformas();
+		}
+
 	}
+}
+
+void Character::atravezarPlataformas(){
+	cambiarFilterIndex(FIGURA_FILTER_INDEX);
+	std::thread t(&Character::test, this);
+	t.detach();
+}
+
+void Character::test(){
+	unsigned int microseconds = 500000;
+	usleep(microseconds);
+	cambiarFilterIndex(PERSONAJE_FILTER_INDEX);
 }
 
 void Character::cambiarFilterIndex(int16 groupIndex){

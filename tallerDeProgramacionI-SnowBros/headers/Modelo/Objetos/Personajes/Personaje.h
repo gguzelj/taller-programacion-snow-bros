@@ -80,6 +80,7 @@ class Personaje : public Character {
 		void empiezoContacto(b2Fixture* fixture);
 		void terminoContacto(b2Fixture* fixture);
 		void volverAPosicionInicial();
+		void noAtravezarPlataformas();
 
 };
 

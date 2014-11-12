@@ -14,6 +14,7 @@ class Enemigo: public Character {
 private:
 
 	int nivelDeCongelamiento;
+	int puntos;
 	time_t tiempoDeImpactoDeLaUltimaBola;
 
 public:
@@ -48,6 +49,15 @@ public:
 	int getNivelDeCongelamiento(){
 		return nivelDeCongelamiento;
 	}
+
+	b2Body* getb2Body() {
+		return this->body;
+	}
+
+	int getPuntos(){
+		return puntos;
+	}
+
 	void hacerAtravezable();
 	void hacerNoAtravezable();
 };

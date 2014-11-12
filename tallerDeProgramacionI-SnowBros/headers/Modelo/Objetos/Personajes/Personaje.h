@@ -45,6 +45,10 @@ class Personaje : public Character {
 		b2Fixture* GetFixtureList();
 		b2Vec2 GetWorldPoint(const b2Vec2& localPoint);
 
+		b2Body* getb2Body(){
+			return body;
+		}
+
 		int getPoints(){
 			return points;
 		}

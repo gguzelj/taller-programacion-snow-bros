@@ -129,8 +129,8 @@ void Personaje::empujar() {
 		b2Contact* c = ce->contact;
 		Figura *figuraA = (Figura*) c->GetFixtureA()->GetUserData();
 		if (figuraA->type == ID_ENEMIGO) {
+			points += ((Enemigo*) figuraA)->getPuntos();
 			((Enemigo*) figuraA)->morir();
-			points++;
 			return;
 		}
 	}
@@ -170,6 +170,7 @@ void Personaje::morir() {
 	sleep(1);
 	entrarEnPeriodoDeInmunidad();
 	this->esta_muerto = true;
+	this->points /= 2;
 }
 
 void Personaje::jump() {

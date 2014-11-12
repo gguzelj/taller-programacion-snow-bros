@@ -76,9 +76,6 @@ public:
 		return '0';
 	}
 
-	b2Body* getb2Body() {
-		return this->body;
-	}
 	void moveLeft();
 	void moveRight();
 	void pushLeft();

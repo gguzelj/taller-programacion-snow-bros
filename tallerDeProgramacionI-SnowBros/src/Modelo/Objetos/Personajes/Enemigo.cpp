@@ -25,6 +25,7 @@ Enemigo::Enemigo(float x, float y, b2World* world) {
 	this->puedeEmpujar = false;
 	this->estaVivo = true;
 	this->enMovimientoBola = false;
+	this->puntos = 50;
 
 	//Parametros para controlar los contactos
 	this->contactosActuales = 0;

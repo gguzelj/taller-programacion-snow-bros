@@ -111,7 +111,7 @@ void Enemigo::movimientoBola(){
 }
 */
 void Enemigo::handleInput(SDL_Keycode input,Uint32 input_type){
-	if(nivelDeCongelamiento > 0) return;
+	if(nivelDeCongelamiento > 0 || enMovimientoBola) return;
 	state->handleInput(*this,input,input_type);
 }
 
@@ -167,8 +167,9 @@ void Enemigo::congelar(){
 	esAtravezable = false;
 	if (!enMovimientoBola)
 		aceleracion = 7.0f;
-	else
-		aceleracion = 25.0f;
+	else{
+		this->aceleracion = 25.0f;
+	}
 }
 
 bool Enemigo::estaCongelado(){

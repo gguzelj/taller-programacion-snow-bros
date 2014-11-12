@@ -130,6 +130,7 @@ void Personaje::empujar() {
 		Figura *figuraA = (Figura*) c->GetFixtureA()->GetUserData();
 		if (figuraA->type == ID_ENEMIGO) {
 			points += ((Enemigo*) figuraA)->getPuntos();
+			((Enemigo*) figuraA)->setOrientacion(this->orientacion);
 			((Enemigo*) figuraA)->morir();
 			return;
 		}

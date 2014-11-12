@@ -37,7 +37,7 @@ public:
 
 	void reaccionarConBolaNieve(BolaNieve* bola);
 
-	void reaccionarConOtroEnemigo(Enemigo* enemigo);
+	void reaccionarConEnemigo(Enemigo* enemigo);
 	void congelar();
 	void movimientoBola();
 

@@ -1,5 +1,7 @@
 #include "../../headers/Modelo/Escenario.h"
 
+int turnCooldown = 0;
+
 Escenario::Escenario(JsonParser *parser) {
 	// Define the gravity vector and then create an instance of b2world
 	b2Vec2 gravity(0.0f, parser->getGravedad());
@@ -340,7 +342,7 @@ void Escenario::agregarProyectil(Proyectil* proy) {
 }
 
 void movimientoDeLaBola(Enemigo* enemigo){
-	//Empieza para con la orientacion actual hasta que toca una pared, donde cambia el sentido.
+	//Empieza con la orientacion actual hasta que toca una pared, donde cambia el sentido.
 	//A la segunda pared que toca, se destruye
 	if (enemigo->getOrientacion() == 'l')
 		enemigo->handleInput(SDLK_LEFT, SDL_KEYDOWN);
@@ -352,21 +354,27 @@ void movimientoDeLaBola(Enemigo* enemigo){
 	int contactosEstaticos = 0;
 	for (b2ContactEdge *ce = body->GetContactList(); ce; ce = ce->next) {
 		b2Contact* c = ce->contact;
-
 		Figura *figuraA = (Figura*) c->GetFixtureA()->GetUserData();
 		Figura *figuraB = (Figura*) c->GetFixtureB()->GetUserData();
 
 		if ((figuraA->type == ID_ENEMIGO )&& (figuraB->type == ID_PERSONAJE))
-			return;
+			continue;
 		else if ((figuraB->type == ID_ENEMIGO) && (figuraA->type == ID_PERSONAJE))
-			return;
-		else
+			continue;
+		else{
 			contactosEstaticos++;
+		}
 	}
-	if(contactosEstaticos < 2)return;
+	if(contactosEstaticos < 3)return;
 	//Si no salio, quiere decir que esta enContactoConParedYPiso
+	//Usamos un cooldown (como en todas las demas cosas que no nos salen) para que cambie la
+	//orientacion solo cuando no esta en cooldown.
+	//TODO revisar por que siempre tira que hay 2 contactos cuando deberia haber uno. Cuando pega con
+	//una pared, hay hasta 5.
+	turnCooldown++;
+	turnCooldown = turnCooldown%5;
 	//Cambiamos la orientacion
-	std::cout<<"Cambia orientacion"<<std::endl;
+	if (turnCooldown != 0) return;
 	if (enemigo->getOrientacion() == 'l'){
 		enemigo->handleInput(SDLK_LEFT, SDL_KEYUP);
 		enemigo->setOrientacion('r');
@@ -378,7 +386,7 @@ void movimientoDeLaBola(Enemigo* enemigo){
 
 	enemigo->cantidadDeRebotesParaDestruccion++;
 
-	if(enemigo->cantidadDeRebotesParaDestruccion == 2)
+	if(enemigo->cantidadDeRebotesParaDestruccion == 3)
 		enemigo->estaVivo = false;
 }
 

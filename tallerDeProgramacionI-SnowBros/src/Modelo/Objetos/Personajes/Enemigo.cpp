@@ -58,17 +58,17 @@ Enemigo::Enemigo(float x, float y, b2World* world) {
 	fix->SetUserData(this);
 
 	//Pared Izquierda
-	shapeDelEnemigo.SetAsBox(0.0000001f, alto - 0.00405f, b2Vec2(-ancho + 0.00000005, 0.0045f), 0);
-	fixtureDef.friction = 0.0019f;
+	shapeDelEnemigo.SetAsBox(0.01f, alto / 2, b2Vec2(-ancho + 0.01, 0), 0);
+	fixtureDef.friction = 0.01f;
 	paredIzquierda = this->body->CreateFixture(&fixtureDef);
 
 	//ParedDerecha
-	shapeDelEnemigo.SetAsBox(0.0000001f, alto - 0.00405f, b2Vec2(ancho - 0.00000005, 0.0045f), 0);
-	fixtureDef.friction = 0.0019f;
+	shapeDelEnemigo.SetAsBox(0.01f, alto / 2, b2Vec2(ancho - 0.01, 0), 0);
+	fixtureDef.friction = 0.01f;
 	paredDerecha = this->body->CreateFixture(&fixtureDef);
 
 	//Piso
-	shapeDelEnemigo.SetAsBox(ancho * 19.5f / 20, alto / 10, b2Vec2(0, -alto), 0);
+	shapeDelEnemigo.SetAsBox(ancho * 19.5f / 20, alto / 10, b2Vec2(0, -alto - 0.01), 0);
 	fixtureDef.friction = 0.0019f;
 	piso = this->body->CreateFixture(&fixtureDef);
 
@@ -131,13 +131,14 @@ void Enemigo::reaccionarConBolaNieve(BolaNieve* bola){
 
 	//Si no estaba congelado, empezamos a congelar
 	if (this->nivelDeCongelamiento == 0){
+		this->state = &Enemigo::standby;
 		this->nivelDeCongelamiento += bola->potencia;
 		std::thread t(&Enemigo::congelar, this);
 		t.detach();
 	}
 }
 
-void Enemigo::reaccionarConOtroEnemigo(Enemigo* enemigo){
+void Enemigo::reaccionarConEnemigo(Enemigo* enemigo){
 	if(enemigo->enMovimientoBola){
 		estaVivo = false;
 	}
@@ -166,7 +167,7 @@ void Enemigo::congelar(){
 	if (!enMovimientoBola)
 		aceleracion = 7.0f;
 	else
-		aceleracion = 20.0f;
+		aceleracion = 25.0f;
 }
 
 bool Enemigo::estaCongelado(){

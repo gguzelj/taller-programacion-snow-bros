@@ -60,9 +60,7 @@ public:
 
 class DyingState: public CharacterState{
 public:
-	void handleInput(Character &character,SDL_Keycode input,Uint32 input_type){
-
-	}
+	void handleInput(Character &character,SDL_Keycode input,Uint32 input_type);
 	char getCode(){
 		return DYING;
 	}

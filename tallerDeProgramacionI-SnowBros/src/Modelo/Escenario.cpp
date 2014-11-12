@@ -17,9 +17,6 @@ Escenario::Escenario(JsonParser *parser) {
 	personajes_ = new std::list<Personaje*>;
 	enemigos_ = new std::list<Enemigo*>;
 
-	crearEnemigo(10, 10);
-	crearEnemigo(20, 20);
-
 	cantidadMaximaDePersonajes = parser->getConnectionsLimit();
 
 	contactos.setPersonaje(personajes_);
@@ -40,7 +37,6 @@ Escenario::Escenario(JsonParser *parser) {
 
 	// Create all the objects
 	for (unsigned int index = 0; index < parser->getCantidadObjetos(); index++) {
-
 		if (parser->getTipoObjeto(index) == CIRCULO)
 			figura_i = new Circulo(parser, index, world_);
 
@@ -55,6 +51,11 @@ Escenario::Escenario(JsonParser *parser) {
 
 		else if (parser->getTipoObjeto(index) == TRAPECIO)
 			figura_i = new Trapecio(parser, index, world_);
+
+		else if (parser->getTipoObjeto(index) == ENEMIGOBASICO){
+			Enemigo* nuevoEnemigo = new Enemigo(parser, index, world_);		//todo puede haber error si no se crea cuidado!!
+			enemigos_->push_back(nuevoEnemigo);
+		}
 
 		else
 			throw ErrorTipoDeObjeto();
@@ -460,12 +461,4 @@ void Escenario::actualizarEnemigos() {
 			movimientoDelEnemigo(*enemigo);
 		}
 	}
-}
-
-bool Escenario::crearEnemigo(float x, float y) {
-	Enemigo* nuevoEnemigo = new Enemigo(x, y, this->world_);
-	if (!nuevoEnemigo)
-		return false;
-	enemigos_->push_back(nuevoEnemigo);
-	return true;
 }

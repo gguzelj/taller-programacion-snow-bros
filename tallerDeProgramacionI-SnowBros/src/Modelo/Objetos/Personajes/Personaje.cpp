@@ -139,7 +139,10 @@ void Personaje::empujar() {
 }
 
 void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
-	if(state == &Personaje::dying) return;
+	if(state == &Personaje::dying){
+		state->handleInput(*this, input, input_type);
+		return;
+	}
 	state->handleInput(*this, input, input_type);
 }
 

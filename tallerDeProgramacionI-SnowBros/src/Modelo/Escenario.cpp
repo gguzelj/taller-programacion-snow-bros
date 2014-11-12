@@ -462,7 +462,7 @@ void Escenario::movimientoDelEnemigo(Enemigo* enemigo) {
 		}
 	}
 	if (v1 > 5) {
-		if ((posicionPersonajeY + 1) < posicionEnemigoY) {
+		if ((posicionPersonajeY + 1) < posicionEnemigoY && enemigo->getNivelDeCongelamiento() == 0) {
 			enemigo->handleInput(SDLK_UP, SDL_KEYUP);
 			enemigo->atravezarPlataformas();
 		}

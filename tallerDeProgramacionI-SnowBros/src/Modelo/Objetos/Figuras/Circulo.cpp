@@ -24,7 +24,7 @@ Circulo::Circulo(JsonParser *parser, int index, b2World* world){
 	circleShape.m_radius = radio;
 
 	fixtureDef.shape = &circleShape;
-	fixtureDef.filter.groupIndex = FIGURA_FILTER_INDEX;
+	fixtureDef.filter.groupIndex = PELOTA_FILTER_INDEX;
 	fixtureDef.friction = 1.0f;
 
 	b2Fixture* fixture = this->body->CreateFixture(&fixtureDef);

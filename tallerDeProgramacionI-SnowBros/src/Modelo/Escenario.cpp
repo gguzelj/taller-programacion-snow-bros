@@ -412,8 +412,7 @@ void Escenario::movimientoDelEnemigo(Enemigo* enemigo){
 			}
 		}
 	}
-	else{
-		if(v1 < 50){
+	else if(v1 < 50){
 		   int i=0;
 		   float posicionesX[4];
 		   float posicionesY[4];
@@ -441,8 +440,9 @@ void Escenario::movimientoDelEnemigo(Enemigo* enemigo){
 			}
 			if((posicionPersonajeY+1) < posicionEnemigoY)
 				enemigo->handleInput(SDLK_UP, SDL_KEYUP);
-		}
 	}
+	else if(v1 > 85)
+		enemigo->atravezarPlataformas();
 }
 
 void Escenario::actualizarEnemigos() {

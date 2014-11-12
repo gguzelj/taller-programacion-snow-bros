@@ -140,7 +140,6 @@ void StandByState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 	case SDL_KEYUP:
 		if (input == SDLK_UP)
 			character.debeSaltar = false;
-
 	}
 }
 
@@ -199,7 +198,6 @@ void ShootingState::handleInput(Character &character, SDL_Keycode input, Uint32 
 			switch (input) {
 
 			case SDLK_SPACE: {
-				//character.state = &Character::shooting;
 				character.disparar();
 				break;
 			}
@@ -223,6 +221,8 @@ void ShootingState::handleInput(Character &character, SDL_Keycode input, Uint32 
 			break;
 
 	case SDL_KEYUP:
+		if (input == SDLK_UP)
+			character.debeSaltar = false;
 		detenerMovimientoHorizontal(&character, input);
 		if(input == SDLK_SPACE){
 			if (character.movimientoLateralDerecha == false && character.movimientoLateralIzquierda == false){
@@ -237,6 +237,7 @@ void ShootingState::handleInput(Character &character, SDL_Keycode input, Uint32 
 	}
 
 }
+
 void PushingState::handleInput(Character &character, SDL_Keycode input, Uint32 input_type) {
 	switch (input_type) {
 	case SDL_KEYDOWN:
@@ -265,6 +266,8 @@ void PushingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 			break;
 
 	case SDL_KEYUP:
+		if (input == SDLK_UP)
+			character.debeSaltar = false;
 		if(input == SDLK_SPACE){
 			if (character.movimientoLateralDerecha == false && character.movimientoLateralIzquierda == false){
 				if (character.getVelocity().y <= 0.0f && character.getCantidadDeContactosActuales() == 0){
@@ -281,5 +284,4 @@ void PushingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 			character.state = &Character::walking;
 		}
 	}
-
 }

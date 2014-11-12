@@ -46,7 +46,7 @@ Enemigo::Enemigo(float x, float y, b2World* world) {
 	//Definimos el fixture del Enemigo
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shapeDelEnemigo;
-	fixtureDef.density = 1;
+	fixtureDef.density = 5;
 	fixtureDef.filter.groupIndex = ENEMIGO_FILTER_INDEX;
 	fixtureDef.friction = 1;
 	b2Fixture* fix = body->CreateFixture(&fixtureDef);
@@ -68,7 +68,7 @@ Enemigo::Enemigo(float x, float y, b2World* world) {
 	paredDerecha = this->body->CreateFixture(&fixtureDef);
 
 	//Piso
-	shapeDelEnemigo.SetAsBox(ancho * 19.5f / 20, alto / 10, b2Vec2(0, -alto - 0.01), 0);
+	shapeDelEnemigo.SetAsBox(ancho * 19.5f / 20, alto / 10, b2Vec2(0, -alto), 0);;
 	fixtureDef.friction = 0.0019f;
 	piso = this->body->CreateFixture(&fixtureDef);
 

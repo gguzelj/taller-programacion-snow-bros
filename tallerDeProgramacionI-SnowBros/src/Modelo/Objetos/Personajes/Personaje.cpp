@@ -52,7 +52,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	//Definimos el fixture del personaje
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shapeDelPersonaje;
-	fixtureDef.density = 1;
+	fixtureDef.density = 10;
 	fixtureDef.filter.groupIndex = PERSONAJE_FILTER_INDEX;
 	b2Fixture* fix = body->CreateFixture(&fixtureDef);
 
@@ -114,7 +114,7 @@ void Personaje::disparar() {
 		vel.x -= aceleracion * 2.0;
 	else
 		vel.x += aceleracion * 2.0;
-	vel.y += 10;
+	vel.y = 10;
 
 	bola->setVelocidad(vel);
 

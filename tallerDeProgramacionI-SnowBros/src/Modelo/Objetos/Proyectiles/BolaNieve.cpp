@@ -21,7 +21,7 @@ BolaNieve::BolaNieve(float x, float y,int potencia, b2World* world) {
 
 
 	 b2FixtureDef fixture;
-	 fixture.density = masa / (radio*radio*M_PI);
+	 fixture.density = 0.1;
 
 	 b2CircleShape circleShape;
 	 circleShape.m_p.Set(0,0);

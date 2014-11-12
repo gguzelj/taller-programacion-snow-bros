@@ -8,9 +8,6 @@ void help();
 
 Client::Client() {
 	this->running_ = true;
-	//TODO agregar el struct que va a ser el escenario que reciba del server.
-	//model_ = nullptr;
-
 	controller_ = nullptr;
 	view_ = nullptr;
 	host = nullptr;
@@ -80,12 +77,13 @@ int Client::run() {
 		bool hayData = shared_rcv_queue_->try_pop(data);
 		if (hayData){
 			onRender(data);
+			free(data.proyectiles);
+			free(data.enemigos);
 			free(data.dinamicos);
 			free(data.personajes);
+			free(data.gameData);
 		}
-
 		SDL_Delay(1);
-
 	}
 
 	recvTh.join();

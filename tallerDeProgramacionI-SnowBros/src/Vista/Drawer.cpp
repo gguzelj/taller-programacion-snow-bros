@@ -335,7 +335,6 @@ void Drawer::drawProyectil(proyectil_t proy) {
 		snowballTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (proy.centro.x - radio) + ox), coord_relativa(coordRel.y, -un_to_px_y * (proy.centro.y + radio) + oy),
 				ancho * un_to_px_x, alto * un_to_px_y, nullptr, proy.rotacion * -RADTODEG, nullptr);
 	}
-
 }
 
 void Drawer::drawEnemy(enemigo_t enemigo) {
@@ -374,14 +373,7 @@ void Drawer::drawEnemy(enemigo_t enemigo) {
 			break;
 		}
 		drawCongelamiento(this->renderer, imagenEnemigos, orientacion, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y,enemigo.nivelDeCongelamiento);
-
 	}
-/*
-
-	rectangleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (enemigo.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (enemigo.centro.y + alto / 2) + oy),
-			ancho * un_to_px_x, alto * un_to_px_y, nullptr, 0, nullptr);
-			*/
-
 }
 
 bool Drawer::blinkCharacter(personaje_t person, int index) {
@@ -396,12 +388,7 @@ bool Drawer::blinkCharacter(personaje_t person, int index) {
 	}
 
 	return personajeOn[index];
-
 }
-
-
-
-
 
 void Drawer::drawCharacter(personaje_t person, int index, int connectionState) {
 
@@ -433,7 +420,7 @@ void Drawer::drawCharacter(personaje_t person, int index, int connectionState) {
 
 	switch (codigo_estado) {
 	case JUMPING:
-		drawPersonajeJumping(this->renderer, textura, orientacion, pos_x, pos_y, anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
+		drawPersonajeJumping(renderer, textura, orientacion, pos_x, pos_y, anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
 		break;
 	case STANDBY:
 		drawPersonajeStandBy(renderer, textura, orientacion, pos_x, pos_y, anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
@@ -447,7 +434,6 @@ void Drawer::drawCharacter(personaje_t person, int index, int connectionState) {
 	case SHOOTING:
 		drawPersonajeShooting(renderer, textura, orientacion, pos_x, pos_y, anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
 		break;
-
 	case DYING:
 		drawPersonajeMuriendo(renderer, textura, orientacion, pos_x, pos_y, anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
 		break;

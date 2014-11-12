@@ -14,7 +14,6 @@ Escenario::Escenario(JsonParser *parser) {
 	figurasEstaticas_ = new std::vector<Figura*>;
 	figurasDinamicas_ = new std::vector<Figura*>;
 	proyectiles_ = new std::list<Proyectil*>;
-	muros_ = new std::list<Muro*>;
 	personajes_ = new std::list<Personaje*>;
 	enemigos_ = new std::list<Enemigo*>;
 
@@ -28,16 +27,16 @@ Escenario::Escenario(JsonParser *parser) {
 	contactos.setCharacters();
 
 	Figura* figura_i;
-	Muro* muro_i;
+	Rectangulo* muro_i;
 
 	//Create the ground
-	muro_i = new Muro(parser->getAnchoUnEscenario(), parser->getAltoUnEscenario(), 0, world_, 0);
-	muros_->push_back(muro_i);
+	muro_i = new Rectangulo(80, 2, 0, 0, -20, world_);
+	figurasEstaticas_->push_back(muro_i);
 	//And walls
-	muro_i = new Muro(parser->getAnchoUnEscenario(), parser->getAltoUnEscenario(), 90, world_, 0.5 * parser->getAnchoUnEscenario());
-	muros_->push_back(muro_i);
-	muro_i = new Muro(parser->getAnchoUnEscenario(), parser->getAltoUnEscenario(), 90, world_, -0.5 * parser->getAnchoUnEscenario());
-	muros_->push_back(muro_i);
+	muro_i = new Rectangulo(2, 42, 0, 41, 0, world_);
+	figurasEstaticas_->push_back(muro_i);
+	muro_i = new Rectangulo(2, 42, 0, -41, 0, world_);
+	figurasEstaticas_->push_back(muro_i);
 
 	// Create all the objects
 	for (unsigned int index = 0; index < parser->getCantidadObjetos(); index++) {
@@ -80,7 +79,8 @@ Escenario::~Escenario() {
 	}
 
 	// Borrar las listas
-	delete muros_;
+	delete figurasDinamicas_;
+	delete figurasEstaticas_;
 	delete personajes_;
 	delete world_;
 }

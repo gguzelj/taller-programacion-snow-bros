@@ -187,7 +187,6 @@ void Enemigo::jump(){
 	}
 }
 
-
 void Enemigo::hacerAtravezable() {
 	this->cambiarFilterIndex(PERSONAJE_FILTER_INDEX);
 }

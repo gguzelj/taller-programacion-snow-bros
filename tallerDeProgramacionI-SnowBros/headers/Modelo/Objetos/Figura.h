@@ -2,6 +2,7 @@
 #define FIGURA_H_
 
 #define FIGURA_FILTER_INDEX -3
+#define MURO_FILTER_INDEX -15
 
 #define BOLA_NIEVE_CODE 'b'
 #define CIRCULO_CODE 'c'

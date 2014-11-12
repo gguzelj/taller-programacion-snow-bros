@@ -9,6 +9,7 @@ BolaEnemigo::BolaEnemigo(float x, float y, b2World* world) {
 	this->masa = MASA_BOLA_NIEVE_ENEMIGO;
 	this->angulo = 0;
 	this->estatico = false;
+	this->destruir = false;
 	this->world = world;
 
 	//Defino el body y fixture
@@ -55,6 +56,11 @@ float BolaEnemigo::getAncho() {
 
 char BolaEnemigo::getId() {
 	return BOLA_NIEVE_CODE;
+}
+
+void BolaEnemigo::morir(){
+	sleep(3);
+	destruir = true;
 }
 
 void BolaEnemigo::reaccionarCon(Figura *fig){

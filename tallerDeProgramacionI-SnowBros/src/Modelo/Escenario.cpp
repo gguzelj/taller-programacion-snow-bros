@@ -54,7 +54,7 @@ Escenario::Escenario(JsonParser *parser) {
 			figura_i = new Trapecio(parser, index, world_);
 
 		else if (parser->getTipoObjeto(index) == ENEMIGOBASICO) {
-			Enemigo* nuevoEnemigo = new Enemigo(parser, index, this);//todo puede haber error si no se crea cuidado!!
+			Enemigo* nuevoEnemigo = new Enemigo(parser, index, this); //todo puede haber error si no se crea cuidado!!
 			enemigos_->push_back(nuevoEnemigo);
 		}
 
@@ -180,8 +180,11 @@ void Escenario::clean() {
 			++proy) {
 		b2Body* body = (*proy)->getb2Body();
 
-		if ((*proy)->type == ID_BOLA_NIEVE_ENEMIGO) continue;
+		if ((*proy)->type == ID_BOLA_NIEVE_ENEMIGO) {
 
+			if (!((BolaEnemigo*) (*proy))->destruir)
+				continue;
+		}
 
 		for (b2ContactEdge *ce = body->GetContactList(); ce; ce = ce->next) {
 			b2Contact* c = ce->contact;
@@ -194,7 +197,8 @@ void Escenario::clean() {
 	}
 }
 
-void crearJoint(Personaje* personaje, BolaEnemigo* bolaEnemigo, b2World* world_) {
+void crearJoint(Personaje* personaje, BolaEnemigo* bolaEnemigo,
+		b2World* world_) {
 	b2RevoluteJointDef revjoint;
 	revjoint.bodyA = bolaEnemigo->getb2Body();
 	revjoint.bodyB = personaje->getb2Body();
@@ -210,12 +214,12 @@ void destruirJointsDeEnemigo(Enemigo* enemigo,
 			++personaje) {
 		if (strcmp((*personaje)->id, "sin asignar") != 0) {
 			/*if ((*personaje)->arrastradoPor == enemigo) {
-				world_->DestroyJoint((*personaje)->joint);
-				(*personaje)->arrastrado = false;
-				(*personaje)->arrastradoPor = nullptr;
-				(*personaje)->joint = nullptr;
-				(*personaje)->state = &Personaje::standby;
-			}*/
+			 world_->DestroyJoint((*personaje)->joint);
+			 (*personaje)->arrastrado = false;
+			 (*personaje)->arrastradoPor = nullptr;
+			 (*personaje)->joint = nullptr;
+			 (*personaje)->state = &Personaje::standby;
+			 }*/
 		}
 	}
 }
@@ -408,57 +412,6 @@ float Escenario::getAnchoUn() {
 
 void Escenario::agregarProyectil(Proyectil* proy) {
 	proyectiles_->push_back(proy);
-}
-
-void movimientoDeLaBola(Enemigo* enemigo) {
-	//Empieza con la orientacion actual hasta que toca una pared, donde cambia el sentido.
-	//A la segunda pared que toca, se destruye
-	if (enemigo->getOrientacion() == 'l')
-		enemigo->handleInput(SDLK_LEFT, SDL_KEYDOWN);
-	else
-		enemigo->handleInput(SDLK_RIGHT, SDL_KEYDOWN);
-
-	//hay dos chances de contacto: piso y pared o piso y personaje
-	b2Body* body = enemigo->getb2Body();
-	int contactosEstaticos = 0;
-	for (b2ContactEdge *ce = body->GetContactList(); ce; ce = ce->next) {
-		b2Contact* c = ce->contact;
-		Figura *figuraA = (Figura*) c->GetFixtureA()->GetUserData();
-		Figura *figuraB = (Figura*) c->GetFixtureB()->GetUserData();
-
-		if ((figuraA->type == ID_ENEMIGO) && (figuraB->type == ID_PERSONAJE))
-			continue;
-		else if ((figuraB->type == ID_ENEMIGO)
-				&& (figuraA->type == ID_PERSONAJE))
-			continue;
-		else {
-			contactosEstaticos++;
-		}
-	}
-	if (contactosEstaticos < 3)
-		return;
-	//Si no salio, quiere decir que esta enContactoConParedYPiso
-	//Usamos un cooldown (como en todas las demas cosas que no nos salen) para que cambie la
-	//orientacion solo cuando no esta en cooldown.
-	//TODO revisar por que siempre tira que hay 2 contactos cuando deberia haber uno. Cuando pega con
-	//una pared, hay hasta 5.
-	turnCooldown++;
-	turnCooldown = turnCooldown % 5;
-	//Cambiamos la orientacion
-	if (turnCooldown != 0)
-		return;
-	if (enemigo->getOrientacion() == 'l') {
-		enemigo->handleInput(SDLK_LEFT, SDL_KEYUP);
-		enemigo->setOrientacion('r');
-	} else {
-		enemigo->handleInput(SDLK_RIGHT, SDL_KEYUP);
-		enemigo->setOrientacion('l');
-	}
-
-	enemigo->cantidadDeRebotesParaDestruccion++;
-
-	if (enemigo->cantidadDeRebotesParaDestruccion == 5)
-		enemigo->estaVivo = false;
 }
 
 void Escenario::movimientoDelEnemigo(Enemigo* enemigo) {

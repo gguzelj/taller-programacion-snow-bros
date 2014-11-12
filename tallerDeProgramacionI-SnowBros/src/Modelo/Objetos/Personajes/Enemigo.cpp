@@ -113,6 +113,10 @@ void Enemigo::morir() {
 	bola->setVelocidad(vel);
 
 	this->escenario_->agregarProyectil(bola);
+
+	//Lanzamos un thread para que muera la bola
+	std::thread t(&BolaEnemigo::morir, bola);
+	t.detach();
 }
 
 void Enemigo::reaccionarConBolaEnemigo(BolaEnemigo*){

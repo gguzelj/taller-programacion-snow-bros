@@ -27,7 +27,7 @@ void Contacto::BeginContact(b2Contact* contact) {
 	figuraB->reaccionarCon(figuraA);
 
 	//Controlo los contactos del personaje
-	if ((figuraA->type == ID_PERSONAJE || figuraA->type == ID_ENEMIGO )&& figuraB->esEstatico())
+	if ((figuraA->type == ID_PERSONAJE || figuraA->type == ID_ENEMIGO ) && figuraB->esEstatico())
 		((Character*) figuraA)->empiezoContacto(contact->GetFixtureA());
 
 	if ((figuraB->type == ID_PERSONAJE || figuraB->type == ID_ENEMIGO) && figuraA->esEstatico())

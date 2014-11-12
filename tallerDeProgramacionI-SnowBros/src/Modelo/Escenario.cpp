@@ -439,7 +439,7 @@ void Escenario::movimientoDelEnemigo(Enemigo* enemigo){
 				enemigo->handleInput(SDLK_UP, SDL_KEYDOWN);
 			}
 	}
-	 if(v1 > 0){
+	 if(v1 > 5){
 		if((posicionPersonajeY+1) < posicionEnemigoY){
 			enemigo->handleInput(SDLK_UP, SDL_KEYUP);
 			enemigo->atravezarPlataformas();

@@ -49,7 +49,7 @@ Enemigo::Enemigo(float x, float y, b2World* world) {
 	fixtureDef.shape = &shapeDelEnemigo;
 	fixtureDef.density = 0.5;
 	fixtureDef.filter.groupIndex = ENEMIGO_FILTER_INDEX;
-	fixtureDef.friction = 0.6;
+	fixtureDef.friction = 0.96;
 	b2Fixture* fix = body->CreateFixture(&fixtureDef);
 
 	//Actualizamos informacion adicional

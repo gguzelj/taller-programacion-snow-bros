@@ -26,6 +26,8 @@ class Personaje : public Character {
 
 		int points;
 
+		int kickCooldown;
+
 		b2Vec2* posicionInicial;
 
 		void hacerInmune();
@@ -52,6 +54,7 @@ class Personaje : public Character {
 		int getPoints(){
 			return points;
 		}
+
 		int getLives(){
 			return lives;
 		}
@@ -59,6 +62,12 @@ class Personaje : public Character {
 		bool getInmune(){
 			return inmune;
 		}
+
+		int getKickCooldown(){
+			return kickCooldown;
+		}
+
+		void decreaseKickCooldown();
 
 		void sacarVida(){
 			lives--;

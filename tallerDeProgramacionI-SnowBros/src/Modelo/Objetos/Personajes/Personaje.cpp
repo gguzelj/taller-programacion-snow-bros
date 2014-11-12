@@ -10,6 +10,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->world = escenario->getWorld();
 	this->jumpCooldown = 0;
 	this->shootCooldown = 0;
+	this->kickCooldown = 0;
 	this->aceleracion = 10.0f;
 	this->x = x;
 	this->y = y;
@@ -123,7 +124,7 @@ void Personaje::disparar() {
 }
 
 void Personaje::empujar() {
-
+	kickCooldown = 12;
 	//Iteramos con los contactos de nuestro personaje hasta encontrar al enemigo y luego lo matamos
 	for (b2ContactEdge *ce = this->body->GetContactList(); ce; ce = ce->next) {
 		b2Contact* c = ce->contact;
@@ -181,6 +182,11 @@ void Personaje::jump() {
 		this->body->SetLinearVelocity(velocidadActual);
 		atravezarPlataformas();
 	}
+}
+
+void Personaje::decreaseKickCooldown(){
+	if (this->kickCooldown > 0)
+		this->kickCooldown -= 1;
 }
 
 void Personaje::volverAPosicionInicial() {

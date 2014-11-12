@@ -9,6 +9,7 @@ FallingState Character::falling;
 ShootingState Character::shooting;
 DyingState Character::dying;
 PushingState Character::pushing;
+KickingState Character::kicking;
 
 void cambiarOrientacionAlDejarDePresionarUnaTecla(Character &character) {
 	switch (character.getOrientacion()) {
@@ -244,6 +245,7 @@ void PushingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 			switch (input) {
 			case SDLK_SPACE: {
 				character.empujar();
+				character.state = &Character::kicking;
 				break;
 			}
 
@@ -283,5 +285,18 @@ void PushingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 		else if((input == SDLK_LEFT)||(input == SDLK_RIGHT)){
 			character.state = &Character::walking;
 		}
+	}
+}
+
+void KickingState::handleInput(Character &character, SDL_Keycode input, Uint32 input_type){
+	switch (input_type) {
+	case SDL_KEYDOWN:
+		if(input == SDLK_UP){
+			saltar(character);
+			break;
+		}
+		break;
+	case SDL_KEYUP:
+		detenerMovimientoHorizontal(&character, input);
 	}
 }

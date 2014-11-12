@@ -11,6 +11,7 @@
 #define SHOOTING 'd'
 #define DYING 'm'
 #define PUSHING 'p'
+#define KICKING 'k'
 
 class OnAirState: public CharacterState{
 public:
@@ -74,4 +75,13 @@ public:
 		return PUSHING;
 	}
 };
+
+class KickingState: public CharacterState{
+public:
+	void handleInput(Character &character,SDL_Keycode input,Uint32 input_type);
+	char getCode(){
+		return KICKING;
+	}
+};
+
 #endif /* ESTADOS_H_ */

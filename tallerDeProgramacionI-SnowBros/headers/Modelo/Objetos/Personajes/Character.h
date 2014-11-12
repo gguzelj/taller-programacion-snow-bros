@@ -49,6 +49,7 @@ public:
 	static ShootingState shooting;
 	static DyingState dying;
 	static PushingState pushing;
+	static KickingState kicking;
 	CharacterState* state;
 
 	virtual ~Character() {

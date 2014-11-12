@@ -24,7 +24,7 @@ public:
 	bool enMovimientoBola;
 	int cantidadDeRebotesParaDestruccion = 0;
 
-	Enemigo(float x, float y, b2World* world);
+	Enemigo(JsonParser *parser, int index, b2World* world);
 	~Enemigo();
 	void disparar();
 

@@ -47,9 +47,9 @@ Enemigo::Enemigo(float x, float y, b2World* world) {
 	//Definimos el fixture del Enemigo
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shapeDelEnemigo;
-	fixtureDef.density = 5;
+	fixtureDef.density = 0.5;
 	fixtureDef.filter.groupIndex = ENEMIGO_FILTER_INDEX;
-	fixtureDef.friction = 1;
+	fixtureDef.friction = 0.6;
 	b2Fixture* fix = body->CreateFixture(&fixtureDef);
 
 	//Actualizamos informacion adicional
@@ -97,19 +97,8 @@ void Enemigo::morir(){
 //	std::thread t(&Enemigo::movimientoBola, this);
 //	t.detach();
 }
-/*
-void Enemigo::movimientoBola(){
-	time_t tiempoDeCreacionDeBola;
-	time(&tiempoDeCreacionDeBola);
-	float tiempoDeEsperaMaximo = 5.0f;
-	time_t newTime = time(&newTime);
-	//Luego de 5 segs la bola se debe destruir
-	while( difftime(newTime, tiempoDeImpactoDeLaUltimaBola )  < tiempoDeEsperaMaximo){
-		newTime = time(&newTime);
-	}
-	estaVivo = false;
-}
-*/
+
+
 void Enemigo::handleInput(SDL_Keycode input,Uint32 input_type){
 	if(nivelDeCongelamiento > 0) return;
 	state->handleInput(*this,input,input_type);
@@ -147,12 +136,12 @@ void Enemigo::reaccionarConEnemigo(Enemigo* enemigo){
 
 void Enemigo::congelar(){
 	float tiempoDeEsperaMaximo = 5.0f;
-
+	aceleracion = 0;
 	while (nivelDeCongelamiento != 0 && !enMovimientoBola){
 		//En caso de que este hecho bola de nieve, lo hacemos
 		//No atravezable, para que pueda empujarlo
 		esAtravezable = (nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX);
-		aceleracion = 0;
+
 		if( difftime(time(nullptr), tiempoDeImpactoDeLaUltimaBola )  > tiempoDeEsperaMaximo){
 			this->nivelDeCongelamiento -=2;
 			if(this->nivelDeCongelamiento < 0)
@@ -162,7 +151,6 @@ void Enemigo::congelar(){
 		//En caso de que este hecho bola de nieve, lo hacemos
 		//No atravezable, para que pueda empujarlo
 		esAtravezable = (nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX);
-		aceleracion = 0;
 	}
 	esAtravezable = false;
 	if (!enMovimientoBola)

@@ -153,6 +153,10 @@ void Personaje::reaccionarConEnemigo(Enemigo* enemigo) {
 	//Si el enemigo esta congelado, no nos sucede nada
 	if (enemigo->estaCongelado()) {
 		state = &Personaje::pushing;
+		if(this->getOrientacion()=='l')
+			enemigo->setOrientacion('r');
+		else
+			enemigo->setOrientacion('l');
 		return;
 	}
 

@@ -36,7 +36,8 @@ Escenario::Escenario(JsonParser *parser) {
 	figurasEstaticas_->push_back(muro_i);
 
 	// Create all the objects
-	for (unsigned int index = 0; index < parser->getCantidadObjetos(); index++) {
+	for (unsigned int index = 0; index < parser->getCantidadObjetos();
+			index++) {
 		if (parser->getTipoObjeto(index) == CIRCULO)
 			figura_i = new Circulo(parser, index, world_);
 
@@ -52,8 +53,8 @@ Escenario::Escenario(JsonParser *parser) {
 		else if (parser->getTipoObjeto(index) == TRAPECIO)
 			figura_i = new Trapecio(parser, index, world_);
 
-		else if (parser->getTipoObjeto(index) == ENEMIGOBASICO){
-			Enemigo* nuevoEnemigo = new Enemigo(parser, index, world_);		//todo puede haber error si no se crea cuidado!!
+		else if (parser->getTipoObjeto(index) == ENEMIGOBASICO) {
+			Enemigo* nuevoEnemigo = new Enemigo(parser, index, this);//todo puede haber error si no se crea cuidado!!
 			enemigos_->push_back(nuevoEnemigo);
 		}
 
@@ -95,7 +96,8 @@ std::list<Personaje*>* Escenario::getPersonajes() {
 }
 
 bool Escenario::asignarPersonaje(conn_id id) {
-	for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
+	for (auto personaje = personajes_->begin(); personaje != personajes_->end();
+			++personaje) {
 		if (strcmp((*personaje)->id, "sin asignar") == 0) {
 			strcpy((*personaje)->id, id);
 			(*personaje)->setConnectionState(CONECTADO);
@@ -114,48 +116,54 @@ bool Escenario::crearPersonaje(float x, float y, conn_id id) {
 }
 
 void Escenario::setPersonajeConnectionState(conn_id id, char state) {
-	for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
+	for (auto personaje = personajes_->begin(); personaje != personajes_->end();
+			++personaje) {
 		if (strcmp((*personaje)->id, id) == 0)
 			(*personaje)->setConnectionState(state);
 	}
 }
 
 void acomodarEstadoCharacter(Character* personaje, b2World* world_) {
-	if(personaje->state != &Personaje::dying){
+	if (personaje->state != &Personaje::dying) {
 		//Chequeo para cambiar el estado jumping a falling o el estado cuando cae de una plataforma
 		personaje->decreaseJumpCooldown();
 		//Chequeo si puedo disparar.
 		personaje->decreaseShootCooldown();
 		//Esta implementado aca para que cambie cuando tiene que hacerlo
-		if (personaje->getVelocity().y <= 0.0f && personaje->getCantidadDeContactosActuales() == 0) {
-			if(personaje->state != &Personaje::shooting)
+		if (personaje->getVelocity().y <= 0.0f
+				&& personaje->getCantidadDeContactosActuales() == 0) {
+			if (personaje->state != &Personaje::shooting)
 				personaje->state = &Personaje::falling;
 			personaje->noAtravezarPlataformas();
 
-		} else if (personaje->getVelocity().y <= 0.0f && personaje->state == &Personaje::jumping) {
+		} else if (personaje->getVelocity().y <= 0.0f
+				&& personaje->state == &Personaje::jumping) {
 			personaje->state = &Personaje::standby;
 		}
 
-		if (personaje->movimientoLateralDerecha || personaje->movimientoLateralIzquierda)
+		if (personaje->movimientoLateralDerecha
+				|| personaje->movimientoLateralIzquierda)
 			Personaje::walking.caminar(*personaje);
 
-		if (personaje->debeSaltar && personaje->state->getCode() != JUMPING && personaje->state->getCode() != FALLING && personaje->getCantidadDeContactosActuales() !=0) {
+		if (personaje->debeSaltar && personaje->state->getCode() != JUMPING
+				&& personaje->state->getCode() != FALLING
+				&& personaje->getCantidadDeContactosActuales() != 0) {
 			personaje->jump();
 			personaje->state = &Personaje::jumping;
 		}
 	}
 	//Seteamos esto aca que me parece lo mas facil, e intuitivo.
-	if( Personaje* pers = dynamic_cast< Personaje* >( personaje ) ){
+	if (Personaje* pers = dynamic_cast<Personaje*>(personaje)) {
 		//Disminuyo el cooldown de patear.
 		pers->decreaseKickCooldown();
-		if(pers->state == &Personaje::kicking && pers->getKickCooldown() == 0)
+		if (pers->state == &Personaje::kicking && pers->getKickCooldown() == 0)
 			pers->state = &Personaje::standby;
-		if(pers->esta_muerto){
+		if (pers->esta_muerto) {
 			pers->volverAPosicionInicial();
 			pers->esta_muerto = false;
 			pers->state = &Personaje::standby;
 		}
-		if(pers->arrastradoPor && !pers->arrastrado){
+		if (pers->arrastradoPor && !pers->arrastrado) {
 			world_->DestroyJoint(pers->joint);
 			pers->arrastrado = false;
 			pers->arrastradoPor = nullptr;
@@ -167,9 +175,14 @@ void acomodarEstadoCharacter(Character* personaje, b2World* world_) {
 	}
 }
 
-void Escenario::clean(){
-	for (auto proy = proyectiles_->begin(); proy != proyectiles_->end(); ++proy) {
+void Escenario::clean() {
+	for (auto proy = proyectiles_->begin(); proy != proyectiles_->end();
+			++proy) {
 		b2Body* body = (*proy)->getb2Body();
+
+		if ((*proy)->type == ID_BOLA_NIEVE_ENEMIGO) continue;
+
+
 		for (b2ContactEdge *ce = body->GetContactList(); ce; ce = ce->next) {
 			b2Contact* c = ce->contact;
 			if (c->IsTouching()) {
@@ -181,45 +194,51 @@ void Escenario::clean(){
 	}
 }
 
-void crearJoint(Personaje* personaje, Enemigo* enemigo, b2World* world_){
+void crearJoint(Personaje* personaje, BolaEnemigo* bolaEnemigo, b2World* world_) {
 	b2RevoluteJointDef revjoint;
-	revjoint.bodyA = enemigo->getb2Body();
+	revjoint.bodyA = bolaEnemigo->getb2Body();
 	revjoint.bodyB = personaje->getb2Body();
 	revjoint.collideConnected = false;
-	revjoint.localAnchorA.Set(0,0);
-	revjoint.localAnchorB.Set(0,0);
-	personaje->joint = (b2RevoluteJoint*) world_->CreateJoint( &revjoint );
+	revjoint.localAnchorA.Set(0, 0);
+	revjoint.localAnchorB.Set(0, 0);
+	personaje->joint = (b2RevoluteJoint*) world_->CreateJoint(&revjoint);
 }
 
-void destruirJointsDeEnemigo(Enemigo* enemigo, std::list<Personaje*>* personajes_, b2World* world_){
-	for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje){
-		if (strcmp((*personaje)->id, "sin asignar") != 0){
-			if((*personaje)->arrastradoPor == enemigo){
+void destruirJointsDeEnemigo(Enemigo* enemigo,
+		std::list<Personaje*>* personajes_, b2World* world_) {
+	for (auto personaje = personajes_->begin(); personaje != personajes_->end();
+			++personaje) {
+		if (strcmp((*personaje)->id, "sin asignar") != 0) {
+			/*if ((*personaje)->arrastradoPor == enemigo) {
 				world_->DestroyJoint((*personaje)->joint);
 				(*personaje)->arrastrado = false;
 				(*personaje)->arrastradoPor = nullptr;
 				(*personaje)->joint = nullptr;
 				(*personaje)->state = &Personaje::standby;
-			}
+			}*/
 		}
 	}
 }
 
 void Escenario::step() {
-	for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
-		if (strcmp((*personaje)->id, "sin asignar") != 0){
+	for (auto personaje = personajes_->begin(); personaje != personajes_->end();
+			++personaje) {
+		if (strcmp((*personaje)->id, "sin asignar") != 0) {
 			acomodarEstadoCharacter(*personaje, world_);
-			if((*personaje)->state == &Personaje::rolling && !(*personaje)->joint){
+			if ((*personaje)->state == &Personaje::rolling
+					&& !(*personaje)->joint) {
 				crearJoint((*personaje), (*personaje)->arrastradoPor, world_);
 			}
 		}
 	}
-	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end(); ++enemigo) {
-		if(!(*enemigo)->estaVivo){
-			destruirJointsDeEnemigo((*enemigo), personajes_, world_);
+
+	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end();
+			++enemigo) {
+
+		if (!(*enemigo)->estaVivo) {
 			world_->DestroyBody((*enemigo)->getb2Body());
 			enemigos_->erase(enemigo++);
-		}else
+		} else
 			acomodarEstadoCharacter(*enemigo, world_);
 	}
 	clean();
@@ -305,7 +324,8 @@ proyectil_t* Escenario::getProyectiles() {
 	p = (proyectil_t*) malloc(sizeof(proyectil_t) * proyectiles_->size());
 
 	int i = 0;
-	for (auto proy = proyectiles_->begin(); proy != proyectiles_->end(); ++proy) {
+	for (auto proy = proyectiles_->begin(); proy != proyectiles_->end();
+			++proy) {
 
 		p[i].id = (*proy)->getId();
 		p[i].alto = (*proy)->getAlto();
@@ -319,10 +339,12 @@ proyectil_t* Escenario::getProyectiles() {
 }
 
 personaje_t* Escenario::getPersonajesParaEnvio() {
-	personaje_t* pers = (personaje_t*) malloc(sizeof(personaje_t) * cantidadMaximaDePersonajes);
+	personaje_t* pers = (personaje_t*) malloc(
+			sizeof(personaje_t) * cantidadMaximaDePersonajes);
 
 	unsigned int i = 0;
-	for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
+	for (auto personaje = personajes_->begin(); personaje != personajes_->end();
+			++personaje) {
 		pers[i].alto = (*personaje)->getAlto();
 		pers[i].ancho = (*personaje)->getAncho();
 		strcpy(pers[i].id, (*personaje)->id);
@@ -353,10 +375,12 @@ personaje_t* Escenario::getPersonajesParaEnvio() {
 }
 
 enemigo_t* Escenario::getEnemigosParaEnvio() {
-	enemigo_t* enems = (enemigo_t*) malloc(sizeof(enemigo_t) * enemigos_->size());
+	enemigo_t* enems = (enemigo_t*) malloc(
+			sizeof(enemigo_t) * enemigos_->size());
 
 	int i = 0;
-	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end(); ++enemigo) {
+	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end();
+			++enemigo) {
 		enems[i].alto = (*enemigo)->getAlto() * 2;
 		enems[i].ancho = (*enemigo)->getAncho() * 2;
 		enems[i].orientacion = (*enemigo)->getOrientacion();
@@ -370,7 +394,8 @@ enemigo_t* Escenario::getEnemigosParaEnvio() {
 }
 
 Personaje* Escenario::getPersonaje(conn_id id) {
-	for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
+	for (auto personaje = personajes_->begin(); personaje != personajes_->end();
+			++personaje) {
 		if (strcmp((*personaje)->id, id) == 0)
 			return *personaje;
 	}
@@ -385,7 +410,7 @@ void Escenario::agregarProyectil(Proyectil* proy) {
 	proyectiles_->push_back(proy);
 }
 
-void movimientoDeLaBola(Enemigo* enemigo){
+void movimientoDeLaBola(Enemigo* enemigo) {
 	//Empieza con la orientacion actual hasta que toca una pared, donde cambia el sentido.
 	//A la segunda pared que toca, se destruye
 	if (enemigo->getOrientacion() == 'l')
@@ -401,55 +426,58 @@ void movimientoDeLaBola(Enemigo* enemigo){
 		Figura *figuraA = (Figura*) c->GetFixtureA()->GetUserData();
 		Figura *figuraB = (Figura*) c->GetFixtureB()->GetUserData();
 
-		if ((figuraA->type == ID_ENEMIGO )&& (figuraB->type == ID_PERSONAJE))
+		if ((figuraA->type == ID_ENEMIGO) && (figuraB->type == ID_PERSONAJE))
 			continue;
-		else if ((figuraB->type == ID_ENEMIGO) && (figuraA->type == ID_PERSONAJE))
+		else if ((figuraB->type == ID_ENEMIGO)
+				&& (figuraA->type == ID_PERSONAJE))
 			continue;
-		else{
+		else {
 			contactosEstaticos++;
 		}
 	}
-	if(contactosEstaticos < 3)return;
+	if (contactosEstaticos < 3)
+		return;
 	//Si no salio, quiere decir que esta enContactoConParedYPiso
 	//Usamos un cooldown (como en todas las demas cosas que no nos salen) para que cambie la
 	//orientacion solo cuando no esta en cooldown.
 	//TODO revisar por que siempre tira que hay 2 contactos cuando deberia haber uno. Cuando pega con
 	//una pared, hay hasta 5.
 	turnCooldown++;
-	turnCooldown = turnCooldown%5;
+	turnCooldown = turnCooldown % 5;
 	//Cambiamos la orientacion
-	if (turnCooldown != 0) return;
-	if (enemigo->getOrientacion() == 'l'){
+	if (turnCooldown != 0)
+		return;
+	if (enemigo->getOrientacion() == 'l') {
 		enemigo->handleInput(SDLK_LEFT, SDL_KEYUP);
 		enemigo->setOrientacion('r');
-	}
-	else{
+	} else {
 		enemigo->handleInput(SDLK_RIGHT, SDL_KEYUP);
 		enemigo->setOrientacion('l');
 	}
 
 	enemigo->cantidadDeRebotesParaDestruccion++;
 
-	if(enemigo->cantidadDeRebotesParaDestruccion == 5)
+	if (enemigo->cantidadDeRebotesParaDestruccion == 5)
 		enemigo->estaVivo = false;
 }
 
-void Escenario::movimientoDelEnemigo(Enemigo* enemigo){
-	   int i=0;
-	   float posicionesX[4];
-	   float posicionesY[4];
-	   for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
-		   posicionesX[i] = (*personaje)->getX();
-		   posicionesY[i] = (*personaje)->getY();
-		   i++;
-		}
-		float posicionPersonajeX = posicionesX[0];
-		float posicionPersonajeY = posicionesY[0];
-		float posicionEnemigoX = enemigo->getX();
-		float posicionEnemigoY = enemigo->getY();
+void Escenario::movimientoDelEnemigo(Enemigo* enemigo) {
+	int i = 0;
+	float posicionesX[4];
+	float posicionesY[4];
+	for (auto personaje = personajes_->begin(); personaje != personajes_->end();
+			++personaje) {
+		posicionesX[i] = (*personaje)->getX();
+		posicionesY[i] = (*personaje)->getY();
+		i++;
+	}
+	float posicionPersonajeX = posicionesX[0];
+	float posicionPersonajeY = posicionesY[0];
+	float posicionEnemigoX = enemigo->getX();
+	float posicionEnemigoY = enemigo->getY();
 
 	int v1 = rand() % 100;
-	if(v1 < 45){
+	if (v1 < 45) {
 		v1 = rand() % 100;
 		if (v1 <= 25)
 			enemigo->handleInput(SDLK_LEFT, SDL_KEYDOWN);
@@ -463,22 +491,21 @@ void Escenario::movimientoDelEnemigo(Enemigo* enemigo){
 					enemigo->handleInput(SDLK_LEFT, SDL_KEYUP);
 			}
 		}
+	} else if (v1 < 50) {
+		if (posicionPersonajeX < posicionEnemigoX) {
+			enemigo->handleInput(SDLK_RIGHT, SDL_KEYUP);
+			enemigo->handleInput(SDLK_LEFT, SDL_KEYDOWN);
+		}
+		if (posicionPersonajeX > posicionEnemigoX) {
+			enemigo->handleInput(SDLK_LEFT, SDL_KEYUP);
+			enemigo->handleInput(SDLK_RIGHT, SDL_KEYDOWN);
+		}
+		if ((posicionPersonajeY - 3) > posicionEnemigoY) {
+			enemigo->handleInput(SDLK_UP, SDL_KEYDOWN);
+		}
 	}
-	else if(v1 < 50){
-			if(posicionPersonajeX < posicionEnemigoX ){
-				enemigo->handleInput(SDLK_RIGHT, SDL_KEYUP);
-				enemigo->handleInput(SDLK_LEFT, SDL_KEYDOWN);
-			}
-			if(posicionPersonajeX > posicionEnemigoX){
-				enemigo->handleInput(SDLK_LEFT, SDL_KEYUP);
-				enemigo->handleInput(SDLK_RIGHT, SDL_KEYDOWN);
-			}
-			if((posicionPersonajeY-3) > posicionEnemigoY){
-				enemigo->handleInput(SDLK_UP, SDL_KEYDOWN);
-			}
-	}
-	 if(v1 > 5){
-		if((posicionPersonajeY+1) < posicionEnemigoY){
+	if (v1 > 5) {
+		if ((posicionPersonajeY + 1) < posicionEnemigoY) {
 			enemigo->handleInput(SDLK_UP, SDL_KEYUP);
 			enemigo->atravezarPlataformas();
 		}
@@ -487,18 +514,15 @@ void Escenario::movimientoDelEnemigo(Enemigo* enemigo){
 
 void Escenario::actualizarEnemigos() {
 
-	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end(); enemigo++) {
+	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end();
+			enemigo++) {
+
 		//Analizamos si el enemigo es atravezable
-		if((*enemigo)->esAtravezable)
+		if ((*enemigo)->esAtravezable)
 			(*enemigo)->hacerAtravezable();
 		else
 			(*enemigo)->hacerNoAtravezable();
 
-		if ((*enemigo)->enMovimientoBola){
-			movimientoDeLaBola(*enemigo);
-		}
-		else{
-			movimientoDelEnemigo(*enemigo);
-		}
+		movimientoDelEnemigo(*enemigo);
 	}
 }

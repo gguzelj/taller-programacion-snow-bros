@@ -10,9 +10,12 @@
 
 #define NIVEL_CONGELAMIENTO_MAX 7
 
+class Escenario;
+
 class Enemigo: public Character {
 private:
 
+	Escenario *escenario_;
 	int nivelDeCongelamiento;
 	int puntos;
 	time_t tiempoDeImpactoDeLaUltimaBola;
@@ -21,14 +24,12 @@ public:
 
 	bool esAtravezable;
 	bool estaVivo;
-	bool enMovimientoBola;
 	int cantidadDeRebotesParaDestruccion = 0;
 
 	b2Fixture* paredIzquierda;
 	b2Fixture* paredDerecha;
 
-	Enemigo(float x, float y, b2World* world);
-	Enemigo(JsonParser *parser, int index, b2World* world);
+	Enemigo(JsonParser *parser, int index, Escenario* escenario);
 	~Enemigo();
 	void disparar();
 
@@ -42,8 +43,10 @@ public:
 
 	void reaccionarConBolaNieve(BolaNieve* bola);
 
-	void reaccionarConEnemigo(Enemigo* enemigo);
+	void reaccionarConBolaEnemigo(BolaEnemigo*);
+
 	void congelar();
+
 	void movimientoBola();
 
 	bool estaCongelado();

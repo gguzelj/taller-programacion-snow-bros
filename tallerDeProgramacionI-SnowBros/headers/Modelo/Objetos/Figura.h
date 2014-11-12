@@ -6,6 +6,7 @@
 #define MURO_FILTER_INDEX -15
 
 #define BOLA_NIEVE_CODE 'b'
+#define BOLA_NIEVE_ENEMIGO_CODE 'e'
 #define CIRCULO_CODE 'c'
 #define MURO_CODE 'm'
 #define PARALELOGRAMO_CODE 'p'
@@ -25,6 +26,7 @@
 #define ID_ENEMIGO 7
 #define ID_PERSONAJE 8
 #define ID_BOLA_NIEVE 9
+#define ID_BOLA_NIEVE_ENEMIGO 10
 
 #define FIGURA_WARNING_OVERLAP "El siguiente objeto se esta superponiendo con otros ya creados \n"
 
@@ -43,6 +45,7 @@ class Rectangulo;
 class Trapecio;
 class Personaje;
 class BolaNieve;
+class BolaEnemigo;
 
 /*
  * Clase abstracta de la cual van a heredar todos los tipos de figuras (Rectangulo, Poligono, Circulo, Parelelogramo)
@@ -88,7 +91,7 @@ public:
 	virtual void reaccionarConEnemigo(Enemigo*){};
 	virtual void reaccionarConPersonaje(Personaje*){};
 	virtual void reaccionarConBolaNieve(BolaNieve*){};
-	virtual void reaccionarConOtroEnemigo(Enemigo*){};
+	virtual void reaccionarConBolaEnemigo(BolaEnemigo*){};
 
 };
 

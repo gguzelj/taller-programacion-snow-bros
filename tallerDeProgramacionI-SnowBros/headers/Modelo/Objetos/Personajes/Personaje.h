@@ -41,7 +41,7 @@ class Personaje : public Character {
 
 		bool arrastrado;
 
-		Enemigo* arrastradoPor;
+		BolaEnemigo* arrastradoPor;
 
 		b2Joint* joint;
 
@@ -94,6 +94,7 @@ class Personaje : public Character {
 		void empujar();
 
 		void reaccionarConEnemigo(Enemigo* enemigo);
+		void reaccionarConBolaEnemigo(BolaEnemigo* bola);
 
 		//Metodos para controlar el estado del personaje
 		void empiezoContacto(b2Fixture* fixture);

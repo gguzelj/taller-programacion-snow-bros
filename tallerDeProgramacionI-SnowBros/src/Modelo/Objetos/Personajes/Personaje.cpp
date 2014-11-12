@@ -24,7 +24,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 
 	this->connectionState = CONECTADO;
 	this->points = 0;
-	this->lives = 5;
+	this->lives = 0;
 	this->type = ID_PERSONAJE;
 	this->ancho = MITAD_ANCHO_PERSONAJE;
 	this->alto = MITAD_ALTO_PERSONAJE;
@@ -77,7 +77,8 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	paredDerecha = this->body->CreateFixture(&fixtureDef);
 
 	//Piso
-	shapeDelPersonaje.SetAsBox(ancho * 19.5f / 20, alto / 10, b2Vec2(0, -alto), 0);
+	shapeDelPersonaje.SetAsBox(ancho * 19.5f / 20, alto / 10, b2Vec2(0, -alto),
+			0);
 	fixtureDef.friction = 0.0019f;
 	piso = this->body->CreateFixture(&fixtureDef);
 
@@ -97,26 +98,26 @@ Personaje::~Personaje() {
 
 void Personaje::disparar() {
 
-	if(shootCooldown > 0) return;
+	if (shootCooldown > 0)
+		return;
 
 	shootCooldown = 10;
 
 	BolaNieve *bola;
 
 	if (orientacion == IZQUIERDA)
-		bola = new BolaNieve(getX() - 1, getY() + MITAD_ALTO_PERSONAJE - 0.35,
-				1, this->world);
+		bola = new BolaNieve(getX() - 1, getY() + MITAD_ALTO_PERSONAJE, 7,
+				this->world);
 	else
-		bola = new BolaNieve(getX() + 1, getY() + MITAD_ALTO_PERSONAJE - 0.35,
-				1, this->world);
+		bola = new BolaNieve(getX() + 1, getY() + MITAD_ALTO_PERSONAJE, 7,
+				this->world);
 
 	b2Vec2 vel = this->body->GetLinearVelocity();
 
 	if (orientacion == IZQUIERDA)
-		vel.x -= aceleracion * 2.8;
+		vel.x -= aceleracion * 15;
 	else
-		vel.x += aceleracion * 2.8;
-	vel.y = 5;
+		vel.x += aceleracion * 15;
 
 	bola->setVelocidad(vel);
 
@@ -140,11 +141,22 @@ void Personaje::empujar() {
 }
 
 void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
-	if(state == &Personaje::dying){
+	if (state == &Personaje::dying) {
 		state->handleInput(*this, input, input_type);
 		return;
 	}
 	state->handleInput(*this, input, input_type);
+}
+
+void Personaje::reaccionarConBolaEnemigo(BolaEnemigo * bola) {
+/*
+	if (this->state == &Personaje::jumping)
+		return;
+	this->arrastrado = true;
+	this->arrastradoPor = bola;
+	this->state = &Personaje::rolling;
+	return;
+*/
 }
 
 /*
@@ -153,33 +165,26 @@ void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
  */
 void Personaje::reaccionarConEnemigo(Enemigo* enemigo) {
 
-	if(state == &Personaje::dying) return;
-
-	if (enemigo->enMovimientoBola){
-		if(this->state == &Personaje::jumping) return;
-		this->arrastrado = true;
-		this->arrastradoPor = enemigo;
-		this->state = &Personaje::rolling;
+	if (state == &Personaje::dying)
 		return;
-	}
 
 	//Si el enemigo esta congelado, no nos sucede nada
 	if (enemigo->estaCongelado()) {
 		b2Fixture* fixture1;
 		b2Fixture* fixture2;
-		if(this->getOrientacion()=='l'){
+		if (this->getOrientacion() == 'l') {
 			fixture1 = this->paredIzquierda;
 			fixture2 = enemigo->paredDerecha;
 			enemigo->setOrientacion('r');
-		}
-		else{
+		} else {
 			fixture1 = this->paredDerecha;
 			fixture2 = enemigo->paredIzquierda;
 			enemigo->setOrientacion('l');
 		}
 		//Checkeo si lo que se esta overlappeando son las paredes de los costados. Si no lo son, entonces es porque no debe
 		//estar empujando.
-		if(b2TestOverlap(fixture1->GetShape(), 0, fixture2->GetShape(), 0, body->GetTransform(), enemigo->getb2Body()->GetTransform())){
+		if (b2TestOverlap(fixture1->GetShape(), 0, fixture2->GetShape(), 0,
+				body->GetTransform(), enemigo->getb2Body()->GetTransform())) {
 			state = &Personaje::pushing;
 		}
 		return;
@@ -213,7 +218,7 @@ void Personaje::jump() {
 	}
 }
 
-void Personaje::decreaseKickCooldown(){
+void Personaje::decreaseKickCooldown() {
 	if (this->kickCooldown > 0)
 		this->kickCooldown -= 1;
 }
@@ -238,6 +243,6 @@ void Personaje::hacerInmune() {
 	inmune = false;
 }
 
-void Personaje::noAtravezarPlataformas(){
+void Personaje::noAtravezarPlataformas() {
 	cambiarFilterIndex(PERSONAJE_FILTER_INDEX);
 }

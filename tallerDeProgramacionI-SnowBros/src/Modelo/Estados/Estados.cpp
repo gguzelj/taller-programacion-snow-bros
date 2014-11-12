@@ -312,9 +312,7 @@ void RollingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 		switch (input_type) {
 		case SDL_KEYDOWN:
 			if (input == SDLK_UP){
-				std::cout << "Salte." << std::endl;
 				personaje->arrastrado = false;
-				//saltar(character);
 				break;
 			}
 		}

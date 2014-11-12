@@ -6,6 +6,8 @@
 #include <Box2D/Box2D.h>
 #include "../Parser/JsonParser.h"
 
+#include "Objetos/Proyectiles/BolaEnemigo.h"
+
 #include "Objetos/Personajes/Character.h"
 #include "Objetos/Personajes/Personaje.h"
 #include "Objetos/Personajes/Enemigo.h"

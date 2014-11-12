@@ -1,14 +1,12 @@
-#include "../../../../headers/Modelo/Objetos/Proyectiles/BolaNieve.h"
+#include "../../../../headers/Modelo/Objetos/Proyectiles/BolaEnemigo.h"
 
-BolaNieve::BolaNieve(float x, float y, int potencia, b2World* world) {
+BolaEnemigo::BolaEnemigo(float x, float y, b2World* world) {
+	this->type = ID_BOLA_NIEVE_ENEMIGO;
 
-	this->type = ID_BOLA_NIEVE;
-
-	this->potencia = potencia;
 	this->x = x;
 	this->y = y;
-	this->radio = RADIO_BOLA_NIEVE;
-	this->masa = MASA_BOLA_NIEVE * 5;
+	this->radio = RADIO_BOLA_NIEVE_ENEMIGO;
+	this->masa = MASA_BOLA_NIEVE_ENEMIGO;
 	this->angulo = 0;
 	this->estatico = false;
 	this->world = world;
@@ -21,7 +19,9 @@ BolaNieve::BolaNieve(float x, float y, int potencia, b2World* world) {
 	this->body = this->world->CreateBody(&cuerpoDeCirculo);
 
 	b2FixtureDef fixture;
+	fixture.filter.groupIndex = 2;
 	fixture.density = 0.1;
+	fixture.restitution = 1;
 
 	b2CircleShape circleShape;
 	circleShape.m_p.Set(0, 0);
@@ -32,33 +32,31 @@ BolaNieve::BolaNieve(float x, float y, int potencia, b2World* world) {
 	b2Fixture *fix = this->body->CreateFixture(&fixture);
 
 	fix->SetUserData(this);
-
 }
 
-BolaNieve::~BolaNieve() {
-
+BolaEnemigo::~BolaEnemigo() {
 }
 
-void BolaNieve::setVelocidad(b2Vec2 velocidad) {
+void BolaEnemigo::setVelocidad(b2Vec2 velocidad) {
 	this->body->SetLinearVelocity(velocidad);
 }
 
-float BolaNieve::getRadio() {
+float BolaEnemigo::getRadio() {
 	return radio;
 }
 
-void BolaNieve::reaccionarCon(Figura* figura) {
-	figura->reaccionarConBolaNieve(this);
-}
-
-float BolaNieve::getAlto() {
+float BolaEnemigo::getAlto() {
 	return radio * 2;
 }
 
-float BolaNieve::getAncho() {
+float BolaEnemigo::getAncho() {
 	return radio * 2;
 }
 
-char BolaNieve::getId() {
+char BolaEnemigo::getId() {
 	return BOLA_NIEVE_CODE;
+}
+
+void BolaEnemigo::reaccionarCon(Figura *fig){
+	fig->reaccionarConBolaEnemigo(this);
 }

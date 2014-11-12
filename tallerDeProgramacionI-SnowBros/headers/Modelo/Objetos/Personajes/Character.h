@@ -10,12 +10,14 @@
 #include "../../../Controlador/ControladorDeContactos.h"
 #include "../../Estados/Estados.h"
 #include "../Proyectiles/BolaNieve.h"
+#include "../Proyectiles/BolaEnemigo.h"
 
 #include "../Figura.h"
 
 #define IZQUIERDA 'l'
 #define DERECHA 'r'
 
+#define ENEMIGO_BOLA 2
 #define PERSONAJE_FILTER_INDEX -1
 #define ENEMIGO_FILTER_INDEX -2
 

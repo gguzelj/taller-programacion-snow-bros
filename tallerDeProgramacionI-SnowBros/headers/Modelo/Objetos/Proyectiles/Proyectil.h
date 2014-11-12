@@ -16,7 +16,6 @@ protected:
 	b2Body* body;
 
 public:
-	std::string type = "proyectil";
 	float x;
 	float y;
 

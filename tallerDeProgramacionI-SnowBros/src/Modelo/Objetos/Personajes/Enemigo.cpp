@@ -1,11 +1,13 @@
 #include "../../../../headers/Modelo/Objetos/Personajes/Enemigo.h"
+#include "../../../../headers/Modelo/Escenario.h"
 #include <ctime>
 #define ORIENTACION_INICIAL 'l'
 
-Enemigo::Enemigo(JsonParser *parser, int index, b2World* world) {
+Enemigo::Enemigo(JsonParser *parser, int index, Escenario* escenario) {
 	//Parametros generales
+	this->escenario_ = escenario;
 	this->jumpCooldown = 0;
-	this->world = world;
+	this->world = escenario->getWorld();
 	this->aceleracion = 7.0f;
 	this->x = parser->getCoorXObjeto(index);
 	this->y = parser->getCoorYObjeto(index);
@@ -24,7 +26,6 @@ Enemigo::Enemigo(JsonParser *parser, int index, b2World* world) {
 	this->nivelDeCongelamiento = 0;
 	this->puedeEmpujar = false;
 	this->estaVivo = true;
-	this->enMovimientoBola = false;
 	this->puntos = 50;
 
 	//Parametros para controlar los contactos
@@ -69,7 +70,9 @@ Enemigo::Enemigo(JsonParser *parser, int index, b2World* world) {
 	paredDerecha = this->body->CreateFixture(&fixtureDef);
 
 	//Piso
-	shapeDelEnemigo.SetAsBox(ancho * 19.5f / 20, alto / 10, b2Vec2(0, -alto), 0);;
+	shapeDelEnemigo.SetAsBox(ancho * 19.5f / 20, alto / 10, b2Vec2(0, -alto),
+			0);
+	;
 	fixtureDef.friction = 0.0019f;
 	piso = this->body->CreateFixture(&fixtureDef);
 
@@ -80,47 +83,62 @@ Enemigo::Enemigo(JsonParser *parser, int index, b2World* world) {
 
 }
 
-Enemigo::~Enemigo(){
+Enemigo::~Enemigo() {
 	this->world->DestroyBody(this->body);
 }
 
-void Enemigo::disparar(){
+void Enemigo::disparar() {
 
 }
 
-void Enemigo::empujar(){
+void Enemigo::empujar() {
 
 }
 
-void Enemigo::morir(){
-	enMovimientoBola = true;
-//	std::thread t(&Enemigo::movimientoBola, this);
-//	t.detach();
+void Enemigo::morir() {
+
+	this->estaVivo = false;
+
+	b2Vec2 vel;
+	float x = getX();
+
+	x += (orientacion == IZQUIERDA)? -1:1;
+	BolaEnemigo *bola = new BolaEnemigo(getX(), getY(), this->world);
+
+	vel.x = (orientacion == IZQUIERDA)?-1500:1500;
+	vel.y = 5;
+	bola->setVelocidad(vel);
+
+	this->escenario_->agregarProyectil(bola);
 }
 
-
-void Enemigo::handleInput(SDL_Keycode input,Uint32 input_type){
-	if(nivelDeCongelamiento > 0 || enMovimientoBola) return;
-	state->handleInput(*this,input,input_type);
+void Enemigo::reaccionarConBolaEnemigo(BolaEnemigo*){
+	this->estaVivo = false;
 }
 
-void Enemigo::reaccionarCon(Figura* figura){
+void Enemigo::handleInput(SDL_Keycode input, Uint32 input_type) {
+	if (nivelDeCongelamiento > 0)
+		return;
+	state->handleInput(*this, input, input_type);
+}
+
+void Enemigo::reaccionarCon(Figura* figura) {
 	figura->reaccionarConEnemigo(this);
 }
 
-void Enemigo::reaccionarConBolaNieve(BolaNieve* bola){
+void Enemigo::reaccionarConBolaNieve(BolaNieve* bola) {
 
 	time(&tiempoDeImpactoDeLaUltimaBola);
 
 	//Si estaba semicongelado, lo congelamos un poco mas
-	if(this->nivelDeCongelamiento > 0 ){
+	if (this->nivelDeCongelamiento > 0) {
 		this->nivelDeCongelamiento += bola->potencia;
-		if(this->nivelDeCongelamiento > NIVEL_CONGELAMIENTO_MAX)
+		if (this->nivelDeCongelamiento > NIVEL_CONGELAMIENTO_MAX)
 			this->nivelDeCongelamiento = NIVEL_CONGELAMIENTO_MAX;
 	}
 
 	//Si no estaba congelado, empezamos a congelar
-	if (this->nivelDeCongelamiento == 0){
+	if (this->nivelDeCongelamiento == 0) {
 		this->state = &Enemigo::standby;
 		this->nivelDeCongelamiento += bola->potencia;
 		std::thread t(&Enemigo::congelar, this);
@@ -128,23 +146,18 @@ void Enemigo::reaccionarConBolaNieve(BolaNieve* bola){
 	}
 }
 
-void Enemigo::reaccionarConEnemigo(Enemigo* enemigo){
-	if(enemigo->enMovimientoBola){
-		estaVivo = false;
-	}
-}
-
-void Enemigo::congelar(){
+void Enemigo::congelar() {
 	float tiempoDeEsperaMaximo = 5.0f;
 	aceleracion = 0;
-	while (nivelDeCongelamiento != 0 && !enMovimientoBola){
+	while (nivelDeCongelamiento != 0) {
 		//En caso de que este hecho bola de nieve, lo hacemos
 		//No atravezable, para que pueda empujarlo
 		esAtravezable = (nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX);
 
-		if( difftime(time(nullptr), tiempoDeImpactoDeLaUltimaBola )  > tiempoDeEsperaMaximo){
-			this->nivelDeCongelamiento -=2;
-			if(this->nivelDeCongelamiento < 0)
+		if (difftime(time(nullptr), tiempoDeImpactoDeLaUltimaBola)
+				> tiempoDeEsperaMaximo) {
+			this->nivelDeCongelamiento -= 2;
+			if (this->nivelDeCongelamiento < 0)
 				this->nivelDeCongelamiento = 0;
 			time(&tiempoDeImpactoDeLaUltimaBola);
 		}
@@ -153,19 +166,15 @@ void Enemigo::congelar(){
 		esAtravezable = (nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX);
 	}
 	esAtravezable = false;
-	if (!enMovimientoBola)
-		aceleracion = 7.0f;
-	else{
-		this->aceleracion = 25.0f;
-	}
+	aceleracion = 7.0f;
 }
 
-bool Enemigo::estaCongelado(){
+bool Enemigo::estaCongelado() {
 	return (nivelDeCongelamiento == NIVEL_CONGELAMIENTO_MAX);
 }
 
-void Enemigo::jump(){
-	if( this->nivelDeCongelamiento == 0){
+void Enemigo::jump() {
+	if (this->nivelDeCongelamiento == 0) {
 		if (this->jumpCooldown <= 0) {
 			this->jumpCooldown = 18;
 			b2Vec2 velocidadActual = this->body->GetLinearVelocity();

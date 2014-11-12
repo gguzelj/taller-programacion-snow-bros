@@ -53,7 +53,11 @@ bool detenerMovimientoHorizontal(Character* character, SDL_Keycode input) {
 	}
 	return false;
 }
-
+void DyingState::handleInput(Character &character, SDL_Keycode input, Uint32 input_type){
+	detenerMovimientoHorizontal(&character, input);
+	character.debeSaltar = false;
+	return;
+}
 void OnAirState::handleInput(Character &character, SDL_Keycode input, Uint32 input_type) {
 	switch (input_type) {
 	case SDL_KEYDOWN:

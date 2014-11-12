@@ -37,6 +37,8 @@ public:
 
 	void reaccionarCon(Figura* fig);
 
+	void cambiarFilterIndex(int16 groupIndex);
+
 };
 
 #endif /* BOLAENEMIGO_H_ */

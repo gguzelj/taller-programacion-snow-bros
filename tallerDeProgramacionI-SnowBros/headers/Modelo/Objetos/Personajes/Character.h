@@ -38,6 +38,7 @@ protected:
 	b2Fixture* piso;
 
 	void cambiarFilterIndex(int16 groupIndex);
+
 public:
 	bool inmune;
 	bool movimientoLateralDerecha, movimientoLateralIzquierda, debeSaltar;

@@ -106,10 +106,10 @@ void Personaje::disparar() {
 	BolaNieve *bola;
 
 	if (orientacion == IZQUIERDA)
-		bola = new BolaNieve(getX() - 1, getY() + MITAD_ALTO_PERSONAJE, 7,
+		bola = new BolaNieve(getX() - 1, getY() + MITAD_ALTO_PERSONAJE, 1,
 				this->world);
 	else
-		bola = new BolaNieve(getX() + 1, getY() + MITAD_ALTO_PERSONAJE, 7,
+		bola = new BolaNieve(getX() + 1, getY() + MITAD_ALTO_PERSONAJE, 1,
 				this->world);
 
 	b2Vec2 vel = this->body->GetLinearVelocity();
@@ -150,6 +150,8 @@ void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
 }
 
 void Personaje::reaccionarConBolaEnemigo(BolaEnemigo * bola) {
+
+	bola->cambiarFilterIndex(PERSONAJE_FILTER_INDEX);
 
 	this->arrastrado = true;
 	this->arrastradoPor = bola;

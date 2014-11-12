@@ -20,7 +20,7 @@ BolaEnemigo::BolaEnemigo(float x, float y, b2World* world) {
 	this->body = this->world->CreateBody(&cuerpoDeCirculo);
 
 	b2FixtureDef fixture;
-	fixture.filter.groupIndex = 2;
+	fixture.filter.groupIndex = BOLA_ENEMIGO_FILTER_INDEX;
 	fixture.density = 0.1;
 	fixture.restitution = 1;
 
@@ -59,10 +59,21 @@ char BolaEnemigo::getId() {
 }
 
 void BolaEnemigo::morir(){
-	sleep(15);
+	sleep(1);
 	destruir = true;
 }
 
 void BolaEnemigo::reaccionarCon(Figura *fig){
 	fig->reaccionarConBolaEnemigo(this);
+}
+
+void BolaEnemigo::cambiarFilterIndex(int16 groupIndex){
+	b2Filter filter;
+	filter.groupIndex = groupIndex;
+
+	//Recorremos todos los fixtures del objeto y cambiamos el filter
+	for (b2Fixture* fix = this->body->GetFixtureList(); fix; fix = fix->GetNext()) {
+		fix->SetFilterData(filter);
+	}
+
 }

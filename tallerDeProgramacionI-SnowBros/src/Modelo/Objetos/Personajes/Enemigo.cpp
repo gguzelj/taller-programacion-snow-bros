@@ -119,8 +119,23 @@ void Enemigo::morir() {
 	t.detach();
 }
 
-void Enemigo::reaccionarConBolaEnemigo(BolaEnemigo*){
+void Enemigo::morirDelay(){
+	sleep(1);
 	this->estaVivo = false;
+}
+
+void Enemigo::reaccionarConBolaEnemigo(BolaEnemigo*){
+
+	//Lanzamos un thread para que muera el enemigo
+	std::thread r(&Enemigo::morirDelay, this);
+	r.detach();
+
+	//Lanzamos el enemigo por los aires
+	b2Vec2 velocidadActual = this->body->GetLinearVelocity();
+	velocidadActual.y = 70;
+	velocidadActual.x *= -1;
+	this->body->SetLinearVelocity(velocidadActual);
+
 }
 
 void Enemigo::handleInput(SDL_Keycode input, Uint32 input_type) {

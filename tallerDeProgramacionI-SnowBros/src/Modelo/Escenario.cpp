@@ -166,6 +166,7 @@ void acomodarEstadoCharacter(Character* personaje, b2World* world_) {
 			pers->state = &Personaje::standby;
 		}
 		if (pers->arrastradoPor && !pers->arrastrado) {
+
 			world_->DestroyJoint(pers->joint);
 			pers->arrastrado = false;
 			pers->arrastradoPor = nullptr;
@@ -173,6 +174,7 @@ void acomodarEstadoCharacter(Character* personaje, b2World* world_) {
 			pers->debeSaltar = true;
 			pers->state = &Character::jumping;
 			pers->jump();
+
 		}
 	}
 }

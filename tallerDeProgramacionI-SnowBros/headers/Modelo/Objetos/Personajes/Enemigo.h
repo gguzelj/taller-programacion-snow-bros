@@ -20,6 +20,8 @@ private:
 	int puntos;
 	time_t tiempoDeImpactoDeLaUltimaBola;
 
+	void morirDelay();
+
 public:
 
 	bool esAtravezable;

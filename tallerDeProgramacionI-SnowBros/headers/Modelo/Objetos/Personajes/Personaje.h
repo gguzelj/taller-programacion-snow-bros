@@ -93,6 +93,8 @@ class Personaje : public Character {
 
 		void empujar();
 
+		char getId();
+
 		void reaccionarConEnemigo(Enemigo* enemigo);
 		void reaccionarConBolaEnemigo(BolaEnemigo* bola);
 

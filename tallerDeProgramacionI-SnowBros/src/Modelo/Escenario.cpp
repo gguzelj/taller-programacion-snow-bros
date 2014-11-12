@@ -124,25 +124,27 @@ void Escenario::setPersonajeConnectionState(conn_id id, char state) {
 }
 
 void acomodarEstadoCharacter(Character* personaje, b2World* world_) {
+
 	if (personaje->state != &Personaje::dying) {
 		//Chequeo para cambiar el estado jumping a falling o el estado cuando cae de una plataforma
 		personaje->decreaseJumpCooldown();
 		//Chequeo si puedo disparar.
 		personaje->decreaseShootCooldown();
+
 		//Esta implementado aca para que cambie cuando tiene que hacerlo
-		if (personaje->getVelocity().y <= 0.0f
-				&& personaje->getCantidadDeContactosActuales() == 0) {
-			if (personaje->state != &Personaje::shooting)
+		if (personaje->getVelocity().y <= 0.0f && personaje->getCantidadDeContactosActuales() == 0) {
+
+			if (personaje->state != &Personaje::shooting && personaje->state != &Personaje::rolling)
 				personaje->state = &Personaje::falling;
 			personaje->noAtravezarPlataformas();
 
-		} else if (personaje->getVelocity().y <= 0.0f
-				&& personaje->state == &Personaje::jumping) {
+		} else if (personaje->getVelocity().y <= 0.0f && personaje->state == &Personaje::jumping) {
+
 			personaje->state = &Personaje::standby;
+
 		}
 
-		if (personaje->movimientoLateralDerecha
-				|| personaje->movimientoLateralIzquierda)
+		if (personaje->movimientoLateralDerecha || personaje->movimientoLateralIzquierda)
 			Personaje::walking.caminar(*personaje);
 
 		if (personaje->debeSaltar && personaje->state->getCode() != JUMPING

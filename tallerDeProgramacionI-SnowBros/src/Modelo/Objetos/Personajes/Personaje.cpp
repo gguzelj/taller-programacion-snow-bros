@@ -141,6 +141,7 @@ void Personaje::empujar() {
 }
 
 void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
+
 	if (state == &Personaje::dying) {
 		state->handleInput(*this, input, input_type);
 		return;
@@ -163,7 +164,7 @@ void Personaje::reaccionarConBolaEnemigo(BolaEnemigo * bola) {
  */
 void Personaje::reaccionarConEnemigo(Enemigo* enemigo) {
 
-	if (state == &Personaje::dying)
+	if (state == &Personaje::dying || state == &Personaje::rolling)
 		return;
 
 	//Si el enemigo esta congelado, no nos sucede nada
@@ -243,4 +244,8 @@ void Personaje::hacerInmune() {
 
 void Personaje::noAtravezarPlataformas() {
 	cambiarFilterIndex(PERSONAJE_FILTER_INDEX);
+}
+
+char Personaje::getId(){
+	return ID_PERSONAJE;
 }

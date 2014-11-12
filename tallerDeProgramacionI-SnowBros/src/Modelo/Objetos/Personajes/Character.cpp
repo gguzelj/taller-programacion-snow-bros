@@ -87,7 +87,7 @@ void Character::updateRightContact(int numero) {
 }
 
 void cambiarEstadoAlAterrizar(Character* character) {
-	if(character->state != &Character::dying){
+	if(character->state != &Character::dying && character->state != &Character::rolling){
 		if (character->movimientoLateralDerecha == true || character->movimientoLateralIzquierda == true)
 			character->state = &Character::walking;
 		else
@@ -129,7 +129,7 @@ void Character::terminoContacto(b2Fixture* fixture) {
 
 			if (contactosActuales == 0 && state->getCode() != JUMPING){
 				noAtravezarPlataformas();
-				if(state != &Character::dying)
+				if(state != &Character::dying && state != &Character::rolling)
 					state = &Character::falling;
 			}
 

@@ -172,6 +172,12 @@ void acomodarEstadoCharacter(Character* personaje, b2World* world_) {
 			pers->arrastradoPor = nullptr;
 			pers->joint = nullptr;
 			pers->debeSaltar = true;
+
+
+			b2Transform tra = pers->getb2Body()->GetTransform();
+			tra.p.y += 3;
+			pers->getb2Body()->SetTransform(tra.p,0);
+
 			pers->state = &Character::jumping;
 			pers->jump();
 

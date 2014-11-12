@@ -59,7 +59,7 @@ char BolaEnemigo::getId() {
 }
 
 void BolaEnemigo::morir(){
-	sleep(1);
+	sleep(15);
 	destruir = true;
 }
 

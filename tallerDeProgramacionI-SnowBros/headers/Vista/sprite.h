@@ -43,6 +43,10 @@
 #define POS_X_EMPUJANDO 206
 #define POS_Y_EMPUJANDO 51
 
+#define FRAMES_PATEANDO 1
+#define POS_X_PATEANDO 326
+#define POS_Y_PATEANDO 48
+
 void dibujarFrame(SDL_Renderer *renderer,SDL_Texture *texture,char orientacion, int pos_x,int pos_y,SDL_Rect srcrect, SDL_Rect dstrect){
 	switch(orientacion){
 		case 'l':{
@@ -125,6 +129,18 @@ void drawPersonajeEmpujando(SDL_Renderer *renderer,SDL_Texture *texture,const ch
 	Uint32 sprite = (ticks / 120  ) % FRAMES_EMPUJANDO;
 
 	SDL_Rect srcrect = { POS_X_EMPUJANDO + (sprite * ANCHO_DEFAULT) ,POS_Y_EMPUJANDO, ANCHO_DEFAULT, ALTO_DEFAULT };
+	SDL_Rect dstrect = { pos_x - (ancho/2), pos_y -( alto/2), ancho, alto};
+
+	dibujarFrame(renderer,texture,orientacion,pos_x,pos_y,srcrect,dstrect);
+}
+
+void drawPersonajePateando(SDL_Renderer *renderer,SDL_Texture *texture,const char orientacion, int pos_x,int pos_y,int ancho,int alto){
+	//Get ticks te da el tiempo en milisegundo desde el arranque de la ejecucion.
+	Uint32 ticks = SDL_GetTicks();
+	//Aumentar para verlo mas lento o disminuir el parametro para verlo mas rapido.
+	Uint32 sprite = (ticks / 120  ) % FRAMES_PATEANDO;
+
+	SDL_Rect srcrect = { POS_X_PATEANDO + (sprite * ANCHO_DEFAULT) ,POS_Y_PATEANDO, ANCHO_DEFAULT, ALTO_DEFAULT };
 	SDL_Rect dstrect = { pos_x - (ancho/2), pos_y -( alto/2), ancho, alto};
 
 	dibujarFrame(renderer,texture,orientacion,pos_x,pos_y,srcrect,dstrect);

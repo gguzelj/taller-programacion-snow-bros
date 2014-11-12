@@ -455,7 +455,9 @@ void Drawer::drawCharacter(personaje_t person, int index, int connectionState) {
 		drawPersonajeEmpujando(renderer, textura, orientacion, pos_x, pos_y, anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
 		break;
 	}
-
+	case KICKING:
+		drawPersonajePateando(renderer, textura, orientacion, pos_x, pos_y, anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
+		break;
 }
 
 void Drawer::drawMessages(dataFromClient_t data, personaje_t personaje) {

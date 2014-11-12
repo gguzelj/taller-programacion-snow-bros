@@ -53,6 +53,7 @@
 #define SHOOTING 'd'
 #define DYING 'm'
 #define PUSHING 'p'
+#define KICKING 'k'
 using namespace std;
 
 const float factor = 0.005;

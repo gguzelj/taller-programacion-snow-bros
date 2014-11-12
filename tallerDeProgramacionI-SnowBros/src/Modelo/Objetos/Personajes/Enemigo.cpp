@@ -99,11 +99,14 @@ void Enemigo::morir() {
 
 	this->estaVivo = false;
 
+	//Ahora creamos la nueva bola
 	b2Vec2 vel;
-	float x = getX();
+	BolaEnemigo *bola;
 
-	x += (orientacion == IZQUIERDA)? -1:1;
-	BolaEnemigo *bola = new BolaEnemigo(getX(), getY(), this->world);
+	if (orientacion == IZQUIERDA)
+		bola = new BolaEnemigo(getX() - 1, getY() + MITAD_ALTO_ENEMIGO, this->world);
+	else
+		bola = new BolaEnemigo(getX() + 1, getY() + MITAD_ALTO_ENEMIGO, this->world);
 
 	vel.x = (orientacion == IZQUIERDA)?-1500:1500;
 	vel.y = 5;

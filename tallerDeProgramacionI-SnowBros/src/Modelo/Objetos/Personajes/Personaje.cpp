@@ -149,14 +149,12 @@ void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
 }
 
 void Personaje::reaccionarConBolaEnemigo(BolaEnemigo * bola) {
-/*
-	if (this->state == &Personaje::jumping)
-		return;
+
 	this->arrastrado = true;
 	this->arrastradoPor = bola;
 	this->state = &Personaje::rolling;
 	return;
-*/
+
 }
 
 /*

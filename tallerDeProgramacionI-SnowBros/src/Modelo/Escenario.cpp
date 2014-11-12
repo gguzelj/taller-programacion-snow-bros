@@ -397,6 +397,19 @@ void movimientoDeLaBola(Enemigo* enemigo){
 }
 
 void Escenario::movimientoDelEnemigo(Enemigo* enemigo){
+	   int i=0;
+	   float posicionesX[4];
+	   float posicionesY[4];
+	   for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
+		   posicionesX[i] = (*personaje)->getX();
+		   posicionesY[i] = (*personaje)->getY();
+		   i++;
+		}
+		float posicionPersonajeX = posicionesX[0];
+		float posicionPersonajeY = posicionesY[0];
+		float posicionEnemigoX = enemigo->getX();
+		float posicionEnemigoY = enemigo->getY();
+
 	int v1 = rand() % 100;
 	if(v1 < 45){
 		v1 = rand() % 100;
@@ -414,20 +427,6 @@ void Escenario::movimientoDelEnemigo(Enemigo* enemigo){
 		}
 	}
 	else if(v1 < 50){
-		   int i=0;
-		   float posicionesX[4];
-		   float posicionesY[4];
-		   for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
-			   posicionesX[i] = (*personaje)->getX();
-			   posicionesY[i] = (*personaje)->getY();
-			   i++;
-			}
-
-			float posicionPersonajeX = posicionesX[0];
-			float posicionPersonajeY = posicionesY[0];
-			float posicionEnemigoX = enemigo->getX();
-			float posicionEnemigoY = enemigo->getY();
-
 			if(posicionPersonajeX < posicionEnemigoX ){
 				enemigo->handleInput(SDLK_RIGHT, SDL_KEYUP);
 				enemigo->handleInput(SDLK_LEFT, SDL_KEYDOWN);
@@ -439,11 +438,13 @@ void Escenario::movimientoDelEnemigo(Enemigo* enemigo){
 			if((posicionPersonajeY-3) > posicionEnemigoY){
 				enemigo->handleInput(SDLK_UP, SDL_KEYDOWN);
 			}
-			if((posicionPersonajeY+1) < posicionEnemigoY)
-				enemigo->handleInput(SDLK_UP, SDL_KEYUP);
 	}
-	else if(v1 > 85)
-		enemigo->atravezarPlataformas();
+	 if(v1 > 0){
+		if((posicionPersonajeY+1) < posicionEnemigoY){
+			enemigo->handleInput(SDLK_UP, SDL_KEYUP);
+			enemigo->atravezarPlataformas();
+		}
+	}
 }
 
 void Escenario::actualizarEnemigos() {

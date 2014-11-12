@@ -143,6 +143,34 @@
                        "estatico":false
                      },
                      {
+                       "tipo":"circulo",
+                       "x":0,
+                       "y":20,
+                       "escala":1,
+                       "rot":45,
+                       "masa":1,
+                       "estatico":false
+                     },
+
+                     {
+                       "tipo":"circulo",
+                       "x":-15,
+                       "y":-11,
+                       "escala":1,
+                       "rot":45,
+                       "masa":1,
+                       "estatico":false
+                     },
+                     {
+                       "tipo":"circulo",
+                       "x":15,
+                       "y":-11,
+                       "escala":1,
+                       "rot":45,
+                       "masa":1,
+                       "estatico":false
+                     },
+                     {
                        "tipo":"enemigobasico",
                        "x":10,
                        "y":10,
@@ -153,8 +181,17 @@
                      },
                      {
                        "tipo":"enemigobasico",
-                       "x":10,
-                       "y":20,
+                       "x":7,
+                       "y":10,
+                       "escala":1,//campo obligatorio por el json
+                       "rot":45,//campo obligatorio por el json
+                       "masa":1,//campo obligatorio por el json
+                       "estatico":false//campo obligatorio por el json
+                     },
+                     {
+                       "tipo":"enemigobasico",
+                       "x":5,
+                       "y":10,
                        "escala":1,//campo obligatorio por el json
                        "rot":45,//campo obligatorio por el json
                        "masa":1,//campo obligatorio por el json
@@ -169,6 +206,43 @@
                        "masa":1,//campo obligatorio por el json
                        "estatico":false//campo obligatorio por el json
                      },
+                     {
+                       "tipo":"enemigobasico",
+                       "x":0,
+                       "y":15,
+                       "escala":1,//campo obligatorio por el json
+                       "rot":45,//campo obligatorio por el json
+                       "masa":1,//campo obligatorio por el json
+                       "estatico":false//campo obligatorio por el json
+                     },
+                     {
+                       "tipo":"enemigobasico",
+                       "x":15,
+                       "y":80,
+                       "escala":1,//campo obligatorio por el json
+                       "rot":45,//campo obligatorio por el json
+                       "masa":1,//campo obligatorio por el json
+                       "estatico":false//campo obligatorio por el json
+                     },
+                     {
+                       "tipo":"enemigobasico",
+                       "x":-10,
+                       "y":15,
+                       "escala":1,//campo obligatorio por el json
+                       "rot":45,//campo obligatorio por el json
+                       "masa":1,//campo obligatorio por el json
+                       "estatico":false//campo obligatorio por el json
+                     },
+                     {
+                       "tipo":"enemigobasico",
+                       "x":-15,
+                       "y":15,
+                       "escala":1,//campo obligatorio por el json
+                       "rot":45,//campo obligatorio por el json
+                       "masa":1,//campo obligatorio por el json
+                       "estatico":false//campo obligatorio por el json
+                     },
+
                      {
                        "tipo":"enemigobasico",
                        "x":20,

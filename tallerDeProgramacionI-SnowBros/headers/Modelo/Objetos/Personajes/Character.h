@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <unistd.h>
 #include <thread>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 #include "../../../Controlador/ControladorDeContactos.h"
 #include "../../Estados/Estados.h"

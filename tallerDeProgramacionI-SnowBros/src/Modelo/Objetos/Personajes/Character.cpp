@@ -141,7 +141,6 @@ void Character::atravezarPlataformas(){
 }
 
 void Character::cambiarFilterIndex(int16 groupIndex){
-
 	b2Filter filter;
 	filter.groupIndex = groupIndex;
 
@@ -149,4 +148,5 @@ void Character::cambiarFilterIndex(int16 groupIndex){
 	for (b2Fixture* fix = this->body->GetFixtureList(); fix; fix = fix->GetNext()) {
 		fix->SetFilterData(filter);
 	}
+
 }

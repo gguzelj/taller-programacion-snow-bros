@@ -103,19 +103,19 @@ void Personaje::disparar() {
 	BolaNieve *bola;
 
 	if (orientacion == IZQUIERDA)
-		bola = new BolaNieve(getX() - 1, getY() + MITAD_ALTO_PERSONAJE - 0.40,
+		bola = new BolaNieve(getX() - 1, getY() + MITAD_ALTO_PERSONAJE - 0.35,
 				1, this->world);
 	else
-		bola = new BolaNieve(getX() + 1, getY() + MITAD_ALTO_PERSONAJE - 0.40,
+		bola = new BolaNieve(getX() + 1, getY() + MITAD_ALTO_PERSONAJE - 0.35,
 				1, this->world);
 
 	b2Vec2 vel = this->body->GetLinearVelocity();
 
 	if (orientacion == IZQUIERDA)
-		vel.x -= aceleracion * 2.0;
+		vel.x -= aceleracion * 2.8;
 	else
-		vel.x += aceleracion * 2.0;
-	vel.y = 10;
+		vel.x += aceleracion * 2.8;
+	vel.y = 5;
 
 	bola->setVelocidad(vel);
 

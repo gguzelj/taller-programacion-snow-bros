@@ -16,7 +16,7 @@ BolaNieve::BolaNieve(float x, float y,int potencia, b2World* world) {
 	 b2BodyDef cuerpoDeCirculo;
 	 cuerpoDeCirculo.type = b2_dynamicBody;
 	 cuerpoDeCirculo.position.Set(x,y);
-	 cuerpoDeCirculo.gravityScale = 6;
+	 cuerpoDeCirculo.gravityScale = 8;
 	 this->body = this->world->CreateBody(&cuerpoDeCirculo);
 
 

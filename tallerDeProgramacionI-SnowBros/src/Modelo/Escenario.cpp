@@ -144,6 +144,10 @@ void acomodarEstadoCharacter(Character* personaje) {
 	}
 	//Seteamos esto aca que me parece lo mas facil, e intuitivo.
 	if( Personaje* pers = dynamic_cast< Personaje* >( personaje ) ){
+		//Disminuyo el cooldown de patear.
+		pers->decreaseKickCooldown();
+		if(pers->state == &Personaje::kicking && pers->getKickCooldown() == 0)
+			pers->state = &Personaje::standby;
 		if(pers->esta_muerto){
 			pers->volverAPosicionInicial();
 			pers->esta_muerto = false;

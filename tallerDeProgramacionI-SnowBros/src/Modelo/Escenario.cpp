@@ -120,7 +120,7 @@ void Escenario::setPersonajeConnectionState(conn_id id, char state) {
 	}
 }
 
-void acomodarEstadoCharacter(Character* personaje) {
+void acomodarEstadoCharacter(Character* personaje, b2World* world_) {
 	if(personaje->state != &Personaje::dying){
 		//Chequeo para cambiar el estado jumping a falling o el estado cuando cae de una plataforma
 		personaje->decreaseJumpCooldown();
@@ -155,6 +155,15 @@ void acomodarEstadoCharacter(Character* personaje) {
 			pers->esta_muerto = false;
 			pers->state = &Personaje::standby;
 		}
+		if(pers->arrastradoPor && !pers->arrastrado){
+			world_->DestroyJoint(pers->joint);
+			pers->arrastrado = false;
+			pers->arrastradoPor = nullptr;
+			pers->joint = nullptr;
+			pers->debeSaltar = true;
+			pers->state = &Character::jumping;
+			pers->jump();
+		}
 	}
 }
 
@@ -172,17 +181,46 @@ void Escenario::clean(){
 	}
 }
 
+void crearJoint(Personaje* personaje, Enemigo* enemigo, b2World* world_){
+	b2RevoluteJointDef revjoint;
+	revjoint.bodyA = enemigo->getb2Body();
+	revjoint.bodyB = personaje->getb2Body();
+	revjoint.collideConnected = false;
+	revjoint.localAnchorA.Set(0,0);
+	revjoint.localAnchorB.Set(0,0);
+	personaje->joint = (b2RevoluteJoint*) world_->CreateJoint( &revjoint );
+}
+
+void destruirJointsDeEnemigo(Enemigo* enemigo, std::list<Personaje*>* personajes_, b2World* world_){
+	for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje){
+		if (strcmp((*personaje)->id, "sin asignar") != 0){
+			if((*personaje)->arrastradoPor == enemigo){
+				world_->DestroyJoint((*personaje)->joint);
+				(*personaje)->arrastrado = false;
+				(*personaje)->arrastradoPor = nullptr;
+				(*personaje)->joint = nullptr;
+				(*personaje)->state = &Personaje::standby;
+			}
+		}
+	}
+}
+
 void Escenario::step() {
 	for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
-		if (strcmp((*personaje)->id, "sin asignar") != 0)
-			acomodarEstadoCharacter(*personaje);
+		if (strcmp((*personaje)->id, "sin asignar") != 0){
+			acomodarEstadoCharacter(*personaje, world_);
+			if((*personaje)->state == &Personaje::rolling && !(*personaje)->joint){
+				crearJoint((*personaje), (*personaje)->arrastradoPor, world_);
+			}
+		}
 	}
 	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end(); ++enemigo) {
 		if(!(*enemigo)->estaVivo){
+			destruirJointsDeEnemigo((*enemigo), personajes_, world_);
 			world_->DestroyBody((*enemigo)->getb2Body());
 			enemigos_->erase(enemigo++);
 		}else
-			acomodarEstadoCharacter(*enemigo);
+			acomodarEstadoCharacter(*enemigo, world_);
 	}
 	clean();
 
@@ -392,7 +430,7 @@ void movimientoDeLaBola(Enemigo* enemigo){
 
 	enemigo->cantidadDeRebotesParaDestruccion++;
 
-	if(enemigo->cantidadDeRebotesParaDestruccion == 3)
+	if(enemigo->cantidadDeRebotesParaDestruccion == 5)
 		enemigo->estaVivo = false;
 }
 

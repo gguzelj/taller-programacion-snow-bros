@@ -3,8 +3,8 @@
 
 #include "Character.h"
 
-#define MITAD_ANCHO_ENEMIGO 0.70f
-#define MITAD_ALTO_ENEMIGO 0.70
+#define MITAD_ANCHO_ENEMIGO 0.85f
+#define MITAD_ALTO_ENEMIGO 0.85f
 #define IZQUIERDA 'l'
 #define DERECHA 'r'
 

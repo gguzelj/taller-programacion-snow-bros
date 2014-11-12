@@ -39,6 +39,12 @@ class Personaje : public Character {
 
 		bool esta_muerto;
 
+		bool arrastrado;
+
+		Enemigo* arrastradoPor;
+
+		b2Joint* joint;
+
 		Personaje(float x, float y,char id[], Escenario* escenario);
 		~Personaje();
 

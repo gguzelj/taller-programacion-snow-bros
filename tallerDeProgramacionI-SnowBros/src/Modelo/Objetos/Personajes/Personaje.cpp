@@ -20,6 +20,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->orientacion = ORIENTACION_INICIAL;
 	this->esta_muerto = false;
 	this->puedeEmpujar = false;
+	this->arrastradoPor = nullptr;
 
 	this->connectionState = CONECTADO;
 	this->points = 0;
@@ -153,6 +154,14 @@ void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
 void Personaje::reaccionarConEnemigo(Enemigo* enemigo) {
 
 	if(state == &Personaje::dying) return;
+
+	if (enemigo->enMovimientoBola){
+		if(this->state == &Personaje::jumping) return;
+		this->arrastrado = true;
+		this->arrastradoPor = enemigo;
+		this->state = &Personaje::rolling;
+		return;
+	}
 
 	//Si el enemigo esta congelado, no nos sucede nada
 	if (enemigo->estaCongelado()) {

@@ -1,6 +1,7 @@
 #define VEL_POR_DEFAULT 10.0f
 #include "../../../headers/Modelo/Estados/Estados.h"
 #include "../../../headers/Modelo/Objetos/Personajes/Character.h"
+#include "../../../headers/Modelo/Objetos/Personajes/Personaje.h"
 
 StandByState Character::standby;
 JumpingState Character::jumping;
@@ -10,6 +11,7 @@ ShootingState Character::shooting;
 DyingState Character::dying;
 PushingState Character::pushing;
 KickingState Character::kicking;
+RollingState Character::rolling;
 
 void cambiarOrientacionAlDejarDePresionarUnaTecla(Character &character) {
 	switch (character.getOrientacion()) {
@@ -302,5 +304,19 @@ void KickingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 		break;
 	case SDL_KEYUP:
 		detenerMovimientoHorizontal(&character, input);
+	}
+}
+
+void RollingState::handleInput(Character &character, SDL_Keycode input, Uint32 input_type){
+	if( Personaje* personaje = dynamic_cast< Personaje* >( &character ) ){
+		switch (input_type) {
+		case SDL_KEYDOWN:
+			if (input == SDLK_UP){
+				std::cout << "Salte." << std::endl;
+				personaje->arrastrado = false;
+				//saltar(character);
+				break;
+			}
+		}
 	}
 }

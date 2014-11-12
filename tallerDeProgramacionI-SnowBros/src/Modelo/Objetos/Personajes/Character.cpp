@@ -117,22 +117,23 @@ void Character::empiezoContacto(b2Fixture* fixture) {
 
 void Character::terminoContacto(b2Fixture* fixture) {
 
-	if (paredDerecha == fixture)
-		contactosDerecha--;
+		if (paredDerecha == fixture)
+			contactosDerecha--;
 
-	if (paredIzquierda == fixture)
-		contactosIzquierda--;
+		if (paredIzquierda == fixture)
+			contactosIzquierda--;
 
-	if (piso == fixture) {
+		if (piso == fixture) {
 
-		contactosActuales--;
+			contactosActuales--;
 
-		if (contactosActuales == 0 && state->getCode() != JUMPING){
-			state = &Character::falling;
-			noAtravezarPlataformas();
+			if (contactosActuales == 0 && state->getCode() != JUMPING){
+				noAtravezarPlataformas();
+				if(state != &Character::dying)
+					state = &Character::falling;
+			}
+
 		}
-
-	}
 }
 
 void Character::atravezarPlataformas(){

@@ -75,8 +75,6 @@ public:
 	Escenario(JsonParser *parser);
 	virtual ~Escenario();
 
-	std::list<Muro*>* getParedes();
-
 	//Devuelve una instancia al personaje del juego
 	std::list<Personaje*>* getPersonajes();
 
@@ -127,7 +125,6 @@ private:
 	std::vector<Figura*>* figurasEstaticas_;
 	std::vector<Figura*>* figurasDinamicas_;
 	std::list<Proyectil*>* proyectiles_;
-	std::list<Muro*>* muros_;
 	std::list<Personaje*>* personajes_;
 	std::list<Enemigo*>* enemigos_;
 

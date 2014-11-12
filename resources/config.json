@@ -73,37 +73,7 @@
                        "masa":3,
                        "estatico":true
                      },
-				     {
-                       "tipo":"rectangulo",
-                       "x":0,
-                       "y":-20,
-                       "alto":2,
-                       "ancho":80,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-				     {
-                       "tipo":"rectangulo",
-                       "x":41,
-                       "y":0,
-                       "alto":42,
-                       "ancho":2,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-				     {
-                       "tipo":"rectangulo",
-                       "x":-41,
-                       "y":0,
-                       "alto":42,
-                       "ancho":2,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-				     {
+		     {
                        "tipo":"poligono",
                        "x":-15,
                        "y":-12,

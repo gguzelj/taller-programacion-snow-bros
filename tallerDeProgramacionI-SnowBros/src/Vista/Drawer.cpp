@@ -356,7 +356,7 @@ void Drawer::drawEnemy(enemigo_t enemigo) {
 	int pos_y = coord_relativa(coordRel.y, -un_to_px_y * (enemigo.centro.y) + oy);
 
 	if(enemigo.nivelDeCongelamiento == 7)
-		drawCongelamiento(this->renderer, imagenEnemigos, orientacion, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y,enemigo.nivelDeCongelamiento);
+		drawCongelamiento(this->renderer, congelamientoCuatro, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
 	else{
 		switch (codigo_estado) {
 		case JUMPING:
@@ -372,7 +372,21 @@ void Drawer::drawEnemy(enemigo_t enemigo) {
 			drawStandardEnemyFalling(renderer, imagenEnemigos, orientacion, pos_x, pos_y,  ancho * un_to_px_x, alto * un_to_px_y);
 			break;
 		}
-		drawCongelamiento(this->renderer, imagenEnemigos, orientacion, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y,enemigo.nivelDeCongelamiento);
+		if(enemigo.nivelDeCongelamiento >0){
+			if(enemigo.nivelDeCongelamiento < 3){
+				drawCongelamiento(this->renderer, congelamientoUno, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+			}
+			else{
+				if( enemigo.nivelDeCongelamiento <5){
+					drawCongelamiento(this->renderer, congelamientoDos, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+				}
+				else{
+					if( enemigo.nivelDeCongelamiento < 7){
+						drawCongelamiento(this->renderer, congelamientoTres, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -637,9 +651,28 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 	}
 
 	imagenEnemigos = this->loadTexture(ENEMY_SPRITE_PATH, this->renderer);
-		if (imagenEnemigos == nullptr) {
+	if (imagenEnemigos == nullptr) {
+		manageLoadCharacterError();
+	}
+
+
+	congelamientoUno = this->loadTexture(CONGELAMIENTO_NIVEL_UNO_PATH, this->renderer);
+	if (congelamientoUno == nullptr) {
+		manageLoadCharacterError();
+	}
+	congelamientoDos = this->loadTexture(CONGELAMIENTO_NIVEL_DOS_PATH, this->renderer);
+	if (congelamientoDos == nullptr) {
+		manageLoadCharacterError();
+	}
+	congelamientoTres = this->loadTexture(CONGELAMIENTO_NIVEL_TRES_PATH, this->renderer);
+	if (congelamientoTres == nullptr) {
+		manageLoadCharacterError();
+	}
+	congelamientoCuatro = this->loadTexture(CONGELAMIENTO_NIVEL_CUATRO_PATH,this->renderer);
+	if (congelamientoCuatro == nullptr) {
 			manageLoadCharacterError();
-		}
+	}
+
 
 //Initialize SDL_ttf
 	if (TTF_Init() == -1) {

@@ -2,6 +2,10 @@
 #include "sprite.h"
 
 #define ENEMY_SPRITE_PATH "resources/sprites/SnowBrosEnemigos.png"
+#define CONGELAMIENTO_NIVEL_UNO_PATH "resources/textures/snowball_uno.png"
+#define CONGELAMIENTO_NIVEL_DOS_PATH "resources/textures/snowball_dos.png"
+#define CONGELAMIENTO_NIVEL_TRES_PATH "resources/textures/snowball_tres.png"
+#define CONGELAMIENTO_NIVEL_CUATRO_PATH "resources/textures/snowball.png"
 
 
 #define ALTO_CAMINAR_ES 17
@@ -34,7 +38,7 @@
 
 
 
-
+/*
 
 
 #define ALTO_CONGELAMIENTO_UNO 11
@@ -89,6 +93,20 @@ void drawCongelamiento(SDL_Renderer *renderer,SDL_Texture *texture,const char or
 
 }
 
+*/
+
+
+void drawCongelamiento(SDL_Renderer *renderer,SDL_Texture *texture, int pos_x,int pos_y,int ancho,int alto){
+
+	SDL_Rect dstrect = { pos_x - ancho / 2, pos_y - alto / 2, ancho, alto};
+	dibujarFrame(renderer,texture,'l',pos_x,pos_y,nullptr,dstrect);
+
+}
+
+
+
+
+
 void drawStandardEnemyWalking(SDL_Renderer *renderer,SDL_Texture *texture,const char orientacion, int pos_x,int pos_y,int ancho,int alto){
 	//Get ticks te da el tiempo en milisegundo desde el arranque de la ejecucion.
 	Uint32 ticks = SDL_GetTicks();
@@ -98,7 +116,7 @@ void drawStandardEnemyWalking(SDL_Renderer *renderer,SDL_Texture *texture,const 
 	SDL_Rect srcrect = { POS_X_CAMINAR_ES + (sprite *ANCHO_CAMINAR_ES) ,POS_Y_CAMINAR_ES, ANCHO_CAMINAR_ES, ALTO_CAMINAR_ES };
 	SDL_Rect dstrect = { pos_x - (ancho/2), pos_y -( alto/2), ancho, alto};
 
-	dibujarFrame(renderer,texture,orientacion,pos_x,pos_y,srcrect,dstrect);
+	dibujarFrame(renderer,texture,orientacion,pos_x,pos_y,&srcrect,dstrect);
 }
 
 void drawStandardEnemyJumping(SDL_Renderer *renderer,SDL_Texture *texture,const char orientacion, int pos_x,int pos_y,int ancho,int alto){
@@ -106,7 +124,7 @@ void drawStandardEnemyJumping(SDL_Renderer *renderer,SDL_Texture *texture,const 
 	SDL_Rect srcrect = { POS_X_SALTAR_ES  ,POS_Y_SALTAR_ES, ANCHO_SALTAR_ES, ALTO_SALTAR_ES };
 	SDL_Rect dstrect = { pos_x - (ancho/2), pos_y -( alto/2), ancho , alto};
 
-	dibujarFrame(renderer,texture,orientacion,pos_x,pos_y,srcrect,dstrect);
+	dibujarFrame(renderer,texture,orientacion,pos_x,pos_y,&srcrect,dstrect);
 
 
 }
@@ -116,12 +134,12 @@ void drawStandardEnemyStandBy(SDL_Renderer *renderer,SDL_Texture *texture,const 
 	SDL_Rect srcrect = { POS_X_STANDBY_ES ,POS_Y_STANDBY_ES, ANCHO_STANDBY_ES, ALTO_STANDBY_ES };
 	SDL_Rect dstrect = { pos_x - (ancho/2), pos_y -( alto/2), ancho , alto};
 
-	dibujarFrame(renderer,texture,orientacion,pos_x,pos_y,srcrect,dstrect);
+	dibujarFrame(renderer,texture,orientacion,pos_x,pos_y,&srcrect,dstrect);
 }
 
 void drawStandardEnemyFalling(SDL_Renderer *renderer,SDL_Texture *texture,const char orientacion, int pos_x,int pos_y,int ancho,int alto){
 	SDL_Rect srcrect = {  POS_X_CAYENDO_ES ,POS_Y_CAYENDO_ES, ANCHO_CAYENDO_ES, ALTO_CAYENDO_ES };
 	SDL_Rect dstrect = { pos_x - (ancho/2), pos_y -( alto/2), ancho , alto};
 
-	dibujarFrame(renderer,texture,orientacion,pos_x,pos_y,srcrect,dstrect);
+	dibujarFrame(renderer,texture,orientacion,pos_x,pos_y,&srcrect,dstrect);
 }

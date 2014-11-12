@@ -145,6 +145,10 @@ private:
 	SDL_Texture* imagenPersonaje4;
 	SDL_Texture* imagenPersonaje5;
 	SDL_Texture* imagenEnemigos;
+	SDL_Texture* congelamientoUno;
+	SDL_Texture* congelamientoDos;
+	SDL_Texture* congelamientoTres;
+	SDL_Texture* congelamientoCuatro;
 	SDL_Texture* messageAboutPoints;
 	SDL_Texture* messageAboutLifes;
 	SDL_Rect camera;

@@ -2,13 +2,13 @@
 #include <ctime>
 #define ORIENTACION_INICIAL 'l'
 
-Enemigo::Enemigo(float x, float y, b2World* world) {
+Enemigo::Enemigo(JsonParser *parser, int index, b2World* world) {
 	//Parametros generales
 	this->jumpCooldown = 0;
 	this->world = world;
 	this->aceleracion = 7.0f;
-	this->x = x;
-	this->y = y;
+	this->x = parser->getCoorXObjeto(index);
+	this->y = parser->getCoorYObjeto(index);
 	this->state = &Enemigo::standby;
 	this->state = nullptr;
 	this->orientacion = ORIENTACION_INICIAL;

@@ -28,6 +28,7 @@
 #define PARALELOGRAMO          "paralelogramo"
 #define POLIGONO               "poligono"
 #define TRAPECIO               "trapecio"
+#define ENEMIGOBASICO			"enemigobasico"
 
 //Valores Default para el juego
 #define MAXIMO_JUGADORES_DEF	4

@@ -28,6 +28,7 @@ public:
 	b2Fixture* paredDerecha;
 
 	Enemigo(float x, float y, b2World* world);
+	Enemigo(JsonParser *parser, int index, b2World* world);
 	~Enemigo();
 	void disparar();
 

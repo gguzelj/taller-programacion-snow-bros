@@ -151,6 +151,8 @@ void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
 
 void Personaje::reaccionarConBolaEnemigo(BolaEnemigo * bola) {
 
+	if( this->state == &Personaje::jumping) return;
+
 	bola->cambiarFilterIndex(PERSONAJE_FILTER_INDEX);
 
 	this->arrastrado = true;

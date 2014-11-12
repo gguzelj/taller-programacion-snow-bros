@@ -24,6 +24,9 @@ public:
 	bool enMovimientoBola;
 	int cantidadDeRebotesParaDestruccion = 0;
 
+	b2Fixture* paredIzquierda;
+	b2Fixture* paredDerecha;
+
 	Enemigo(float x, float y, b2World* world);
 	~Enemigo();
 	void disparar();

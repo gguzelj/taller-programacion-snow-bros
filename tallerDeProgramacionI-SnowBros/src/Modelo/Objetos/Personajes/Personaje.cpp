@@ -156,11 +156,23 @@ void Personaje::reaccionarConEnemigo(Enemigo* enemigo) {
 
 	//Si el enemigo esta congelado, no nos sucede nada
 	if (enemigo->estaCongelado()) {
-		state = &Personaje::pushing;
-		if(this->getOrientacion()=='l')
+		b2Fixture* fixture1;
+		b2Fixture* fixture2;
+		if(this->getOrientacion()=='l'){
+			fixture1 = this->paredIzquierda;
+			fixture2 = enemigo->paredDerecha;
 			enemigo->setOrientacion('r');
-		else
+		}
+		else{
+			fixture1 = this->paredDerecha;
+			fixture2 = enemigo->paredIzquierda;
 			enemigo->setOrientacion('l');
+		}
+		//Checkeo si lo que se esta overlappeando son las paredes de los costados. Si no lo son, entonces es porque no debe
+		//estar empujando.
+		if(b2TestOverlap(fixture1->GetShape(), 0, fixture2->GetShape(), 0, body->GetTransform(), enemigo->getb2Body()->GetTransform())){
+			state = &Personaje::pushing;
+		}
 		return;
 	}
 

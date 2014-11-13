@@ -21,7 +21,6 @@ private:
 	int* contactosLeftSensor;
 	int* contactosRightSensor;
 
-	std::list<Character*>* characters;
 	std::list<Personaje*>* personajes;
 	std::list<Enemigo*>* enemigos;
 

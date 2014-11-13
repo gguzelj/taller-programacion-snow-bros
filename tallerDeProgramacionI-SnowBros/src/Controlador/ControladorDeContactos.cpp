@@ -4,20 +4,7 @@
 #include "../../headers/Modelo/Estados/Estados.h"
 #include "../../headers/Modelo/Objetos/Personajes/Enemigo.h"
 
-void Contacto::actualizarCharacters(std::list<Enemigo*> enemigos, std::list<Personaje*> personajes) {
-	characters->clear();
-	for (auto enemigo = enemigos.begin(); enemigo != enemigos.end(); enemigo++) {
-		this->characters->push_back((Character*) (*enemigo));
-	}
-	for (auto personaje = personajes.begin(); personaje != personajes.end(); personaje++) {
-		this->characters->push_back((Character*) (*personaje));
-	}
-
-}
-
 void Contacto::BeginContact(b2Contact* contact) {
-
-	this->actualizarCharacters(*enemigos, *personajes);
 
 	Figura *figuraA = (Figura*) contact->GetFixtureA()->GetUserData();
 	Figura *figuraB = (Figura*) contact->GetFixtureB()->GetUserData();
@@ -36,8 +23,6 @@ void Contacto::BeginContact(b2Contact* contact) {
 }
 
 void Contacto::EndContact(b2Contact* contact) {
-
-	this->actualizarCharacters(*enemigos, *personajes);
 
 	Figura *figuraA = (Figura*) contact->GetFixtureA()->GetUserData();
 	Figura *figuraB = (Figura*) contact->GetFixtureB()->GetUserData();

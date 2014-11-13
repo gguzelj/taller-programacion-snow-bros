@@ -1,6 +1,8 @@
 #ifndef ESCENARIO_H_
 #define ESCENARIO_H_
 
+#define ASIGNADO(id) (strcmp((id), "sin asignar")) == 0
+
 #include <list>
 #include <vector>
 #include <Box2D/Box2D.h>
@@ -101,6 +103,7 @@ public:
 
 	Personaje* getPersonaje(conn_id id);
 
+	void preStep();
 	void step();
 
 	bool crearEnemigo(float x, float y);

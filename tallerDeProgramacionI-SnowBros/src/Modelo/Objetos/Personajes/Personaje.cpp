@@ -149,9 +149,11 @@ void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
 	state->handleInput(*this, input, input_type);
 }
 
-void Personaje::beginContactBolaEnemigo(BolaEnemigo * bola, b2Contact* contact) {
+void Personaje::beginContactBolaEnemigo(BolaEnemigo * bola,
+		b2Contact* contact) {
 
-	if( this->state == &Personaje::jumping) return;
+	if (this->state == &Personaje::jumping)
+		return;
 
 	bola->cambiarFilterIndex(PERSONAJE_FILTER_INDEX);
 
@@ -250,6 +252,83 @@ void Personaje::noAtravezarPlataformas() {
 	cambiarFilterIndex(PERSONAJE_FILTER_INDEX);
 }
 
-char Personaje::getId(){
+char Personaje::getId() {
 	return ID_PERSONAJE;
+}
+
+void crearJoint(Personaje* personaje, BolaEnemigo* bolaEnemigo,
+		b2World* world_) {
+	b2RevoluteJointDef revjoint;
+	revjoint.bodyA = bolaEnemigo->getb2Body();
+	revjoint.bodyB = personaje->getb2Body();
+	revjoint.collideConnected = false;
+	revjoint.localAnchorA.Set(0, 0);
+	revjoint.localAnchorB.Set(0, 0);
+	personaje->joint = (b2RevoluteJoint*) world_->CreateJoint(&revjoint);
+}
+
+void Personaje::controlarEstado() {
+	Character::controlarEstado();
+
+	//Seteamos esto aca que me parece lo mas facil, e intuitivo.
+	//Disminuyo el cooldown de patear.
+	decreaseKickCooldown();
+	if (state == &Personaje::kicking && getKickCooldown() == 0)
+		state = &Personaje::standby;
+	if (esta_muerto) {
+		volverAPosicionInicial();
+		esta_muerto = false;
+		state = &Personaje::standby;
+	}
+	if (arrastradoPor && !arrastrado) {
+
+		world->DestroyJoint(joint);
+		arrastrado = false;
+		arrastradoPor = nullptr;
+		joint = nullptr;
+		debeSaltar = true;
+
+		b2Transform tra = getb2Body()->GetTransform();
+		tra.p.y += 3;
+		getb2Body()->SetTransform(tra.p, 0);
+
+		state = &Character::jumping;
+		jump();
+
+	}
+
+	if (state == &Personaje::rolling && !joint) {
+		crearJoint(this, arrastradoPor, world);
+	}
+}
+
+b2Body* Personaje::getb2Body() {
+	return body;
+}
+
+int Personaje::getPoints() {
+	return points;
+}
+
+int Personaje::getLives() {
+	return lives;
+}
+
+bool Personaje::getInmune() {
+	return inmune;
+}
+
+int Personaje::getKickCooldown() {
+	return kickCooldown;
+}
+
+void Personaje::sacarVida() {
+	lives--;
+}
+
+char Personaje::getConnectionState() {
+	return connectionState;
+}
+void Personaje::setConnectionState(char state) {
+	connectionState = state;
 }

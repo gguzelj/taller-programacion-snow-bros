@@ -162,3 +162,82 @@ void Character::cambiarFilterIndex(int16 groupIndex){
 	}
 
 }
+
+Character::~Character() {
+	return;
+}
+
+float Character::getX(){
+	return (this->body->GetPosition().x);
+}
+
+float Character::getY(){
+	return (this->body->GetPosition().y);
+}
+
+float Character::getAncho() {
+	return ancho;
+}
+float Character::getAlto() {
+	return alto;
+}
+
+char Character::getId(){
+	return '0';
+}
+
+void Character::jump(){
+	return;
+}
+void Character::handleInput(SDL_Keycode input, Uint32 input_type) {
+	return;
+}
+
+void Character::disparar() {
+	return;
+}
+
+void Character::sacarVida() {
+	return;
+}
+
+void Character::empujar(){
+	return;
+}
+
+void Character::noAtravezarPlataformas(){
+	return;
+};
+
+void Character::controlarEstado(){
+
+	if (this->state != &Character::dying) {
+		//Chequeo para cambiar el estado jumping a falling o el estado cuando cae de una plataforma
+		this->decreaseJumpCooldown();
+		//Chequeo si puedo disparar.
+		this->decreaseShootCooldown();
+
+		//Esta implementado aca para que cambie cuando tiene que hacerlo
+		if (this->getVelocity().y <= 0.0f && this->getCantidadDeContactosActuales() == 0) {
+
+			if (this->state != &Character::shooting && this->state != &Character::rolling)
+				this->state = &Character::falling;
+			this->noAtravezarPlataformas();
+
+		} else if (this->getVelocity().y <= 0.0f && this->state == &Character::jumping) {
+
+			this->state = &Character::standby;
+
+		}
+
+		if (this->movimientoLateralDerecha || this->movimientoLateralIzquierda)
+			Character::walking.caminar(*this);
+
+		if (this->debeSaltar && this->state->getCode() != JUMPING
+				&& this->state->getCode() != FALLING
+				&& this->getCantidadDeContactosActuales() != 0) {
+			this->jump();
+			this->state = &Character::jumping;
+		}
+	}
+}

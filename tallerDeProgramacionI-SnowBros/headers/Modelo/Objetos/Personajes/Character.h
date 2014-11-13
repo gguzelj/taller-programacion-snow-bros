@@ -23,19 +23,23 @@
 
 class Character: public Figura {
 protected:
-	b2Vec2 posicion;
-	b2World* world;
+
 	b2Body* body;
-	int jumpCooldown;
-	int shootCooldown;
-	float ancho;
-	float alto;
-	int aceleracion;
-	char orientacion;
-	int lives;
+	b2Vec2 posicion;
 	b2Fixture* paredIzquierda;
 	b2Fixture* paredDerecha;
 	b2Fixture* piso;
+	b2World* world;
+
+	char orientacion;
+
+	int aceleracion;
+	int jumpCooldown;
+	int lives;
+	int shootCooldown;
+
+	float ancho;
+	float alto;
 
 	void cambiarFilterIndex(int16 groupIndex);
 
@@ -58,71 +62,48 @@ public:
 	static RollingState rolling;
 	CharacterState* state;
 
-	virtual ~Character() {
-	}
-	b2Vec2 Posicion();
+	virtual ~Character();
+
+	virtual void atravezarPlataformas();
+	virtual void noAtravezarPlataformas();
+	virtual void disparar();
+	virtual void sacarVida();
+	virtual void empujar();
+	virtual void jump();
+	virtual void handleInput(SDL_Keycode input, Uint32 input_type);
+
 	b2Fixture* GetFixtureList();
 	b2Vec2 GetWorldPoint(const b2Vec2& localPoint);
+	b2Vec2 getVelocity();
+	b2Vec2 Posicion();
 
-	float getX(){
-		return (this->body->GetPosition().x);
-	}
+	char getId();
+	char getOrientacion();
 
-	float getY(){
-		return (this->body->GetPosition().y);
-	}
+	int getCantidadDeContactosActuales();
+	int getJumpCooldown();
+	int getShootCooldown();
 
-	float getAncho() {
-		return ancho;
-	}
-	float getAlto() {
-		return alto;
-	}
+	float getAncho();
+	float getAlto();
+	float getX();
+	float getY();
 
-	char getId(){
-		return '0';
-	}
-
+	void controlarEstado();
 	void moveLeft();
 	void moveRight();
 	void pushLeft();
 	void pushRight();
-	virtual void jump(){
-	}
 	void stop();
 	void decreaseJumpCooldown();
 	void decreaseShootCooldown();
-	int getJumpCooldown();
-	int getShootCooldown();
 	void updateLeftContact(int);
 	void updateRightContact(int);
-	virtual void handleInput(SDL_Keycode input, Uint32 input_type) {
-	}
-
-	;
-	b2Vec2 getVelocity();
-	int getCantidadDeContactosActuales();
-	char getOrientacion();
 	void setOrientacion(char orientacion);
-
-	virtual void disparar() {
-	}
-
-	virtual void sacarVida() {
-	}
-
-	virtual void empujar(){
-	}
-
 	void beginContact(Figura*,b2Contact*);
-
 	void terminoContacto(b2Fixture* fixture);
 	void empiezoContacto(b2Fixture* fixture);
 
-	virtual void atravezarPlataformas();
-	virtual void noAtravezarPlataformas(){};
-
-	void test();
 };
 
 #endif /* CHARACTER_H_ */

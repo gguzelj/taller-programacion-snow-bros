@@ -17,94 +17,61 @@ typedef char conn_id[20];
 
 class Escenario;
 
-class Personaje : public Character {
-	private:
+class Personaje: public Character {
+private:
 
-		Escenario *escenario_;
+	b2Vec2* posicionInicial;
+	Escenario *escenario_;
 
-		char connectionState;
+	char connectionState;
 
-		int points;
+	int points;
+	int kickCooldown;
 
-		int kickCooldown;
+	void entrarEnPeriodoDeInmunidad();
+	void hacerInmune();
 
-		b2Vec2* posicionInicial;
+public:
 
-		void hacerInmune();
+	b2Body* getb2Body();
+	b2Fixture* GetFixtureList();
+	b2Joint* joint;
+	b2Vec2 GetWorldPoint(const b2Vec2& localPoint);
+	b2Vec2 Posicion();
+	BolaEnemigo* arrastradoPor;
+	conn_id id;
 
-		void entrarEnPeriodoDeInmunidad();
+	bool esta_muerto;
+	bool arrastrado;
 
-	public:
-		conn_id id;
+	Personaje(float x, float y, char id[], Escenario* escenario);
+	~Personaje();
 
-		bool esta_muerto;
+	bool getInmune();
 
-		bool arrastrado;
+	char getConnectionState();
+	char getId();
 
-		BolaEnemigo* arrastradoPor;
+	int getKickCooldown();
+	int getLives();
+	int getPoints();
 
-		b2Joint* joint;
-
-		Personaje(float x, float y,char id[], Escenario* escenario);
-		~Personaje();
-
-		void jump();
-		b2Vec2 Posicion();
-		b2Fixture* GetFixtureList();
-		b2Vec2 GetWorldPoint(const b2Vec2& localPoint);
-
-		b2Body* getb2Body(){
-			return body;
-		}
-
-		int getPoints(){
-			return points;
-		}
-
-		int getLives(){
-			return lives;
-		}
-
-		bool getInmune(){
-			return inmune;
-		}
-
-		int getKickCooldown(){
-			return kickCooldown;
-		}
-
-		void decreaseKickCooldown();
-
-		void sacarVida(){
-			lives--;
-		}
-
-		void morir();
-
-		char getConnectionState(){
-			return connectionState;
-		}
-		void setConnectionState(char state){
-			connectionState = state;
-		}
-		void handleInput(SDL_Keycode input,Uint32 input_type);
-
-		void disparar();
-
-		void empujar();
-
-		char getId();
-
-		void beginContactEnemigo(Enemigo*,b2Contact*);
-		void beginContactBolaEnemigo(BolaEnemigo*,b2Contact*);
-
-		//Metodos para controlar el estado del personaje
-		void empiezoContacto(b2Fixture* fixture);
-		void terminoContacto(b2Fixture* fixture);
-		void volverAPosicionInicial();
-		void noAtravezarPlataformas();
+	void beginContactBolaEnemigo(BolaEnemigo*, b2Contact*);
+	void beginContactEnemigo(Enemigo*, b2Contact*);
+	void controlarEstado();
+	void decreaseKickCooldown();
+	void disparar();
+	void empiezoContacto(b2Fixture* fixture);
+	void empujar();
+	void handleInput(SDL_Keycode input, Uint32 input_type);
+	void jump();
+	void morir();
+	void noAtravezarPlataformas();
+	void sacarVida();
+	void setConnectionState(char state);
+	void terminoContacto(b2Fixture* fixture);
+	void volverAPosicionInicial();
 
 };
-
 
 #endif /* PERSONAJE_H_ */

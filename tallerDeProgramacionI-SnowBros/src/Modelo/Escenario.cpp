@@ -30,7 +30,8 @@ Escenario::Escenario(JsonParser *parser) {
 	figurasEstaticas_->push_back(muro_i);
 
 	// Create all the objects
-	for (unsigned int index = 0; index < parser->getCantidadObjetos(); index++) {
+	for (unsigned int index = 0; index < parser->getCantidadObjetos();
+			index++) {
 
 		if (parser->getTipoObjeto(index) == CIRCULO)
 			figura_i = new Circulo(parser, index, world_);
@@ -89,11 +90,10 @@ std::list<Personaje*>* Escenario::getPersonajes() {
 }
 
 bool Escenario::asignarPersonaje(conn_id id) {
-	for (auto personaje = personajes_->begin(); personaje != personajes_->end();
-			++personaje) {
-		if (strcmp((*personaje)->id, "sin asignar") == 0) {
-			strcpy((*personaje)->id, id);
-			(*personaje)->setConnectionState(CONECTADO);
+	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {
+		if (ASIGNADO((*per)->id)) {
+			strcpy((*per)->id, id);
+			(*per)->setConnectionState(CONECTADO);
 			return true;
 		}
 	}
@@ -116,92 +116,28 @@ void Escenario::setPersonajeConnectionState(conn_id id, char state) {
 	}
 }
 
-void acomodarEstadoCharacter(Character* personaje, b2World* world_) {
-
-	if (personaje->state != &Personaje::dying) {
-		//Chequeo para cambiar el estado jumping a falling o el estado cuando cae de una plataforma
-		personaje->decreaseJumpCooldown();
-		//Chequeo si puedo disparar.
-		personaje->decreaseShootCooldown();
-
-		//Esta implementado aca para que cambie cuando tiene que hacerlo
-		if (personaje->getVelocity().y <= 0.0f && personaje->getCantidadDeContactosActuales() == 0) {
-
-			if (personaje->state != &Personaje::shooting && personaje->state != &Personaje::rolling)
-				personaje->state = &Personaje::falling;
-			personaje->noAtravezarPlataformas();
-
-		} else if (personaje->getVelocity().y <= 0.0f && personaje->state == &Personaje::jumping) {
-
-			personaje->state = &Personaje::standby;
-
-		}
-
-		if (personaje->movimientoLateralDerecha || personaje->movimientoLateralIzquierda)
-			Personaje::walking.caminar(*personaje);
-
-		if (personaje->debeSaltar && personaje->state->getCode() != JUMPING
-				&& personaje->state->getCode() != FALLING
-				&& personaje->getCantidadDeContactosActuales() != 0) {
-			personaje->jump();
-			personaje->state = &Personaje::jumping;
-		}
-	}
-	//Seteamos esto aca que me parece lo mas facil, e intuitivo.
-	if (Personaje* pers = dynamic_cast<Personaje*>(personaje)) {
-		//Disminuyo el cooldown de patear.
-		pers->decreaseKickCooldown();
-		if (pers->state == &Personaje::kicking && pers->getKickCooldown() == 0)
-			pers->state = &Personaje::standby;
-		if (pers->esta_muerto) {
-			pers->volverAPosicionInicial();
-			pers->esta_muerto = false;
-			pers->state = &Personaje::standby;
-		}
-		if (pers->arrastradoPor && !pers->arrastrado) {
-
-			world_->DestroyJoint(pers->joint);
-			pers->arrastrado = false;
-			pers->arrastradoPor = nullptr;
-			pers->joint = nullptr;
-			pers->debeSaltar = true;
-
-
-			b2Transform tra = pers->getb2Body()->GetTransform();
-			tra.p.y += 3;
-			pers->getb2Body()->SetTransform(tra.p,0);
-
-			pers->state = &Character::jumping;
-			pers->jump();
-
-		}
-	}
-}
-
 void destruirJointsDeBolaEnemigo(BolaEnemigo* enemigo,
 		std::list<Personaje*>* personajes_, b2World* world_) {
-	for (auto personaje = personajes_->begin(); personaje != personajes_->end();
-			++personaje) {
-		if (strcmp((*personaje)->id, "sin asignar") != 0) {
-			if ((*personaje)->arrastradoPor == enemigo) {
-			 world_->DestroyJoint((*personaje)->joint);
-			 (*personaje)->arrastrado = false;
-			 (*personaje)->arrastradoPor = nullptr;
-			 (*personaje)->joint = nullptr;
-			 (*personaje)->state = &Personaje::standby;
-			 }
+	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {
+		if (!ASIGNADO((*per)->id)) {
+			if ((*per)->arrastradoPor == enemigo) {
+				world_->DestroyJoint((*per)->joint);
+				(*per)->arrastrado = false;
+				(*per)->arrastradoPor = nullptr;
+				(*per)->joint = nullptr;
+				(*per)->state = &Personaje::standby;
+			}
 		}
 	}
 }
 
 void Escenario::clean() {
-	for (auto proy = proyectiles_->begin(); proy != proyectiles_->end();
-			++proy) {
-		b2Body* body = (*proy)->getb2Body();
+	for (auto pro = proyectiles_->begin(); pro != proyectiles_->end(); ++pro) {
+		b2Body* body = (*pro)->getb2Body();
 
-		if ((*proy)->type == ID_BOLA_NIEVE_ENEMIGO) {
+		if ((*pro)->type == ID_BOLA_NIEVE_ENEMIGO) {
 
-			if (!((BolaEnemigo*) (*proy))->destruir)
+			if (!((BolaEnemigo*) (*pro))->destruir)
 				continue;
 		}
 
@@ -209,53 +145,38 @@ void Escenario::clean() {
 			b2Contact* c = ce->contact;
 			if (c->IsTouching()) {
 
-
-				if ((*proy)->type == ID_BOLA_NIEVE_ENEMIGO) {
-					destruirJointsDeBolaEnemigo((BolaEnemigo*) (*proy),personajes_,world_);
+				if ((*pro)->type == ID_BOLA_NIEVE_ENEMIGO) {
+					destruirJointsDeBolaEnemigo((BolaEnemigo*) (*pro),
+							personajes_, world_);
 				}
 
-				world_->DestroyBody((*proy)->getb2Body());
-				proyectiles_->erase(proy++);
+				world_->DestroyBody((*pro)->getb2Body());
+				proyectiles_->erase(pro++);
 				break;
 			}
 		}
 	}
 }
 
-void crearJoint(Personaje* personaje, BolaEnemigo* bolaEnemigo,
-		b2World* world_) {
-	b2RevoluteJointDef revjoint;
-	revjoint.bodyA = bolaEnemigo->getb2Body();
-	revjoint.bodyB = personaje->getb2Body();
-	revjoint.collideConnected = false;
-	revjoint.localAnchorA.Set(0, 0);
-	revjoint.localAnchorB.Set(0, 0);
-	personaje->joint = (b2RevoluteJoint*) world_->CreateJoint(&revjoint);
-}
-
-void Escenario::step() {
-	for (auto personaje = personajes_->begin(); personaje != personajes_->end();
-			++personaje) {
-		if (strcmp((*personaje)->id, "sin asignar") != 0) {
-			acomodarEstadoCharacter(*personaje, world_);
-			if ((*personaje)->state == &Personaje::rolling
-					&& !(*personaje)->joint) {
-				crearJoint((*personaje), (*personaje)->arrastradoPor, world_);
-			}
+void Escenario::preStep() {
+	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {
+		if (!ASIGNADO((*per)->id)) {
+			(*per)->controlarEstado();
 		}
 	}
 
-	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end();
-			++enemigo) {
-
-		if (!(*enemigo)->estaVivo) {
-			world_->DestroyBody((*enemigo)->getb2Body());
-			enemigos_->erase(enemigo++);
+	for (auto en = enemigos_->begin(); en != enemigos_->end(); ++en) {
+		if (!(*en)->estaVivo) {
+			world_->DestroyBody((*en)->getb2Body());
+			enemigos_->erase(en++);
 		} else
-			acomodarEstadoCharacter(*enemigo, world_);
+			(*en)->controlarEstado();
 	}
 	clean();
+}
 
+void Escenario::step() {
+	preStep();
 	getWorld()->Step(timeStep, velocityIterations, positionIterations);
 }
 
@@ -446,7 +367,8 @@ void Escenario::movimientoDelEnemigo(Enemigo* enemigo) {
 		}
 	}
 	if (v1 > 5) {
-		if ((posicionPersonajeY + 1) < posicionEnemigoY && enemigo->getNivelDeCongelamiento() == 0) {
+		if ((posicionPersonajeY + 1) < posicionEnemigoY
+				&& enemigo->getNivelDeCongelamiento() == 0) {
 			enemigo->handleInput(SDLK_UP, SDL_KEYUP);
 			enemigo->atravezarPlataformas();
 		}

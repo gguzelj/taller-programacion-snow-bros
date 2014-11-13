@@ -124,7 +124,7 @@ void Enemigo::morirDelay(){
 	this->estaVivo = false;
 }
 
-void Enemigo::reaccionarConBolaEnemigo(BolaEnemigo*){
+void Enemigo::beginContactBolaEnemigo(BolaEnemigo* bola, b2Contact* contact){
 
 	//Lanzamos un thread para que muera el enemigo
 	std::thread r(&Enemigo::morirDelay, this);
@@ -144,11 +144,11 @@ void Enemigo::handleInput(SDL_Keycode input, Uint32 input_type) {
 	state->handleInput(*this, input, input_type);
 }
 
-void Enemigo::reaccionarCon(Figura* figura) {
-	figura->reaccionarConEnemigo(this);
+void Enemigo::beginContact(Figura* figura, b2Contact* contact) {
+	figura->beginContactEnemigo(this, contact);
 }
 
-void Enemigo::reaccionarConBolaNieve(BolaNieve* bola) {
+void Enemigo::beginContactBolaNieve(BolaNieve* bola, b2Contact* contact) {
 
 	time(&tiempoDeImpactoDeLaUltimaBola);
 

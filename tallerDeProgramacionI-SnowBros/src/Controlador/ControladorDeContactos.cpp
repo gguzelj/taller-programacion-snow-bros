@@ -10,8 +10,8 @@ void Contacto::BeginContact(b2Contact* contact) {
 	Figura *figuraB = (Figura*) contact->GetFixtureB()->GetUserData();
 
 	//Hacemos que reaccionen las figuras
-	figuraA->reaccionarCon(figuraB);
-	figuraB->reaccionarCon(figuraA);
+	figuraA->beginContact(figuraB, contact);
+	figuraB->beginContact(figuraA, contact);
 
 	//Controlo los contactos del personaje
 	if ((figuraA->type == ID_PERSONAJE || figuraA->type == ID_ENEMIGO ) && figuraB->esEstatico())

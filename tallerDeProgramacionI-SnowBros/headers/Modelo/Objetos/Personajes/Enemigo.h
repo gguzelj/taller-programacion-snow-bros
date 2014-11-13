@@ -41,11 +41,11 @@ public:
 
 	void handleInput(SDL_Keycode input, Uint32 input_type);
 
-	void reaccionarCon(Figura* figura);
+	void beginContact(Figura*,b2Contact*);
 
-	void reaccionarConBolaNieve(BolaNieve* bola);
+	void beginContactBolaNieve(BolaNieve*,b2Contact*);
 
-	void reaccionarConBolaEnemigo(BolaEnemigo*);
+	void beginContactBolaEnemigo(BolaEnemigo*,b2Contact*);
 
 	void congelar();
 

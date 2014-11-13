@@ -20,7 +20,6 @@ public:
 	float getAncho();
 	char getId();
 
-	void reaccionarCon(Figura* figura){ ; };
 };
 
 #endif /* POLIGONO_H_ */

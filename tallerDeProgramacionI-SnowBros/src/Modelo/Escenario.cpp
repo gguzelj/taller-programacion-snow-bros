@@ -21,7 +21,6 @@ Escenario::Escenario(JsonParser *parser) {
 
 	contactos.setPersonaje(personajes_);
 	contactos.setEnemigos(enemigos_);
-	contactos.setCharacters();
 
 	Figura* figura_i;
 	Rectangulo* muro_i;

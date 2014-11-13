@@ -34,9 +34,6 @@ public:
 	void setEnemigos(std::list<Enemigo*>* enemigos){
 		this->enemigos = enemigos;
 	}
-	void setCharacters(){
-		characters = new std::list<Character*>();
-	}
 
 	void updateContacto(int* contactosDelSensor, int* contactosDelSensorL, int* contactosDelSensorR){
 		this->contactosSensor = contactosDelSensor;

@@ -35,7 +35,7 @@ public:
 		return body;
 	}
 
-	void reaccionarCon(Figura* fig);
+	void beginContact(Figura*, b2Contact*);
 
 	void cambiarFilterIndex(int16 groupIndex);
 

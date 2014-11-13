@@ -81,18 +81,18 @@ public:
 	virtual float getAncho() = 0;
 	virtual char getId() = 0;
 
-	virtual void reaccionarCon(Figura*){};
+	virtual void beginContact(Figura*,b2Contact*){};
 
-	virtual void reaccionarConCirculo(Circulo*){};
-	virtual void reaccionarConMuro(Muro*){};
-	virtual void reaccionarConParalelogramo(Paralelogramo*){};
-	virtual void reaccionarConPoligono(Poligono*){};
-	virtual void reaccionarConRectanguo(Rectangulo*){};
-	virtual void reaccionarConTrapecio(Trapecio*){};
-	virtual void reaccionarConEnemigo(Enemigo*){};
-	virtual void reaccionarConPersonaje(Personaje*){};
-	virtual void reaccionarConBolaNieve(BolaNieve*){};
-	virtual void reaccionarConBolaEnemigo(BolaEnemigo*){};
+	virtual void beginContactCirculo(Circulo*,b2Contact*){};
+	virtual void beginContactMuro(Muro*,b2Contact*){};
+	virtual void beginContactParalelogramo(Paralelogramo*,b2Contact*){};
+	virtual void beginContactPoligono(Poligono*,b2Contact*){};
+	virtual void beginContactRectanguo(Rectangulo*,b2Contact*){};
+	virtual void beginContactTrapecio(Trapecio*,b2Contact*){};
+	virtual void beginContactEnemigo(Enemigo*,b2Contact*){};
+	virtual void beginContactPersonaje(Personaje*,b2Contact*){};
+	virtual void beginContactBolaNieve(BolaNieve*,b2Contact*){};
+	virtual void beginContactBolaEnemigo(BolaEnemigo*,b2Contact*){};
 
 };
 

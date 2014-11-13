@@ -24,7 +24,7 @@ public:
 	float getAncho();
 	char getId();
 
-	void reaccionarCon(Figura* figura);
+	void beginContact(Figura*,b2Contact*);
 
 };
 

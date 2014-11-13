@@ -47,8 +47,8 @@ float BolaNieve::getRadio() {
 	return radio;
 }
 
-void BolaNieve::reaccionarCon(Figura* figura) {
-	figura->reaccionarConBolaNieve(this);
+void BolaNieve::beginContact(Figura* figura, b2Contact* contact) {
+	figura->beginContactBolaNieve(this, contact);
 }
 
 float BolaNieve::getAlto() {

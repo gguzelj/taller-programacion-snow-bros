@@ -95,8 +95,8 @@ class Personaje : public Character {
 
 		char getId();
 
-		void reaccionarConEnemigo(Enemigo* enemigo);
-		void reaccionarConBolaEnemigo(BolaEnemigo* bola);
+		void beginContactEnemigo(Enemigo*,b2Contact*);
+		void beginContactBolaEnemigo(BolaEnemigo*,b2Contact*);
 
 		//Metodos para controlar el estado del personaje
 		void empiezoContacto(b2Fixture* fixture);

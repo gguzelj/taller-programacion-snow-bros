@@ -17,7 +17,6 @@ public:
 	float getAncho();
 	char getId();
 
-	void reaccionarCon(Figura* figura){ ; };
 };
 
 #endif /* TRAPECIO_H_ */

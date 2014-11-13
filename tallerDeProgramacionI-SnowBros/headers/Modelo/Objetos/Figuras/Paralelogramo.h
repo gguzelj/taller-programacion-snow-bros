@@ -16,8 +16,6 @@ public:
 	float getAncho();
 	char getId();
 
-	void reaccionarCon(Figura* figura){ ; };
-
 };
 
 

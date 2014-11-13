@@ -149,7 +149,7 @@ void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
 	state->handleInput(*this, input, input_type);
 }
 
-void Personaje::reaccionarConBolaEnemigo(BolaEnemigo * bola) {
+void Personaje::beginContactBolaEnemigo(BolaEnemigo * bola, b2Contact* contact) {
 
 	if( this->state == &Personaje::jumping) return;
 
@@ -166,7 +166,7 @@ void Personaje::reaccionarConBolaEnemigo(BolaEnemigo * bola) {
  * Aca definimos como reacciona el personaje ante el contacto con el enemigo.
  * El enemigo se pasa por parametro para que se pueda definir su comportamiento tambien
  */
-void Personaje::reaccionarConEnemigo(Enemigo* enemigo) {
+void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 
 	if (state == &Personaje::dying || state == &Personaje::rolling)
 		return;

@@ -63,8 +63,8 @@ void BolaEnemigo::morir(){
 	destruir = true;
 }
 
-void BolaEnemigo::reaccionarCon(Figura *fig){
-	fig->reaccionarConBolaEnemigo(this);
+void BolaEnemigo::beginContact(Figura *fig, b2Contact* contact){
+	fig->beginContactBolaEnemigo(this, contact);
 }
 
 void BolaEnemigo::cambiarFilterIndex(int16 groupIndex){

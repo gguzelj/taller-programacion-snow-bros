@@ -108,7 +108,7 @@ void Enemigo::morir() {
 	else
 		bola = new BolaEnemigo(getX() + 1, getY() + MITAD_ALTO_ENEMIGO, this->world);
 
-	vel.x = (orientacion == IZQUIERDA)?-1500:1500;
+	vel.x = (orientacion == IZQUIERDA)?-15:15;
 	vel.y = 5;
 	bola->setVelocidad(vel);
 

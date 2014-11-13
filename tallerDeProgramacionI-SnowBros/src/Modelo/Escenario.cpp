@@ -178,6 +178,22 @@ void acomodarEstadoCharacter(Character* personaje, b2World* world_) {
 	}
 }
 
+void destruirJointsDeBolaEnemigo(BolaEnemigo* enemigo,
+		std::list<Personaje*>* personajes_, b2World* world_) {
+	for (auto personaje = personajes_->begin(); personaje != personajes_->end();
+			++personaje) {
+		if (strcmp((*personaje)->id, "sin asignar") != 0) {
+			if ((*personaje)->arrastradoPor == enemigo) {
+			 world_->DestroyJoint((*personaje)->joint);
+			 (*personaje)->arrastrado = false;
+			 (*personaje)->arrastradoPor = nullptr;
+			 (*personaje)->joint = nullptr;
+			 (*personaje)->state = &Personaje::standby;
+			 }
+		}
+	}
+}
+
 void Escenario::clean() {
 	for (auto proy = proyectiles_->begin(); proy != proyectiles_->end();
 			++proy) {
@@ -192,6 +208,12 @@ void Escenario::clean() {
 		for (b2ContactEdge *ce = body->GetContactList(); ce; ce = ce->next) {
 			b2Contact* c = ce->contact;
 			if (c->IsTouching()) {
+
+
+				if ((*proy)->type == ID_BOLA_NIEVE_ENEMIGO) {
+					destruirJointsDeBolaEnemigo((BolaEnemigo*) (*proy),personajes_,world_);
+				}
+
 				world_->DestroyBody((*proy)->getb2Body());
 				proyectiles_->erase(proy++);
 				break;
@@ -209,22 +231,6 @@ void crearJoint(Personaje* personaje, BolaEnemigo* bolaEnemigo,
 	revjoint.localAnchorA.Set(0, 0);
 	revjoint.localAnchorB.Set(0, 0);
 	personaje->joint = (b2RevoluteJoint*) world_->CreateJoint(&revjoint);
-}
-
-void destruirJointsDeEnemigo(Enemigo* enemigo,
-		std::list<Personaje*>* personajes_, b2World* world_) {
-	for (auto personaje = personajes_->begin(); personaje != personajes_->end();
-			++personaje) {
-		if (strcmp((*personaje)->id, "sin asignar") != 0) {
-			/*if ((*personaje)->arrastradoPor == enemigo) {
-			 world_->DestroyJoint((*personaje)->joint);
-			 (*personaje)->arrastrado = false;
-			 (*personaje)->arrastradoPor = nullptr;
-			 (*personaje)->joint = nullptr;
-			 (*personaje)->state = &Personaje::standby;
-			 }*/
-		}
-	}
 }
 
 void Escenario::step() {

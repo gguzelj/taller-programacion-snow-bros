@@ -22,7 +22,7 @@ BolaEnemigo::BolaEnemigo(float x, float y, b2World* world) {
 	b2FixtureDef fixture;
 	fixture.filter.groupIndex = BOLA_ENEMIGO_FILTER_INDEX;
 	fixture.density = 0.1;
-	fixture.restitution = 1;
+	fixture.restitution = 0.5;
 
 	b2CircleShape circleShape;
 	circleShape.m_p.Set(0, 0);

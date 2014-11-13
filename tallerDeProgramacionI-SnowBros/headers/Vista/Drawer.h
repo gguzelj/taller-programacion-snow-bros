@@ -45,6 +45,9 @@
 #define MITAD_ANCHO_PERSONAJE 0.5f
 #define MITAD_ALTO_PERSONAJE 0.85
 
+//Mensaje de espera
+#define WAITING_MSG "Esperando a todos los jugadores"
+
 //defines que eran de Estados.h
 #define JUMPING 'j'
 #define STANDBY 's'
@@ -149,26 +152,40 @@ private:
 	SDL_Texture* congelamientoDos;
 	SDL_Texture* congelamientoTres;
 	SDL_Texture* congelamientoCuatro;
-	SDL_Texture* messageAboutPoints;
-	SDL_Texture* messageAboutLifes;
+
 	SDL_Rect camera;
 	SDL_Rect coordRel;
 	TTF_Font* fontToBeUsed;
 
 	//Scene texture
-	LTexture rectangleTexture;
-	LTexture circleTexture;
-	LTexture triangleTexture;
-	LTexture squareTexture;
-	LTexture pentagonTexture;
-	LTexture hexagonTexture;
-	LTexture trapexTexture;
-	LTexture paralelogramTexture;
-	LTexture snowballTexture;
+	LTexture rectangleLT;
+	LTexture circleLT;
+	LTexture triangleLT;
+	LTexture squareLT;
+	LTexture pentagonLT;
+	LTexture hexagonLT;
+	LTexture trapexLT;
+	LTexture paralelogramLT;
+	LTexture snowballLT;
+
 	//Ahora los puntos y vidas son LTextures.
-	LTexture pointsT;
-	LTexture livesT;
-	LTexture waitingScreenT;
+	LTexture pointsLT;
+	LTexture livesLT;
+	LTexture waitingScreenLT;
+
+	//Cargo los numeros del 0 al 9
+	LTexture ceroLT;
+	LTexture unoLT;
+	LTexture dosLT;
+	LTexture tresLT;
+	LTexture cuatroLT;
+	LTexture cincoLT;
+	LTexture seisLT;
+	LTexture sieteLT;
+	LTexture ochoLT;
+	LTexture nueveLT;
+
+	std::vector<LTexture*> numerosLT;
 
 	//Paths Attributes
 	string fontPath;
@@ -201,6 +218,9 @@ private:
 	int anchoLives;
 	int anchoPoints;
 	int altoText;
+	int anchoNumber;
+	int anchoWaiting;
+	int altoWaiting;
 
 	//Private Methods
 	//General purpose methods

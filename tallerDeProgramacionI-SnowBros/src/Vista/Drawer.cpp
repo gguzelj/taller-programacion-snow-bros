@@ -34,48 +34,107 @@ bool Drawer::loadMedia() {
 	bool success = true;
 
 	//Load images
-	if (!rectangleTexture.loadFromFile(rectangleImage, renderer)) {
+	if (!rectangleLT.loadFromFile(rectangleImage, renderer)) {
 		printf("Failed to load rectangle texture!\n");
 		success = false;
 	}
-	if (!circleTexture.loadFromFile(circleImage, renderer)) {
+	if (!circleLT.loadFromFile(circleImage, renderer)) {
 		printf("Failed to load circle texture!\n");
 		success = false;
 	}
-	if (!triangleTexture.loadFromFile(triangleImagePath, renderer)) {
+	if (!triangleLT.loadFromFile(triangleImagePath, renderer)) {
 		printf("Failed to load triangle texture!\n");
 		success = false;
 	}
-	if (!squareTexture.loadFromFile(squareImagePath, renderer)) {
+	if (!squareLT.loadFromFile(squareImagePath, renderer)) {
 		printf("Failed to load square texture!\n");
 		success = false;
 	}
-	if (!pentagonTexture.loadFromFile(pentagonImagePath, renderer)) {
+	if (!pentagonLT.loadFromFile(pentagonImagePath, renderer)) {
 		printf("Failed to load pentagon texture!\n");
 		success = false;
 	}
-	if (!hexagonTexture.loadFromFile(hexagonImagePath, renderer)) {
+	if (!hexagonLT.loadFromFile(hexagonImagePath, renderer)) {
 		printf("Failed to load hexagon texture!\n");
 		success = false;
 	}
-	if (!trapexTexture.loadFromFile(trapexImagePath, renderer)) {
+	if (!trapexLT.loadFromFile(trapexImagePath, renderer)) {
 		printf("Failed to load trapex texture!\n");
 		success = false;
 	}
-	if (!paralelogramTexture.loadFromFile(paralelogramImagePath, renderer)) {
+	if (!paralelogramLT.loadFromFile(paralelogramImagePath, renderer)) {
 		printf("Failed to load paralelogram texture!\n");
 		success = false;
 	}
-	if (!snowballTexture.loadFromFile(snowballImagePath, renderer)) {
+	if (!snowballLT.loadFromFile(snowballImagePath, renderer)) {
 		printf("Failed to load paralelogram texture!\n");
 		success = false;
 	}
+
+	SDL_Color textColor = { 0, 0, 0, 0xFF };
+
+	//Load messages
+	if(!pointsLT.loadFromRenderedText(renderer, fontToBeUsed, points, textColor, &anchoPoints, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!livesLT.loadFromRenderedText(renderer, fontToBeUsed, lives, textColor, &anchoLives, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+
+	if(!waitingScreenLT.loadFromRenderedText(renderer, fontToBeUsed, WAITING_MSG, textColor, &anchoWaiting, &altoWaiting)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+
+	//Load numbers
+	if(!ceroLT.loadFromRenderedText(renderer, fontToBeUsed, "0", textColor, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!unoLT.loadFromRenderedText(renderer, fontToBeUsed, "1", textColor, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!dosLT.loadFromRenderedText(renderer, fontToBeUsed, "2", textColor, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!tresLT.loadFromRenderedText(renderer, fontToBeUsed, "3", textColor, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!cuatroLT.loadFromRenderedText(renderer, fontToBeUsed, "4", textColor, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!cincoLT.loadFromRenderedText(renderer, fontToBeUsed, "5", textColor, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!seisLT.loadFromRenderedText(renderer, fontToBeUsed, "6", textColor, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!sieteLT.loadFromRenderedText(renderer, fontToBeUsed, "7", textColor, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!ochoLT.loadFromRenderedText(renderer, fontToBeUsed, "8", textColor, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!nueveLT.loadFromRenderedText(renderer, fontToBeUsed, "9", textColor, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	this->numerosLT = {&ceroLT, &unoLT, &dosLT, &tresLT, &cuatroLT, &cincoLT, &seisLT, &sieteLT, &ochoLT, &nueveLT};
 
 	return success;
 }
 
 Drawer::Drawer() {
-
 	this->personajeOn = {true,true,true,true,true};
 	this->contadorOn = {5,5,5,5,5};
 
@@ -87,13 +146,19 @@ Drawer::Drawer() {
 	this->imagenPersonaje3 = nullptr;
 	this->imagenPersonaje4 = nullptr;
 	this->imagenPersonaje5 = nullptr;
-	this->messageAboutLifes = nullptr;
-	this->messageAboutPoints = nullptr;
+	this->imagenEnemigos = nullptr;
+	this->congelamientoUno = nullptr;
+	this->congelamientoDos = nullptr;
+	this->congelamientoTres = nullptr;
+	this->congelamientoCuatro = nullptr;
 	this->fontToBeUsed = nullptr;
 	//Tamaños para dibujar el texto en pantalla. Los inicializo en 0, despues se modifican.
 	this->altoText = 0;
 	this->anchoPoints = 0;
 	this->anchoLives = 0;
+	this->anchoNumber = 0;
+	this->anchoWaiting = 0;
+	this->altoWaiting = 0;
 
 	//Paths
 	this->imagePath = "resources/snowBackground.png";
@@ -146,10 +211,13 @@ Drawer::~Drawer() {
 	SDL_DestroyTexture(imagenPersonaje3);
 	SDL_DestroyTexture(imagenPersonaje4);
 	SDL_DestroyTexture(imagenPersonaje5);
+	SDL_DestroyTexture(imagenEnemigos);
+	SDL_DestroyTexture(congelamientoUno);
+	SDL_DestroyTexture(congelamientoDos);
+	SDL_DestroyTexture(congelamientoTres);
+	SDL_DestroyTexture(congelamientoCuatro);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
-	SDL_DestroyTexture(messageAboutLifes);
-	SDL_DestroyTexture(messageAboutPoints);
 	TTF_CloseFont(fontToBeUsed);
 	TTF_Quit();
 	SDL_Quit();
@@ -266,14 +334,14 @@ void Drawer::drawFigura(figura_t objeto) {
 	float alto = objeto.alto;
 
 	if (objeto.id == RECTANGULO_CODE) {
-		rectangleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
+		rectangleLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
 				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
 
 	if (objeto.id == CIRCULO_CODE) {
 		float radio = objeto.alto / 2;
 
-		circleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - radio) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + radio) + oy),
+		circleLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - radio) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + radio) + oy),
 				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
 
@@ -282,12 +350,12 @@ void Drawer::drawFigura(figura_t objeto) {
 		centro.x = ancho / 2 * un_to_px_x;
 		centro.y = alto * un_to_px_y / 1.5;
 
-		triangleTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 1.5) + oy),
+		triangleLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 1.5) + oy),
 				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, &centro);
 	}
 
 	if (objeto.id == CUADRADO_CODE) {
-		squareTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
+		squareLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
 				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
 
@@ -296,21 +364,21 @@ void Drawer::drawFigura(figura_t objeto) {
 		centro.x = (ancho * un_to_px_x) / 2;
 		centro.y = (ancho * un_to_px_y) / 1.91;
 
-		pentagonTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
+		pentagonLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
 				coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / (1 + cos(M_PI / 5))) + oy), ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, &centro);
 	}
 
 	if (objeto.id == HEXAGONO_CODE) {
-		hexagonTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
+		hexagonLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
 				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
 
 	if (objeto.id == TRAPECIO_CODE) {
-		trapexTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 1.6) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
+		trapexLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 1.6) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
 				ancho * un_to_px_x * 1.1, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
 	if (objeto.id == PARALELOGRAMO_CODE) {
-		paralelogramTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
+		paralelogramLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
 				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
 }
@@ -332,7 +400,7 @@ void Drawer::drawProyectil(proyectil_t proy) {
 	if (proy.id == BOLA_NIEVE_CODE) {
 		float radio = proy.alto / 2;
 
-		snowballTexture.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (proy.centro.x - radio) + ox), coord_relativa(coordRel.y, -un_to_px_y * (proy.centro.y + radio) + oy),
+		snowballLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (proy.centro.x - radio) + ox), coord_relativa(coordRel.y, -un_to_px_y * (proy.centro.y + radio) + oy),
 				ancho * un_to_px_x, alto * un_to_px_y, nullptr, proy.rotacion * -RADTODEG, nullptr);
 	}
 }
@@ -462,23 +530,40 @@ void Drawer::drawCharacter(personaje_t person, int index, int connectionState) {
 
 void Drawer::drawMessages(dataFromClient_t data, personaje_t personaje) {
 
-//Set the coordinates which we want to draw to
+	//Set the coordinates which we want to draw to
 	float coordXDelMensaje = 10; //Por ahora lo puse asi, despues lo acomodamos bien con los demas mensajes.
 	float coordYDelMensaje = 10; //Parte superior de la pantalla
 
-	SDL_Color textColor = { 0, 0, 0, 0xFF };
+	int desplazamientoEnX = (ancho_px - (anchoLives + anchoNumber*5)) / data.cantPersonajes;
 
-	pointsT.loadFromRenderedText(renderer, fontToBeUsed, points + std::to_string(personaje.points), textColor, &anchoPoints, &altoText);
-	livesT.loadFromRenderedText(renderer, fontToBeUsed, lives + std::to_string(personaje.lives), textColor, &anchoLives, &altoText);
+	for (unsigned int p = 0; p < data.cantPersonajes; p++){
+		if (data.personajes[p].connectionState >= 0){
+			int puntos = data.personajes[p].points;
+			int vidas = data.personajes[p].lives;
 
-//Render the first message
-	pointsT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoPoints, altoText);
+			//Render the first message
+			pointsLT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoPoints, altoText);
+			coordXDelMensaje += anchoPoints;
+			for(int i = 5; i > 0; i--){
+				ceroLT.render(renderer, coordXDelMensaje+anchoNumber*(i-1), coordYDelMensaje, anchoNumber, altoText);
+				numerosLT[puntos%10]->render(renderer, coordXDelMensaje+anchoNumber*(i-1), coordYDelMensaje, anchoNumber, altoText);
+				puntos/=10;
+			}
 
-//Render the other message
-	coordYDelMensaje += altoText + 5;
-	livesT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoLives, altoText);
+			//Render the other message
+			coordYDelMensaje += altoText + 5;
+			coordXDelMensaje -= anchoPoints;
+			livesLT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoLives, altoText);
+			coordXDelMensaje += anchoLives;
+			numerosLT[vidas]->render(renderer, coordXDelMensaje, coordYDelMensaje, anchoNumber, altoText);
 
-//Dibujamos la pantalla de espera
+			//Corijo la posicion para el proximo personaje
+			coordXDelMensaje += desplazamientoEnX - anchoLives;
+			coordYDelMensaje -= altoText + 5;
+		}
+	}
+
+	//Dibujamos la pantalla de espera
 	if (data.gameData->paused)
 		drawWaitingScreen();
 
@@ -486,19 +571,14 @@ void Drawer::drawMessages(dataFromClient_t data, personaje_t personaje) {
 
 void Drawer::drawWaitingScreen() {
 
-	std::string texto = "Esperando a todos los jugadores";
-
 	int anchoT = 500;
 	int altoT = 100;
 
-//Pense que esto lo dibujaba en medio de la pantall, pero no..
+	//Pense que esto lo dibujaba en medio de la pantall, pero no..
 	float ox = 300;
 	float oy = 300;
 
-	SDL_Color textColor = { 0, 0, 0, 0xFF };
-
-	waitingScreenT.loadFromRenderedText(renderer, fontToBeUsed, texto, textColor, &anchoT, &altoT);
-	waitingScreenT.render(renderer, ox, oy, anchoT, altoT);
+	waitingScreenLT.render(renderer, ox, oy, anchoT, altoT);
 
 }
 
@@ -655,7 +735,6 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 		manageLoadCharacterError();
 	}
 
-
 	congelamientoUno = this->loadTexture(CONGELAMIENTO_NIVEL_UNO_PATH, this->renderer);
 	if (congelamientoUno == nullptr) {
 		manageLoadCharacterError();
@@ -671,17 +750,6 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 	congelamientoCuatro = this->loadTexture(CONGELAMIENTO_NIVEL_CUATRO_PATH,this->renderer);
 	if (congelamientoCuatro == nullptr) {
 			manageLoadCharacterError();
-	}
-
-
-//Initialize SDL_ttf
-	if (TTF_Init() == -1) {
-		manageSDL_ttfError();
-	}
-	int sizeOfTheFont = 20;
-	fontToBeUsed = TTF_OpenFont(this->fontPath.c_str(), sizeOfTheFont);
-	if (fontToBeUsed == nullptr) {
-		manageSDL_ttfLoadFontError();
 	}
 
 //Aca se carga la fuente

@@ -104,11 +104,13 @@ void Enemigo::morir() {
 	BolaEnemigo *bola;
 
 	if (orientacion == IZQUIERDA)
-		bola = new BolaEnemigo(getX() - 1, getY() + MITAD_ALTO_ENEMIGO, this->world);
+		bola = new BolaEnemigo(getX() - 1, getY() + MITAD_ALTO_ENEMIGO,
+				this->world);
 	else
-		bola = new BolaEnemigo(getX() + 1, getY() + MITAD_ALTO_ENEMIGO, this->world);
+		bola = new BolaEnemigo(getX() + 1, getY() + MITAD_ALTO_ENEMIGO,
+				this->world);
 
-	vel.x = (orientacion == IZQUIERDA)?-15:15;
+	vel.x = (orientacion == IZQUIERDA) ? -15 : 15;
 	vel.y = 5;
 	bola->setVelocidad(vel);
 
@@ -119,12 +121,12 @@ void Enemigo::morir() {
 	t.detach();
 }
 
-void Enemigo::morirDelay(){
+void Enemigo::morirDelay() {
 	sleep(1);
 	this->estaVivo = false;
 }
 
-void Enemigo::beginContactBolaEnemigo(BolaEnemigo* bola, b2Contact* contact){
+void Enemigo::beginContactBolaEnemigo(BolaEnemigo* bola, b2Contact* contact) {
 
 	//Lanzamos un thread para que muera el enemigo
 	std::thread r(&Enemigo::morirDelay, this);
@@ -212,4 +214,83 @@ void Enemigo::hacerAtravezable() {
 
 void Enemigo::hacerNoAtravezable() {
 	this->cambiarFilterIndex(ENEMIGO_FILTER_INDEX);
+}
+
+int Enemigo::getNivelDeCongelamiento() {
+	return nivelDeCongelamiento;
+}
+
+b2Body* Enemigo::getb2Body() {
+	return this->body;
+}
+
+int Enemigo::getPuntos() {
+	return puntos;
+}
+
+void Enemigo::controlarEstado() {
+	Character::controlarEstado();
+
+	//Analizamos si el enemigo es atravezable
+	if (esAtravezable)
+		hacerAtravezable();
+	else
+		hacerNoAtravezable();
+}
+
+void Enemigo::mover() {
+	int i = 0;
+	std::list<Personaje*>* personajes_ = escenario_->getPersonajes();
+
+	float posicionesX[4];
+	float posicionesY[4];
+	for (auto personaje = personajes_->begin(); personaje != personajes_->end();
+			++personaje) {
+		posicionesX[i] = (*personaje)->getX();
+		posicionesY[i] = (*personaje)->getY();
+		i++;
+	}
+	float posicionPersonajeX = posicionesX[0];
+	float posicionPersonajeY = posicionesY[0];
+	float posicionEnemigoX = this->getX();
+	float posicionEnemigoY = this->getY();
+
+	int v1 = rand() % 100;
+	if (v1 < 45) {
+		v1 = rand() % 100;
+		if (v1 <= 25)
+			this->handleInput(SDLK_LEFT, SDL_KEYDOWN);
+		else {
+			if (v1 <= 50)
+				this->handleInput(SDLK_RIGHT, SDL_KEYDOWN);
+			else {
+				if (v1 <= 75)
+					this->handleInput(SDLK_RIGHT, SDL_KEYUP);
+				else
+					this->handleInput(SDLK_LEFT, SDL_KEYUP);
+			}
+		}
+	} else if (v1 < 50) {
+		if (posicionPersonajeX < posicionEnemigoX) {
+			this->handleInput(SDLK_RIGHT, SDL_KEYUP);
+			this->handleInput(SDLK_LEFT, SDL_KEYDOWN);
+		}
+		if (posicionPersonajeX > posicionEnemigoX) {
+			this->handleInput(SDLK_LEFT, SDL_KEYUP);
+			this->handleInput(SDLK_RIGHT, SDL_KEYDOWN);
+		}
+		if ((posicionPersonajeY - 3) > posicionEnemigoY) {
+			this->handleInput(SDLK_UP, SDL_KEYDOWN);
+		}
+	}
+	if (v1 > 5) {
+		if ((posicionPersonajeY + 1) < posicionEnemigoY
+				&& this->getNivelDeCongelamiento() == 0) {
+			this->handleInput(SDLK_UP, SDL_KEYUP);
+			this->atravezarPlataformas();
+		}
+	}
+
+}
+void Escenario::movimientoDelEnemigo(Enemigo* enemigo) {
 }

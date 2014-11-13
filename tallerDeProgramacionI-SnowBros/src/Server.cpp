@@ -485,11 +485,8 @@ void Server::step() {
 	}
 
 	//Solo simulamos mientras el juego no esta pausado
-	if (!gameData_.paused) {
-
+	if (!gameData_.paused)
 		model_->step();
-		model_->actualizarEnemigos();
-	}
 
 	SDL_Delay(30);
 }

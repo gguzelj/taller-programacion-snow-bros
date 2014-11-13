@@ -24,12 +24,12 @@
 #include "../Exceptions/ErrorTipoDeObjeto.h"
 
 typedef char conn_id[20];
-typedef struct punto{
+typedef struct punto {
 	float x;
 	float y;
 } punto_t;
 
-typedef struct personaje{
+typedef struct personaje {
 	punto_t centro;
 	char id[20];
 	float ancho;
@@ -40,24 +40,24 @@ typedef struct personaje{
 	int points;
 	int lives;
 	bool inmune;
-}personaje_t;
+} personaje_t;
 
-typedef struct enemigo{
+typedef struct enemigo {
 	punto_t centro;
 	float ancho;
 	float alto;
 	char estado;
 	char orientacion;
 	int nivelDeCongelacion;
-}enemigo_t;
+} enemigo_t;
 
-typedef struct gameData{
+typedef struct gameData {
 	bool paused;
 	unsigned int cantProyectiles;
 	unsigned int cantEnemigos;
-}gameData_t;
+} gameData_t;
 
-typedef struct figura{
+typedef struct figura {
 	punto_t centro;
 	char id;
 	float ancho;
@@ -65,7 +65,7 @@ typedef struct figura{
 	float rotacion;
 } figura_t;
 
-typedef struct proyectil{
+typedef struct proyectil {
 	punto_t centro;
 	char id;
 	float ancho;
@@ -75,17 +75,27 @@ typedef struct proyectil{
 
 class Escenario {
 public:
+
 	Escenario(JsonParser *parser);
 	virtual ~Escenario();
 
-	//Devuelve una instancia al personaje del juego
+	b2World* getWorld();
+
+	enemigo_t* getEnemigosParaEnvio();
+	figura_t* getObjetosEstaticos();
+	figura_t* getObjetosDinamicos();
+	figura_t* getFiguras(std::vector<Figura*>*);
+	Personaje* getPersonaje(conn_id id);
+	personaje_t* getPersonajesParaEnvio();
+	proyectil_t* getProyectiles();
+
 	std::list<Personaje*>* getPersonajes();
 
-	void setPersonajeConnectionState(conn_id id, char state);
-	bool crearPersonaje(float x, float y,conn_id id);
 	bool asignarPersonaje(conn_id id);
+	bool crearEnemigo(float x, float y);
+	bool crearPersonaje(float x, float y, conn_id id);
 
-	b2World* getWorld();
+	float getAnchoUn();
 
 	unsigned int getCantObjDinamicos();
 	unsigned int getCantObjEstaticos();
@@ -93,26 +103,11 @@ public:
 	unsigned int getCantEnemigos();
 	unsigned int getCantProyectiles();
 
-	personaje_t* getPersonajesParaEnvio();
-	enemigo_t* getEnemigosParaEnvio();
-
-	proyectil_t* getProyectiles();
-	figura_t* getObjetosEstaticos();
-	figura_t* getObjetosDinamicos();
-	figura_t* getFiguras(std::vector<Figura*>*);
-
-	Personaje* getPersonaje(conn_id id);
-
-	void preStep();
-	void step();
-
-	bool crearEnemigo(float x, float y);
-
 	void actualizarEnemigos();
-
-	float getAnchoUn();
-
 	void agregarProyectil(Proyectil* proy);
+	void preStep();
+	void setPersonajeConnectionState(conn_id id, char state);
+	void step();
 
 private:
 	Contacto contactos;

@@ -33,42 +33,29 @@ public:
 
 	Enemigo(JsonParser *parser, int index, Escenario* escenario);
 	~Enemigo();
-	void disparar();
 
-	void empujar();
-
-	void morir();
-
-	void handleInput(SDL_Keycode input, Uint32 input_type);
-
-	void beginContact(Figura*,b2Contact*);
-
-	void beginContactBolaNieve(BolaNieve*,b2Contact*);
-
-	void beginContactBolaEnemigo(BolaEnemigo*,b2Contact*);
-
-	void congelar();
-
-	void movimientoBola();
+	b2Body* getb2Body();
 
 	bool estaCongelado();
 
-	void jump();
+	int getNivelDeCongelamiento();
+	int getPuntos();
 
-	int getNivelDeCongelamiento(){
-		return nivelDeCongelamiento;
-	}
-
-	b2Body* getb2Body() {
-		return this->body;
-	}
-
-	int getPuntos(){
-		return puntos;
-	}
-
+	void beginContact(Figura*, b2Contact*);
+	void beginContactBolaNieve(BolaNieve*, b2Contact*);
+	void beginContactBolaEnemigo(BolaEnemigo*, b2Contact*);
+	void congelar();
+	void controlarEstado();
+	void disparar();
+	void empujar();
 	void hacerAtravezable();
 	void hacerNoAtravezable();
+	void handleInput(SDL_Keycode input, Uint32 input_type);
+	void jump();
+	void morir();
+	void mover();
+	void movimientoBola();
+
 };
 
 #endif /* ENEMIGO_H_ */

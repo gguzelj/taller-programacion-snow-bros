@@ -94,18 +94,13 @@ public:
 	personaje_t* getPersonajesParaEnvio();
 	enemigo_t* getEnemigosParaEnvio();
 
+	proyectil_t* getProyectiles();
 	figura_t* getObjetosEstaticos();
 	figura_t* getObjetosDinamicos();
-	proyectil_t* getProyectiles();
+	figura_t* getFiguras(std::vector<Figura*>*);
 
-	/*
-	 * Devuelve la lista de Personajes
-	 */
 	Personaje* getPersonaje(conn_id id);
 
-	/*
-	 * Realiza un step en la simulacion.
-	 */
 	void step();
 
 	bool crearEnemigo(float x, float y);

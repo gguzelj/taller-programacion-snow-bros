@@ -3,27 +3,22 @@
 int turnCooldown = 0;
 
 Escenario::Escenario(JsonParser *parser) {
-	// Define the gravity vector and then create an instance of b2world
+
+	Figura* figura_i;
+	Rectangulo* muro_i;
 	b2Vec2 gravity(0.0f, parser->getGravedad());
-	ancho_un = parser->getAnchoUnEscenario();
-	alto_un = parser->getAltoUnEscenario();
-	world_ = new b2World(gravity);
 
-	world_->SetContactListener(&contactos);
-
+	cantidadMaximaDePersonajes = parser->getConnectionsLimit();
 	figurasEstaticas_ = new std::vector<Figura*>;
 	figurasDinamicas_ = new std::vector<Figura*>;
 	proyectiles_ = new std::list<Proyectil*>;
 	personajes_ = new std::list<Personaje*>;
 	enemigos_ = new std::list<Enemigo*>;
+	ancho_un = parser->getAnchoUnEscenario();
+	alto_un = parser->getAltoUnEscenario();
+	world_ = new b2World(gravity);
 
-	cantidadMaximaDePersonajes = parser->getConnectionsLimit();
-
-	contactos.setPersonaje(personajes_);
-	contactos.setEnemigos(enemigos_);
-
-	Figura* figura_i;
-	Rectangulo* muro_i;
+	world_->SetContactListener(&contactos);
 
 	//Create the ground
 	muro_i = new Rectangulo(80, 2, 0, 0, -20, world_);
@@ -35,8 +30,8 @@ Escenario::Escenario(JsonParser *parser) {
 	figurasEstaticas_->push_back(muro_i);
 
 	// Create all the objects
-	for (unsigned int index = 0; index < parser->getCantidadObjetos();
-			index++) {
+	for (unsigned int index = 0; index < parser->getCantidadObjetos(); index++) {
+
 		if (parser->getTipoObjeto(index) == CIRCULO)
 			figura_i = new Circulo(parser, index, world_);
 
@@ -68,7 +63,7 @@ Escenario::Escenario(JsonParser *parser) {
 }
 
 Escenario::~Escenario() {
-	// Borrar cada uno de los objetos
+
 	for (int i = 0; figurasEstaticas_->size(); i++) {
 		(figurasEstaticas_->pop_back());
 	}
@@ -79,7 +74,6 @@ Escenario::~Escenario() {
 		(personajes_->pop_back());
 	}
 
-	// Borrar las listas
 	delete figurasDinamicas_;
 	delete figurasEstaticas_;
 	delete personajes_;
@@ -278,44 +272,23 @@ unsigned int Escenario::getCantObjEstaticos() {
 	return figurasEstaticas_->size();
 }
 
-/*
- * Devolvemos un vector con objetos Estaticos
- */
 figura_t* Escenario::getObjetosEstaticos() {
-
-	figura_t* obj;
-	Figura* fig;
-	obj = (figura_t*) malloc(sizeof(figura_t) * figurasEstaticas_->size());
-
-	for (unsigned int i = 0; i < figurasEstaticas_->size(); i++) {
-
-		fig = (*figurasEstaticas_)[i];
-
-		obj[i].id = fig->getId();
-		obj[i].alto = fig->getAlto();
-		obj[i].ancho = fig->getAncho();
-		obj[i].rotacion = fig->getAngulo();
-		obj[i].centro.x = fig->GetCenter().x;
-		obj[i].centro.y = fig->GetCenter().y;
-
-	}
-
-	return obj;
-
+	return getFiguras(figurasEstaticas_);
 }
 
-/*
- * Devolvemos un vector con objetos dinamicos
- */
 figura_t* Escenario::getObjetosDinamicos() {
+	return getFiguras(figurasDinamicas_);
+}
+
+figura_t* Escenario::getFiguras(std::vector<Figura*>* vector) {
 
 	figura_t* obj;
 	Figura* fig;
-	obj = (figura_t*) malloc(sizeof(figura_t) * figurasDinamicas_->size());
+	obj = (figura_t*) malloc(sizeof(figura_t) * vector->size());
 
-	for (unsigned int i = 0; i < figurasDinamicas_->size(); i++) {
+	for (unsigned int i = 0; i < vector->size(); i++) {
 
-		fig = (*figurasDinamicas_)[i];
+		fig = (*vector)[i];
 
 		obj[i].id = fig->getId();
 		obj[i].alto = fig->getAlto();

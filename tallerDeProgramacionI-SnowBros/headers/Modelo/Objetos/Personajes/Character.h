@@ -112,8 +112,9 @@ public:
 	}
 
 	virtual void empujar(){
-
 	}
+
+	void beginContact(Figura*,b2Contact*);
 
 	void terminoContacto(b2Fixture* fixture);
 	void empiezoContacto(b2Fixture* fixture);

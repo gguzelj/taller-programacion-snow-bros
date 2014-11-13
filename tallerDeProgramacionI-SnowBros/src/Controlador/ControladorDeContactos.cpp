@@ -13,13 +13,6 @@ void Contacto::BeginContact(b2Contact* contact) {
 	figuraA->beginContact(figuraB, contact);
 	figuraB->beginContact(figuraA, contact);
 
-	//Controlo los contactos del personaje
-	if ((figuraA->type == ID_PERSONAJE || figuraA->type == ID_ENEMIGO ) && figuraB->esEstatico())
-		((Character*) figuraA)->empiezoContacto(contact->GetFixtureA());
-
-	if ((figuraB->type == ID_PERSONAJE || figuraB->type == ID_ENEMIGO) && figuraA->esEstatico())
-		((Character*) figuraB)->empiezoContacto(contact->GetFixtureB());
-
 }
 
 void Contacto::EndContact(b2Contact* contact) {

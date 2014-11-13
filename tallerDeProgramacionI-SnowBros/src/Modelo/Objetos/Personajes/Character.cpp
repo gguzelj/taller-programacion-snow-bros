@@ -115,6 +115,18 @@ void Character::empiezoContacto(b2Fixture* fixture) {
 	}
 }
 
+void Character::beginContact(Figura* figura, b2Contact* contact){
+	Figura *figuraA = (Figura*) contact->GetFixtureA()->GetUserData();
+	Figura *figuraB = (Figura*) contact->GetFixtureB()->GetUserData();
+
+	if(figuraA == this && figuraB->esEstatico())
+		this->empiezoContacto(contact->GetFixtureA());
+
+	if(figuraB == this && figuraA->esEstatico())
+		this->empiezoContacto(contact->GetFixtureB());
+
+}
+
 void Character::terminoContacto(b2Fixture* fixture) {
 
 		if (paredDerecha == fixture)

@@ -21,6 +21,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->esta_muerto = false;
 	this->puedeEmpujar = false;
 	this->arrastradoPor = nullptr;
+	this->joint = nullptr;
 
 	this->connectionState = CONECTADO;
 	this->points = 0;
@@ -273,33 +274,35 @@ void Personaje::controlarEstado() {
 	//Seteamos esto aca que me parece lo mas facil, e intuitivo.
 	//Disminuyo el cooldown de patear.
 	decreaseKickCooldown();
-	if (state == &Personaje::kicking && getKickCooldown() == 0)
+	if (state == &Personaje::kicking && getKickCooldown() == 0){
+		stop();
 		state = &Personaje::standby;
+		return;
+	}
 	if (esta_muerto) {
 		volverAPosicionInicial();
 		esta_muerto = false;
 		state = &Personaje::standby;
+		return;
 	}
 	if (arrastradoPor && !arrastrado) {
-
 		world->DestroyJoint(joint);
 		arrastrado = false;
 		arrastradoPor = nullptr;
 		joint = nullptr;
 		debeSaltar = true;
 
-		b2Transform tra = getb2Body()->GetTransform();
+		b2Transform tra = body->GetTransform();
 		tra.p.y += 3;
-		getb2Body()->SetTransform(tra.p, 0);
+		body->SetTransform(tra.p, 0);
 
 		state = &Character::jumping;
 		jump();
-
+		return;
 	}
 
-	if (state == &Personaje::rolling && !joint) {
+	if (state == &Personaje::rolling && !joint)
 		crearJoint(this, arrastradoPor, world);
-	}
 }
 
 b2Body* Personaje::getb2Body() {

@@ -26,6 +26,10 @@ public:
 
 	void beginContact(Figura*,b2Contact*);
 
+	b2Body* getb2Body(){
+		return body;
+	}
+
 };
 
 #endif /* BOLANIEVE_H_ */

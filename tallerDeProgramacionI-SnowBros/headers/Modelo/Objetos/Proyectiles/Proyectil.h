@@ -19,7 +19,6 @@ public:
 	float x;
 	float y;
 
-	Proyectil();
 	virtual ~Proyectil();
 
 	b2Vec2 GetCenter();

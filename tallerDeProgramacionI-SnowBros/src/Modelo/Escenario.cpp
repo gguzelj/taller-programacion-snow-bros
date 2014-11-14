@@ -136,7 +136,6 @@ void Escenario::clean() {
 		b2Body* body = (*pro)->getb2Body();
 
 		if ((*pro)->type == ID_BOLA_NIEVE_ENEMIGO) {
-
 			if (!((BolaEnemigo*) (*pro))->destruir)
 				continue;
 		}
@@ -144,7 +143,6 @@ void Escenario::clean() {
 		for (b2ContactEdge *ce = body->GetContactList(); ce; ce = ce->next) {
 			b2Contact* c = ce->contact;
 			if (c->IsTouching()) {
-
 				if ((*pro)->type == ID_BOLA_NIEVE_ENEMIGO) {
 					destruirJointsDeBolaEnemigo((BolaEnemigo*) (*pro),
 							personajes_, world_);

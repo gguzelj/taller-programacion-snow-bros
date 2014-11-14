@@ -30,8 +30,9 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->ancho = MITAD_ANCHO_PERSONAJE;
 	this->alto = MITAD_ALTO_PERSONAJE;
 
-	this->movimientoLateralDerecha = false;
-	this->movimientoLateralIzquierda = false;
+	this->movimientoDisparar = false;
+	this->movimientoDerecha = false;
+	this->movimientoIzquierda = false;
 	this->inmune = false;
 
 	//Parametros para controlar los contactos
@@ -211,7 +212,10 @@ void Personaje::controlarEstado() {
 		crearJoint(this, arrastradoPor, world);
 }
 
-void Personaje::disparar() {
+void Personaje::realizarDisparo() {
+
+	if(!movimientoDisparar)
+		return;
 
 	if (shootCooldown > 0)
 		return;

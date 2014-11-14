@@ -16,6 +16,7 @@
 
 #define IZQUIERDA 'l'
 #define DERECHA 'r'
+#define SIN_ORIENTACION ' '
 
 #define ENEMIGO_BOLA 2
 #define PERSONAJE_FILTER_INDEX -1
@@ -42,14 +43,17 @@ protected:
 	float alto;
 
 	void cambiarFilterIndex(int16 groupIndex);
+	void caminar();
 
 public:
 	bool inmune;
-	bool movimientoLateralDerecha, movimientoLateralIzquierda;
 	int contactosActuales;
 	int contactosIzquierda;
 	int contactosDerecha;
 	bool puedeEmpujar;
+	bool movimientoDerecha;
+	bool movimientoIzquierda;
+	bool movimientoDisparar;
 
 	static JumpingState jumping;
 	static FallingState falling;
@@ -66,10 +70,10 @@ public:
 
 	virtual void atravezarPlataformas();
 	virtual void noAtravezarPlataformas();
-	virtual void disparar();
 	virtual void sacarVida();
 	virtual void kick();
 	virtual void jump();
+	virtual void realizarDisparo();
 	virtual void handleInput(SDL_Keycode input, Uint32 input_type);
 
 	b2Fixture* GetFixtureList();
@@ -77,7 +81,11 @@ public:
 	b2Vec2 getVelocity();
 	b2Vec2 Posicion();
 
+	bool detener(char orientacion);
+
+	void caminar(char orientacion);
 	void controlarEstado();
+	void disparar();
 	void moveLeft();
 	void moveRight();
 	void pushLeft();
@@ -97,7 +105,7 @@ public:
 	 */
 	char getId();
 	char getOrientacion();
-	int getCantidadDeContactosActuales();
+	int getContactosActuales();
 	int getJumpCooldown();
 	int getShootCooldown();
 	float getAncho();

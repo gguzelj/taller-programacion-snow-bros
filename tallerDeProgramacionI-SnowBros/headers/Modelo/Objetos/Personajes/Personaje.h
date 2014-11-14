@@ -64,7 +64,7 @@ public:
 	/*
 	 * Realiza la accion de disparar una BolaNieve
 	 */
-	void disparar();
+	void realizarDisparo();
 
 	/*
 	 * Se encarga de realizar la accion de patear y pasar al Personaje al

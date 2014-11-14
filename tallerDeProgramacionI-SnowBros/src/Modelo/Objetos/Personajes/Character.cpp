@@ -1,19 +1,78 @@
 #include "../../../../headers/Modelo/Objetos/Personajes/Character.h"
 
+/*
+ *	Seteamos la orientacion del personaje y lo hacemos caminar
+ */
+void Character::caminar(char orient) {
+
+	//Primero intentamos movermos en la direccion indicada
+	//pero solamente si el personaje ya se estaba moviendo
+	//en esa direccion
+	if (movimientoIzquierda)
+		return;
+
+	if (movimientoDerecha)
+		return;
+
+	//Si el personaje no se movia para ningun lado, seteamos
+	//una orientacion y lo movemos
+	movimientoIzquierda = (orient == IZQUIERDA);
+	movimientoDerecha = (orient == DERECHA);
+	orientacion = orient;
+
+	caminar(orient);
+}
+
+void Character::caminar() {
+
+	if (movimientoIzquierda) {
+		moveLeft();
+		return;
+	}
+
+	if (movimientoDerecha) {
+		moveRight();
+		return;
+	}
+
+}
+
+/*
+ * Solo nos detenemos si la orientacion es la misma en que teniamos
+ */
+bool Character::detener(char orientacion) {
+
+	if (movimientoIzquierda && (orientacion == IZQUIERDA)) {
+		movimientoIzquierda = false;
+		stop();
+		return true;
+	}
+
+	if (movimientoDerecha && (orientacion == DERECHA)) {
+		movimientoDerecha = false;
+		stop();
+		return true;
+	}
+	return false;
+}
+
+void Character::disparar() {
+	this->movimientoDisparar = true;
+}
+
+void Character::realizarDisparo() {
+}
+
 void Character::moveLeft() {
-	if (this->contactosIzquierda == 0) {
-		b2Vec2 velocidadActual = this->body->GetLinearVelocity();
-		velocidadActual.x = -aceleracion;
-		this->body->SetLinearVelocity(velocidadActual);
-	};
+	b2Vec2 velocidadActual = this->body->GetLinearVelocity();
+	velocidadActual.x = -aceleracion;
+	this->body->SetLinearVelocity(velocidadActual);
 }
 
 void Character::moveRight() {
-	if (this->contactosDerecha == 0) {
-		b2Vec2 velocidadActual = this->body->GetLinearVelocity();
-		velocidadActual.x = aceleracion;
-		this->body->SetLinearVelocity(velocidadActual);
-	};
+	b2Vec2 velocidadActual = this->body->GetLinearVelocity();
+	velocidadActual.x = aceleracion;
+	this->body->SetLinearVelocity(velocidadActual);
 }
 
 void Character::pushLeft() {
@@ -52,7 +111,7 @@ void Character::setOrientacion(char orientacion) {
 	this->orientacion = orientacion;
 }
 
-int Character::getCantidadDeContactosActuales() {
+int Character::getContactosActuales() {
 	return this->contactosActuales;
 }
 
@@ -87,8 +146,8 @@ void Character::updateRightContact(int numero) {
 }
 
 void cambiarEstadoAlAterrizar(Character* character) {
-	if(character->state != &Character::dying && character->state != &Character::rolling){
-		if (character->movimientoLateralDerecha == true || character->movimientoLateralIzquierda == true)
+	if (character->state != &Character::dying && character->state != &Character::rolling) {
+		if (character->movimientoDerecha == true || character->movimientoIzquierda == true)
 			character->state = &Character::walking;
 		else
 			character->state = &Character::standby;
@@ -115,44 +174,44 @@ void Character::empiezoContacto(b2Fixture* fixture) {
 	}
 }
 
-void Character::beginContact(Figura* figura, b2Contact* contact){
+void Character::beginContact(Figura* figura, b2Contact* contact) {
 	Figura *figuraA = (Figura*) contact->GetFixtureA()->GetUserData();
 	Figura *figuraB = (Figura*) contact->GetFixtureB()->GetUserData();
 
-	if(figuraA == this && figuraB->esEstatico())
+	if (figuraA == this && figuraB->esEstatico())
 		this->empiezoContacto(contact->GetFixtureA());
 
-	if(figuraB == this && figuraA->esEstatico())
+	if (figuraB == this && figuraA->esEstatico())
 		this->empiezoContacto(contact->GetFixtureB());
 
 }
 
 void Character::terminoContacto(b2Fixture* fixture) {
 
-		if (paredDerecha == fixture)
-			contactosDerecha--;
+	if (paredDerecha == fixture)
+		contactosDerecha--;
 
-		if (paredIzquierda == fixture)
-			contactosIzquierda--;
+	if (paredIzquierda == fixture)
+		contactosIzquierda--;
 
-		if (piso == fixture) {
+	if (piso == fixture) {
 
-			contactosActuales--;
+		contactosActuales--;
 
-			if (contactosActuales == 0 && state->getCode() != JUMPING){
-				noAtravezarPlataformas();
-				if(state != &Character::dying && state != &Character::rolling)
-					state = &Character::falling;
-			}
-
+		if (contactosActuales == 0 && state->getCode() != JUMPING) {
+			noAtravezarPlataformas();
+			if (state != &Character::dying && state != &Character::rolling)
+				state = &Character::falling;
 		}
+
+	}
 }
 
-void Character::atravezarPlataformas(){
+void Character::atravezarPlataformas() {
 	cambiarFilterIndex(FIGURA_FILTER_INDEX);
 }
 
-void Character::cambiarFilterIndex(int16 groupIndex){
+void Character::cambiarFilterIndex(int16 groupIndex) {
 	b2Filter filter;
 	filter.groupIndex = groupIndex;
 
@@ -167,11 +226,11 @@ Character::~Character() {
 	return;
 }
 
-float Character::getX(){
+float Character::getX() {
 	return (this->body->GetPosition().x);
 }
 
-float Character::getY(){
+float Character::getY() {
 	return (this->body->GetPosition().y);
 }
 
@@ -182,18 +241,14 @@ float Character::getAlto() {
 	return alto;
 }
 
-char Character::getId(){
+char Character::getId() {
 	return '0';
 }
 
-void Character::jump(){
+void Character::jump() {
 	return;
 }
 void Character::handleInput(SDL_Keycode input, Uint32 input_type) {
-	return;
-}
-
-void Character::disparar() {
 	return;
 }
 
@@ -201,36 +256,35 @@ void Character::sacarVida() {
 	return;
 }
 
-void Character::kick(){
+void Character::kick() {
 	return;
 }
 
-void Character::noAtravezarPlataformas(){
+void Character::noAtravezarPlataformas() {
 	return;
-};
+}
+;
 
-void Character::controlarEstado(){
+void Character::controlarEstado() {
 
-	if (this->state != &Character::dying) {
-		//Chequeo para cambiar el estado jumping a falling o el estado cuando cae de una plataforma
-		this->decreaseJumpCooldown();
-		//Chequeo si puedo disparar.
-		this->decreaseShootCooldown();
+	caminar();
+	realizarDisparo();
 
-		//Esta implementado aca para que cambie cuando tiene que hacerlo
-		if (this->getVelocity().y <= 0.0f && this->getCantidadDeContactosActuales() == 0) {
+	if (state != &Character::dying) {
+		decreaseJumpCooldown();
+		decreaseShootCooldown();
 
-			if (this->state != &Character::shooting && this->state != &Character::rolling)
-				this->state = &Character::falling;
+		if (getVelocity().y <= 0.0f && getContactosActuales() == 0) {
+
+			if (state != &Character::shooting && state != &Character::rolling)
+				state = &Character::falling;
 			this->noAtravezarPlataformas();
 
-		} else if (this->getVelocity().y <= 0.0f && this->state == &Character::jumping) {
+		} else if (getVelocity().y <= 0.0f && state == &Character::jumping) {
 
-			this->state = &Character::standby;
+			state = &Character::standby;
 
 		}
 
-		if (this->movimientoLateralDerecha || this->movimientoLateralIzquierda)
-			Character::walking.caminar(*this);
 	}
 }

@@ -47,7 +47,6 @@ public:
 	char getCode(){
 		return WALKING;
 	}
-	void caminar(Character &character);
 };
 
 class ShootingState: public CharacterState{

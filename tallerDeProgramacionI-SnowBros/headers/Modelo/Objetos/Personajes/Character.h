@@ -45,7 +45,7 @@ protected:
 
 public:
 	bool inmune;
-	bool movimientoLateralDerecha, movimientoLateralIzquierda, debeSaltar;
+	bool movimientoLateralDerecha, movimientoLateralIzquierda;
 	int contactosActuales;
 	int contactosIzquierda;
 	int contactosDerecha;

@@ -58,7 +58,6 @@ public:
 	}
 };
 
-
 class DyingState: public CharacterState{
 public:
 	void handleInput(Character &character,SDL_Keycode input,Uint32 input_type);

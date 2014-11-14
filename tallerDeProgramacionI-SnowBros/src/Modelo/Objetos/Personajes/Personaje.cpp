@@ -32,7 +32,6 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 
 	this->movimientoLateralDerecha = false;
 	this->movimientoLateralIzquierda = false;
-	this->debeSaltar = false;
 	this->inmune = false;
 
 	//Parametros para controlar los contactos
@@ -198,7 +197,6 @@ void Personaje::controlarEstado() {
 		arrastrado = false;
 		arrastradoPor = nullptr;
 		joint = nullptr;
-		debeSaltar = true;
 
 		b2Transform tra = body->GetTransform();
 		tra.p.y += 3;

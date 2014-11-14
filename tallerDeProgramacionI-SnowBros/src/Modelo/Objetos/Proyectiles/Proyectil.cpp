@@ -5,7 +5,6 @@ Proyectil::Proyectil(){
 }
 
 Proyectil::~Proyectil() {
-
 }
 
 b2Vec2 Proyectil::GetCenter(){

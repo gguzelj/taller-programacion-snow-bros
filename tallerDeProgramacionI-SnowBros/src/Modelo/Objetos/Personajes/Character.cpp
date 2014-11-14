@@ -232,12 +232,5 @@ void Character::controlarEstado(){
 
 		if (this->movimientoLateralDerecha || this->movimientoLateralIzquierda)
 			Character::walking.caminar(*this);
-
-		if (this->debeSaltar && this->state->getCode() != JUMPING
-				&& this->state->getCode() != FALLING
-				&& this->getCantidadDeContactosActuales() != 0) {
-			this->jump();
-			this->state = &Character::jumping;
-		}
 	}
 }

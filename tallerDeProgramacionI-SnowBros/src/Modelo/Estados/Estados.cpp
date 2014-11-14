@@ -55,9 +55,8 @@ bool detenerMovimientoHorizontal(Character* character, SDL_Keycode input) {
 	}
 	return false;
 }
-void DyingState::handleInput(Character &character, SDL_Keycode input, Uint32 input_type){
+void DyingState::handleInput(Character &character, SDL_Keycode input, Uint32 input_type) {
 	detenerMovimientoHorizontal(&character, input);
-	character.debeSaltar = false;
 	return;
 }
 void OnAirState::handleInput(Character &character, SDL_Keycode input, Uint32 input_type) {
@@ -91,8 +90,6 @@ void OnAirState::handleInput(Character &character, SDL_Keycode input, Uint32 inp
 		break;
 
 	case SDL_KEYUP:
-		if (input == SDLK_UP)
-			character.debeSaltar = false;
 		detenerMovimientoHorizontal(&character, input);
 		if (character.movimientoLateralIzquierda || character.movimientoLateralDerecha)
 			cambiarOrientacionAlDejarDePresionarUnaTecla(character);
@@ -102,7 +99,6 @@ void OnAirState::handleInput(Character &character, SDL_Keycode input, Uint32 inp
 
 void saltar(Character& character) {
 	if (character.getJumpCooldown() <= 0) {
-		character.debeSaltar = true;
 		character.state = &Character::jumping;
 		character.jump();
 	}
@@ -144,9 +140,6 @@ void StandByState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 	}
 		break;
 
-	case SDL_KEYUP:
-		if (input == SDLK_UP)
-			character.debeSaltar = false;
 	}
 }
 
@@ -186,8 +179,6 @@ void WalkingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 		break;
 
 	case SDL_KEYUP:
-		if (input == SDLK_UP)
-			character.debeSaltar = false;
 		detenerMovimientoHorizontal(&character, input);
 		if (character.movimientoLateralDerecha == false && character.movimientoLateralIzquierda == false)
 			character.state = &Character::standby;
@@ -202,43 +193,40 @@ void ShootingState::handleInput(Character &character, SDL_Keycode input, Uint32 
 	switch (input_type) {
 	case SDL_KEYDOWN:
 
-			switch (input) {
+		switch (input) {
 
-			case SDLK_SPACE: {
-				character.disparar();
-				break;
+		case SDLK_SPACE: {
+			character.disparar();
+			break;
+		}
+
+		case SDLK_LEFT:
+			if (!character.movimientoLateralDerecha) {
+				character.moveLeft();
+				character.setOrientacion(IZQUIERDA);
 			}
-
-			case SDLK_LEFT:
-				if (!character.movimientoLateralDerecha) {
-					character.moveLeft();
-					character.setOrientacion(IZQUIERDA);
-				}
-				character.movimientoLateralIzquierda = true;
-				break;
-
-			case SDLK_RIGHT:
-				if (!character.movimientoLateralIzquierda) {
-					character.moveRight();
-					character.setOrientacion(DERECHA);
-				}
-				character.movimientoLateralDerecha = true;
-				break;
-			}
+			character.movimientoLateralIzquierda = true;
 			break;
 
+		case SDLK_RIGHT:
+			if (!character.movimientoLateralIzquierda) {
+				character.moveRight();
+				character.setOrientacion(DERECHA);
+			}
+			character.movimientoLateralDerecha = true;
+			break;
+		}
+		break;
+
 	case SDL_KEYUP:
-		if (input == SDLK_UP)
-			character.debeSaltar = false;
 		detenerMovimientoHorizontal(&character, input);
-		if(input == SDLK_SPACE){
-			if (character.movimientoLateralDerecha == false && character.movimientoLateralIzquierda == false){
+		if (input == SDLK_SPACE) {
+			if (character.movimientoLateralDerecha == false && character.movimientoLateralIzquierda == false) {
 				if (character.getVelocity().y <= 0.0f && character.getCantidadDeContactosActuales() == 0)
 					character.state = &Character::falling;
 				else
 					character.state = &Character::standby;
-			}
-			else
+			} else
 				character.state = &Character::walking;
 		}
 	}
@@ -248,56 +236,51 @@ void ShootingState::handleInput(Character &character, SDL_Keycode input, Uint32 
 void PushingState::handleInput(Character &character, SDL_Keycode input, Uint32 input_type) {
 	switch (input_type) {
 	case SDL_KEYDOWN:
-			switch (input) {
-			case SDLK_SPACE: {
-				character.empujar();
-				character.state = &Character::kicking;
-				break;
-			}
+		switch (input) {
+		case SDLK_SPACE: {
+			character.empujar();
+			character.state = &Character::kicking;
+			break;
+		}
 
-			case SDLK_LEFT:
-				if (!character.movimientoLateralDerecha) {
-					character.pushLeft();
-					character.setOrientacion(IZQUIERDA);
-				}
-				character.movimientoLateralIzquierda = true;
-				break;
-
-			case SDLK_RIGHT:
-				if (!character.movimientoLateralIzquierda) {
-					character.pushRight();
-					character.setOrientacion(DERECHA);
-				}
-				character.movimientoLateralDerecha = true;
-				break;
+		case SDLK_LEFT:
+			if (!character.movimientoLateralDerecha) {
+				character.pushLeft();
+				character.setOrientacion(IZQUIERDA);
 			}
+			character.movimientoLateralIzquierda = true;
 			break;
 
+		case SDLK_RIGHT:
+			if (!character.movimientoLateralIzquierda) {
+				character.pushRight();
+				character.setOrientacion(DERECHA);
+			}
+			character.movimientoLateralDerecha = true;
+			break;
+		}
+		break;
+
 	case SDL_KEYUP:
-		if (input == SDLK_UP)
-			character.debeSaltar = false;
-		if(input == SDLK_SPACE){
-			if (character.movimientoLateralDerecha == false && character.movimientoLateralIzquierda == false){
-				if (character.getVelocity().y <= 0.0f && character.getCantidadDeContactosActuales() == 0){
+		if (input == SDLK_SPACE) {
+			if (character.movimientoLateralDerecha == false && character.movimientoLateralIzquierda == false) {
+				if (character.getVelocity().y <= 0.0f && character.getCantidadDeContactosActuales() == 0) {
 					character.state = &Character::falling;
 					character.noAtravezarPlataformas();
-				}
-				else
+				} else
 					character.state = &Character::standby;
-			}
-			else
+			} else
 				character.state = &Character::walking;
-		}
-		else if((input == SDLK_LEFT)||(input == SDLK_RIGHT)){
+		} else if ((input == SDLK_LEFT) || (input == SDLK_RIGHT)) {
 			character.state = &Character::walking;
 		}
 	}
 }
 
-void KickingState::handleInput(Character &character, SDL_Keycode input, Uint32 input_type){
+void KickingState::handleInput(Character &character, SDL_Keycode input, Uint32 input_type) {
 	switch (input_type) {
 	case SDL_KEYDOWN:
-		if(input == SDLK_UP){
+		if (input == SDLK_UP) {
 			saltar(character);
 			break;
 		}
@@ -307,11 +290,11 @@ void KickingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 	}
 }
 
-void RollingState::handleInput(Character &character, SDL_Keycode input, Uint32 input_type){
-	if( Personaje* personaje = dynamic_cast< Personaje* >( &character ) ){
+void RollingState::handleInput(Character &character, SDL_Keycode input, Uint32 input_type) {
+	if (Personaje* personaje = dynamic_cast<Personaje*>(&character)) {
 		switch (input_type) {
 		case SDL_KEYDOWN:
-			if (input == SDLK_UP){
+			if (input == SDLK_UP) {
 				personaje->arrastrado = false;
 				break;
 			}

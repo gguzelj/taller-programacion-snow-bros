@@ -104,6 +104,12 @@ void Controlador::handleEvent(SDL_Event* evento,bool* running, int32_t *code, Ui
 					cantEventos++;
 					break;
 				}
+				case SDLK_SPACE:{
+					*type = SDL_KEYUP;
+					*code= evento->key.keysym.sym;
+					cantEventos++;
+					break;
+				}
 			}break;
 		}
 }

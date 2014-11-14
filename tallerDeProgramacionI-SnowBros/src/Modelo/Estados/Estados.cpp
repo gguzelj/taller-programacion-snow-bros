@@ -294,7 +294,7 @@ void RollingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 	if (Personaje* personaje = dynamic_cast<Personaje*>(&character)) {
 		switch (input_type) {
 		case SDL_KEYDOWN:
-			if (input == SDLK_UP) {
+			if (input == SDLK_UP){
 				personaje->arrastrado = false;
 				break;
 			}

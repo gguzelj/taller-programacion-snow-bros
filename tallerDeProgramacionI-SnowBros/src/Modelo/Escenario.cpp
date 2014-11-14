@@ -120,11 +120,11 @@ void destruirJointsDeBolaEnemigo(BolaEnemigo* enemigo,
 		std::list<Personaje*>* personajes_, b2World* world_) {
 	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {
 		if (!ASIGNADO((*per)->id)) {
-			if ((*per)->arrastradoPor == enemigo) {
-				world_->DestroyJoint((*per)->joint);
-				(*per)->arrastrado = false;
-				(*per)->arrastradoPor = nullptr;
-				(*per)->joint = nullptr;
+			if ((*per)->getArrastradoPor() == enemigo) {
+				world_->DestroyJoint((*per)->getJoint());
+				(*per)->setArrastrado(false);
+				(*per)->setArrastradoPor(nullptr);
+				(*per)->setJoint(nullptr);
 				(*per)->state = &Personaje::standby;
 			}
 		}
@@ -227,9 +227,6 @@ figura_t* Escenario::getFiguras(std::vector<Figura*>* vector) {
 	return obj;
 }
 
-/*
- * Devolvemos un vector con proyectiles
- */
 proyectil_t* Escenario::getProyectiles() {
 
 	proyectil_t* p;

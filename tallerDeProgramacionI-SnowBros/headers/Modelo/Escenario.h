@@ -81,39 +81,86 @@ public:
 
 	b2World* getWorld();
 
+	/*
+	 * Metodos encargados de preparar la informacion a enviar a los clientes.
+	 */
 	enemigo_t* getEnemigosParaEnvio();
 	figura_t* getObjetosEstaticos();
 	figura_t* getObjetosDinamicos();
 	figura_t* getFiguras(std::vector<Figura*>*);
-	Personaje* getPersonaje(conn_id id);
 	personaje_t* getPersonajesParaEnvio();
 	proyectil_t* getProyectiles();
 
+	/*
+	 * Devuelve la lista de Personajes
+	 */
 	std::list<Personaje*>* getPersonajes();
 
+	/*
+	 * Devuelve el Personaje correspondiente al id
+	 */
+	Personaje* getPersonaje(conn_id id);
+
+	/*
+	 * Le asigna un Personaje al id
+	 */
 	bool asignarPersonaje(conn_id id);
-	bool crearEnemigo(float x, float y);
+
+	/*
+	 * Crea un personaje en la posicion x,y con id
+	 */
 	bool crearPersonaje(float x, float y, conn_id id);
 
+	/*
+	 * Setea el connectionState state al personaje con tal id
+	 */
+	void setPersonajeConnectionState(conn_id id, char state);
+
+	/*
+	 * Crea un enemigo en la posicion x,y
+	 */
+	bool crearEnemigo(float x, float y);
+
+	/*
+	 * Agrega un proyectil a la lista de proyectiles
+	 */
+	void agregarProyectil(Proyectil* proy);
+
+	/*
+	 * Devuelve el ancho en unidades del escenario
+	 */
 	float getAnchoUn();
 
+	/*
+	 * Metodos que devuelven cantidad de objetos en el momento de ejecucion
+	 */
 	unsigned int getCantObjDinamicos();
 	unsigned int getCantObjEstaticos();
 	unsigned int getCantPersonajes();
 	unsigned int getCantEnemigos();
 	unsigned int getCantProyectiles();
 
+	/*
+	 * Actualiza la accion y por consecuente la posicion de cada enemigo en juego
+	 */
 	void actualizarEnemigos();
-	void agregarProyectil(Proyectil* proy);
+
+	/*
+	 * Lleva a cabo la actualizacion de estados requerida antes de cada step
+	 */
 	void preStep();
-	void setPersonajeConnectionState(conn_id id, char state);
+
+	/*
+	 * Realiza las acciones que incluyen el pre-step, el step propiamente dicho
+	 * y las post actualizaciones de los Enemigos.
+	 */
 	void step();
 
 private:
 	Contacto contactos;
-	const float32 timeStep = 1 / 40.0; //the length of time passed to simulate (seconds)
-	const int32 velocityIterations = 32;   //how strongly to correct velocity
-	const int32 positionIterations = 64;   //how strongly to correct position}
+	const float32 timeStep = 1 / 40.0; 		//the length of time passed to simulate (seconds)
+	const int32 velocityIterations = 32;    //how strongly to correct velocity
+	const int32 positionIterations = 64;    //how strongly to correct position}
 
 	b2World* world_;
 	std::vector<Figura*>* figurasEstaticas_;
@@ -122,7 +169,14 @@ private:
 	std::list<Personaje*>* personajes_;
 	std::list<Enemigo*>* enemigos_;
 
+	/*
+	 * Se encarga de la limpieza y eliminacion de objetos que deben ser removidos
+	 */
 	void clean();
+
+	/*
+	 * TODO y esto? No encuentro definicion del metodo.
+	 */
 	void movimientoDelEnemigo(Enemigo* enemigo);
 
 	float ancho_un;

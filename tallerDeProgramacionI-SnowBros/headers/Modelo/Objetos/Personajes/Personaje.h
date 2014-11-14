@@ -18,60 +18,198 @@ typedef char conn_id[20];
 class Escenario;
 
 class Personaje: public Character {
-private:
-
-	b2Vec2* posicionInicial;
-	Escenario *escenario_;
-
-	char connectionState;
-
-	int points;
-	int kickCooldown;
-
-	void entrarEnPeriodoDeInmunidad();
-	void hacerInmune();
-
 public:
 
-	b2Body* getb2Body();
-	b2Fixture* GetFixtureList();
-	b2Joint* joint;
-	b2Vec2 GetWorldPoint(const b2Vec2& localPoint);
-	b2Vec2 Posicion();
-	BolaEnemigo* arrastradoPor;
 	conn_id id;
-
-	bool esta_muerto;
-	bool arrastrado;
 
 	Personaje(float x, float y, char id[], Escenario* escenario);
 	~Personaje();
 
-	bool getInmune();
-
-	char getConnectionState();
-	char getId();
-
-	int getKickCooldown();
-	int getLives();
-	int getPoints();
-
-	void beginContactBolaEnemigo(BolaEnemigo*, b2Contact*);
-	void beginContactEnemigo(Enemigo*, b2Contact*);
-	void controlarEstado();
-	void decreaseKickCooldown();
-	void disparar();
-	void empiezoContacto(b2Fixture* fixture);
-	void empujar();
+	/*
+	 * Se encarga de llamar al handleInput de su estado para resolver la accion
+	 * a realizar en base al input de entrada
+	 */
 	void handleInput(SDL_Keycode input, Uint32 input_type);
-	void jump();
-	void morir();
-	void noAtravezarPlataformas();
-	void sacarVida();
-	void setConnectionState(char state);
+
+	/*
+	 * Aca definimos como reacciona el Personaje ante el contacto con
+	 * una BolaEnemigo. La misma se pasa por parametro para que se pueda
+	 * definir su comportamiento tambien
+	 */
+	void beginContactBolaEnemigo(BolaEnemigo*, b2Contact*);
+
+	/*
+	 * Encargado de realizar las acciones pertinentes en caso de que el
+	 * Personaje entre en contacto con un Enemigo
+	 */
+	void beginContactEnemigo(Enemigo*, b2Contact*);
+
+	/*
+	 * Realiza las corecciones pertinentes al estado del Personaje previo
+	 * al step.
+	 */
+	void controlarEstado();
+
+	/*
+	 * TODO no encuentro definicion
+	 */
+	void empiezoContacto(b2Fixture* fixture);
+
+	/*
+	 * TODO no encuentro definicion
+	 */
 	void terminoContacto(b2Fixture* fixture);
+
+
+	/*
+	 * Realiza la accion de disparar una BolaNieve
+	 */
+	void disparar();
+
+	/*
+	 * Se encarga de realizar la accion de patear y pasar al Personaje al
+	 * estado correspondiente
+	 */
+	void kick();
+
+
+	/*
+	 * Se encarga de realizar la accion de saltar y pasar al Personaje al
+	 * estado correspondiente
+	 */
+	void jump();
+
+	/*
+	 * Se encarga de realizar la accion de morir y pasar al Personaje al
+	 * estado correspondiente
+	 */
+	void morir();
+
+	/*
+	 * Devuelve el personaje a su posicion inicial en el escenario
+	 */
 	void volverAPosicionInicial();
 
+	/*
+	 * Cambia el filter group del Personaje para que el mismo no pueda atravesar
+	 * plataformas
+	 */
+	void noAtravezarPlataformas();
+
+	/*
+	 * Resta una vida al Personaje
+	 */
+	void sacarVida();
+
+	/*
+	 * Disminuye el kickCooldown en una unidad
+	 */
+	void decreaseKickCooldown();
+
+	/*
+	 * Setea el connectionState del Personaje al pasado por parametro
+	 */
+	void setConnectionState(char state);
+
+	/*
+	 * Setea el joint del Personaje al pasado por parametro
+	 */
+	void setJoint(b2RevoluteJoint* joint);
+
+	/*
+	 * Setea el atributo arrastrado del Personaje al bool pasado por parametro
+	 */
+	void setArrastrado(bool valor);
+
+	/*
+	 * Setea el atributo arrastradoPor del Personaje al valor pasado por parametro
+	 */
+	void setArrastradoPor(BolaEnemigo* bola);
+
+	/*
+	 * Devuelve el b2Body del Personaje
+	 */
+	b2Body* getb2Body();
+
+	/*
+	 * Devuelve el FixtureList asociado al body del Personaje
+	 */
+	b2Fixture* GetFixtureList();
+
+
+	b2Vec2 GetWorldPoint(const b2Vec2& localPoint);
+
+	/*
+	 * Devuelve true si el Personaje es inmune, false en caso contrario
+	 */
+	bool getInmune();
+
+	/*
+	 * Devuelve el connectionState del Personaje
+	 */
+	char getConnectionState();
+
+	/*
+	 * Devuelve el id del Personaje
+	 */
+	char getId();
+
+	/*
+	 * Devuelve el kickCooldown del Personaje
+	 */
+	int getKickCooldown();
+
+	/*
+	 * Devuelve las vidas restantes del Personaje
+	 */
+	int getLives();
+
+	/*
+	 * Devuelve los puntos actuales del personaje
+	 */
+	int getPoints();
+
+	/*
+	 * Devuelve el joint del Personaje o nullptr si no hay ninguno
+	 */
+	b2Joint* getJoint();
+
+	/*
+	 * Devuelve la BolaEnemigo por la cual es arrastrado el Personaje
+	 * o nullptr si no hay ninguno.
+	 */
+	BolaEnemigo* getArrastradoPor();
+
+	/*
+	 * Devuelve true si el Personaje esta_muerto o false en caso contrario
+	 */
+	bool estaMuerto();
+
+	/*
+	 * Devuelve true si el Personaje esta siendo arrastrado por una BolaEnemigo
+	 */
+	bool esArrastrado();
+
+private:
+	Escenario *escenario_;
+	b2Joint* joint;
+	BolaEnemigo* arrastradoPor;
+	b2Vec2* posicionInicial;
+	bool esta_muerto;
+	bool arrastrado;
+	char connectionState;
+	int points;
+	int kickCooldown;
+
+	/*
+	 * Hace que el Personaje sea inmune
+	 */
+	void entrarEnPeriodoDeInmunidad();
+
+	/*
+	 * El Personaje no es afectado por los enemigos
+	 */
+	void hacerInmune();
 };
 
 #endif /* PERSONAJE_H_ */

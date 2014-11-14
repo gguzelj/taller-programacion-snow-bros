@@ -97,49 +97,24 @@ Personaje::~Personaje() {
 	this->world->DestroyBody(this->body);
 }
 
-void Personaje::disparar() {
+//////////////////////////////////////////////////////////
+///              Funciones auxiliares                  ///
+//////////////////////////////////////////////////////////
 
-	if (shootCooldown > 0)
-		return;
-
-	shootCooldown = 10;
-
-	BolaNieve *bola;
-
-	if (orientacion == IZQUIERDA)
-		bola = new BolaNieve(getX() - 1, getY() + MITAD_ALTO_PERSONAJE, 1,
-				this->world);
-	else
-		bola = new BolaNieve(getX() + 1, getY() + MITAD_ALTO_PERSONAJE, 1,
-				this->world);
-
-	b2Vec2 vel = this->body->GetLinearVelocity();
-
-	if (orientacion == IZQUIERDA)
-		vel.x -= aceleracion * 15;
-	else
-		vel.x += aceleracion * 15;
-
-	bola->setVelocidad(vel);
-
-	this->escenario_->agregarProyectil(bola);
-
+void crearJoint(Personaje* personaje, BolaEnemigo* bolaEnemigo,
+		b2World* world_) {
+	b2RevoluteJointDef revjoint;
+	revjoint.bodyA = bolaEnemigo->getb2Body();
+	revjoint.bodyB = personaje->getb2Body();
+	revjoint.collideConnected = false;
+	revjoint.localAnchorA.Set(0, 0);
+	revjoint.localAnchorB.Set(0, 0);
+	personaje->setJoint((b2RevoluteJoint*) world_->CreateJoint(&revjoint));
 }
 
-void Personaje::empujar() {
-	kickCooldown = 12;
-	//Iteramos con los contactos de nuestro personaje hasta encontrar al enemigo y luego lo matamos
-	for (b2ContactEdge *ce = this->body->GetContactList(); ce; ce = ce->next) {
-		b2Contact* c = ce->contact;
-		Figura *figuraA = (Figura*) c->GetFixtureA()->GetUserData();
-		if (figuraA->type == ID_ENEMIGO) {
-			points += ((Enemigo*) figuraA)->getPuntos();
-			((Enemigo*) figuraA)->setOrientacion(this->orientacion);
-			((Enemigo*) figuraA)->morir();
-			return;
-		}
-	}
-}
+//////////////////////////////////////////////////////////
+///              Public methods                        ///
+//////////////////////////////////////////////////////////
 
 void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
 
@@ -162,13 +137,8 @@ void Personaje::beginContactBolaEnemigo(BolaEnemigo * bola,
 	this->arrastradoPor = bola;
 	this->state = &Personaje::rolling;
 	return;
-
 }
 
-/*
- * Aca definimos como reacciona el personaje ante el contacto con el enemigo.
- * El enemigo se pasa por parametro para que se pueda definir su comportamiento tambien
- */
 void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 
 	if (state == &Personaje::dying || state == &Personaje::rolling)
@@ -203,71 +173,9 @@ void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 		std::thread t(&Personaje::morir, this);
 		t.detach();
 	}
-	// En caso que el personaje pierda todas sus vidas, el mismo no debe aparecer mas en la pantalla. Es decir,
-	// hay que sacarlo del modelo. TODO
+	// TODO En caso que el personaje pierda todas sus vidas, el mismo no debe aparecer mas en la pantalla. Es decir,
+	// hay que sacarlo del modelo.
 }
-
-void Personaje::morir() {
-	sleep(1);
-	entrarEnPeriodoDeInmunidad();
-	this->esta_muerto = true;
-	this->points /= 2;
-}
-
-void Personaje::jump() {
-	if (this->jumpCooldown <= 0) {
-		this->jumpCooldown = 18;
-		b2Vec2 velocidadActual = this->body->GetLinearVelocity();
-		velocidadActual.y = 25;
-		this->body->SetLinearVelocity(velocidadActual);
-		atravezarPlataformas();
-	}
-}
-
-void Personaje::decreaseKickCooldown() {
-	if (this->kickCooldown > 0)
-		this->kickCooldown -= 1;
-}
-
-void Personaje::volverAPosicionInicial() {
-	this->body->SetTransform(*posicionInicial, body->GetAngle());
-}
-
-void Personaje::entrarEnPeriodoDeInmunidad() {
-
-	inmune = true;
-
-	std::thread t(&Personaje::hacerInmune, this);
-	t.detach();
-
-}
-
-void Personaje::hacerInmune() {
-
-	sleep(TIEMPO_INMUNIDAD);
-
-	inmune = false;
-}
-
-void Personaje::noAtravezarPlataformas() {
-	cambiarFilterIndex(PERSONAJE_FILTER_INDEX);
-}
-
-char Personaje::getId() {
-	return ID_PERSONAJE;
-}
-
-void crearJoint(Personaje* personaje, BolaEnemigo* bolaEnemigo,
-		b2World* world_) {
-	b2RevoluteJointDef revjoint;
-	revjoint.bodyA = bolaEnemigo->getb2Body();
-	revjoint.bodyB = personaje->getb2Body();
-	revjoint.collideConnected = false;
-	revjoint.localAnchorA.Set(0, 0);
-	revjoint.localAnchorB.Set(0, 0);
-	personaje->joint = (b2RevoluteJoint*) world_->CreateJoint(&revjoint);
-}
-
 void Personaje::controlarEstado() {
 	Character::controlarEstado();
 
@@ -305,6 +213,104 @@ void Personaje::controlarEstado() {
 		crearJoint(this, arrastradoPor, world);
 }
 
+void Personaje::disparar() {
+
+	if (shootCooldown > 0)
+		return;
+
+	shootCooldown = 10;
+
+	BolaNieve *bola;
+
+	if (orientacion == IZQUIERDA)
+		bola = new BolaNieve(getX() - 1, getY() + MITAD_ALTO_PERSONAJE, 1,
+				this->world);
+	else
+		bola = new BolaNieve(getX() + 1, getY() + MITAD_ALTO_PERSONAJE, 1,
+				this->world);
+
+	b2Vec2 vel = this->body->GetLinearVelocity();
+
+	if (orientacion == IZQUIERDA)
+		vel.x -= aceleracion * 15;
+	else
+		vel.x += aceleracion * 15;
+
+	bola->setVelocidad(vel);
+
+	this->escenario_->agregarProyectil(bola);
+
+}
+
+void Personaje::kick() {
+	kickCooldown = 12;
+	//Iteramos con los contactos de nuestro personaje hasta encontrar al enemigo y luego lo matamos
+	for (b2ContactEdge *ce = this->body->GetContactList(); ce; ce = ce->next) {
+		b2Contact* c = ce->contact;
+		Figura *figuraA = (Figura*) c->GetFixtureA()->GetUserData();
+		if (figuraA->type == ID_ENEMIGO) {
+			points += ((Enemigo*) figuraA)->getPuntos();
+			((Enemigo*) figuraA)->setOrientacion(this->orientacion);
+			((Enemigo*) figuraA)->morir();
+			return;
+		}
+	}
+}
+
+void Personaje::jump() {
+	if (this->jumpCooldown <= 0) {
+		this->jumpCooldown = 18;
+		b2Vec2 velocidadActual = this->body->GetLinearVelocity();
+		velocidadActual.y = 25;
+		this->body->SetLinearVelocity(velocidadActual);
+		atravezarPlataformas();
+	}
+}
+
+void Personaje::morir() {
+	sleep(1);
+	entrarEnPeriodoDeInmunidad();
+	this->esta_muerto = true;
+	this->points /= 2;
+}
+
+void Personaje::volverAPosicionInicial() {
+	this->body->SetTransform(*posicionInicial, body->GetAngle());
+}
+
+void Personaje::noAtravezarPlataformas() {
+	cambiarFilterIndex(PERSONAJE_FILTER_INDEX);
+}
+
+void Personaje::decreaseKickCooldown() {
+	if (this->kickCooldown > 0)
+		this->kickCooldown -= 1;
+}
+
+void Personaje::sacarVida() {
+	lives--;
+}
+
+void Personaje::setConnectionState(char state) {
+	connectionState = state;
+}
+
+void Personaje::setJoint(b2RevoluteJoint* joint){
+	this->joint = joint;
+}
+
+void Personaje::setArrastrado(bool valor){
+	arrastrado = valor;
+}
+
+void Personaje::setArrastradoPor(BolaEnemigo* bola){
+	arrastradoPor = bola;
+}
+
+char Personaje::getId() {
+	return ID_PERSONAJE;
+}
+
 b2Body* Personaje::getb2Body() {
 	return body;
 }
@@ -325,13 +331,38 @@ int Personaje::getKickCooldown() {
 	return kickCooldown;
 }
 
-void Personaje::sacarVida() {
-	lives--;
+b2Joint* Personaje::getJoint(){
+	return joint;
+}
+
+BolaEnemigo* Personaje::getArrastradoPor(){
+	return arrastradoPor;
+}
+
+bool Personaje::esArrastrado(){
+	return arrastrado;
+}
+
+bool Personaje::estaMuerto(){
+	return esta_muerto;
 }
 
 char Personaje::getConnectionState() {
 	return connectionState;
 }
-void Personaje::setConnectionState(char state) {
-	connectionState = state;
+
+
+//////////////////////////////////////////////////////////
+///              Private methods                       ///
+//////////////////////////////////////////////////////////
+
+void Personaje::entrarEnPeriodoDeInmunidad() {
+	inmune = true;
+	std::thread t(&Personaje::hacerInmune, this);
+	t.detach();
+}
+
+void Personaje::hacerInmune() {
+	sleep(TIEMPO_INMUNIDAD);
+	inmune = false;
 }

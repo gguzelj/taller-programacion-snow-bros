@@ -250,7 +250,7 @@ void PushingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 	case SDL_KEYDOWN:
 			switch (input) {
 			case SDLK_SPACE: {
-				character.empujar();
+				character.kick();
 				character.state = &Character::kicking;
 				break;
 			}
@@ -313,7 +313,7 @@ void RollingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 		case SDL_KEYDOWN:
 			if (input == SDLK_UP){
 				std::cerr << "Toque up" << std::endl;
-				personaje->arrastrado = false;
+				personaje->setArrastrado(false);
 				break;
 			}
 		}

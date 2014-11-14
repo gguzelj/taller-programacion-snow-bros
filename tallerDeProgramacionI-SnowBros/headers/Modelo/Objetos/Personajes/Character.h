@@ -68,7 +68,7 @@ public:
 	virtual void noAtravezarPlataformas();
 	virtual void disparar();
 	virtual void sacarVida();
-	virtual void empujar();
+	virtual void kick();
 	virtual void jump();
 	virtual void handleInput(SDL_Keycode input, Uint32 input_type);
 
@@ -76,18 +76,6 @@ public:
 	b2Vec2 GetWorldPoint(const b2Vec2& localPoint);
 	b2Vec2 getVelocity();
 	b2Vec2 Posicion();
-
-	char getId();
-	char getOrientacion();
-
-	int getCantidadDeContactosActuales();
-	int getJumpCooldown();
-	int getShootCooldown();
-
-	float getAncho();
-	float getAlto();
-	float getX();
-	float getY();
 
 	void controlarEstado();
 	void moveLeft();
@@ -103,6 +91,19 @@ public:
 	void beginContact(Figura*,b2Contact*);
 	void terminoContacto(b2Fixture* fixture);
 	void empiezoContacto(b2Fixture* fixture);
+
+	/*
+	 * Getters
+	 */
+	char getId();
+	char getOrientacion();
+	int getCantidadDeContactosActuales();
+	int getJumpCooldown();
+	int getShootCooldown();
+	float getAncho();
+	float getAlto();
+	float getX();
+	float getY();
 
 };
 

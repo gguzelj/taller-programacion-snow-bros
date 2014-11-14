@@ -108,7 +108,7 @@ typedef struct connection {
 	Threadsafe_queue<dataToSend_t>* dataQueue;
 } connection_t;
 
-/**
+/*
  * Clase Server
  */
 class Server {
@@ -116,10 +116,14 @@ public:
 	Server();
 	virtual ~Server();
 
-	//Metodo para iniciar el servidor creando el socket y bindeandolo
+	/*
+	 * Metodo para iniciar el servidor creando el socket y bindeandolo
+	 */
 	int init(int argc, char *argv[]);
 
-	//Metodo que se encarga de la ejecucion del servidor
+	/*
+	 * Metodo que se encarga de la ejecucion del servidor
+	 */
 	void run();
 
 private:

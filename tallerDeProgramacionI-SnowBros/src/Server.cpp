@@ -1,8 +1,5 @@
 #include "../headers/Server.h"
 
-/**
- * Constructor del Server
- */
 Server::Server() {
 
 	acceptNewClients_ = true;
@@ -24,9 +21,6 @@ Server::Server() {
 	Log::ins()->add(SRV_MSG_CREATE, Log::INFO);
 }
 
-/**
- * Destructor del server
- */
 Server::~Server() {
 
 	acceptNewClients_ = false;
@@ -35,9 +29,6 @@ Server::~Server() {
 	close(sockfd_);
 }
 
-/**
- * Inicializamos el servidor
- */
 int Server::init(int argc, char *argv[]) {
 
 	if (validateParameters(argc, argv) == SRV_ERROR)
@@ -60,9 +51,6 @@ int Server::init(int argc, char *argv[]) {
 	return SRV_NO_ERROR;
 }
 
-/**
- * Metodo para crear el socket con el que va a trabajar el server
- */
 int Server::createSocket() {
 
 	struct timeval timeout;
@@ -91,9 +79,6 @@ int Server::createSocket() {
 	return SRV_NO_ERROR;
 }
 
-/*
- * Bindeamos el socket
- */
 int Server::bindSocket() {
 	struct sockaddr_in serv_addr;
 
@@ -141,9 +126,6 @@ void Server::run() {
 	return;
 }
 
-/**
- * newConnectionsManager
- */
 void Server::newConnectionsManager() {
 	struct sockaddr_in cli_addr;
 	socklen_t clilen = sizeof(cli_addr);
@@ -167,9 +149,6 @@ void Server::newConnectionsManager() {
 	}
 }
 
-/**
- * Metodo encargado de negociar la conexion con el cliente
- */
 int Server::acceptConnection(int newsockfd) {
 
 	std::string msg;
@@ -218,9 +197,6 @@ int Server::acceptConnection(int newsockfd) {
 	return SRV_NO_ERROR;
 }
 
-/**
- * Buscamos si existe lugar disponible para una nueva conexion
- */
 int Server::manejarNuevoCliente(connection_t *conn) {
 
 	std::string msg;
@@ -250,9 +226,6 @@ int Server::manejarNuevoCliente(connection_t *conn) {
 	return SRV_ERROR;
 }
 
-/**
- * Buscamos si es posible reactivar la conexion
- */
 int Server::manejarReconexion(connection_t *conn) {
 
 	std::string msg;
@@ -296,7 +269,7 @@ int Server::manejarReconexion(connection_t *conn) {
 
 }
 
-/**
+/*
  * Si se llama este metodo es porque se acepto un nuevo cliente.
  * Eso significa que no se llego al limite maximo de jugadores, y que
  * por lo tanto, el juego estaba pausado.
@@ -313,7 +286,7 @@ int Server::validarComienzoJuego() {
 	return SRV_ERROR;
 }
 
-/**
+/*
  * Metodo utilizado para enviar por primera vez todos los datos del juego
  * a un nuevo cliente
  */
@@ -342,7 +315,7 @@ void Server::enviarDatosJuego(int sockfd) {
 	}
 }
 
-/**
+/*
  * Por cada cliente vamos a correr este metodo que se encarga de recibir los
  * mensajes. Los mensajes que se envian pueden ser de dos tipos:
  *
@@ -422,7 +395,7 @@ void Server::enviarAClientes() {
 	}
 }
 
-/**
+/*
  * Thread que corre por cada cliente para enviarle informacion
  * del juego
  */

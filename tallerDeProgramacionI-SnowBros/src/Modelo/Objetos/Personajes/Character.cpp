@@ -201,7 +201,7 @@ void Character::sacarVida() {
 	return;
 }
 
-void Character::empujar(){
+void Character::kick(){
 	return;
 }
 

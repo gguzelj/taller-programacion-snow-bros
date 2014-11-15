@@ -161,7 +161,8 @@ Drawer::Drawer() {
 	this->altoWaiting = 0;
 
 	//Paths
-	this->imagePath = "resources/snowBackground.png";
+//	this->imagePath = "resources/snowBackground.png";
+	this->imagePath = "resources/background1.png";
 	this->fontPath = "resources/dailypla.ttf";
 	this->rectangleImage = "resources/textures/rectangle.png";
 	this->circleImage = "resources/textures/circle.png";
@@ -191,12 +192,12 @@ Drawer::Drawer() {
 	width = ntohl(width);
 	height = ntohl(height);
 
-	this->alto_un = height / FACTOR_CONVERSION_UN_A_PX;//Alto de la imagen dividido factor de conversion
+	this->alto_un = ((float)height) / FACTOR_CONVERSION_UN_A_PX;//Alto de la imagen dividido factor de conversion
 	this->ancho_un = width / FACTOR_CONVERSION_UN_A_PX;//Ancho de la imagen dividido factor de conversion
 
-	this->currentZoomFactor = 1.0;
-	this->camera = {0,0,ancho_px,alto_px};
-	this->coordRel = {0,0,ancho_px,alto_px};
+	this->currentZoomFactor = 1.5;
+	this->camera = {0,0,ancho_px,alto_px/2};
+	this->coordRel = {0,0,ancho_px,alto_px/2};
 
 	this->un_to_px_x = this->un_to_px_x_inicial = currentZoomFactor * FACTOR_CONVERSION_UN_A_PX;
 	this->un_to_px_y = this->un_to_px_y_inicial = currentZoomFactor * FACTOR_CONVERSION_UN_A_PX;

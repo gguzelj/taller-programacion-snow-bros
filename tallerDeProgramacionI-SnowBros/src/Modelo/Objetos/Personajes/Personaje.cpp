@@ -66,20 +66,17 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	fix->SetUserData(this);
 
 	//Pared Izquierda
-	shapeDelPersonaje.SetAsBox(0.0000001f, alto - 0.00405f,
-			b2Vec2(-ancho + 0.00000005, 0.0045f), 0);
+	shapeDelPersonaje.SetAsBox(0.0000001f, alto - 0.00405f, b2Vec2(-ancho + 0.00000005, 0.0045f), 0);
 	fixtureDef.friction = 0.0019f;
 	paredIzquierda = this->body->CreateFixture(&fixtureDef);
 
 	//ParedDerecha
-	shapeDelPersonaje.SetAsBox(0.0000001f, alto - 0.00405f,
-			b2Vec2(ancho - 0.00000005, 0.0045f), 0);
+	shapeDelPersonaje.SetAsBox(0.0000001f, alto - 0.00405f, b2Vec2(ancho - 0.00000005, 0.0045f), 0);
 	fixtureDef.friction = 0.0019f;
 	paredDerecha = this->body->CreateFixture(&fixtureDef);
 
 	//Piso
-	shapeDelPersonaje.SetAsBox(ancho * 19.5f / 20, alto / 10, b2Vec2(0, -alto),
-			0);
+	shapeDelPersonaje.SetAsBox(ancho * 19.5f / 20, alto / 10, b2Vec2(0, -alto), 0);
 	fixtureDef.friction = 0.0019f;
 	piso = this->body->CreateFixture(&fixtureDef);
 
@@ -101,8 +98,7 @@ Personaje::~Personaje() {
 ///              Funciones auxiliares                  ///
 //////////////////////////////////////////////////////////
 
-void crearJoint(Personaje* personaje, BolaEnemigo* bolaEnemigo,
-		b2World* world_) {
+void crearJoint(Personaje* personaje, BolaEnemigo* bolaEnemigo, b2World* world_) {
 	b2RevoluteJointDef revjoint;
 	revjoint.bodyA = bolaEnemigo->getb2Body();
 	revjoint.bodyB = personaje->getb2Body();
@@ -125,8 +121,7 @@ void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
 	state->handleInput(*this, input, input_type);
 }
 
-void Personaje::beginContactBolaEnemigo(BolaEnemigo * bola,
-		b2Contact* contact) {
+void Personaje::beginContactBolaEnemigo(BolaEnemigo * bola, b2Contact* contact) {
 
 	if (this->state == &Personaje::jumping)
 		return;
@@ -146,24 +141,7 @@ void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 
 	//Si el enemigo esta congelado, no nos sucede nada
 	if (enemigo->estaCongelado()) {
-		b2Fixture* fixture1;
-		b2Fixture* fixture2;
-		if (this->getOrientacion() == 'l') {
-			fixture1 = this->paredIzquierda;
-			fixture2 = enemigo->paredDerecha;
-			enemigo->setOrientacion('r');
-		} else {
-			fixture1 = this->paredDerecha;
-			fixture2 = enemigo->paredIzquierda;
-			enemigo->setOrientacion('l');
-		}
-		//Checkeo si lo que se esta overlappeando son las paredes de los costados. Si no lo son, entonces es porque no debe
-		//estar empujando.
-		if (b2TestOverlap(fixture1->GetShape(), 0, fixture2->GetShape(), 0,
-				body->GetTransform(), enemigo->getb2Body()->GetTransform())) {
-			state = &Personaje::pushing;
-		}
-		return;
+		this->empujando = true;
 	}
 
 	//En otro caso, restamos vida
@@ -179,20 +157,26 @@ void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 void Personaje::controlarEstado() {
 	Character::controlarEstado();
 
+	if (empujando)
+		state = &Character::pushing;
+
 	//Seteamos esto aca que me parece lo mas facil, e intuitivo.
 	//Disminuyo el cooldown de patear.
 	decreaseKickCooldown();
-	if (state == &Personaje::kicking && getKickCooldown() == 0){
+
+	if (state == &Personaje::kicking && getKickCooldown() == 0) {
 		stop();
 		state = &Personaje::standby;
 		return;
 	}
+
 	if (esta_muerto) {
 		volverAPosicionInicial();
 		esta_muerto = false;
 		state = &Personaje::standby;
 		return;
 	}
+
 	if (arrastradoPor && !arrastrado) {
 		world->DestroyJoint(joint);
 		arrastrado = false;
@@ -214,7 +198,7 @@ void Personaje::controlarEstado() {
 
 void Personaje::realizarDisparo() {
 
-	if(!movimientoDisparar)
+	if (!movimientoDisparar)
 		return;
 
 	if (shootCooldown > 0)
@@ -225,11 +209,9 @@ void Personaje::realizarDisparo() {
 	BolaNieve *bola;
 
 	if (orientacion == IZQUIERDA)
-		bola = new BolaNieve(getX() - 1, getY() + MITAD_ALTO_PERSONAJE, 1,
-				this->world);
+		bola = new BolaNieve(getX() - 1, getY() + MITAD_ALTO_PERSONAJE, 1, this->world);
 	else
-		bola = new BolaNieve(getX() + 1, getY() + MITAD_ALTO_PERSONAJE, 1,
-				this->world);
+		bola = new BolaNieve(getX() + 1, getY() + MITAD_ALTO_PERSONAJE, 1, this->world);
 
 	b2Vec2 vel = this->body->GetLinearVelocity();
 
@@ -297,15 +279,15 @@ void Personaje::setConnectionState(char state) {
 	connectionState = state;
 }
 
-void Personaje::setJoint(b2RevoluteJoint* joint){
+void Personaje::setJoint(b2RevoluteJoint* joint) {
 	this->joint = joint;
 }
 
-void Personaje::setArrastrado(bool valor){
+void Personaje::setArrastrado(bool valor) {
 	arrastrado = valor;
 }
 
-void Personaje::setArrastradoPor(BolaEnemigo* bola){
+void Personaje::setArrastradoPor(BolaEnemigo* bola) {
 	arrastradoPor = bola;
 }
 
@@ -333,26 +315,25 @@ int Personaje::getKickCooldown() {
 	return kickCooldown;
 }
 
-b2Joint* Personaje::getJoint(){
+b2Joint* Personaje::getJoint() {
 	return joint;
 }
 
-BolaEnemigo* Personaje::getArrastradoPor(){
+BolaEnemigo* Personaje::getArrastradoPor() {
 	return arrastradoPor;
 }
 
-bool Personaje::esArrastrado(){
+bool Personaje::esArrastrado() {
 	return arrastrado;
 }
 
-bool Personaje::estaMuerto(){
+bool Personaje::estaMuerto() {
 	return esta_muerto;
 }
 
 char Personaje::getConnectionState() {
 	return connectionState;
 }
-
 
 //////////////////////////////////////////////////////////
 ///              Private methods                       ///

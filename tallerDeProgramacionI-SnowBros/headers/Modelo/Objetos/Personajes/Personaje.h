@@ -21,6 +21,7 @@ class Personaje: public Character {
 public:
 
 	conn_id id;
+	bool empujando;
 
 	Personaje(float x, float y, char id[], Escenario* escenario);
 	~Personaje();

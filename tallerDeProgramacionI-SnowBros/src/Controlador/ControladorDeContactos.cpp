@@ -28,4 +28,14 @@ void Contacto::EndContact(b2Contact* contact) {
 	if ((figuraB->type == ID_PERSONAJE || figuraB->type == ID_ENEMIGO) && figuraA->esEstatico()){
 		((Character*) figuraB)->terminoContacto(contact->GetFixtureB());
 	}
+
+
+	//Esta villereada la voy a sacar.. otro dia
+	if (figuraB->type == ID_PERSONAJE && figuraA->type == ID_ENEMIGO)
+		((Personaje*) figuraB)->empujando = false;
+
+	if (figuraA->type == ID_PERSONAJE && figuraB->type == ID_ENEMIGO)
+		((Personaje*) figuraA)->empujando = false;
+
+
 }

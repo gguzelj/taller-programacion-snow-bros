@@ -13,42 +13,6 @@ PushingState Character::pushing;
 KickingState Character::kicking;
 RollingState Character::rolling;
 
-void detectarEstadoBasico(Character &character) {
-	if (character.getVelocity().y <= 0.0f && character.getContactosActuales() == 0) {
-		character.state = &Character::falling;
-		return;
-	}
-
-	if (character.getVelocity().y > 0.0f && character.getContactosActuales() == 0) {
-		character.state = &Character::jumping;
-		return;
-	}
-
-	if (character.getVelocity().x != 0.0f) {
-		character.state = &Character::walking;
-		return;
-	}
-
-	character.state = &Character::standby;
-}
-
-void detenerMovimientos(Character &character, SDL_Keycode input) {
-
-	char orientacion;
-
-	switch (input) {
-	case SDLK_LEFT:
-		orientacion = IZQUIERDA;
-		break;
-
-	case SDLK_RIGHT:
-		orientacion = DERECHA;
-		break;
-	}
-
-	character.detener(orientacion);
-}
-
 /**
  * StandByState: Clase encargada de manejar los eventos cuando el
  * personaje se encuentra en un estado StandBy
@@ -70,12 +34,12 @@ void StandByState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 
 		case SDLK_LEFT:
 			character.state = &Character::walking;
-			character.caminar(IZQUIERDA);
+			character.move(IZQUIERDA);
 			break;
 
 		case SDLK_RIGHT:
 			character.state = &Character::walking;
-			character.caminar(DERECHA);
+			character.move(DERECHA);
 			break;
 
 		case SDLK_SPACE:
@@ -89,8 +53,7 @@ void StandByState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 
 		switch (input) {
 		case SDLK_SPACE:
-			character.movimientoDisparar = false;
-			detectarEstadoBasico(character);
+			character.dejarDisparar();
 			break;
 
 		case SDLK_LEFT:
@@ -103,9 +66,9 @@ void StandByState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 		}
 
 		//Detiene si la orientacion es la misma que tenia
-		if (character.detener(orientacion))
-			character.state = &Character::standby;
+		character.detener(orientacion);
 	}
+
 }
 
 /**
@@ -126,11 +89,13 @@ void WalkingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 			break;
 
 		case SDLK_LEFT:
-			character.caminar(IZQUIERDA);
+			character.state = &Character::walking;
+			character.move(IZQUIERDA);
 			break;
 
 		case SDLK_RIGHT:
-			character.caminar(DERECHA);
+			character.state = &Character::walking;
+			character.move(DERECHA);
 			break;
 
 		case SDLK_SPACE:
@@ -145,8 +110,7 @@ void WalkingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 		switch (input) {
 
 		case SDLK_SPACE:
-			character.movimientoDisparar = false;
-			detectarEstadoBasico(character);
+			character.dejarDisparar();
 			break;
 
 		case SDLK_LEFT:
@@ -158,9 +122,7 @@ void WalkingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 			break;
 		}
 
-		//Detiene si la orientacion es la misma que tenia
-		if (character.detener(orientacion))
-			character.state = &Character::standby;
+		character.detener(orientacion);
 	}
 }
 
@@ -183,11 +145,13 @@ void OnAirState::handleInput(Character &character, SDL_Keycode input, Uint32 inp
 			break;
 
 		case SDLK_LEFT:
-			character.caminar(IZQUIERDA);
+			character.state = &Character::walking;
+			character.move(IZQUIERDA);
 			break;
 
 		case SDLK_RIGHT:
-			character.caminar(DERECHA);
+			character.state = &Character::walking;
+			character.move(DERECHA);
 			break;
 		}
 		break;
@@ -204,8 +168,7 @@ void OnAirState::handleInput(Character &character, SDL_Keycode input, Uint32 inp
 			break;
 
 		case SDLK_SPACE:
-			character.movimientoDisparar = false;
-			detectarEstadoBasico(character);
+			character.dejarDisparar();
 			break;
 
 		}
@@ -221,6 +184,8 @@ void OnAirState::handleInput(Character &character, SDL_Keycode input, Uint32 inp
  */
 void ShootingState::handleInput(Character &character, SDL_Keycode input, Uint32 input_type) {
 
+	char orientacion;
+
 	switch (input_type) {
 	case SDL_KEYDOWN:
 
@@ -231,16 +196,14 @@ void ShootingState::handleInput(Character &character, SDL_Keycode input, Uint32 
 			character.jump();
 			break;
 
-		case SDLK_SPACE:
-			character.movimientoDisparar = true;
-			break;
-
 		case SDLK_LEFT:
-			character.caminar(IZQUIERDA);
+			character.state = &Character::walking;
+			character.move(IZQUIERDA);
 			break;
 
 		case SDLK_RIGHT:
-			character.caminar(DERECHA);
+			character.state = &Character::walking;
+			character.move(DERECHA);
 			break;
 		}
 		break;
@@ -248,15 +211,22 @@ void ShootingState::handleInput(Character &character, SDL_Keycode input, Uint32 
 	case SDL_KEYUP:
 
 		switch (input) {
+		case SDLK_LEFT:
+			orientacion = IZQUIERDA;
+			break;
+
+		case SDLK_RIGHT:
+			orientacion = DERECHA;
+			break;
 
 		case SDLK_SPACE:
-			character.movimientoDisparar = false;
-			detectarEstadoBasico(character);
+			character.dejarDisparar();
+			character.state = &Character::falling;
 			break;
+
 		}
 
-		detenerMovimientos(character, input);
-
+		character.detener(orientacion);
 		break;
 	}
 }
@@ -277,6 +247,8 @@ void DyingState::handleInput(Character &character, SDL_Keycode input, Uint32 inp
  */
 void PushingState::handleInput(Character &character, SDL_Keycode input, Uint32 input_type) {
 
+	char orientacion;
+
 	switch (input_type) {
 
 	case SDL_KEYDOWN:
@@ -289,11 +261,11 @@ void PushingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 			break;
 
 		case SDLK_LEFT:
-			character.caminar(IZQUIERDA);
+			character.move(IZQUIERDA);
 			break;
 
 		case SDLK_RIGHT:
-			character.caminar(DERECHA);
+			character.move(DERECHA);
 			break;
 		}
 		break;
@@ -301,12 +273,21 @@ void PushingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 	case SDL_KEYUP:
 
 		switch (input) {
+		case SDLK_LEFT:
+			orientacion = IZQUIERDA;
+			break;
+
+		case SDLK_RIGHT:
+			orientacion = DERECHA;
+			break;
 
 		case SDLK_SPACE:
-			detectarEstadoBasico(character);
+			character.dejarDisparar();
+			break;
+
 		}
 
-		detenerMovimientos(character, input);
+		character.detener(orientacion);
 		break;
 
 	}
@@ -322,7 +303,9 @@ void KickingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 
 	case SDL_KEYDOWN:
 
-		if (input == SDLK_UP) {
+		switch (input) {
+
+		case SDLK_UP:
 			character.state = &Character::jumping;
 			character.jump();
 			break;

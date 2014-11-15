@@ -3,7 +3,7 @@
 /*
  *	Seteamos la orientacion del personaje y lo hacemos caminar
  */
-void Character::caminar(char orient) {
+void Character::move(char orient) {
 
 	//Primero intentamos movermos en la direccion indicada
 	//pero solamente si el personaje ya se estaba moviendo
@@ -20,10 +20,10 @@ void Character::caminar(char orient) {
 	movimientoDerecha = (orient == DERECHA);
 	orientacion = orient;
 
-	caminar(orient);
+	move(orient);
 }
 
-void Character::caminar() {
+void Character::move() {
 
 	if (movimientoIzquierda) {
 		moveLeft();
@@ -58,6 +58,10 @@ bool Character::detener(char orientacion) {
 
 void Character::disparar() {
 	this->movimientoDisparar = true;
+}
+
+void Character::dejarDisparar() {
+	this->movimientoDisparar = false;
 }
 
 void Character::realizarDisparo() {
@@ -146,12 +150,14 @@ void Character::updateRightContact(int numero) {
 }
 
 void cambiarEstadoAlAterrizar(Character* character) {
-	if (character->state != &Character::dying && character->state != &Character::rolling) {
-		if (character->movimientoDerecha == true || character->movimientoIzquierda == true)
-			character->state = &Character::walking;
-		else
-			character->state = &Character::standby;
-	}
+	/*
+	 if (character->state != &Character::dying && character->state != &Character::rolling) {
+	 if (character->movimientoDerecha == true || character->movimientoIzquierda == true)
+	 character->state = &Character::walking;
+	 else
+	 character->state = &Character::standby;
+	 }
+	 */
 }
 
 void Character::empiezoContacto(b2Fixture* fixture) {
@@ -200,8 +206,7 @@ void Character::terminoContacto(b2Fixture* fixture) {
 
 		if (contactosActuales == 0 && state->getCode() != JUMPING) {
 			noAtravezarPlataformas();
-			if (state != &Character::dying && state != &Character::rolling)
-				state = &Character::falling;
+
 		}
 
 	}
@@ -265,26 +270,52 @@ void Character::noAtravezarPlataformas() {
 }
 ;
 
+void Character::detectarEstado() {
+
+	if (state == &Character::dying)
+		return;
+
+	if (state == &Character::rolling)
+		return;
+
+	//Esta disparando?
+	if (movimientoDisparar) {
+		state = &Character::shooting;
+		return;
+	}
+
+	//Esta cayendo?
+	if (getVelocity().y <= 0.0f && getContactosActuales() == 0) {
+		state = &Character::falling;
+		return;
+	}
+
+	//Esta quieto?
+	if (getVelocity().y == 0.0f && getVelocity().x == 0.0f) {
+		state = &Character::standby;
+		return;
+	}
+
+	//Esta saltando?
+	if (getVelocity().y > 0.0f && getContactosActuales() == 0) {
+		state = &Character::jumping;
+		return;
+	}
+
+	//Esta caminando?
+	if (movimientoDerecha || movimientoIzquierda) {
+		state = &Character::walking;
+		return;
+	}
+}
+
 void Character::controlarEstado() {
 
-	caminar();
+	detectarEstado();
+
+	decreaseJumpCooldown();
+	decreaseShootCooldown();
+	move();
 	realizarDisparo();
 
-	if (state != &Character::dying) {
-		decreaseJumpCooldown();
-		decreaseShootCooldown();
-
-		if (getVelocity().y <= 0.0f && getContactosActuales() == 0) {
-
-			if (state != &Character::shooting && state != &Character::rolling)
-				state = &Character::falling;
-			this->noAtravezarPlataformas();
-
-		} else if (getVelocity().y <= 0.0f && state == &Character::jumping) {
-
-			state = &Character::standby;
-
-		}
-
-	}
 }

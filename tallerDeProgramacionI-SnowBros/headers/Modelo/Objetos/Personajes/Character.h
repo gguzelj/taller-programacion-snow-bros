@@ -16,7 +16,6 @@
 
 #define IZQUIERDA 'l'
 #define DERECHA 'r'
-#define SIN_ORIENTACION ' '
 
 #define ENEMIGO_BOLA 2
 #define PERSONAJE_FILTER_INDEX -1
@@ -43,7 +42,8 @@ protected:
 	float alto;
 
 	void cambiarFilterIndex(int16 groupIndex);
-	void caminar();
+	void move();
+	virtual void realizarDisparo();
 
 public:
 	bool inmune;
@@ -73,7 +73,6 @@ public:
 	virtual void sacarVida();
 	virtual void kick();
 	virtual void jump();
-	virtual void realizarDisparo();
 	virtual void handleInput(SDL_Keycode input, Uint32 input_type);
 
 	b2Fixture* GetFixtureList();
@@ -83,8 +82,10 @@ public:
 
 	bool detener(char orientacion);
 
-	void caminar(char orientacion);
+	void move(char orientacion);
 	void controlarEstado();
+	void dejarDisparar();
+	void detectarEstado();
 	void disparar();
 	void moveLeft();
 	void moveRight();

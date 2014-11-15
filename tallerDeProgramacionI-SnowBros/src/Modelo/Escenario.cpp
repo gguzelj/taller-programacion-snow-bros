@@ -24,9 +24,9 @@ Escenario::Escenario(JsonParser *parser) {
 	muro_i = new Rectangulo(80, 2, 0, 0, ALTURA_DEL_PISO, world_);
 	figurasEstaticas_->push_back(muro_i);
 	//And walls
-	muro_i = new Rectangulo(2, 42, 0, 41, 0, world_);
+	muro_i = new Rectangulo(2, 50, 0, LIMITE_PARED, 0, world_);
 	figurasEstaticas_->push_back(muro_i);
-	muro_i = new Rectangulo(2, 42, 0, -41, 0, world_);
+	muro_i = new Rectangulo(2, 50, 0, -LIMITE_PARED, 0, world_);
 	figurasEstaticas_->push_back(muro_i);
 
 	// Create all the objects

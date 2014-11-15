@@ -3,6 +3,7 @@
 
 #define ASIGNADO(id) (strcmp((id), "sin asignar")) == 0
 #define ALTURA_DEL_PISO -16
+#define LIMITE_PARED 29
 
 #include <list>
 #include <vector>

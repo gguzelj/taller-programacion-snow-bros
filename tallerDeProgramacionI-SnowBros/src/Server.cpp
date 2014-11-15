@@ -499,7 +499,7 @@ float Server::getInitialX() {
 }
 
 float Server::getInitialY() {
-	return 0.0;
+	return -10.0;
 }
 
 void Server::enviarProyectiles(int sock, proyectil_t* dinamicos) {

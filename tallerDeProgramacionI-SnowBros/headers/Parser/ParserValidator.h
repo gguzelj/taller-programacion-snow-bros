@@ -14,7 +14,8 @@
 #include "../Log/Log.h"
 
 #define FACTOR_CONVERSION_UN_A_PX 25
-#define imagePath "resources/snowBackground.png"
+
+#define imagePath "resources/background1.png"
 
 /**
  * Clase encargada de hacer validaciones para el json

@@ -2,6 +2,7 @@
 #define ESCENARIO_H_
 
 #define ASIGNADO(id) (strcmp((id), "sin asignar")) == 0
+#define ALTURA_DEL_PISO -16
 
 #include <list>
 #include <vector>

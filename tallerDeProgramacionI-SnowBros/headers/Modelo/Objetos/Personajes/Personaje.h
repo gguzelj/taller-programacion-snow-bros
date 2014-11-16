@@ -185,6 +185,10 @@ public:
 	 */
 	bool estaEmpujandoEnemigo();
 
+	/*
+	 * Suma los puntos ganados
+	 */
+	void addPoints(int puntos);
 private:
 	Escenario *escenario_;
 	b2Joint* joint;

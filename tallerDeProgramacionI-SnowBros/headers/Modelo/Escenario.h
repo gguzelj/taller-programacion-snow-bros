@@ -184,6 +184,11 @@ private:
 	 */
 	void movimientoDelEnemigo(Enemigo* enemigo);
 
+	/*
+	 * Agrega los puntos ganados al eliminar un enemigo, a cada jugador
+	 */
+	void addPointsToPlayers(int puntos);
+
 	float ancho_un;
 	float alto_un;
 	unsigned int cantidadMaximaDePersonajes;

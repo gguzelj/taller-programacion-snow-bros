@@ -254,7 +254,6 @@ void Personaje::kick() {
 		b2Contact* c = ce->contact;
 		Figura *figuraA = (Figura*) c->GetFixtureA()->GetUserData();
 		if (figuraA->type == ID_ENEMIGO) {
-			points += ((Enemigo*) figuraA)->getPuntos();
 			((Enemigo*) figuraA)->setOrientacion(this->orientacion);
 			((Enemigo*) figuraA)->morir();
 			return;
@@ -373,4 +372,8 @@ void Personaje::entrarEnPeriodoDeInmunidad() {
 void Personaje::hacerInmune() {
 	sleep(TIEMPO_INMUNIDAD);
 	inmune = false;
+}
+
+void Personaje::addPoints(int puntos){
+	points+=puntos;
 }

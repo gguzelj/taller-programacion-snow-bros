@@ -548,7 +548,6 @@ void Drawer::drawMessages(dataFromClient_t data, personaje_t personaje) {
 			pointsLT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoPoints, altoText);
 			coordXDelMensaje += anchoPoints;
 			for(int i = 5; i > 0; i--){
-				ceroLT.render(renderer, coordXDelMensaje+anchoNumber*(i-1), coordYDelMensaje, anchoNumber, altoText);
 				numerosLT[puntos%10]->render(renderer, coordXDelMensaje+anchoNumber*(i-1), coordYDelMensaje, anchoNumber, altoText);
 				puntos/=10;
 			}

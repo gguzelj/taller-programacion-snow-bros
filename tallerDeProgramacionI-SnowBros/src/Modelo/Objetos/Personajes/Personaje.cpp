@@ -235,9 +235,9 @@ void Personaje::shoot() {
 	b2Vec2 vel = this->body->GetLinearVelocity();
 
 	if (orientacion == IZQUIERDA)
-		vel.x -= aceleracion * 15;
+		vel.x -= aceleracion * 4;
 	else
-		vel.x += aceleracion * 15;
+		vel.x += aceleracion * 4;
 
 	bola->setVelocidad(vel);
 

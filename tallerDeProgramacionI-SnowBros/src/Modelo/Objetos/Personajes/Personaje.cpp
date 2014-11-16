@@ -239,6 +239,8 @@ void Personaje::shoot() {
 	else
 		vel.x += aceleracion * 4;
 
+	vel.y = 2;
+
 	bola->setVelocidad(vel);
 
 	this->escenario_->agregarProyectil(bola);

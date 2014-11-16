@@ -25,7 +25,7 @@ bool ParserValidator::validarEscenario(escenario_t* &escenario,
 	width = ntohl(width);
 	height = ntohl(height);
 
-	escenario->altoUn = height / FACTOR_CONVERSION_UN_A_PX;//Alto de la imagen dividido factor de conversion
+	escenario->altoUn = ((float)height) / FACTOR_CONVERSION_UN_A_PX;//Alto de la imagen dividido factor de conversion
 	escenario->anchoUn = width / FACTOR_CONVERSION_UN_A_PX;//Ancho de la imagen dividido factor de conversion
 
 	return false;
@@ -203,7 +203,7 @@ bool ParserValidator::valCoorYObjeto(Json::Value obj, double &y,
 	}
 
 	y = obj[Y_COOR].asDouble();
-	double margen = esc->altoUn / 2;
+	double margen = esc->altoUn;
 
 	//Validamos que la coordenada X exista dentro del escenario del juego
 	if (y > margen || y < -margen) {

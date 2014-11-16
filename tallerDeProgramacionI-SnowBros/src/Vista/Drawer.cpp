@@ -601,18 +601,18 @@ void Drawer::setearLimitesDelNivel(int nivel){
 
 	if(nivel == 1){
 
-		limInfCamera = 400;
-		limSupCamera = 760 - camera.h;
+		limInfCamera = 800;
+		limSupCamera = 1520 - camera.h;
 
-		limiteInferior = 220 *currentZoomFactor ;
+		limiteInferior = 800 *currentZoomFactor ;
 		limiteSuperior =  alto_imagen - coordRel.h + (currentZoomFactor - 1) * (alto_imagen);
 	}
 	if(nivel == 2){
 		limInfCamera = 0;
-		limSupCamera = 380 - camera.h;
+		limSupCamera = 760 - camera.h;
 
 		limiteInferior = 0 ;
-		limiteSuperior = 380 * currentZoomFactor - coordRel.h;
+		limiteSuperior = 760 * currentZoomFactor - coordRel.h;
 	}
 }
 

@@ -2,7 +2,7 @@
 #define ESCENARIO_H_
 
 #define ASIGNADO(id) (strcmp((id), "sin asignar")) == 0
-#define ALTURA_DEL_PISO -16
+#define ALTURA_DEL_PISO -30 //Alto de la imagen / factor de conversion un to px
 #define LIMITE_PARED 29
 
 #include <list>

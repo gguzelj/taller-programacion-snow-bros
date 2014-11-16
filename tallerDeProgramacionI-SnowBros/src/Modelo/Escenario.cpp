@@ -21,7 +21,7 @@ Escenario::Escenario(JsonParser *parser) {
 	world_->SetContactListener(&contactos);
 
 	//Create the ground
-	muro_i = new Rectangulo(80, 2, 0, 0, ALTURA_DEL_PISO, world_);
+	muro_i = new Rectangulo(60, 1, 0, 0, ALTURA_DEL_PISO, world_);
 	figurasEstaticas_->push_back(muro_i);
 	//And walls
 	muro_i = new Rectangulo(2, 50, 0, LIMITE_PARED, 0, world_);

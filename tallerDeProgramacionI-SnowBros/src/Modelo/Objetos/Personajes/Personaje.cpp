@@ -34,10 +34,6 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->movimientoIzquierda = false;
 	this->inmune = false;
 
-	//Parametros para controlar los contactos
-	this->contactosIzquierda = 0;
-	this->contactosDerecha = 0;
-
 	//Defino body del personaje
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;

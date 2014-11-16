@@ -153,56 +153,6 @@ int Character::getShootCooldown() {
 	return (this->jumpCooldown);
 }
 
-void Character::empiezoContacto(b2Fixture* fixture) {
-
-	//contacto con derecha?
-	if (paredDerecha == fixture)
-		contactosDerecha++;
-
-	//Contacto con izquierda?
-	if (paredIzquierda == fixture)
-		contactosIzquierda++;
-
-}
-
-void Character::beginContact(Figura* figura, b2Contact* contact) {
-	Figura *figuraA = (Figura*) contact->GetFixtureA()->GetUserData();
-	Figura *figuraB = (Figura*) contact->GetFixtureB()->GetUserData();
-
-	if (figuraA == this && figuraB->esEstatico())
-		this->empiezoContacto(contact->GetFixtureA());
-
-	if (figuraB == this && figuraA->esEstatico())
-		this->empiezoContacto(contact->GetFixtureB());
-
-}
-
-void Character::endContact(Figura* figura, b2Contact* contact) {
-
-	b2Fixture *fix;
-
-	if (!figura->esEstatico())
-		return;
-
-	if (contact->GetFixtureA()->GetUserData() == this)
-		fix = contact->GetFixtureA();
-	else
-		fix = contact->GetFixtureB();
-
-	terminoContacto(fix);
-
-}
-
-void Character::terminoContacto(b2Fixture* fixture) {
-
-	if (paredDerecha == fixture)
-		contactosDerecha--;
-
-	if (paredIzquierda == fixture)
-		contactosIzquierda--;
-
-}
-
 void Character::atravezarPlataformas() {
 	cambiarFilterIndex(FIGURA_FILTER_INDEX);
 }

@@ -26,10 +26,6 @@ Enemigo::Enemigo(JsonParser *parser, int index, Escenario* escenario) {
 	this->estaVivo = true;
 	this->puntos = 50;
 
-	//Parametros para controlar los contactos
-	this->contactosIzquierda = 0;
-	this->contactosDerecha = 0;
-
 	//Defino body del Enemigo
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;

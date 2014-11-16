@@ -86,7 +86,6 @@ public:
 	void dejarDisparar();
 	void detectarEstado();
 	void disparar();
-	void endContact(Figura*, b2Contact*);
 	void moveLeft();
 	void moveRight();
 	void pushLeft();
@@ -95,9 +94,6 @@ public:
 	void decreaseJumpCooldown();
 	void decreaseShootCooldown();
 	void setOrientacion(char orientacion);
-	void beginContact(Figura*,b2Contact*);
-	void terminoContacto(b2Fixture* fixture);
-	void empiezoContacto(b2Fixture* fixture);
 
 	/*
 	 * Getters

@@ -121,6 +121,8 @@ void Personaje::beginContactBolaEnemigo(BolaEnemigo * bola, b2Contact* contact) 
 
 	bola->cambiarFilterIndex(PERSONAJE_FILTER_INDEX);
 
+	this->movimientoDerecha = false;
+	this->movimientoIzquierda = false;
 	this->arrastrado = true;
 	this->arrastradoPor = bola;
 	this->state = &Personaje::rolling;

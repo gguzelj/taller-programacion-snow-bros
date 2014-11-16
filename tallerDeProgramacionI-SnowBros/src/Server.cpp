@@ -449,7 +449,7 @@ void Server::step() {
 			} else {
 				if (data != nullptr) {
 					personaje->handleInput(data->keycode_1, data->type_1);
-					//personaje->handleInput(data->keycode_2, data->type_2);
+					personaje->handleInput(data->keycode_2, data->type_2);
 				}
 			}
 

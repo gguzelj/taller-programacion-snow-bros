@@ -23,6 +23,9 @@ Escenario::Escenario(JsonParser *parser) {
 	//Create the ground
 	muro_i = new Rectangulo(ANCHO_DEL_PISO, 1, 0, 0, ALTURA_DEL_PISO, world_);
 	figurasEstaticas_->push_back(muro_i);
+	//Create the roof
+	muro_i = new Rectangulo(ANCHO_DEL_PISO, 1.5, 0, 0, ALTURA_DEL_TECHO, world_);
+	figurasEstaticas_->push_back(muro_i);
 	//And walls
 	muro_i = new Rectangulo(1, ALTO_DE_PARED, 0, LIMITE_PARED, 0, world_);
 	figurasEstaticas_->push_back(muro_i);

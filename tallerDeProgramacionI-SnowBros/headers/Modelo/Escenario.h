@@ -3,6 +3,7 @@
 
 #define ASIGNADO(id) (strcmp((id), "sin asignar")) == 0
 #define ALTURA_DEL_PISO -30 //Alto de la imagen / factor de conversion un to px
+#define ALTURA_DEL_TECHO 0
 #define ANCHO_DEL_PISO 60
 #define ALTO_DE_PARED 60
 #define LIMITE_PARED 28 //Ancho de la imagen / (factor de conversion*2)

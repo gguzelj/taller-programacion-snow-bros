@@ -52,7 +52,6 @@ public:
 	bool movimientoDerecha;
 	bool movimientoIzquierda;
 	bool movimientoDisparar;
-	bool movimientoEmpujando;
 
 	static JumpingState jumping;
 	static FallingState falling;

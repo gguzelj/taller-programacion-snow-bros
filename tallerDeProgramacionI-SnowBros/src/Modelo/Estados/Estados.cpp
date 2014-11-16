@@ -27,8 +27,7 @@ void StandByState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 		switch (input) {
 
 		case SDLK_UP:
-			if(!character.estaEnAire())
-				character.jump();
+			character.jump();
 			break;
 
 		case SDLK_LEFT:
@@ -80,7 +79,6 @@ void WalkingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 		switch (input) {
 
 		case SDLK_UP:
-			if(!character.estaEnAire())
 			character.jump();
 			break;
 
@@ -182,8 +180,7 @@ void ShootingState::handleInput(Character &character, SDL_Keycode input, Uint32 
 		switch (input) {
 
 		case SDLK_UP:
-			if(!character.estaEnAire())
-				character.jump();
+			character.jump();
 			break;
 
 		case SDLK_LEFT:

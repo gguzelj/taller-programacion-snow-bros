@@ -52,12 +52,6 @@ public:
 	void controlarEstado();
 
 	/*
-	 * Termino contacto con enemigo
-	 */
-	void endContactEnemigo(Enemigo*, b2Contact*);
-
-
-	/*
 	 * Realiza la accion de disparar una BolaNieve
 	 */
 	void shoot();
@@ -185,6 +179,11 @@ public:
 	 * Devuelve true si el Personaje esta siendo arrastrado por una BolaEnemigo
 	 */
 	bool esArrastrado();
+
+	/*
+	 * Devuelve true si el Personaje esta empujando algun enemigo
+	 */
+	bool estaEmpujandoEnemigo();
 
 private:
 	Escenario *escenario_;

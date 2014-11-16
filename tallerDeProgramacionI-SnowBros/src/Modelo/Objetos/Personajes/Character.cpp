@@ -61,7 +61,7 @@ bool Character::estaEnAire() {
 	//Buscamos si el piso esta haciendo contacto con algo
 	for (b2ContactEdge *ce = this->body->GetContactList(); ce; ce = ce->next) {
 		b2Contact* c = ce->contact;
-		if( c->GetFixtureA() == piso ||  c->GetFixtureB() == piso )
+		if (c->GetFixtureA() == piso || c->GetFixtureB() == piso)
 			return false;
 	}
 
@@ -262,7 +262,7 @@ void Character::noAtravezarPlataformas() {
 
 void Character::detectarEstado() {
 
-	if(getVelocity().y < 0.0f)
+	if (getVelocity().y < 0.0f)
 		this->noAtravezarPlataformas();
 
 	if (state == &Character::dying)
@@ -295,13 +295,9 @@ void Character::detectarEstado() {
 		return;
 	}
 
-	//Esta caminando?
+	//Esta moviendose?
 	if (movimientoDerecha || movimientoIzquierda) {
-
-		if (movimientoEmpujando > 0)
-			state = &Character::pushing;
-		else
-			state = &Character::walking;
+		state = &Character::walking;
 		return;
 	}
 }

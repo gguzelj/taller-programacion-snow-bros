@@ -32,7 +32,6 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->movimientoDisparar = false;
 	this->movimientoDerecha = false;
 	this->movimientoIzquierda = false;
-	this->movimientoEmpujando = false;
 	this->inmune = false;
 
 	//Parametros para controlar los contactos
@@ -132,22 +131,10 @@ void Personaje::beginContactBolaEnemigo(BolaEnemigo * bola, b2Contact* contact) 
 	return;
 }
 
-void Personaje::endContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
-
-	if(enemigo->estaCongelado())
-		movimientoEmpujando = false;
-
-}
-
 void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 
 	if (state == &Personaje::dying || state == &Personaje::rolling)
 		return;
-
-	//Si el enemigo esta congelado, no nos sucede nada
-	if (enemigo->estaCongelado()) {
-		this->movimientoEmpujando = true;
-	}
 
 	//En otro caso, restamos vida
 	if (lives > 0 && !inmune) {
@@ -159,9 +146,40 @@ void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 	// TODO En caso que el personaje pierda todas sus vidas, el mismo no debe aparecer mas en la pantalla. Es decir,
 	// hay que sacarlo del modelo.
 }
+
+bool Personaje::estaEmpujandoEnemigo() {
+	Figura *figura;
+	b2Fixture *pared = (orientacion == DERECHA) ? paredDerecha : paredIzquierda;
+
+	//Buscamos si el piso esta haciendo contacto con algo
+	for (b2ContactEdge *ce = this->body->GetContactList(); ce; ce = ce->next) {
+		b2Contact* c = ce->contact;
+
+		if (c->GetFixtureA() == pared) {
+			figura = (Figura*) c->GetFixtureB()->GetUserData();
+			if (figura->type == ID_ENEMIGO) {
+				return ((Enemigo*) figura)->estaCongelado();
+			}
+		}
+
+		if (c->GetFixtureB() == pared) {
+			figura = (Figura*) c->GetFixtureA()->GetUserData();
+			if (figura->type == ID_ENEMIGO) {
+				return ((Enemigo*) figura)->estaCongelado();
+			}
+		}
+	}
+
+	return false;
+}
+
 void Personaje::controlarEstado() {
 
 	Character::controlarEstado();
+
+	if (state == &Character::walking)
+		if (estaEmpujandoEnemigo())
+			state = &Character::pushing;
 
 	//Seteamos esto aca que me parece lo mas facil, e intuitivo.
 	//Disminuyo el cooldown de patear.
@@ -245,6 +263,9 @@ void Personaje::kick() {
 }
 
 void Personaje::jump() {
+
+	if (estaEnAire())
+		return;
 
 	if (this->jumpCooldown <= 0) {
 		this->jumpCooldown = 18;

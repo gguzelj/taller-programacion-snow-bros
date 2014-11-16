@@ -262,6 +262,9 @@ void Character::noAtravezarPlataformas() {
 
 void Character::detectarEstado() {
 
+	if(getVelocity().y < 0.0f)
+		this->noAtravezarPlataformas();
+
 	if (state == &Character::dying)
 		return;
 
@@ -277,7 +280,6 @@ void Character::detectarEstado() {
 	//Esta cayendo?
 	if (getVelocity().y < 0.0f && estaEnAire()) {
 		state = &Character::falling;
-		this->noAtravezarPlataformas();
 		return;
 	}
 

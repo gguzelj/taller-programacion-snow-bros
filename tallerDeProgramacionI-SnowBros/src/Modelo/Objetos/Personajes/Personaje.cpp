@@ -56,6 +56,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	fixtureDef.shape = &shapeDelPersonaje;
 	fixtureDef.density = 10;
 	fixtureDef.restitution = 0;
+	fixtureDef.friction = 0.001f;
 	fixtureDef.filter.groupIndex = PERSONAJE_FILTER_INDEX;
 	b2Fixture* fix = body->CreateFixture(&fixtureDef);
 
@@ -67,17 +68,14 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 
 	//Pared Izquierda
 	shapeDelPersonaje.SetAsBox(ancho / 100, alto * 0.002, b2Vec2(-ancho, 0), 0);
-	fixtureDef.friction = 0.001f;
 	paredIzquierda = this->body->CreateFixture(&fixtureDef);
 
 	//ParedDerecha
 	shapeDelPersonaje.SetAsBox(ancho / 100, alto * 0.002, b2Vec2(ancho, 0), 0);
-	fixtureDef.friction = 0.001f;
 	paredDerecha = this->body->CreateFixture(&fixtureDef);
 
 	//Piso
 	shapeDelPersonaje.SetAsBox(ancho * 0.001, alto / 100, b2Vec2(0, -alto), 0);
-	fixtureDef.friction = 0.001f;
 	piso = this->body->CreateFixture(&fixtureDef);
 
 	//Seteamos esta clase como UserData
@@ -163,9 +161,7 @@ void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 }
 void Personaje::controlarEstado() {
 
-	//std::cout << "Estado antes: " << state->getCode();
 	Character::controlarEstado();
-	//std::cout << " Estado despues: " << state->getCode() << std::endl;
 
 	//Seteamos esto aca que me parece lo mas facil, e intuitivo.
 	//Disminuyo el cooldown de patear.

@@ -36,10 +36,10 @@
 
 //defines de la camara
 #define FACTOR_CONVERSION_UN_A_PX 25
-#define COTA_INF_X -(ancho_px )/5
-#define COTA_INF_Y -(alto_px)/5
-#define COTA_SUP_X	(ancho_px)/5
-#define COTA_SUP_Y	(alto_px)/5
+#define COTA_INF_X -(coordRel.w)/5
+#define COTA_INF_Y -(coordRel.h)/5
+#define COTA_SUP_X	(coordRel.w)/5
+#define COTA_SUP_Y	(coordRel.h)/5
 
 //defines que eran del Personaje.cpp
 #define MITAD_ANCHO_PERSONAJE 0.5f
@@ -138,6 +138,17 @@ public:
 
 private:
 
+	int limIzqCamera ;
+	int limDerCamera ;
+	int limInfCamera ;
+	int limSupCamera;
+
+	int limiteIzquierdo ;
+	int limiteDerecho;
+	int limiteInferior ;
+	int limiteSuperior ;
+
+
 	//SDL Attributes
 	SDL_Renderer *renderer;
 	SDL_Window *window;
@@ -224,6 +235,7 @@ private:
 
 	//Private Methods
 	//General purpose methods
+	void setearLimitesDelNivel(int nivel);
 	void loadFont();
 	bool loadMedia();
 	void runWindow(int ancho_px ,int alto_px ,string imagePath);

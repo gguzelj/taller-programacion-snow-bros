@@ -196,7 +196,6 @@ int Client::initialize() {
 		recibirDinamicos(dinamicos_);
 		recibirPersonajes(personajes_);
 		recibirEnemigos(enemigos_, gameDetails_.cantEnemigos);
-
 		//Inicializamos la vista para el personaje principal
 		for (unsigned int i = 0; i < gameDetails_.cantPersonajes; i++) {
 

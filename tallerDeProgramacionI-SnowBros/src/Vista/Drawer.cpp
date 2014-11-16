@@ -179,8 +179,8 @@ Drawer::Drawer() {
 	this->lives = "Lives: ";
 
 	//Hardcodeo esto por ahora.
-	this->ancho_px = 1024;
-	this->alto_px = 720;
+	this->ancho_px = 800;
+	this->alto_px = 540;
 
 	std::ifstream in(imagePath);
 	unsigned int width, height;
@@ -193,11 +193,12 @@ Drawer::Drawer() {
 	height = ntohl(height);
 
 	this->alto_un = ((float)height) / FACTOR_CONVERSION_UN_A_PX;//Alto de la imagen dividido factor de conversion
-	this->ancho_un = width / FACTOR_CONVERSION_UN_A_PX;//Ancho de la imagen dividido factor de conversion
-
+	this->ancho_un = ((float) width) / FACTOR_CONVERSION_UN_A_PX;//Ancho de la imagen dividido factor de conversion
 	this->currentZoomFactor = 1.5;
-	this->camera = {0,0,ancho_px,alto_px/2};
-	this->coordRel = {0,0,ancho_px,alto_px/2};
+	this->camera = {0,0,ancho_px/ currentZoomFactor,alto_px/ (currentZoomFactor)};
+	this->coordRel = {0,0,ancho_px,alto_px};
+
+	this->setearLimitesDelNivel(1);
 
 	this->un_to_px_x = this->un_to_px_x_inicial = currentZoomFactor * FACTOR_CONVERSION_UN_A_PX;
 	this->un_to_px_y = this->un_to_px_y_inicial = currentZoomFactor * FACTOR_CONVERSION_UN_A_PX;
@@ -587,6 +588,35 @@ void Drawer::presentScenary() {
 	SDL_RenderPresent(this->renderer);
 }
 
+
+
+void Drawer::setearLimitesDelNivel(int nivel){
+	float ancho_imagen = ancho_un * FACTOR_CONVERSION_UN_A_PX;
+	float alto_imagen = alto_un * FACTOR_CONVERSION_UN_A_PX;
+	limIzqCamera = 0;
+	limDerCamera = ancho_imagen -camera.w;
+	limiteIzquierdo = 0;
+	limiteDerecho = ancho_imagen - coordRel.w + (currentZoomFactor - 1) * (ancho_imagen);
+
+	if(nivel == 1){
+
+		limInfCamera = 400;
+		limSupCamera = 760 - camera.h;
+
+		limiteInferior = 220 *currentZoomFactor ;
+		limiteSuperior =  alto_imagen - coordRel.h + (currentZoomFactor - 1) * (alto_imagen);
+	}
+	if(nivel == 2){
+		limInfCamera = 0;
+		limSupCamera = 380 - camera.h;
+
+		limiteInferior = 0 ;
+		limiteSuperior = 380 * currentZoomFactor - coordRel.h;
+	}
+}
+
+
+
 void ajusteFueraDeLimite(SDL_Rect &rect, int limIzq, int limDer, int limInf, int limSup) {
 	if (rect.y < limInf)
 		rect.y = limInf;
@@ -613,7 +643,7 @@ void Drawer::inicializarCamara(personaje_t personaje) {
 
 	coordRel.x = camera.x;
 	coordRel.y = camera.y;
-
+	/*
 	int limIzqCamera = 0;
 	int limDerCamera = ancho_imagen - camera.w;
 	int limInfCamera = 0;
@@ -623,7 +653,7 @@ void Drawer::inicializarCamara(personaje_t personaje) {
 	int limiteDerecho = ancho_imagen - coordRel.w + (currentZoomFactor - 1) * (ancho_imagen);
 	int limiteInferior = 0;
 	int limiteSuperior = alto_imagen - coordRel.h + (currentZoomFactor - 1) * (alto_imagen);
-
+*/
 	ajusteFueraDeLimite(camera, limIzqCamera, limDerCamera, limInfCamera, limSupCamera);
 	ajusteFueraDeLimite(coordRel, limiteIzquierdo, limiteDerecho, limiteInferior, limiteSuperior);
 
@@ -632,6 +662,7 @@ void Drawer::inicializarCamara(personaje_t personaje) {
 void Drawer::actualizarCamara(personaje_t personaje) {
 	float ancho_imagen = ancho_un * FACTOR_CONVERSION_UN_A_PX;
 	float alto_imagen = alto_un * FACTOR_CONVERSION_UN_A_PX;
+
 
 	int ox = (ancho_imagen / 2) + (currentZoomFactor - 1) * (ancho_imagen) / 2;
 	int oy = (alto_imagen / 2) + (currentZoomFactor - 1) * (alto_imagen) / 2;
@@ -642,6 +673,8 @@ void Drawer::actualizarCamara(personaje_t personaje) {
 	float x_relativa = coord_relativa(coordRel.x + (coordRel.w / 2), pos_x);
 	float y_relativa = coord_relativa(coordRel.y + (coordRel.h / 2), pos_y);
 
+	/*
+
 	int limIzqCamera = 0;
 	int limDerCamera = ancho_imagen - camera.w;
 	int limInfCamera = 0;
@@ -651,7 +684,7 @@ void Drawer::actualizarCamara(personaje_t personaje) {
 	int limiteDerecho = ancho_imagen - coordRel.w + (currentZoomFactor - 1) * (ancho_imagen);
 	int limiteInferior = 0;
 	int limiteSuperior = alto_imagen - coordRel.h + (currentZoomFactor - 1) * (alto_imagen);
-
+*/
 	if (x_relativa <= COTA_INF_X) {
 		if (camera.x > limIzqCamera)
 			camera.x -= abs(x_relativa - COTA_INF_X);
@@ -672,6 +705,9 @@ void Drawer::actualizarCamara(personaje_t personaje) {
 			camera.y += abs(y_relativa - COTA_SUP_Y);
 		coordRel.y = camera.y * currentZoomFactor;
 	}
+
+	//std::cerr << "x camera: "<<camera.x<< " y: "<< camera.y<<std::endl;
+	//std::cerr << "X: "<<camera.x<< " y: "<< coordRel.y<<std::endl;
 
 	ajusteFueraDeLimite(camera, limIzqCamera, limDerCamera, limInfCamera, limSupCamera);
 	ajusteFueraDeLimite(coordRel, limiteIzquierdo, limiteDerecho, limiteInferior, limiteSuperior);
@@ -852,7 +888,7 @@ void Drawer::zoomIn() {
 		int ancho_anterior = camera.w;
 		int alto_anterior = camera.h;
 		camera.h = alto_px / currentZoomFactor;
-		camera.w = ancho_px / currentZoomFactor;
+		camera.w = ancho_px / (currentZoomFactor);
 
 		int dif_ancho = abs(ancho_anterior - camera.w);
 		int dif_alto = abs(alto_anterior - camera.h);
@@ -873,7 +909,7 @@ void Drawer::zoomOut() {
 	currentZoomFactor -= factor;
 	int ancho_anterior = camera.w;
 	int alto_anterior = camera.h;
-	camera.h = alto_px / currentZoomFactor;
+	camera.h = alto_px / (currentZoomFactor);
 	camera.w = ancho_px / currentZoomFactor;
 
 	int dif_ancho = abs(ancho_anterior - camera.w);

@@ -138,6 +138,8 @@ public:
 
 private:
 
+	int nivel;
+
 	int limIzqCamera ;
 	int limDerCamera ;
 	int limInfCamera ;

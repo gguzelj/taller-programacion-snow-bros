@@ -195,10 +195,11 @@ Drawer::Drawer() {
 	this->alto_un = ((float)height) / FACTOR_CONVERSION_UN_A_PX;//Alto de la imagen dividido factor de conversion
 	this->ancho_un = ((float) width) / FACTOR_CONVERSION_UN_A_PX;//Ancho de la imagen dividido factor de conversion
 	this->currentZoomFactor = 1.5;
-	this->camera = {0,0,ancho_px/ currentZoomFactor,alto_px/ (currentZoomFactor)};
+	this->camera = {0,0,ancho_px / currentZoomFactor,alto_px / (currentZoomFactor)};
 	this->coordRel = {0,0,ancho_px,alto_px};
 
-	this->setearLimitesDelNivel(1);
+	this->nivel = 1;
+	this->setearLimitesDelNivel(nivel);
 
 	this->un_to_px_x = this->un_to_px_x_inicial = currentZoomFactor * FACTOR_CONVERSION_UN_A_PX;
 	this->un_to_px_y = this->un_to_px_y_inicial = currentZoomFactor * FACTOR_CONVERSION_UN_A_PX;
@@ -900,8 +901,9 @@ void Drawer::zoomIn() {
 		coordRel.y = currentZoomFactor * camera.y;
 
 		//Zoom in a la escala de las figuras
-		un_to_px_x = un_to_px_x_inicial * currentZoomFactor;
-		un_to_px_y = un_to_px_y_inicial * currentZoomFactor;
+		un_to_px_x = FACTOR_CONVERSION_UN_A_PX * currentZoomFactor;
+		un_to_px_y =  FACTOR_CONVERSION_UN_A_PX * currentZoomFactor;
+		this->setearLimitesDelNivel(nivel);
 	}
 }
 
@@ -919,7 +921,7 @@ void Drawer::zoomOut() {
 	int proximo_x_maximo = ancho_un * FACTOR_CONVERSION_UN_A_PX - 2 * camera.w + ancho_anterior;
 	int proximo_y_maximo = alto_un * FACTOR_CONVERSION_UN_A_PX - 2 * camera.h + alto_anterior;
 
-	if (proximo_x_maximo <= 0 || proximo_y_maximo <= 0) {
+	if (proximo_x_maximo <= this->limIzqCamera || proximo_y_maximo <= this->limInfCamera) {
 		currentZoomFactor += factor;
 		camera.h = alto_px / currentZoomFactor;
 		camera.w = ancho_px / currentZoomFactor;
@@ -940,8 +942,9 @@ void Drawer::zoomOut() {
 	coordRel.y = currentZoomFactor * camera.y;
 
 //Zoom out a la escala de las figuras
-	un_to_px_x = un_to_px_x_inicial * currentZoomFactor;
-	un_to_px_y = un_to_px_y_inicial * currentZoomFactor;
+	un_to_px_x = FACTOR_CONVERSION_UN_A_PX * currentZoomFactor;
+	un_to_px_y =  FACTOR_CONVERSION_UN_A_PX * currentZoomFactor;
+	this->setearLimitesDelNivel(nivel);
 }
 
 SDL_Texture* Drawer::selectTexture(int index) throw (ErrorFueraDeRango) {

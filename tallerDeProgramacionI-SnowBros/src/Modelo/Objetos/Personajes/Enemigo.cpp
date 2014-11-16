@@ -23,12 +23,10 @@ Enemigo::Enemigo(JsonParser *parser, int index, Escenario* escenario) {
 	this->ancho = MITAD_ANCHO_ENEMIGO;
 	this->alto = MITAD_ALTO_ENEMIGO;
 	this->nivelDeCongelamiento = 0;
-	this->puedeEmpujar = false;
 	this->estaVivo = true;
 	this->puntos = 50;
 
 	//Parametros para controlar los contactos
-	this->contactosActuales = 0;
 	this->contactosIzquierda = 0;
 	this->contactosDerecha = 0;
 
@@ -47,7 +45,8 @@ Enemigo::Enemigo(JsonParser *parser, int index, Escenario* escenario) {
 	//Definimos el fixture del Enemigo
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shapeDelEnemigo;
-	fixtureDef.density = 0.5;
+	fixtureDef.density = 5;
+	fixtureDef.restitution = 0;
 	fixtureDef.filter.groupIndex = ENEMIGO_FILTER_INDEX;
 	fixtureDef.friction = 0.96;
 	b2Fixture* fix = body->CreateFixture(&fixtureDef);
@@ -60,19 +59,17 @@ Enemigo::Enemigo(JsonParser *parser, int index, Escenario* escenario) {
 
 	//Pared Izquierda
 	shapeDelEnemigo.SetAsBox(0.01f, alto / 2, b2Vec2(-ancho + 0.01, 0), 0);
-	fixtureDef.friction = 0.01f;
+	fixtureDef.friction = 0.001f;
 	paredIzquierda = this->body->CreateFixture(&fixtureDef);
 
 	//ParedDerecha
 	shapeDelEnemigo.SetAsBox(0.01f, alto / 2, b2Vec2(ancho - 0.01, 0), 0);
-	fixtureDef.friction = 0.01f;
+	fixtureDef.friction = 0.001f;
 	paredDerecha = this->body->CreateFixture(&fixtureDef);
 
 	//Piso
-	shapeDelEnemigo.SetAsBox(ancho * 19.5f / 20, alto / 10, b2Vec2(0, -alto),
-			0);
-	;
-	fixtureDef.friction = 0.0019f;
+	shapeDelEnemigo.SetAsBox(ancho * 19.5f / 20, alto / 10, b2Vec2(0, -alto), 0);
+	fixtureDef.friction = 0.9f;
 	piso = this->body->CreateFixture(&fixtureDef);
 
 	//Seteamos esta clase como UserData
@@ -103,11 +100,9 @@ void Enemigo::morir() {
 	BolaEnemigo *bola;
 
 	if (orientacion == IZQUIERDA)
-		bola = new BolaEnemigo(getX() - 1, getY() + MITAD_ALTO_ENEMIGO,
-				this->world);
+		bola = new BolaEnemigo(getX() - 1, getY() + MITAD_ALTO_ENEMIGO, this->world);
 	else
-		bola = new BolaEnemigo(getX() + 1, getY() + MITAD_ALTO_ENEMIGO,
-				this->world);
+		bola = new BolaEnemigo(getX() + 1, getY() + MITAD_ALTO_ENEMIGO, this->world);
 
 	vel.x = (orientacion == IZQUIERDA) ? -15 : 15;
 	vel.y = 5;
@@ -145,6 +140,11 @@ void Enemigo::handleInput(SDL_Keycode input, Uint32 input_type) {
 	state->handleInput(*this, input, input_type);
 }
 
+void Enemigo::endContact(Figura* figura, b2Contact* contact) {
+	Character::endContact(figura, contact);
+	figura->endContactEnemigo(this, contact);
+}
+
 void Enemigo::beginContact(Figura* figura, b2Contact* contact) {
 	figura->beginContactEnemigo(this, contact);
 }
@@ -177,8 +177,7 @@ void Enemigo::congelar() {
 		//No atravezable, para que pueda empujarlo
 		esAtravezable = (nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX);
 
-		if (difftime(time(nullptr), tiempoDeImpactoDeLaUltimaBola)
-				> tiempoDeEsperaMaximo) {
+		if (difftime(time(nullptr), tiempoDeImpactoDeLaUltimaBola) > tiempoDeEsperaMaximo) {
 			this->nivelDeCongelamiento -= 2;
 			if (this->nivelDeCongelamiento < 0)
 				this->nivelDeCongelamiento = 0;
@@ -243,8 +242,7 @@ void Enemigo::mover() {
 
 	float posicionesX[4];
 	float posicionesY[4];
-	for (auto personaje = personajes_->begin(); personaje != personajes_->end();
-			++personaje) {
+	for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
 		posicionesX[i] = (*personaje)->getX();
 		posicionesY[i] = (*personaje)->getY();
 		i++;
@@ -283,8 +281,7 @@ void Enemigo::mover() {
 		}
 	}
 	if (v1 > 5) {
-		if ((posicionPersonajeY + 1) < posicionEnemigoY
-				&& this->getNivelDeCongelamiento() == 0) {
+		if ((posicionPersonajeY + 1) < posicionEnemigoY && this->getNivelDeCongelamiento() == 0) {
 			this->handleInput(SDLK_UP, SDL_KEYUP);
 			this->atravezarPlataformas();
 		}

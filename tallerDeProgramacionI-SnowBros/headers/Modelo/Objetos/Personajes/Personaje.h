@@ -1,6 +1,7 @@
 #ifndef PERSONAJE_H_
 #define PERSONAJE_H_
 
+#include <Box2D/Box2D.h>
 #include "Character.h"
 #include "Enemigo.h"
 
@@ -21,7 +22,6 @@ class Personaje: public Character {
 public:
 
 	conn_id id;
-	bool empujando;
 
 	Personaje(float x, float y, char id[], Escenario* escenario);
 	~Personaje();
@@ -52,20 +52,15 @@ public:
 	void controlarEstado();
 
 	/*
-	 * TODO no encuentro definicion
+	 * Termino contacto con enemigo
 	 */
-	void empiezoContacto(b2Fixture* fixture);
-
-	/*
-	 * TODO no encuentro definicion
-	 */
-	void terminoContacto(b2Fixture* fixture);
+	void endContactEnemigo(Enemigo*, b2Contact*);
 
 
 	/*
 	 * Realiza la accion de disparar una BolaNieve
 	 */
-	void realizarDisparo();
+	void shoot();
 
 	/*
 	 * Se encarga de realizar la accion de patear y pasar al Personaje al

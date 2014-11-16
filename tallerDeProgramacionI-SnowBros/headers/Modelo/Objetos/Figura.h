@@ -82,6 +82,7 @@ public:
 	virtual char getId() = 0;
 
 	virtual void beginContact(Figura*,b2Contact*){};
+	virtual void endContact(Figura*,b2Contact*){};
 
 	virtual void beginContactCirculo(Circulo*,b2Contact*){};
 	virtual void beginContactMuro(Muro*,b2Contact*){};
@@ -93,6 +94,17 @@ public:
 	virtual void beginContactPersonaje(Personaje*,b2Contact*){};
 	virtual void beginContactBolaNieve(BolaNieve*,b2Contact*){};
 	virtual void beginContactBolaEnemigo(BolaEnemigo*,b2Contact*){};
+
+	virtual void endContactCirculo(Circulo*,b2Contact*){};
+	virtual void endContactMuro(Muro*,b2Contact*){};
+	virtual void endContactParalelogramo(Paralelogramo*,b2Contact*){};
+	virtual void endContactPoligono(Poligono*,b2Contact*){};
+	virtual void endContactRectanguo(Rectangulo*,b2Contact*){};
+	virtual void endContactTrapecio(Trapecio*,b2Contact*){};
+	virtual void endContactEnemigo(Enemigo*,b2Contact*){};
+	virtual void endContactPersonaje(Personaje*,b2Contact*){};
+	virtual void endContactBolaNieve(BolaNieve*,b2Contact*){};
+	virtual void endContactBolaEnemigo(BolaEnemigo*,b2Contact*){};
 
 };
 

@@ -19,7 +19,6 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->state = &Personaje::standby;
 	this->orientacion = ORIENTACION_INICIAL;
 	this->esta_muerto = false;
-	this->puedeEmpujar = false;
 	this->arrastradoPor = nullptr;
 	this->joint = nullptr;
 
@@ -33,10 +32,10 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->movimientoDisparar = false;
 	this->movimientoDerecha = false;
 	this->movimientoIzquierda = false;
+	this->movimientoEmpujando = false;
 	this->inmune = false;
 
 	//Parametros para controlar los contactos
-	this->contactosActuales = 0;
 	this->contactosIzquierda = 0;
 	this->contactosDerecha = 0;
 
@@ -56,6 +55,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shapeDelPersonaje;
 	fixtureDef.density = 10;
+	fixtureDef.restitution = 0;
 	fixtureDef.filter.groupIndex = PERSONAJE_FILTER_INDEX;
 	b2Fixture* fix = body->CreateFixture(&fixtureDef);
 
@@ -66,18 +66,18 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	fix->SetUserData(this);
 
 	//Pared Izquierda
-	shapeDelPersonaje.SetAsBox(0.0000001f, alto - 0.00405f, b2Vec2(-ancho + 0.00000005, 0.0045f), 0);
-	fixtureDef.friction = 0.0019f;
+	shapeDelPersonaje.SetAsBox(ancho / 100, alto * 0.002, b2Vec2(-ancho, 0), 0);
+	fixtureDef.friction = 0.001f;
 	paredIzquierda = this->body->CreateFixture(&fixtureDef);
 
 	//ParedDerecha
-	shapeDelPersonaje.SetAsBox(0.0000001f, alto - 0.00405f, b2Vec2(ancho - 0.00000005, 0.0045f), 0);
-	fixtureDef.friction = 0.0019f;
+	shapeDelPersonaje.SetAsBox(ancho / 100, alto * 0.002, b2Vec2(ancho, 0), 0);
+	fixtureDef.friction = 0.001f;
 	paredDerecha = this->body->CreateFixture(&fixtureDef);
 
 	//Piso
-	shapeDelPersonaje.SetAsBox(ancho * 19.5f / 20, alto / 10, b2Vec2(0, -alto), 0);
-	fixtureDef.friction = 0.0019f;
+	shapeDelPersonaje.SetAsBox(ancho * 0.001, alto / 100, b2Vec2(0, -alto), 0);
+	fixtureDef.friction = 0.001f;
 	piso = this->body->CreateFixture(&fixtureDef);
 
 	//Seteamos esta clase como UserData
@@ -134,6 +134,13 @@ void Personaje::beginContactBolaEnemigo(BolaEnemigo * bola, b2Contact* contact) 
 	return;
 }
 
+void Personaje::endContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
+
+	if(enemigo->estaCongelado())
+		movimientoEmpujando = false;
+
+}
+
 void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 
 	if (state == &Personaje::dying || state == &Personaje::rolling)
@@ -141,7 +148,7 @@ void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 
 	//Si el enemigo esta congelado, no nos sucede nada
 	if (enemigo->estaCongelado()) {
-		this->empujando = true;
+		this->movimientoEmpujando = true;
 	}
 
 	//En otro caso, restamos vida
@@ -155,10 +162,10 @@ void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 	// hay que sacarlo del modelo.
 }
 void Personaje::controlarEstado() {
-	Character::controlarEstado();
 
-	if (empujando)
-		state = &Character::pushing;
+	//std::cout << "Estado antes: " << state->getCode();
+	Character::controlarEstado();
+	//std::cout << " Estado despues: " << state->getCode() << std::endl;
 
 	//Seteamos esto aca que me parece lo mas facil, e intuitivo.
 	//Disminuyo el cooldown de patear.
@@ -196,7 +203,7 @@ void Personaje::controlarEstado() {
 		crearJoint(this, arrastradoPor, world);
 }
 
-void Personaje::realizarDisparo() {
+void Personaje::shoot() {
 
 	if (!movimientoDisparar)
 		return;
@@ -242,6 +249,7 @@ void Personaje::kick() {
 }
 
 void Personaje::jump() {
+
 	if (this->jumpCooldown <= 0) {
 		this->jumpCooldown = 18;
 		b2Vec2 velocidadActual = this->body->GetLinearVelocity();

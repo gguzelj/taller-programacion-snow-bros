@@ -43,17 +43,16 @@ protected:
 
 	void cambiarFilterIndex(int16 groupIndex);
 	void move();
-	virtual void realizarDisparo();
+	virtual void shoot();
 
 public:
 	bool inmune;
-	int contactosActuales;
 	int contactosIzquierda;
 	int contactosDerecha;
-	bool puedeEmpujar;
 	bool movimientoDerecha;
 	bool movimientoIzquierda;
 	bool movimientoDisparar;
+	bool movimientoEmpujando;
 
 	static JumpingState jumping;
 	static FallingState falling;
@@ -81,12 +80,14 @@ public:
 	b2Vec2 Posicion();
 
 	bool detener(char orientacion);
+	bool estaEnAire();
 
 	void move(char orientacion);
 	void controlarEstado();
 	void dejarDisparar();
 	void detectarEstado();
 	void disparar();
+	void endContact(Figura*, b2Contact*);
 	void moveLeft();
 	void moveRight();
 	void pushLeft();
@@ -94,8 +95,6 @@ public:
 	void stop();
 	void decreaseJumpCooldown();
 	void decreaseShootCooldown();
-	void updateLeftContact(int);
-	void updateRightContact(int);
 	void setOrientacion(char orientacion);
 	void beginContact(Figura*,b2Contact*);
 	void terminoContacto(b2Fixture* fixture);
@@ -104,9 +103,9 @@ public:
 	/*
 	 * Getters
 	 */
+	bool getDisparando();
 	char getId();
 	char getOrientacion();
-	int getContactosActuales();
 	int getJumpCooldown();
 	int getShootCooldown();
 	float getAncho();

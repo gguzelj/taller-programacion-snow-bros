@@ -1,4 +1,3 @@
-#define VEL_POR_DEFAULT 10.0f
 #include "../../../headers/Modelo/Estados/Estados.h"
 #include "../../../headers/Modelo/Objetos/Personajes/Character.h"
 #include "../../../headers/Modelo/Objetos/Personajes/Personaje.h"
@@ -28,22 +27,19 @@ void StandByState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 		switch (input) {
 
 		case SDLK_UP:
-			character.state = &Character::jumping;
-			character.jump();
+			if(!character.estaEnAire())
+				character.jump();
 			break;
 
 		case SDLK_LEFT:
-			character.state = &Character::walking;
 			character.move(IZQUIERDA);
 			break;
 
 		case SDLK_RIGHT:
-			character.state = &Character::walking;
 			character.move(DERECHA);
 			break;
 
 		case SDLK_SPACE:
-			character.state = &Character::shooting;
 			character.disparar();
 			break;
 		}
@@ -84,22 +80,19 @@ void WalkingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 		switch (input) {
 
 		case SDLK_UP:
-			character.state = &Character::jumping;
+			if(!character.estaEnAire())
 			character.jump();
 			break;
 
 		case SDLK_LEFT:
-			character.state = &Character::walking;
 			character.move(IZQUIERDA);
 			break;
 
 		case SDLK_RIGHT:
-			character.state = &Character::walking;
 			character.move(DERECHA);
 			break;
 
 		case SDLK_SPACE:
-			character.state = &Character::shooting;
 			character.disparar();
 			break;
 		}
@@ -140,17 +133,14 @@ void OnAirState::handleInput(Character &character, SDL_Keycode input, Uint32 inp
 		switch (input) {
 
 		case SDLK_SPACE:
-			character.state = &Character::shooting;
 			character.disparar();
 			break;
 
 		case SDLK_LEFT:
-			character.state = &Character::walking;
 			character.move(IZQUIERDA);
 			break;
 
 		case SDLK_RIGHT:
-			character.state = &Character::walking;
 			character.move(DERECHA);
 			break;
 		}
@@ -192,17 +182,15 @@ void ShootingState::handleInput(Character &character, SDL_Keycode input, Uint32 
 		switch (input) {
 
 		case SDLK_UP:
-			character.state = &Character::jumping;
-			character.jump();
+			if(!character.estaEnAire())
+				character.jump();
 			break;
 
 		case SDLK_LEFT:
-			character.state = &Character::walking;
 			character.move(IZQUIERDA);
 			break;
 
 		case SDLK_RIGHT:
-			character.state = &Character::walking;
 			character.move(DERECHA);
 			break;
 		}
@@ -221,7 +209,6 @@ void ShootingState::handleInput(Character &character, SDL_Keycode input, Uint32 
 
 		case SDLK_SPACE:
 			character.dejarDisparar();
-			character.state = &Character::falling;
 			break;
 
 		}

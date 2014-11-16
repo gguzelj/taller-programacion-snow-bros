@@ -56,6 +56,18 @@ bool Character::detener(char orientacion) {
 	return false;
 }
 
+bool Character::estaEnAire() {
+
+	//Buscamos si el piso esta haciendo contacto con algo
+	for (b2ContactEdge *ce = this->body->GetContactList(); ce; ce = ce->next) {
+		b2Contact* c = ce->contact;
+		if( c->GetFixtureA() == piso ||  c->GetFixtureB() == piso )
+			return false;
+	}
+
+	return true;
+}
+
 void Character::disparar() {
 	this->movimientoDisparar = true;
 }
@@ -64,7 +76,7 @@ void Character::dejarDisparar() {
 	this->movimientoDisparar = false;
 }
 
-void Character::realizarDisparo() {
+void Character::shoot() {
 }
 
 void Character::moveLeft() {
@@ -107,16 +119,16 @@ b2Vec2 Character::GetWorldPoint(const b2Vec2& localPoint) {
 	return body->GetWorldPoint(localPoint);
 }
 
+bool Character::getDisparando() {
+	return movimientoDisparar;
+}
+
 char Character::getOrientacion() {
 	return this->orientacion;
 }
 
 void Character::setOrientacion(char orientacion) {
 	this->orientacion = orientacion;
-}
-
-int Character::getContactosActuales() {
-	return this->contactosActuales;
 }
 
 b2Vec2 Character::getVelocity() {
@@ -141,25 +153,6 @@ int Character::getShootCooldown() {
 	return (this->jumpCooldown);
 }
 
-void Character::updateLeftContact(int numero) {
-	this->contactosIzquierda = numero;
-}
-
-void Character::updateRightContact(int numero) {
-	this->contactosDerecha = numero;
-}
-
-void cambiarEstadoAlAterrizar(Character* character) {
-	/*
-	 if (character->state != &Character::dying && character->state != &Character::rolling) {
-	 if (character->movimientoDerecha == true || character->movimientoIzquierda == true)
-	 character->state = &Character::walking;
-	 else
-	 character->state = &Character::standby;
-	 }
-	 */
-}
-
 void Character::empiezoContacto(b2Fixture* fixture) {
 
 	//contacto con derecha?
@@ -170,14 +163,6 @@ void Character::empiezoContacto(b2Fixture* fixture) {
 	if (paredIzquierda == fixture)
 		contactosIzquierda++;
 
-	//Contacto con Piso?
-	if (fixture == piso) {
-
-		if (contactosActuales == 0)
-			cambiarEstadoAlAterrizar(this);
-
-		contactosActuales++;
-	}
 }
 
 void Character::beginContact(Figura* figura, b2Contact* contact) {
@@ -192,6 +177,22 @@ void Character::beginContact(Figura* figura, b2Contact* contact) {
 
 }
 
+void Character::endContact(Figura* figura, b2Contact* contact) {
+
+	b2Fixture *fix;
+
+	if (!figura->esEstatico())
+		return;
+
+	if (contact->GetFixtureA()->GetUserData() == this)
+		fix = contact->GetFixtureA();
+	else
+		fix = contact->GetFixtureB();
+
+	terminoContacto(fix);
+
+}
+
 void Character::terminoContacto(b2Fixture* fixture) {
 
 	if (paredDerecha == fixture)
@@ -200,16 +201,6 @@ void Character::terminoContacto(b2Fixture* fixture) {
 	if (paredIzquierda == fixture)
 		contactosIzquierda--;
 
-	if (piso == fixture) {
-
-		contactosActuales--;
-
-		if (contactosActuales == 0 && state->getCode() != JUMPING) {
-			noAtravezarPlataformas();
-
-		}
-
-	}
 }
 
 void Character::atravezarPlataformas() {
@@ -268,7 +259,6 @@ void Character::kick() {
 void Character::noAtravezarPlataformas() {
 	return;
 }
-;
 
 void Character::detectarEstado() {
 
@@ -285,8 +275,9 @@ void Character::detectarEstado() {
 	}
 
 	//Esta cayendo?
-	if (getVelocity().y <= 0.0f && getContactosActuales() == 0) {
+	if (getVelocity().y < 0.0f && estaEnAire()) {
 		state = &Character::falling;
+		this->noAtravezarPlataformas();
 		return;
 	}
 
@@ -297,14 +288,18 @@ void Character::detectarEstado() {
 	}
 
 	//Esta saltando?
-	if (getVelocity().y > 0.0f && getContactosActuales() == 0) {
+	if (getVelocity().y > 0.0f && estaEnAire()) {
 		state = &Character::jumping;
 		return;
 	}
 
 	//Esta caminando?
 	if (movimientoDerecha || movimientoIzquierda) {
-		state = &Character::walking;
+
+		if (movimientoEmpujando > 0)
+			state = &Character::pushing;
+		else
+			state = &Character::walking;
 		return;
 	}
 }
@@ -316,6 +311,6 @@ void Character::controlarEstado() {
 	decreaseJumpCooldown();
 	decreaseShootCooldown();
 	move();
-	realizarDisparo();
+	shoot();
 
 }

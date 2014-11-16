@@ -44,6 +44,7 @@ public:
 	void beginContact(Figura*, b2Contact*);
 	void beginContactBolaNieve(BolaNieve*, b2Contact*);
 	void beginContactBolaEnemigo(BolaEnemigo*, b2Contact*);
+	void endContact(Figura*, b2Contact*);
 	void congelar();
 	void controlarEstado();
 	void disparar();

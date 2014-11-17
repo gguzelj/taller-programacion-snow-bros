@@ -17,7 +17,8 @@
 
 #include "Objetos/Personajes/Character.h"
 #include "Objetos/Personajes/Personaje.h"
-#include "Objetos/Personajes/Enemigo.h"
+#include "Objetos/Personajes/EnemigoBasico.h"
+#include "Objetos/Personajes/EnemigoFuego.h"
 
 #include "Objetos/Figura.h"
 #include "Objetos/Figuras/Circulo.h"
@@ -48,6 +49,7 @@ typedef struct personaje {
 } personaje_t;
 
 typedef struct enemigo {
+	int tipo;
 	punto_t centro;
 	float ancho;
 	float alto;

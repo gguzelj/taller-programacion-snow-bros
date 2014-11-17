@@ -18,7 +18,6 @@ Enemigo::Enemigo(JsonParser *parser, int index, Escenario* escenario) {
 	this->movimientoIzquierda = false;
 	this->tiempoDeImpactoDeLaUltimaBola = 0.0f;
 	this->esAtravezable = false;
-	this->type = ID_ENEMIGO;
 	this->lives = 5;
 	this->ancho = MITAD_ANCHO_ENEMIGO;
 	this->alto = MITAD_ALTO_ENEMIGO;

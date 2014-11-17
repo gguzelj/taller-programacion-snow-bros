@@ -13,7 +13,7 @@
 class Escenario;
 
 class Enemigo: public Character {
-private:
+protected:
 
 	Escenario *escenario_;
 	int nivelDeCongelamiento;

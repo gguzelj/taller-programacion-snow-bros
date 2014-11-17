@@ -29,6 +29,7 @@
 #define POLIGONO               "poligono"
 #define TRAPECIO               "trapecio"
 #define ENEMIGOBASICO			"enemigobasico"
+#define ENEMIGOFUEGO			"enemigofuego"
 
 //Valores Default para el juego
 #define MAXIMO_JUGADORES_DEF	4

@@ -5,7 +5,6 @@ int turnCooldown = 0;
 Escenario::Escenario(JsonParser *parser) {
 
 	Figura* figura_i;
-	Rectangulo* muro_i;
 	b2Vec2 gravity(0.0f, parser->getGravedad());
 
 	cantidadMaximaDePersonajes = parser->getConnectionsLimit();
@@ -21,13 +20,14 @@ Escenario::Escenario(JsonParser *parser) {
 	world_->SetContactListener(&contactos);
 
 	//Create the ground
-	muro_i = new Rectangulo(ancho_un, 0, 0, 0, -alto_un/2, world_);
-	//figurasEstaticas_->push_back(muro_i);
+	new Rectangulo(ancho_un, 0, 0, 0, -alto_un/2, world_);
+
 	//Create the roof
-	muro_i = new Rectangulo(ancho_un, 0, 0, 0, ALTURA_DEL_TECHO, world_);
+	new Rectangulo(ancho_un, 0, 0, 0, ALTURA_DEL_TECHO, world_);
+
 	//And walls
-	muro_i = new Rectangulo(0, alto_un, 0, ancho_un/2, 0, world_);
-	muro_i = new Rectangulo(0, alto_un, 0, -ancho_un/2, 0, world_);
+	new Rectangulo(0, alto_un, 0, ancho_un/2, 0, world_);
+	new Rectangulo(0, alto_un, 0, -ancho_un/2, 0, world_);
 
 	// Create all the objects
 	for (unsigned int index = 0; index < parser->getCantidadObjetos();
@@ -48,10 +48,11 @@ Escenario::Escenario(JsonParser *parser) {
 		else if (parser->getTipoObjeto(index) == TRAPECIO)
 			figura_i = new Trapecio(parser, index, world_);
 
-		else if (parser->getTipoObjeto(index) == ENEMIGOBASICO) {
-			Enemigo* nuevoEnemigo = new Enemigo(parser, index, this); //todo puede haber error si no se crea cuidado!!
-			enemigos_->push_back(nuevoEnemigo);
-		}
+		else if (parser->getTipoObjeto(index) == ENEMIGOBASICO)
+			enemigos_->push_back(new EnemigoBasico(parser, index, this));
+
+		else if (parser->getTipoObjeto(index) == ENEMIGOFUEGO)
+			enemigos_->push_back(new EnemigoFuego(parser, index, this));
 
 		else
 			throw ErrorTipoDeObjeto();
@@ -298,6 +299,7 @@ enemigo_t* Escenario::getEnemigosParaEnvio() {
 	int i = 0;
 	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end();
 			++enemigo) {
+		enems[i].tipo = (*enemigo)->type;
 		enems[i].alto = (*enemigo)->getAlto() * 2;
 		enems[i].ancho = (*enemigo)->getAncho() * 2;
 		enems[i].orientacion = (*enemigo)->getOrientacion();

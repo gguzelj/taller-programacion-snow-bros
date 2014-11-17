@@ -1,4 +1,5 @@
 #include "../../../../headers/Modelo/Objetos/Proyectiles/BolaEnemigo.h"
+#include <ctime>
 
 BolaEnemigo::BolaEnemigo(float x, float y, b2World* world) {
 	this->type = ID_BOLA_NIEVE_ENEMIGO;
@@ -11,6 +12,8 @@ BolaEnemigo::BolaEnemigo(float x, float y, b2World* world) {
 	this->estatico = false;
 	this->destruir = false;
 	this->world = world;
+	this->velocidad = {25,0};
+
 
 	//Defino el body y fixture
 	b2BodyDef cuerpoDeCirculo;
@@ -58,8 +61,30 @@ char BolaEnemigo::getId() {
 	return BOLA_NIEVE_CODE;
 }
 
+
+void BolaEnemigo::actualizar(){
+	if(this->getVelocidad().y <0)
+		this->velocidad.y = this->getVelocidad().y;
+	else
+		this->velocidad.y = 0;
+	if (this->getVelocidad().x > 0){
+		this->velocidad.x = 25;
+	}
+	else
+		this->velocidad.x = -25;
+	this->setVelocidad(velocidad);
+}
+
+
 void BolaEnemigo::morir(){
-	sleep(15);
+	time_t tiempoInicial, tiempoFinal;
+	time(&tiempoInicial);
+	time(&tiempoFinal);
+	while(difftime(tiempoFinal,tiempoInicial) < 7){
+		sleep(0.5);
+		this->actualizar();
+		time(&tiempoFinal);
+	}
 	destruir = true;
 }
 

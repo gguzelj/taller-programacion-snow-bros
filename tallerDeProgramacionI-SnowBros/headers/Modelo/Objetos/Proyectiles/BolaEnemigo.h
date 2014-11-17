@@ -10,6 +10,7 @@
 class BolaEnemigo: public Proyectil {
 
 private:
+	b2Vec2 velocidad;
 	float radio;
 
 public:
@@ -19,7 +20,15 @@ public:
 	BolaEnemigo(float x, float y,b2World* world);
 	virtual ~BolaEnemigo();
 
+	b2Vec2 getPosicion(){
+		return (this->body)->GetPosition();
+	}
+
 	void setVelocidad(b2Vec2 velocidad);
+
+	b2Vec2 getVelocidad(){
+		return this->body->GetLinearVelocity();
+	}
 
 	float getRadio();
 
@@ -34,6 +43,8 @@ public:
 	b2Body* getb2Body(){
 		return body;
 	}
+
+	void actualizar();
 
 	void beginContact(Figura*, b2Contact*);
 

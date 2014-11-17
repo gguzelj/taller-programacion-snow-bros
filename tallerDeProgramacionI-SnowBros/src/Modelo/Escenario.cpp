@@ -165,6 +165,8 @@ void Escenario::preStep() {
 
 	for (auto en = enemigos_->begin(); en != enemigos_->end(); ++en) {
 		if (!(*en)->estaVivo) {
+			int puntos = (*en)->getPuntos();
+			addPointsToPlayers(puntos);
 			world_->DestroyBody((*en)->getb2Body());
 			enemigos_->erase(en++);
 		} else
@@ -177,6 +179,12 @@ void Escenario::step() {
 	preStep();
 	getWorld()->Step(timeStep, velocityIterations, positionIterations);
 	actualizarEnemigos();
+}
+
+void Escenario::addPointsToPlayers(int puntos){
+	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {
+		(*per)->addPoints(puntos);
+	}
 }
 
 unsigned int Escenario::getCantPersonajes() {

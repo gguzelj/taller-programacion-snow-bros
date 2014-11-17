@@ -250,12 +250,6 @@ void Character::detectarEstado() {
 		state = &Character::walking;
 		return;
 	}
-
-	//Evitar un bug de cuando se cae que no quede en el aire puede causar moonwalk, sino setearlo en standby
-	if (!(estaEnAire()) && getVelocity().y == 0.0f) {
-		state = &Character::walking;
-		return;
-	}
 }
 
 void Character::controlarEstado() {

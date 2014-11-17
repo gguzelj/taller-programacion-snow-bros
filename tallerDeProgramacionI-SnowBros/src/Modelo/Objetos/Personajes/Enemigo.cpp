@@ -12,8 +12,8 @@ Enemigo::Enemigo(JsonParser *parser, int index, Escenario* escenario) {
 	this->x = parser->getCoorXObjeto(index);
 	this->y = parser->getCoorYObjeto(index);
 	this->state = &Enemigo::standby;
-	this->state = nullptr;
 	this->orientacion = ORIENTACION_INICIAL;
+	this->movimientoDisparar = false;
 	this->movimientoDerecha = false;
 	this->movimientoIzquierda = false;
 	this->tiempoDeImpactoDeLaUltimaBola = 0.0f;
@@ -247,8 +247,6 @@ void Enemigo::mover() {
 	float posicionPersonajeY = posicionesY[0];
 	float posicionEnemigoX = this->getX();
 	float posicionEnemigoY = this->getY();
-	this->handleInput(SDLK_SPACE, SDL_KEYUP);
-
 
 	int v1 = rand() % 100;
 	if (v1 < 45) {

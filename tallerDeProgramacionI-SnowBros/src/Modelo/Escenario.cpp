@@ -21,12 +21,13 @@ Escenario::Escenario(JsonParser *parser) {
 	world_->SetContactListener(&contactos);
 
 	//Create the ground
-	muro_i = new Rectangulo(ANCHO_DEL_PISO, 0, 0, 0, ALTURA_DEL_PISO, world_);
+	muro_i = new Rectangulo(ancho_un, 0, 0, 0, -alto_un/2, world_);
+	//figurasEstaticas_->push_back(muro_i);
 	//Create the roof
-	muro_i = new Rectangulo(ANCHO_DEL_PISO, 0, 0, 0, ALTURA_DEL_TECHO, world_);
+	muro_i = new Rectangulo(ancho_un, 0, 0, 0, ALTURA_DEL_TECHO, world_);
 	//And walls
-	muro_i = new Rectangulo(0, ALTO_DE_PARED, 0, LIMITE_PARED, 0, world_);
-	muro_i = new Rectangulo(0, ALTO_DE_PARED, 0, -LIMITE_PARED, 0, world_);
+	muro_i = new Rectangulo(0, alto_un, 0, ancho_un/2, 0, world_);
+	muro_i = new Rectangulo(0, alto_un, 0, -ancho_un/2, 0, world_);
 
 	// Create all the objects
 	for (unsigned int index = 0; index < parser->getCantidadObjetos();
@@ -164,8 +165,6 @@ void Escenario::preStep() {
 
 	for (auto en = enemigos_->begin(); en != enemigos_->end(); ++en) {
 		if (!(*en)->estaVivo) {
-			int puntos = (*en)->getPuntos();
-			addPointsToPlayers(puntos);
 			world_->DestroyBody((*en)->getb2Body());
 			enemigos_->erase(en++);
 		} else
@@ -178,12 +177,6 @@ void Escenario::step() {
 	preStep();
 	getWorld()->Step(timeStep, velocityIterations, positionIterations);
 	actualizarEnemigos();
-}
-
-void Escenario::addPointsToPlayers(int puntos){
-	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {
-		(*per)->addPoints(puntos);
-	}
 }
 
 unsigned int Escenario::getCantPersonajes() {

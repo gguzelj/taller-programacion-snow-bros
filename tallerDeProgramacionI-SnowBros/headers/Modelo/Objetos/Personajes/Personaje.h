@@ -40,6 +40,12 @@ public:
 	void beginContactBolaEnemigo(BolaEnemigo*, b2Contact*);
 
 	/*
+	 * Definimos el comportamiento del personaje ante la reaccion con
+	 * una bola de Fuego
+	 */
+	void beginContactBolaFuego(BolaFuego*, b2Contact*);
+
+	/*
 	 * Encargado de realizar las acciones pertinentes en caso de que el
 	 * Personaje entre en contacto con un Enemigo
 	 */

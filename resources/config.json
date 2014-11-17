@@ -5,87 +5,85 @@
         "objetos": [
                      {
                        "tipo":"rectangulo",
-                       "x":-19,
-                       "y":-25,
-                       "alto":1,
-                       "ancho":20,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":19,
-                       "y":-25,
-                       "alto":1,
-                       "ancho":20,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-19,
-                       "y":-15,
-                       "alto":1,
-                       "ancho":20,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":19,
-                       "y":-15,
-                       "alto":1,
-                       "ancho":20,
-                       "rot":0,
-                       "masa":3,
-                       "estatico":true
-                     },
-                     {
-                       "tipo":"rectangulo",
-                       "x":-19,
+                       "x":-23,
                        "y":-5,
                        "alto":1,
-                       "ancho":20,
+                       "ancho":10,
                        "rot":0,
                        "masa":3,
                        "estatico":true
                      },
                      {
                        "tipo":"rectangulo",
-                       "x":19,
+                       "x":23,
                        "y":-5,
                        "alto":1,
-                       "ancho":20,
+                       "ancho":10,
                        "rot":0,
                        "masa":3,
                        "estatico":true
-                     },                     
-                    {
-                       "tipo":"poligono",
-                       "lados":3,
-                       "x":-5,
-                       "y":-20,
-                       "escala":3,
-                       "color":"#8834AA",
+                     },
+                     {
+                       "tipo":"rectangulo",
+                       "x":25.5,
+                       "y":-12,
+                       "alto":1,
+                       "ancho":5,
                        "rot":0,
-                       "masa":5,
+                       "masa":3,
                        "estatico":true
-                     }, 
-                                         {
-                       "tipo":"poligono",
-                       "lados":3,
-                       "x":5,
-                       "y":-20,
-                       "escala":3,
-                       "color":"#8834AA",
+                     },
+                     {
+                       "tipo":"rectangulo",
+                       "x":-25.5,
+                       "y":-12,
+                       "alto":1,
+                       "ancho":5,
                        "rot":0,
-                       "masa":5,
+                       "masa":3,
                        "estatico":true
-                     }, 
-                    {
+                     },
+                     {
+                       "tipo":"rectangulo",
+                       "x":18,
+                       "y":-12,
+                       "alto":1,
+                       "ancho":5,
+                       "rot":0,
+                       "masa":3,
+                       "estatico":true
+                     },
+                     {
+                       "tipo":"rectangulo",
+                       "x":-18,
+                       "y":-12,
+                       "alto":1,
+                       "ancho":5,
+                       "rot":0,
+                       "masa":3,
+                       "estatico":true
+                     },
+                     {
+                       "tipo":"rectangulo",
+                       "x":10.5,
+                       "y":-12,
+                       "alto":1,
+                       "ancho":5,
+                       "rot":0,
+                       "masa":3,
+                       "estatico":true
+                     },
+                     {
+                       "tipo":"rectangulo",
+                       "x":-10.5,
+                       "y":-12,
+                       "alto":1,
+                       "ancho":5,
+                       "rot":0,
+                       "masa":3,
+                       "estatico":true
+                     },
+                     {
                        "tipo":"poligono",
                        "lados":4,
                        "x":-5,
@@ -106,27 +104,7 @@
                        "rot":45,
                        "masa":5,
                        "estatico":true
-                     }, 
-                     {
-                       "tipo":"circulo",
-                       "x":-22,
-                       "y":-23,
-                       "escala":1.5,
-                       "color":"#1234AA",
-                       "rot":0,
-                       "masa":5,
-                       "estatico":false
-                     },
-                     {
-                       "tipo":"circulo",
-                       "x":22,
-                       "y":-23,
-                       "escala":1.5,
-                       "color":"#1234AA",
-                       "rot":0,
-                       "masa":5,
-                       "estatico":false
-                     },                          
+                     },       
                      {
                        "tipo":"enemigobasico",
                        "x":10,

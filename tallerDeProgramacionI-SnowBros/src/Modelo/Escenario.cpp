@@ -21,16 +21,12 @@ Escenario::Escenario(JsonParser *parser) {
 	world_->SetContactListener(&contactos);
 
 	//Create the ground
-	muro_i = new Rectangulo(ANCHO_DEL_PISO, 1, 0, 0, ALTURA_DEL_PISO, world_);
-	figurasEstaticas_->push_back(muro_i);
+	muro_i = new Rectangulo(ANCHO_DEL_PISO, 0, 0, 0, ALTURA_DEL_PISO, world_);
 	//Create the roof
-	muro_i = new Rectangulo(ANCHO_DEL_PISO, 1.5, 0, 0, ALTURA_DEL_TECHO, world_);
-	figurasEstaticas_->push_back(muro_i);
+	muro_i = new Rectangulo(ANCHO_DEL_PISO, 0, 0, 0, ALTURA_DEL_TECHO, world_);
 	//And walls
-	muro_i = new Rectangulo(1, ALTO_DE_PARED, 0, LIMITE_PARED, 0, world_);
-	figurasEstaticas_->push_back(muro_i);
-	muro_i = new Rectangulo(1, ALTO_DE_PARED, 0, -LIMITE_PARED, 0, world_);
-	figurasEstaticas_->push_back(muro_i);
+	muro_i = new Rectangulo(0, ALTO_DE_PARED, 0, LIMITE_PARED, 0, world_);
+	muro_i = new Rectangulo(0, ALTO_DE_PARED, 0, -LIMITE_PARED, 0, world_);
 
 	// Create all the objects
 	for (unsigned int index = 0; index < parser->getCantidadObjetos();

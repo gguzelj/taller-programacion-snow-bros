@@ -247,6 +247,8 @@ void Enemigo::mover() {
 	float posicionPersonajeY = posicionesY[0];
 	float posicionEnemigoX = this->getX();
 	float posicionEnemigoY = this->getY();
+	this->handleInput(SDLK_SPACE, SDL_KEYUP);
+
 
 	int v1 = rand() % 100;
 	if (v1 < 45) {

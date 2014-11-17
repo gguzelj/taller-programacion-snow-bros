@@ -250,7 +250,7 @@ void Personaje::kick() {
 	for (b2ContactEdge *ce = this->body->GetContactList(); ce; ce = ce->next) {
 		b2Contact* c = ce->contact;
 		Figura *figuraA = (Figura*) c->GetFixtureA()->GetUserData();
-		if (figuraA->type == ID_ENEMIGO) {
+		if (figuraA->type == ID_ENEMIGO_BASICO || figuraA->type == ID_ENEMIGO_FUEGO) {
 			((Enemigo*) figuraA)->setOrientacion(this->orientacion);
 			((Enemigo*) figuraA)->morir();
 			return;

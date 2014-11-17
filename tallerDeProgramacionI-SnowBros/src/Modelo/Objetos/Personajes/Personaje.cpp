@@ -153,19 +153,16 @@ bool Personaje::estaEmpujandoEnemigo() {
 	for (b2ContactEdge *ce = this->body->GetContactList(); ce; ce = ce->next) {
 		b2Contact* c = ce->contact;
 
-		if (c->GetFixtureA() == pared) {
+		if (c->GetFixtureA() == pared)
 			figura = (Figura*) c->GetFixtureB()->GetUserData();
-			if (figura->type == ID_ENEMIGO) {
-				return ((Enemigo*) figura)->estaCongelado();
-			}
-		}
-
-		if (c->GetFixtureB() == pared) {
+		else if (c->GetFixtureB() == pared)
 			figura = (Figura*) c->GetFixtureA()->GetUserData();
-			if (figura->type == ID_ENEMIGO) {
-				return ((Enemigo*) figura)->estaCongelado();
-			}
-		}
+		else
+			continue;
+
+		if (figura->type == ID_ENEMIGO_BASICO || figura->type == ID_ENEMIGO_FUEGO)
+			return ((Enemigo*) figura)->estaCongelado();
+
 	}
 
 	return false;
@@ -179,8 +176,8 @@ void Personaje::controlarEstado() {
 		if (estaEmpujandoEnemigo())
 			state = &Character::pushing;
 
-	//Seteamos esto aca que me parece lo mas facil, e intuitivo.
-	//Disminuyo el cooldown de patear.
+//Seteamos esto aca que me parece lo mas facil, e intuitivo.
+//Disminuyo el cooldown de patear.
 	decreaseKickCooldown();
 
 	if (state == &Personaje::kicking && getKickCooldown() == 0) {
@@ -249,7 +246,7 @@ void Personaje::shoot() {
 
 void Personaje::kick() {
 	kickCooldown = 12;
-	//Iteramos con los contactos de nuestro personaje hasta encontrar al enemigo y luego lo matamos
+//Iteramos con los contactos de nuestro personaje hasta encontrar al enemigo y luego lo matamos
 	for (b2ContactEdge *ce = this->body->GetContactList(); ce; ce = ce->next) {
 		b2Contact* c = ce->contact;
 		Figura *figuraA = (Figura*) c->GetFixtureA()->GetUserData();
@@ -374,6 +371,6 @@ void Personaje::hacerInmune() {
 	inmune = false;
 }
 
-void Personaje::addPoints(int puntos){
-	points+=puntos;
+void Personaje::addPoints(int puntos) {
+	points += puntos;
 }

@@ -28,8 +28,8 @@
 #define ID_PERSONAJE 8
 #define ID_BOLA_NIEVE 9
 #define ID_BOLA_NIEVE_ENEMIGO 10
-#define ID_ENEMIGO_BASICO 11;
-#define ID_ENEMIGO_FUEGO 12;
+#define ID_ENEMIGO_BASICO 11
+#define ID_ENEMIGO_FUEGO 12
 
 #define FIGURA_WARNING_OVERLAP "El siguiente objeto se esta superponiendo con otros ya creados \n"
 

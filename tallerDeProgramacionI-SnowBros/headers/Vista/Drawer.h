@@ -98,6 +98,7 @@ typedef struct personaje{
 }personaje_t;
 
 typedef struct enemigo{
+	int tipo;
 	punto_t centro;
 	float ancho;
 	float alto;

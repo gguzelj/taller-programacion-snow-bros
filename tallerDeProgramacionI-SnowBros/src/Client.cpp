@@ -76,6 +76,7 @@ int Client::run() {
 		dataFromServer_t data;
 		bool hayData = shared_rcv_queue_->try_pop(data);
 		if (hayData){
+
 			onRender(data);
 			free(data.proyectiles);
 			free(data.enemigos);

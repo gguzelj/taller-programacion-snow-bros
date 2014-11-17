@@ -1,9 +1,3 @@
-/*
- * sprite.h
- *
- *  Created on: 19/9/2014
- *      Author: anonimo
- */
 #include "SDL2/SDL.h"
 
 #define SPRITE_PATH "resources/sprites/sprite_player_own.png"
@@ -63,6 +57,7 @@ void dibujarFrame(SDL_Renderer *renderer,SDL_Texture *texture,char orientacion, 
 
 //orientacion l = izquierda ; r = derecha;
 void drawPersonajeWalking(SDL_Renderer *renderer,SDL_Texture *texture,const char orientacion, int pos_x,int pos_y,int ancho,int alto){
+
 	//Get ticks te da el tiempo en milisegundo desde el arranque de la ejecucion.
 	Uint32 ticks = SDL_GetTicks();
 	//con 150 me parece que se ve bien, aumentar para verlo mas lendo o disminuir el parametro para verlo mas rapido.
@@ -75,6 +70,7 @@ void drawPersonajeWalking(SDL_Renderer *renderer,SDL_Texture *texture,const char
 }
 
 void drawPersonajeJumping(SDL_Renderer *renderer,SDL_Texture *texture,const char orientacion, int pos_x,int pos_y,int ancho,int alto){
+
 	Uint32 ticks = SDL_GetTicks();
 	Uint32 sprite = (ticks / 100 ) % FRAMES_SALTAR;
 
@@ -85,6 +81,7 @@ void drawPersonajeJumping(SDL_Renderer *renderer,SDL_Texture *texture,const char
 }
 
 void drawPersonajeStandBy(SDL_Renderer *renderer,SDL_Texture *texture,const char orientacion, int pos_x,int pos_y,int ancho,int alto){
+
 	SDL_Rect srcrect = { POS_X_STANDBY ,POS_Y_STANDBY, ANCHO_DEFAULT, ALTO_DEFAULT };
 	SDL_Rect dstrect = { pos_x - (ancho/2), pos_y -( alto/2), ancho , alto};
 
@@ -92,6 +89,7 @@ void drawPersonajeStandBy(SDL_Renderer *renderer,SDL_Texture *texture,const char
 }
 
 void drawPersonajeFalling(SDL_Renderer *renderer,SDL_Texture *texture,const char orientacion, int pos_x,int pos_y,int ancho,int alto){
+
 	SDL_Rect srcrect = {  POS_X_CAYENDO ,POS_Y_CAYENDO, ANCHO_DEFAULT, ALTO_DEFAULT };
 	SDL_Rect dstrect = { pos_x - (ancho/2), pos_y -( alto/2), ancho , alto};
 
@@ -99,6 +97,7 @@ void drawPersonajeFalling(SDL_Renderer *renderer,SDL_Texture *texture,const char
 }
 
 void drawPersonajeShooting(SDL_Renderer *renderer,SDL_Texture *texture,const char orientacion, int pos_x,int pos_y,int ancho,int alto){
+
 	//Get ticks te da el tiempo en milisegundo desde el arranque de la ejecucion.
 	Uint32 ticks = SDL_GetTicks();
 	//Aumentar para verlo mas lento o disminuir el parametro para verlo mas rapido.

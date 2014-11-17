@@ -152,6 +152,7 @@ Drawer::Drawer() {
 	this->congelamientoTres = nullptr;
 	this->congelamientoCuatro = nullptr;
 	this->fontToBeUsed = nullptr;
+
 	//Tamaños para dibujar el texto en pantalla. Los inicializo en 0, despues se modifican.
 	this->altoText = 0;
 	this->anchoPoints = 0;
@@ -160,8 +161,17 @@ Drawer::Drawer() {
 	this->anchoWaiting = 0;
 	this->altoWaiting = 0;
 
+	//Limites
+	this->limDerCamera = 0;
+	this->limInfCamera = 0;
+	this->limIzqCamera = 0;
+	this->limSupCamera = 0;
+	this->limiteDerecho = 0;
+	this->limiteInferior = 0;
+	this->limiteIzquierdo = 0;
+	this->limiteSuperior = 0;
+
 	//Paths
-//	this->imagePath = "resources/snowBackground.png";
 	this->imagePath = "resources/background1.png";
 	this->fontPath = "resources/dailypla.ttf";
 	this->rectangleImage = "resources/textures/rectangle.png";
@@ -179,8 +189,8 @@ Drawer::Drawer() {
 	this->lives = "Lives: ";
 
 	//Hardcodeo esto por ahora.
-	this->ancho_px = 800;
-	this->alto_px = 540;
+	this->ancho_px = 1366;
+	this->alto_px = 720;
 
 	std::ifstream in(imagePath);
 	unsigned int width, height;
@@ -192,9 +202,9 @@ Drawer::Drawer() {
 	width = ntohl(width);
 	height = ntohl(height);
 
-	this->alto_un = ((float)height) / FACTOR_CONVERSION_UN_A_PX;//Alto de la imagen dividido factor de conversion
-	this->ancho_un = ((float) width) / FACTOR_CONVERSION_UN_A_PX;//Ancho de la imagen dividido factor de conversion
-	this->currentZoomFactor = 1.5;
+	this->alto_un = (float)height / FACTOR_CONVERSION_UN_A_PX;//Alto de la imagen dividido factor de conversion
+	this->ancho_un = (float) width / FACTOR_CONVERSION_UN_A_PX;//Ancho de la imagen dividido factor de conversion
+	this->currentZoomFactor = 1.0;
 	this->camera = {0,0,ancho_px / currentZoomFactor,alto_px / (currentZoomFactor)};
 	this->coordRel = {0,0,ancho_px,alto_px};
 

@@ -1,6 +1,7 @@
 #include "SDL2/SDL.h"
 #include "sprite.h"
 
+#define ENEMIGO_FUEGO_SPRITE_PATH "resources/sprites/SnowBrosEnemigoFuego.png"
 #define ENEMY_SPRITE_PATH "resources/sprites/SnowBrosEnemigos.png"
 #define CONGELAMIENTO_NIVEL_UNO_PATH "resources/textures/snowball_uno.png"
 #define CONGELAMIENTO_NIVEL_DOS_PATH "resources/textures/snowball_dos.png"

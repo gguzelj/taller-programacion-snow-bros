@@ -147,6 +147,7 @@ Drawer::Drawer() {
 	this->imagenPersonaje4 = nullptr;
 	this->imagenPersonaje5 = nullptr;
 	this->imagenEnemigos = nullptr;
+	this->imagenEnemigoFuego = nullptr;
 	this->congelamientoUno = nullptr;
 	this->congelamientoDos = nullptr;
 	this->congelamientoTres = nullptr;
@@ -225,6 +226,7 @@ Drawer::~Drawer() {
 	SDL_DestroyTexture(imagenPersonaje4);
 	SDL_DestroyTexture(imagenPersonaje5);
 	SDL_DestroyTexture(imagenEnemigos);
+	SDL_DestroyTexture(imagenEnemigoFuego);
 	SDL_DestroyTexture(congelamientoUno);
 	SDL_DestroyTexture(congelamientoDos);
 	SDL_DestroyTexture(congelamientoTres);
@@ -420,6 +422,8 @@ void Drawer::drawProyectil(proyectil_t proy) {
 
 void Drawer::drawEnemy(enemigo_t enemigo) {
 
+	SDL_Texture* imagen;
+
 	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
 	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);
 
@@ -436,21 +440,26 @@ void Drawer::drawEnemy(enemigo_t enemigo) {
 	int pos_x = coord_relativa(coordRel.x, un_to_px_x * (enemigo.centro.x ) + ox);
 	int pos_y = coord_relativa(coordRel.y, -un_to_px_y * (enemigo.centro.y) + oy);
 
+	if(enemigo.tipo == ID_ENEMIGO_BASICO)
+		imagen = imagenEnemigos;
+	else if(enemigo.tipo == ID_ENEMIGO_FUEGO)
+		imagen = imagenEnemigoFuego;
+
 	if(enemigo.nivelDeCongelamiento == 7)
 		drawCongelamiento(this->renderer, congelamientoCuatro, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
 	else{
 		switch (codigo_estado) {
 		case JUMPING:
-			drawStandardEnemyJumping(this->renderer, imagenEnemigos, orientacion, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+			drawStandardEnemyJumping(this->renderer, imagen, orientacion, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
 			break;
 		case STANDBY:
-			drawStandardEnemyStandBy(renderer, imagenEnemigos, orientacion, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+			drawStandardEnemyStandBy(renderer, imagen, orientacion, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
 			break;
 		case WALKING:
-			drawStandardEnemyWalking(renderer, imagenEnemigos, orientacion, pos_x, pos_y,  ancho * un_to_px_x, alto * un_to_px_y);
+			drawStandardEnemyWalking(renderer, imagen, orientacion, pos_x, pos_y,  ancho * un_to_px_x, alto * un_to_px_y);
 			break;
 		case FALLING:
-			drawStandardEnemyFalling(renderer, imagenEnemigos, orientacion, pos_x, pos_y,  ancho * un_to_px_x, alto * un_to_px_y);
+			drawStandardEnemyFalling(renderer, imagen, orientacion, pos_x, pos_y,  ancho * un_to_px_x, alto * un_to_px_y);
 			break;
 		}
 		if(enemigo.nivelDeCongelamiento >0){
@@ -779,6 +788,11 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 
 	imagenEnemigos = this->loadTexture(ENEMY_SPRITE_PATH, this->renderer);
 	if (imagenEnemigos == nullptr) {
+		manageLoadCharacterError();
+	}
+
+	imagenEnemigoFuego = this->loadTexture(ENEMIGO_FUEGO_SPRITE_PATH, this->renderer);
+	if (imagenEnemigoFuego == nullptr) {
 		manageLoadCharacterError();
 	}
 

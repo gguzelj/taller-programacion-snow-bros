@@ -30,6 +30,9 @@
 #define PENTAGONO_CODE '5'
 #define HEXAGONO_CODE '6'
 
+#define ID_ENEMIGO_BASICO 11
+#define ID_ENEMIGO_FUEGO 12
+
 //Conversion de unidades
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
@@ -162,6 +165,7 @@ private:
 	SDL_Texture* imagenPersonaje4;
 	SDL_Texture* imagenPersonaje5;
 	SDL_Texture* imagenEnemigos;
+	SDL_Texture* imagenEnemigoFuego;
 	SDL_Texture* congelamientoUno;
 	SDL_Texture* congelamientoDos;
 	SDL_Texture* congelamientoTres;

@@ -4,7 +4,6 @@
 #define RADIO_BOLA_NIEVE_ENEMIGO 1
 #define MASA_BOLA_NIEVE_ENEMIGO 100
 
-#include <unistd.h>
 #include "Proyectil.h"
 
 class BolaEnemigo: public Proyectil {

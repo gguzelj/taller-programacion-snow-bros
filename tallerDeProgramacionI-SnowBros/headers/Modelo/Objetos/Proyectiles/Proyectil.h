@@ -1,6 +1,7 @@
 #ifndef PROYECTIL_H_
 #define PROYECTIL_H_
 
+#include <unistd.h>
 #include <math.h>
 #include <Box2D/Box2D.h>
 #include <Box2D/Collision/b2Collision.h>

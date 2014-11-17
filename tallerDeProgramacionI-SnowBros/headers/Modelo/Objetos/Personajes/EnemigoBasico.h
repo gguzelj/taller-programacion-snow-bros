@@ -7,6 +7,8 @@ class EnemigoBasico: public Enemigo {
 public:
 	EnemigoBasico(JsonParser*, int index, Escenario*);
 	virtual ~EnemigoBasico();
+
+	void mover();
 };
 
 #endif /* SRC_MODELO_OBJETOS_PERSONAJES_ENEMIGOBASICO_H_ */

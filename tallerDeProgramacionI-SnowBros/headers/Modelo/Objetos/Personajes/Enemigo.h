@@ -34,6 +34,8 @@ public:
 	Enemigo(JsonParser *parser, int index, Escenario* escenario);
 	~Enemigo();
 
+	virtual void mover();
+
 	b2Body* getb2Body();
 
 	bool estaCongelado();
@@ -54,7 +56,6 @@ public:
 	void handleInput(SDL_Keycode input, Uint32 input_type);
 	void jump();
 	void morir();
-	void mover();
 	void movimientoBola();
 
 };

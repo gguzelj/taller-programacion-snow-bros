@@ -182,11 +182,6 @@ private:
 	void clean();
 
 	/*
-	 * TODO y esto? No encuentro definicion del metodo.
-	 */
-	void movimientoDelEnemigo(Enemigo* enemigo);
-
-	/*
 	 * Agrega los puntos ganados al eliminar un enemigo, a cada jugador
 	 */
 	void addPointsToPlayers(int puntos);

@@ -6,6 +6,7 @@
 #define MURO_FILTER_INDEX -15
 #define BOLA_ENEMIGO_FILTER_INDEX -5
 
+#define BOLA_FUEGO_CODE 'f'
 #define BOLA_NIEVE_CODE 'b'
 #define BOLA_NIEVE_ENEMIGO_CODE 'e'
 #define CIRCULO_CODE 'c'
@@ -30,6 +31,7 @@
 #define ID_BOLA_NIEVE_ENEMIGO 10
 #define ID_ENEMIGO_BASICO 11
 #define ID_ENEMIGO_FUEGO 12
+#define ID_BOLA_FUEGO 13
 
 #define FIGURA_WARNING_OVERLAP "El siguiente objeto se esta superponiendo con otros ya creados \n"
 
@@ -49,6 +51,7 @@ class Trapecio;
 class Personaje;
 class BolaNieve;
 class BolaEnemigo;
+class BolaFuego;
 
 /*
  * Clase abstracta de la cual van a heredar todos los tipos de figuras (Rectangulo, Poligono, Circulo, Parelelogramo)
@@ -96,6 +99,7 @@ public:
 	virtual void beginContactPersonaje(Personaje*,b2Contact*){};
 	virtual void beginContactBolaNieve(BolaNieve*,b2Contact*){};
 	virtual void beginContactBolaEnemigo(BolaEnemigo*,b2Contact*){};
+	virtual void beginContactBolaFuego(BolaFuego*,b2Contact*){};
 
 	virtual void endContactCirculo(Circulo*,b2Contact*){};
 	virtual void endContactMuro(Muro*,b2Contact*){};
@@ -107,6 +111,7 @@ public:
 	virtual void endContactPersonaje(Personaje*,b2Contact*){};
 	virtual void endContactBolaNieve(BolaNieve*,b2Contact*){};
 	virtual void endContactBolaEnemigo(BolaEnemigo*,b2Contact*){};
+	virtual void endContactBolaFuego(BolaFuego*,b2Contact*){};
 
 };
 

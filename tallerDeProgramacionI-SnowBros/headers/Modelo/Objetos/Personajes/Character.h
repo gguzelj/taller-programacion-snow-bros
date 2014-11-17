@@ -11,6 +11,7 @@
 #include "../../Estados/Estados.h"
 #include "../Proyectiles/BolaNieve.h"
 #include "../Proyectiles/BolaEnemigo.h"
+#include "../Proyectiles/BolaFuego.h"
 
 #include "../Figura.h"
 

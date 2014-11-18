@@ -113,7 +113,7 @@ bool Drawer::loadMedia() {
 		success = false;
 	}
 
-	SDL_Color textColor = { 0, 0, 0, 0xFF };
+	SDL_Color textColor = { 255, 255, 255, 0xFF };
 
 	//Load messages
 	if(!pointsLT.loadFromRenderedText(renderer, fontToBeUsed, points, textColor, &anchoPoints, &altoText)){
@@ -397,58 +397,51 @@ void Drawer::drawFigura(figura_t objeto) {
 	int ancho_imagen = (ancho_un * FACTOR_CONVERSION_UN_A_PX);
 	int alto_imagen = (alto_un * FACTOR_CONVERSION_UN_A_PX);
 
-	int ox = (ancho_imagen * currentZoomFactor) / 2;
-	int oy = (alto_imagen * currentZoomFactor) / 2;
-
 	float ancho = objeto.ancho;
 	float alto = objeto.alto;
 
+	int ox = (ancho_imagen * currentZoomFactor) / 2;
+	int oy = (alto_imagen * currentZoomFactor) / 2;
+
+	int pos_x = coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox);
+	int pos_y = coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy);
+
+
 	if (objeto.id == RECTANGULO_CODE) {
-		rectangleLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
-				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
+		rectangleLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
 	if (objeto.id == CIRCULO_CODE) {
-		float radio = objeto.alto / 2;
-
-		circleLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - radio) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + radio) + oy),
-				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
+		circleLT.render(renderer, pos_x, pos_y,	ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
 	if (objeto.id == TRIANGULO_CODE) {
 		SDL_Point centro;
 		centro.x = ancho / 2 * un_to_px_x;
 		centro.y = alto * un_to_px_y / 1.5;
+		pos_y = coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 1.5) + oy);
 
-		triangleLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 1.5) + oy),
-				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, &centro);
+		triangleLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, &centro);
 	}
 	if (objeto.id == CUADRADO_CODE) {
-		squareLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
-				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
+		squareLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
 	if (objeto.id == PENTAGONO_CODE) {
 		SDL_Point centro;
 		centro.x = (ancho * un_to_px_x) / 2;
 		centro.y = (ancho * un_to_px_y) / 1.91;
+		pos_y = coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / (1 + cos(M_PI / 5))) + oy);
 
-		pentagonLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
-				coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / (1 + cos(M_PI / 5))) + oy), ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, &centro);
+		pentagonLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, &centro);
 	}
 	if (objeto.id == HEXAGONO_CODE) {
-		hexagonLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
-				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
+		hexagonLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
 	if (objeto.id == TRAPECIO_CODE) {
-		trapexLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 1.6) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
-				ancho * un_to_px_x * 1.1, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
+		pos_x = coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 1.6) + ox);
+		trapexLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x * 1.1, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
 	if (objeto.id == PARALELOGRAMO_CODE) {
-		paralelogramLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
-				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
+		paralelogramLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
-
-	int pos_x = coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x ) + ox);
-	int pos_y = coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y) + oy);
-
 	if(objeto.id == PORTAL_CODE){
 		drawPortal(renderer, portal, pos_x, pos_y, ANCHO_PORTAL, alto * un_to_px_y);
 	}
@@ -468,21 +461,15 @@ void Drawer::drawProyectil(proyectil_t proy) {
 	float ancho = proy.ancho;
 	float alto = proy.alto;
 
-	cout<<proy.id<<endl;
+	int pos_x = coord_relativa(coordRel.x, un_to_px_x * (proy.centro.x - ancho / 2) + ox);
+	int pos_y = coord_relativa(coordRel.y, -un_to_px_y * (proy.centro.y + alto / 2) + oy);
 
 	if (proy.id == BOLA_NIEVE_CODE) {
-		float radio = proy.alto / 2;
-
-		snowballLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (proy.centro.x - radio) + ox), coord_relativa(coordRel.y, -un_to_px_y * (proy.centro.y + radio) + oy),
-				ancho * un_to_px_x, alto * un_to_px_y, nullptr, proy.rotacion * -RADTODEG, nullptr);
+		snowballLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y, nullptr, proy.rotacion, nullptr);
 	}
 	else if (proy.id == BOLA_FUEGO_CODE) {
-		float radio = proy.alto / 2;
-
-		fireballLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (proy.centro.x - radio) + ox), coord_relativa(coordRel.y, -un_to_px_y * (proy.centro.y + radio) + oy),
-				ancho * un_to_px_x, alto * un_to_px_y, nullptr, proy.rotacion * -RADTODEG, nullptr);
+		fireballLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y, nullptr, proy.rotacion, nullptr);
 	}
-
 }
 
 void Drawer::drawEnemy(enemigo_t enemigo) {
@@ -737,17 +724,14 @@ void Drawer::setearLimitesDelNivel(int nivel){
 	limiteDerecho = ancho_imagen - coordRel.w + (currentZoomFactor - 1) * (ancho_imagen);
 
 	if(nivel == 1){
-
 		limInfCamera = 800;
 		limSupCamera = 1520 - camera.h;
-
 		limiteInferior = 800 *currentZoomFactor ;
 		limiteSuperior =  alto_imagen - coordRel.h + (currentZoomFactor - 1) * (alto_imagen);
 	}
 	if(nivel == 2){
 		limInfCamera = 0;
 		limSupCamera = 760 - camera.h;
-
 		limiteInferior = 0 ;
 		limiteSuperior = 760 * currentZoomFactor - coordRel.h;
 	}
@@ -798,7 +782,6 @@ void Drawer::actualizarCamara(personaje_t personaje) {
 	float ancho_imagen = ancho_un * FACTOR_CONVERSION_UN_A_PX;
 	float alto_imagen = alto_un * FACTOR_CONVERSION_UN_A_PX;
 
-
 	int ox = (ancho_imagen / 2) + (currentZoomFactor - 1) * (ancho_imagen) / 2;
 	int oy = (alto_imagen / 2) + (currentZoomFactor - 1) * (alto_imagen) / 2;
 
@@ -808,9 +791,7 @@ void Drawer::actualizarCamara(personaje_t personaje) {
 	float x_relativa = coord_relativa(coordRel.x + (coordRel.w / 2), pos_x);
 	float y_relativa = coord_relativa(coordRel.y + (coordRel.h / 2), pos_y);
 
-	/*
-
-	int limIzqCamera = 0;
+	/*int limIzqCamera = 0;
 	int limDerCamera = ancho_imagen - camera.w;
 	int limInfCamera = 0;
 	int limSupCamera = alto_imagen - camera.h;
@@ -818,8 +799,8 @@ void Drawer::actualizarCamara(personaje_t personaje) {
 	int limiteIzquierdo = 0;
 	int limiteDerecho = ancho_imagen - coordRel.w + (currentZoomFactor - 1) * (ancho_imagen);
 	int limiteInferior = 0;
-	int limiteSuperior = alto_imagen - coordRel.h + (currentZoomFactor - 1) * (alto_imagen);
-*/
+	int limiteSuperior = alto_imagen - coordRel.h + (currentZoomFactor - 1) * (alto_imagen);*/
+
 	if (x_relativa <= COTA_INF_X) {
 		if (camera.x > limIzqCamera)
 			camera.x -= abs(x_relativa - COTA_INF_X);
@@ -842,6 +823,88 @@ void Drawer::actualizarCamara(personaje_t personaje) {
 	}
 	ajusteFueraDeLimite(camera, limIzqCamera, limDerCamera, limInfCamera, limSupCamera);
 	ajusteFueraDeLimite(coordRel, limiteIzquierdo, limiteDerecho, limiteInferior, limiteSuperior);
+}
+
+void Drawer::zoomIn() {
+	if (currentZoomFactor < ZOOM_MAX) {
+		currentZoomFactor += factor;
+		int ancho_anterior = camera.w;
+		int alto_anterior = camera.h;
+		camera.h = alto_px / currentZoomFactor;
+		camera.w = ancho_px / (currentZoomFactor);
+
+		int dif_ancho = abs(ancho_anterior - camera.w);
+		int dif_alto = abs(alto_anterior - camera.h);
+
+		camera.x += dif_ancho / 2;
+		camera.y += dif_alto / 2;
+
+		coordRel.x = currentZoomFactor * camera.x;
+		coordRel.y = currentZoomFactor * camera.y;
+
+		//Zoom in a la escala de las figuras
+		un_to_px_x = FACTOR_CONVERSION_UN_A_PX * currentZoomFactor;
+		un_to_px_y =  FACTOR_CONVERSION_UN_A_PX * currentZoomFactor;
+		setearLimitesDelNivel(nivel);
+	}
+}
+
+void Drawer::zoomOut() {
+	currentZoomFactor -= factor;
+	int ancho_anterior = camera.w;
+	int alto_anterior = camera.h;
+	camera.h = alto_px / (currentZoomFactor);
+	camera.w = ancho_px / currentZoomFactor;
+
+	int dif_ancho = abs(ancho_anterior - camera.w);
+	int dif_alto = abs(alto_anterior - camera.h);
+
+	//Me fijo que no se expanda mas de lo que deberia
+	int proximo_x_maximo = ancho_un * FACTOR_CONVERSION_UN_A_PX - 2 * camera.w + ancho_anterior;
+	int proximo_y_maximo = alto_un * FACTOR_CONVERSION_UN_A_PX - 2 * camera.h + alto_anterior;
+
+	if (proximo_x_maximo <= limIzqCamera || proximo_y_maximo <= limInfCamera) {
+		currentZoomFactor += factor;
+		camera.h = alto_px / currentZoomFactor;
+		camera.w = ancho_px / currentZoomFactor;
+		return;
+	}
+
+	camera.x -= dif_ancho / 2;
+	camera.y -= dif_alto / 2;
+
+	if (camera.x >= proximo_x_maximo) {
+		camera.x = proximo_x_maximo;
+	}
+	if (camera.y >= proximo_y_maximo) {
+		camera.y = proximo_y_maximo;
+	}
+
+	coordRel.x = currentZoomFactor * camera.x;
+	coordRel.y = currentZoomFactor * camera.y;
+
+	//Zoom out a la escala de las figuras
+	un_to_px_x = FACTOR_CONVERSION_UN_A_PX * currentZoomFactor;
+	un_to_px_y =  FACTOR_CONVERSION_UN_A_PX * currentZoomFactor;
+	setearLimitesDelNivel(nivel);
+}
+
+SDL_Texture* Drawer::selectTexture(int index) throw (ErrorFueraDeRango) {
+	if (index >= 4 || index < 0)
+		throw ErrorFueraDeRango();
+
+	if (index == 0)
+		return imagenPersonaje;
+
+	else if (index == 1)
+		return imagenPersonaje2;
+
+	else if (index == 2)
+		return imagenPersonaje3;
+
+	else {
+		return imagenPersonaje4;
+	}
 }
 
 void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
@@ -1018,86 +1081,4 @@ SDL_Texture* Drawer::loadTexture(const std::string &file, SDL_Renderer *ren) {
 
 void Drawer::logSDLError(const std::string &msg) {
 	Log::ins()->add(msg + SDL_GetError(), Log::ERROR);
-}
-
-void Drawer::zoomIn() {
-	if (currentZoomFactor < ZOOM_MAX) {
-		currentZoomFactor += factor;
-		int ancho_anterior = camera.w;
-		int alto_anterior = camera.h;
-		camera.h = alto_px / currentZoomFactor;
-		camera.w = ancho_px / (currentZoomFactor);
-
-		int dif_ancho = abs(ancho_anterior - camera.w);
-		int dif_alto = abs(alto_anterior - camera.h);
-
-		camera.x += dif_ancho / 2;
-		camera.y += dif_alto / 2;
-
-		coordRel.x = currentZoomFactor * camera.x;
-		coordRel.y = currentZoomFactor * camera.y;
-
-		//Zoom in a la escala de las figuras
-		un_to_px_x = FACTOR_CONVERSION_UN_A_PX * currentZoomFactor;
-		un_to_px_y =  FACTOR_CONVERSION_UN_A_PX * currentZoomFactor;
-		setearLimitesDelNivel(nivel);
-	}
-}
-
-void Drawer::zoomOut() {
-	currentZoomFactor -= factor;
-	int ancho_anterior = camera.w;
-	int alto_anterior = camera.h;
-	camera.h = alto_px / (currentZoomFactor);
-	camera.w = ancho_px / currentZoomFactor;
-
-	int dif_ancho = abs(ancho_anterior - camera.w);
-	int dif_alto = abs(alto_anterior - camera.h);
-
-	//Me fijo que no se expanda mas de lo que deberia
-	int proximo_x_maximo = ancho_un * FACTOR_CONVERSION_UN_A_PX - 2 * camera.w + ancho_anterior;
-	int proximo_y_maximo = alto_un * FACTOR_CONVERSION_UN_A_PX - 2 * camera.h + alto_anterior;
-
-	if (proximo_x_maximo <= limIzqCamera || proximo_y_maximo <= limInfCamera) {
-		currentZoomFactor += factor;
-		camera.h = alto_px / currentZoomFactor;
-		camera.w = ancho_px / currentZoomFactor;
-		return;
-	}
-
-	camera.x -= dif_ancho / 2;
-	camera.y -= dif_alto / 2;
-
-	if (camera.x >= proximo_x_maximo) {
-		camera.x = proximo_x_maximo;
-	}
-	if (camera.y >= proximo_y_maximo) {
-		camera.y = proximo_y_maximo;
-	}
-
-	coordRel.x = currentZoomFactor * camera.x;
-	coordRel.y = currentZoomFactor * camera.y;
-
-	//Zoom out a la escala de las figuras
-	un_to_px_x = FACTOR_CONVERSION_UN_A_PX * currentZoomFactor;
-	un_to_px_y =  FACTOR_CONVERSION_UN_A_PX * currentZoomFactor;
-	setearLimitesDelNivel(nivel);
-}
-
-SDL_Texture* Drawer::selectTexture(int index) throw (ErrorFueraDeRango) {
-	if (index >= 4 || index < 0)
-		throw ErrorFueraDeRango();
-
-	if (index == 0)
-		return imagenPersonaje;
-
-	else if (index == 1)
-		return imagenPersonaje2;
-
-	else if (index == 2)
-		return imagenPersonaje3;
-
-	else {
-		return imagenPersonaje4;
-	}
 }

@@ -275,6 +275,8 @@ private:
 	void presentScenary();
 	void clearScenary();
 	bool blinkCharacter(personaje_t person, int index);
+	void drawStandardEnemy(enemigo_t enemigo);
+	void drawFireEnemy(enemigo_t enemigo);
 
 	//Exception management methods
 	void logSDLError( const std::string &msg);

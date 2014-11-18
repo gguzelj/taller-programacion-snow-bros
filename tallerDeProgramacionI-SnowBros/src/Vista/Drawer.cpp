@@ -18,6 +18,19 @@ void Drawer::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, SD
 	renderTexture(tex, ren, dst, clip);
 }
 
+void Drawer::loadMusic(){
+	 //Initialize SDL_mixer con parametros default
+	if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 ){
+		printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+
+	//Load background music
+	gMusic = Mix_LoadMUS( "resources/SoundEffects/beat.wav" );
+	if( gMusic == NULL ){
+		printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+}
+
 void Drawer::loadFont() {
 	//Initialize SDL_ttf
 	if (TTF_Init() == -1) {
@@ -154,6 +167,9 @@ Drawer::Drawer() {
 	this->congelamientoCuatro = nullptr;
 	this->fontToBeUsed = nullptr;
 
+	//The music that will be played
+	gMusic = nullptr;
+
 	//Tamaños para dibujar el texto en pantalla. Los inicializo en 0, despues se modifican.
 	this->altoText = 0;
 	this->anchoPoints = 0;
@@ -219,6 +235,7 @@ Drawer::Drawer() {
 }
 
 Drawer::~Drawer() {
+	Mix_FreeMusic(gMusic);
 	SDL_DestroyTexture(image);
 	SDL_DestroyTexture(imagenPersonaje);
 	SDL_DestroyTexture(imagenPersonaje2);
@@ -587,7 +604,6 @@ void Drawer::drawMessages(dataFromClient_t data, personaje_t personaje) {
 	//Dibujamos la pantalla de espera
 	if (data.gameData->paused)
 		drawWaitingScreen();
-
 }
 
 void Drawer::drawWaitingScreen() {
@@ -600,14 +616,11 @@ void Drawer::drawWaitingScreen() {
 	float oy = 300;
 
 	waitingScreenLT.render(renderer, ox, oy, anchoT, altoT);
-
 }
 
 void Drawer::presentScenary() {
 	SDL_RenderPresent(this->renderer);
 }
-
-
 
 void Drawer::setearLimitesDelNivel(int nivel){
 	float ancho_imagen = ancho_un * FACTOR_CONVERSION_UN_A_PX;
@@ -633,8 +646,6 @@ void Drawer::setearLimitesDelNivel(int nivel){
 		limiteSuperior = 760 * currentZoomFactor - coordRel.h;
 	}
 }
-
-
 
 void ajusteFueraDeLimite(SDL_Rect &rect, int limIzq, int limDer, int limInf, int limSup) {
 	if (rect.y < limInf)
@@ -662,8 +673,8 @@ void Drawer::inicializarCamara(personaje_t personaje) {
 
 	coordRel.x = camera.x;
 	coordRel.y = camera.y;
-	/*
-	int limIzqCamera = 0;
+
+	/*int limIzqCamera = 0;
 	int limDerCamera = ancho_imagen - camera.w;
 	int limInfCamera = 0;
 	int limSupCamera = alto_imagen - camera.h;
@@ -671,11 +682,10 @@ void Drawer::inicializarCamara(personaje_t personaje) {
 	int limiteIzquierdo = 0;
 	int limiteDerecho = ancho_imagen - coordRel.w + (currentZoomFactor - 1) * (ancho_imagen);
 	int limiteInferior = 0;
-	int limiteSuperior = alto_imagen - coordRel.h + (currentZoomFactor - 1) * (alto_imagen);
-*/
+	int limiteSuperior = alto_imagen - coordRel.h + (currentZoomFactor - 1) * (alto_imagen);*/
+
 	ajusteFueraDeLimite(camera, limIzqCamera, limDerCamera, limInfCamera, limSupCamera);
 	ajusteFueraDeLimite(coordRel, limiteIzquierdo, limiteDerecho, limiteInferior, limiteSuperior);
-
 }
 
 void Drawer::actualizarCamara(personaje_t personaje) {
@@ -724,10 +734,6 @@ void Drawer::actualizarCamara(personaje_t personaje) {
 			camera.y += abs(y_relativa - COTA_SUP_Y);
 		coordRel.y = camera.y * currentZoomFactor;
 	}
-
-	//std::cerr << "x camera: "<<camera.x<< " y: "<< camera.y<<std::endl;
-	//std::cerr << "X: "<<camera.x<< " y: "<< coordRel.y<<std::endl;
-
 	ajusteFueraDeLimite(camera, limIzqCamera, limDerCamera, limInfCamera, limSupCamera);
 	ajusteFueraDeLimite(coordRel, limiteIzquierdo, limiteDerecho, limiteInferior, limiteSuperior);
 }
@@ -737,65 +743,57 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 		logSDLError("Error al inicializar SDL2. Verifique la instalacion de la libreria");
 		throw SDLError();
 	}
-//Starting SDL2_IMAGE
+	//Starting SDL2_IMAGE
 	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG) {
 		manageSDL2_imageError();
 	}
 
-//Opening a window
+	//Opening a window
 	window = SDL_CreateWindow("Snow Bros", SDL_WINDOWPOS_CENTERED,
 	SDL_WINDOWPOS_CENTERED, ancho_px, alto_px, SDL_WINDOW_SHOWN);
 	if (window == nullptr) {
 		manageCreateWindowError();
 	}
 
-//Creating a renderer
+	//Creating a renderer
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (renderer == nullptr) {
 		manageCreateRendererError();
 	}
 
-//Loading the image
+	//Loading the images
 	image = this->loadTexture(this->imagePath, renderer);
 	if (image == nullptr) {
 		manageLoadBackgroundError();
 	}
-
 	imagenPersonaje = this->loadTexture(SPRITE_PATH, this->renderer);
 	if (imagenPersonaje == nullptr) {
 		manageLoadCharacterError();
 	}
-
 	imagenPersonaje2 = this->loadTexture(SPRITE2_PATH, this->renderer);
 	if (imagenPersonaje == nullptr) {
 		manageLoadCharacterError();
 	}
-
 	imagenPersonaje3 = this->loadTexture(SPRITE3_PATH, this->renderer);
 	if (imagenPersonaje == nullptr) {
 		manageLoadCharacterError();
 	}
-
 	imagenPersonaje4 = this->loadTexture(SPRITE4_PATH, this->renderer);
 	if (imagenPersonaje == nullptr) {
 		manageLoadCharacterError();
 	}
-
 	imagenPersonaje5 = this->loadTexture(SPRITE5_PATH, this->renderer);
 	if (imagenPersonaje == nullptr) {
 		manageLoadCharacterError();
 	}
-
 	imagenEnemigos = this->loadTexture(ENEMY_SPRITE_PATH, this->renderer);
 	if (imagenEnemigos == nullptr) {
 		manageLoadCharacterError();
 	}
-
 	imagenEnemigoFuego = this->loadTexture(ENEMIGO_FUEGO_SPRITE_PATH, this->renderer);
 	if (imagenEnemigoFuego == nullptr) {
 		manageLoadCharacterError();
 	}
-
 	congelamientoUno = this->loadTexture(CONGELAMIENTO_NIVEL_UNO_PATH, this->renderer);
 	if (congelamientoUno == nullptr) {
 		manageLoadCharacterError();
@@ -813,11 +811,17 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 			manageLoadCharacterError();
 	}
 
-//Aca se carga la fuente
+	//Aca se carga la fuente
 	loadFont();
 
-//Aca se cargan las imagenes de las figuras.
+	//Aca se cargan las imagenes de las figuras.
 	loadMedia();
+
+	//Aca se carga la musica
+	loadMusic();
+
+	//Play the music
+	Mix_PlayMusic( gMusic, -1 );
 }
 
 void Drawer::manageSDL2_imageError() {

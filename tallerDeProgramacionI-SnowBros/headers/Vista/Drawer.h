@@ -4,9 +4,9 @@
 #include "../Log/Log.h"
 #include <iostream>
 #include <Box2D/Box2D.h>
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_image.h"
-#include <SDL2/SDL2_gfxPrimitives.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL2_rotozoom.h>
 #include <SDL2/SDL_ttf.h>
 #include "../Exceptions/SDLError.h"
@@ -175,6 +175,9 @@ private:
 	SDL_Rect coordRel;
 	TTF_Font* fontToBeUsed;
 
+	//The music that will be played
+	Mix_Music *gMusic;
+
 	//Scene texture
 	LTexture rectangleLT;
 	LTexture circleLT;
@@ -245,6 +248,7 @@ private:
 	void setearLimitesDelNivel(int nivel);
 	void loadFont();
 	bool loadMedia();
+	void loadMusic();
 	void runWindow(int ancho_px ,int alto_px ,string imagePath);
 	void actualizarCamara(personaje_t personaje);
 	SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren);

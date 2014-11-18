@@ -11,7 +11,7 @@ dataToSend_t* Controlador::handleEvents(bool* running){
 	dataToSend_t* data = (dataToSend_t*) malloc(size);
 	bzero(data, size);
 
-	while(SDL_PollEvent(&event) && &running){
+	while(SDL_PollEvent(&event) && running){
 		if(cantEventos == 0)
 			handleEvent(&event, running, &(data->keycode_1),&(data->type_1));
 		if(cantEventos == 1)
@@ -26,12 +26,8 @@ dataToSend_t* Controlador::handleEvents(bool* running){
 }
 
 void Controlador::handleEvent(SDL_Event* evento,bool* running, int32_t *code, Uint32 *type){
-	//logica de manejo de eventos del personaje
-	//model->getPersonaje()->handleInput(evento->key.keysym.sym,evento->type);
-
 	switch (evento->type){
 		case SDL_QUIT:
-			//aca no habria que usar algun metodo como desconexion o algo asi?
 			(*running) = false;
 			break;
 
@@ -39,6 +35,15 @@ void Controlador::handleEvent(SDL_Event* evento,bool* running, int32_t *code, Ui
 			switch(evento->key.keysym.sym){
 				case SDLK_ESCAPE:{
 					(*running) = false;
+					break;
+				}
+				case SDLK_m:{
+					//If the music is paused
+					if( Mix_PausedMusic() == 1 )
+						Mix_ResumeMusic();	//Resume the music
+					//If the music is playing
+					else
+						Mix_PauseMusic(); 	//Pause the music
 					break;
 				}
 				case SDLK_PLUS:{

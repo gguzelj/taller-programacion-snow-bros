@@ -25,9 +25,34 @@ void Drawer::loadMusic(){
 	}
 
 	//Load background music
-	gMusic = Mix_LoadMUS( "resources/SoundEffects/beat.wav" );
-	if( gMusic == NULL ){
-		printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+	gMusic = Mix_LoadMUS( "resources/SoundEffects/background.mid" );
+	if(!gMusic){
+		printf( "Failed to load background music! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	//Load soundeffects
+	gWalking1 = Mix_LoadWAV("resources/SoundEffects/walking1.wav");
+	if(!gWalking1){
+		printf( "Failed to load walking1 wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	gWalking2 = Mix_LoadWAV("resources/SoundEffects/walking2.wav");
+	if(!gWalking2){
+		printf( "Failed to load walking2 wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	gShooting = Mix_LoadWAV("resources/SoundEffects/shooting.wav");
+	if(!gShooting){
+		printf( "Failed to load shooting wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	gJumping = Mix_LoadWAV("resources/SoundEffects/jumping.wav");
+	if(!gJumping){
+		printf( "Failed to load jumping wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	gKick = Mix_LoadWAV("resources/SoundEffects/kick.wav");
+	if(!gKick){
+		printf( "Failed to load walking wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	gGameover = Mix_LoadWAV("resources/SoundEffects/gameover.wav");
+	if(!gGameover){
+		printf( "Failed to load gameover wav! SDL_mixer Error: %s\n", Mix_GetError() );
 	}
 }
 
@@ -169,6 +194,12 @@ Drawer::Drawer() {
 
 	//The music that will be played
 	gMusic = nullptr;
+	gKick = nullptr;
+	gWalking1 = nullptr;
+	gWalking2 = nullptr;
+	gShooting = nullptr;
+	gJumping = nullptr;
+	gGameover = nullptr;
 
 	//Tamaños para dibujar el texto en pantalla. Los inicializo en 0, despues se modifican.
 	this->altoText = 0;
@@ -1000,7 +1031,7 @@ void Drawer::zoomOut() {
 	int dif_ancho = abs(ancho_anterior - camera.w);
 	int dif_alto = abs(alto_anterior - camera.h);
 
-//Me fijo que no se expanda mas de lo que deberia
+	//Me fijo que no se expanda mas de lo que deberia
 	int proximo_x_maximo = ancho_un * FACTOR_CONVERSION_UN_A_PX - 2 * camera.w + ancho_anterior;
 	int proximo_y_maximo = alto_un * FACTOR_CONVERSION_UN_A_PX - 2 * camera.h + alto_anterior;
 

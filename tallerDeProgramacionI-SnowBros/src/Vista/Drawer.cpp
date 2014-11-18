@@ -108,6 +108,10 @@ bool Drawer::loadMedia() {
 		printf("Failed to load paralelogram texture!\n");
 		success = false;
 	}
+	if (!fireballLT.loadFromFile(fireballImagePath, renderer)) {
+		printf("Failed to load paralelogram texture!\n");
+		success = false;
+	}
 
 	SDL_Color textColor = { 0, 0, 0, 0xFF };
 
@@ -232,6 +236,7 @@ Drawer::Drawer() {
 	this->trapexImagePath = "resources/textures/trapecio.png";
 	this->paralelogramImagePath = "resources/textures/paralelogramo.png";
 	this->snowballImagePath = "resources/textures/snowball.png";
+	this->fireballImagePath = "resources/textures/bolaDeFuego.png";
 	this->portalPath = "resources/sprites/portal.png";
 
 	//Text
@@ -463,12 +468,21 @@ void Drawer::drawProyectil(proyectil_t proy) {
 	float ancho = proy.ancho;
 	float alto = proy.alto;
 
+	cout<<proy.id<<endl;
+
 	if (proy.id == BOLA_NIEVE_CODE) {
 		float radio = proy.alto / 2;
 
 		snowballLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (proy.centro.x - radio) + ox), coord_relativa(coordRel.y, -un_to_px_y * (proy.centro.y + radio) + oy),
 				ancho * un_to_px_x, alto * un_to_px_y, nullptr, proy.rotacion * -RADTODEG, nullptr);
 	}
+	else if (proy.id == BOLA_FUEGO_CODE) {
+		float radio = proy.alto / 2;
+
+		fireballLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (proy.centro.x - radio) + ox), coord_relativa(coordRel.y, -un_to_px_y * (proy.centro.y + radio) + oy),
+				ancho * un_to_px_x, alto * un_to_px_y, nullptr, proy.rotacion * -RADTODEG, nullptr);
+	}
+
 }
 
 void Drawer::drawEnemy(enemigo_t enemigo) {
@@ -566,6 +580,9 @@ void Drawer::drawFireEnemy(enemigo_t enemigo){
 			break;
 		case FALLING:
 			drawFireEnemyFalling(renderer, imagen, orientacion, pos_x, pos_y,  ancho * un_to_px_x, alto * un_to_px_y);
+			break;
+		case SHOOTING:
+			drawFireEnemyShooting(renderer, imagen, orientacion, pos_x, pos_y,  ancho * un_to_px_x, alto * un_to_px_y);
 			break;
 		}
 		if(enemigo.nivelDeCongelamiento >0){

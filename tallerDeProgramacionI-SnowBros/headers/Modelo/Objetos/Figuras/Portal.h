@@ -11,7 +11,7 @@ private:
 	b2Vec2 destination;
 
 public:
-	Portal(float ancho, float alto, int rot, float pos_x, float pos_y, b2World* world);
+	Portal(float ancho, float alto, int rot, b2Vec2 address, b2World* world);
 	virtual ~Portal();
 
 	void setDestination(const b2Vec2& destination);

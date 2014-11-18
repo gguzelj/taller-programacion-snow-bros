@@ -1,11 +1,11 @@
 #include "../../../../headers/Modelo/Objetos/Figuras/Portal.h"
 
-Portal::Portal(float ancho, float alto, int rot, float pos_x, float pos_y, b2World* world) {
+Portal::Portal(float ancho, float alto, int rot, b2Vec2 address, b2World* world) {
 	this->type = ID_PORTAL;
 	this->ancho = ancho;
 	this->alto = alto;
-	this->y = pos_y;
-	this->x = pos_x;
+	this->y = address.y;
+	this->x = address.x;
 	this->angulo = rot * DEGTORAD;
 	this->estatico = true;
 	this->world = world;
@@ -46,7 +46,7 @@ float Portal::getAlto() {
 }
 
 char Portal::getId() {
-	return RECTANGULO_CODE;
+	return PORTAL_CODE;
 }
 
 void Portal::setDestination(const b2Vec2& destination) {

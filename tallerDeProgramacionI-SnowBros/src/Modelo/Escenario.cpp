@@ -20,26 +20,20 @@ Escenario::Escenario(JsonParser *parser) {
 	world_->SetContactListener(&contactos);
 
 	//Create the ground
-	new Rectangulo(ancho_un, 0, 0, 0, -alto_un/2, world_);
+	new Rectangulo(ancho_un, 0, 0, 0, -alto_un / 2, world_);
 
 	//Create the roof
 	new Rectangulo(ancho_un, 0, 0, 0, ALTURA_DEL_TECHO, world_);
 
 	//And walls
-	new Rectangulo(0, alto_un, 0, ancho_un/2, 0, world_);
-	new Rectangulo(0, alto_un, 0, -ancho_un/2, 0, world_);
+	new Rectangulo(0, alto_un, 0, ancho_un / 2, 0, world_);
+	new Rectangulo(0, alto_un, 0, -ancho_un / 2, 0, world_);
 
 	//Creamos los portales
-	Portal *port = new Portal(0.1, 3, 0, 0, 4-alto_un/2, world_);
-	b2Vec2 destination;
-	destination.x = 0;
-	destination.y = -4;
-
-	port->setDestination(destination);
+	this->crearPortales();
 
 	// Create all the objects
-	for (unsigned int index = 0; index < parser->getCantidadObjetos();
-			index++) {
+	for (unsigned int index = 0; index < parser->getCantidadObjetos(); index++) {
 
 		if (parser->getTipoObjeto(index) == CIRCULO)
 			figura_i = new Circulo(parser, index, world_);
@@ -117,16 +111,32 @@ bool Escenario::crearPersonaje(float x, float y, conn_id id) {
 	return true;
 }
 
+void Escenario::crearPortales() {
+
+	b2Vec2 portal1Address = b2Vec2(27,-27);
+	b2Vec2 portal2Address = b2Vec2(-27,-27);
+	b2Vec2 portal1Destination = b2Vec2(portal2Address.x+1, portal2Address.y-1);
+	b2Vec2 portal2Destination = b2Vec2(portal1Address.x-1, portal1Address.y-1);
+
+	Portal *portal1 = new Portal(0.1, 3, 0, portal1Address, world_);
+	Portal *portal2 = new Portal(0.1, 3, 0, portal2Address, world_);
+
+	portal1->setDestination(portal1Destination);
+	portal2->setDestination(portal2Destination);
+
+	figurasEstaticas_->push_back(portal1);
+	figurasEstaticas_->push_back(portal2);
+}
+
 void Escenario::setPersonajeConnectionState(conn_id id, char state) {
-	for (auto personaje = personajes_->begin(); personaje != personajes_->end();
-			++personaje) {
+	for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
 		if (strcmp((*personaje)->id, id) == 0)
 			(*personaje)->setConnectionState(state);
 	}
 }
 
-void destruirJointsDeBolaEnemigo(BolaEnemigo* enemigo,
-		std::list<Personaje*>* personajes_, b2World* world_) {
+void destruirJointsDeBolaEnemigo(BolaEnemigo* enemigo, std::list<Personaje*>* personajes_,
+		b2World* world_) {
 	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {
 		if (!ASIGNADO((*per)->id)) {
 			if ((*per)->getArrastradoPor() == enemigo) {
@@ -149,7 +159,6 @@ void Escenario::clean() {
 				continue;
 		}
 
-
 		if ((*pro)->type == ID_BOLA_FUEGO) {
 			if (!((BolaFuego*) (*pro))->destruir)
 				continue;
@@ -160,8 +169,7 @@ void Escenario::clean() {
 			if (c->IsTouching()) {
 
 				if ((*pro)->type == ID_BOLA_NIEVE_ENEMIGO) {
-					destruirJointsDeBolaEnemigo((BolaEnemigo*) (*pro),
-							personajes_, world_);
+					destruirJointsDeBolaEnemigo((BolaEnemigo*) (*pro), personajes_, world_);
 				}
 
 				world_->DestroyBody((*pro)->getb2Body());
@@ -197,7 +205,7 @@ void Escenario::step() {
 	actualizarEnemigos();
 }
 
-void Escenario::addPointsToPlayers(int puntos){
+void Escenario::addPointsToPlayers(int puntos) {
 	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {
 		(*per)->addPoints(puntos);
 	}
@@ -257,8 +265,7 @@ proyectil_t* Escenario::getProyectiles() {
 	p = (proyectil_t*) malloc(sizeof(proyectil_t) * proyectiles_->size());
 
 	int i = 0;
-	for (auto proy = proyectiles_->begin(); proy != proyectiles_->end();
-			++proy) {
+	for (auto proy = proyectiles_->begin(); proy != proyectiles_->end(); ++proy) {
 
 		p[i].id = (*proy)->getId();
 		p[i].alto = (*proy)->getAlto();
@@ -272,12 +279,10 @@ proyectil_t* Escenario::getProyectiles() {
 }
 
 personaje_t* Escenario::getPersonajesParaEnvio() {
-	personaje_t* pers = (personaje_t*) malloc(
-			sizeof(personaje_t) * cantidadMaximaDePersonajes);
+	personaje_t* pers = (personaje_t*) malloc(sizeof(personaje_t) * cantidadMaximaDePersonajes);
 
 	unsigned int i = 0;
-	for (auto personaje = personajes_->begin(); personaje != personajes_->end();
-			++personaje) {
+	for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
 		pers[i].alto = (*personaje)->getAlto();
 		pers[i].ancho = (*personaje)->getAncho();
 		strcpy(pers[i].id, (*personaje)->id);
@@ -308,12 +313,10 @@ personaje_t* Escenario::getPersonajesParaEnvio() {
 }
 
 enemigo_t* Escenario::getEnemigosParaEnvio() {
-	enemigo_t* enems = (enemigo_t*) malloc(
-			sizeof(enemigo_t) * enemigos_->size());
+	enemigo_t* enems = (enemigo_t*) malloc(sizeof(enemigo_t) * enemigos_->size());
 
 	int i = 0;
-	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end();
-			++enemigo) {
+	for (auto enemigo = enemigos_->begin(); enemigo != enemigos_->end(); ++enemigo) {
 		enems[i].tipo = (*enemigo)->type;
 		enems[i].alto = (*enemigo)->getAlto() * 2;
 		enems[i].ancho = (*enemigo)->getAncho() * 2;
@@ -328,8 +331,7 @@ enemigo_t* Escenario::getEnemigosParaEnvio() {
 }
 
 Personaje* Escenario::getPersonaje(conn_id id) {
-	for (auto personaje = personajes_->begin(); personaje != personajes_->end();
-			++personaje) {
+	for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
 		if (strcmp((*personaje)->id, id) == 0)
 			return *personaje;
 	}

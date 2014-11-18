@@ -120,6 +120,11 @@ public:
 	bool crearPersonaje(float x, float y, conn_id id);
 
 	/*
+	 * Creamos los portales del juego
+	 */
+	void crearPortales();
+
+	/*
 	 * Setea el connectionState state al personaje con tal id
 	 */
 	void setPersonajeConnectionState(conn_id id, char state);

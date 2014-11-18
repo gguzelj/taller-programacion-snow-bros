@@ -13,6 +13,7 @@
 #define MURO_CODE 'm'
 #define PARALELOGRAMO_CODE 'p'
 #define RECTANGULO_CODE 'r'
+#define PORTAL_CODE 'o'
 #define TRAPECIO_CODE 't'
 #define TRIANGULO_CODE '3'
 #define CUADRADO_CODE '4'

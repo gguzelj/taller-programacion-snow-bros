@@ -55,6 +55,8 @@ class BolaNieve;
 class BolaEnemigo;
 class BolaFuego;
 class Portal;
+class BonusVidaExtra;
+class BonusMoverRapido;
 
 /*
  * Clase abstracta de la cual van a heredar todos los tipos de figuras (Rectangulo, Poligono, Circulo, Parelelogramo)

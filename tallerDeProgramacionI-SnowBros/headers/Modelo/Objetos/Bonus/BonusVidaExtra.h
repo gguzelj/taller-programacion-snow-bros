@@ -13,6 +13,9 @@ private:
 public:
 	BonusVidaExtra();
 	~BonusVidaExtra();
+
+	void desactivar();
+	bool activo();
 };
 
 

@@ -14,6 +14,9 @@ public:
 	BonusMoverRapido();
 	~BonusMoverRapido();
 
+	void desactivar();
+	bool activo();
+
 };
 
 

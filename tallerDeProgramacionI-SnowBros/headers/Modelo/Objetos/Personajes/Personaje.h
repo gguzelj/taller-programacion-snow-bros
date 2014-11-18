@@ -4,6 +4,8 @@
 #include <Box2D/Box2D.h>
 #include "Character.h"
 #include "Enemigo.h"
+#include "../Bonus/BonusVidaExtra.h"
+#include "../Bonus/BonusMoverRapido.h"
 
 #define MITAD_ANCHO_PERSONAJE 0.5f
 #define MITAD_ALTO_PERSONAJE 0.85

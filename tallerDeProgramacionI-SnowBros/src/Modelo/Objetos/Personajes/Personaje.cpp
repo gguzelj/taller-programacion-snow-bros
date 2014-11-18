@@ -24,7 +24,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 
 	this->connectionState = CONECTADO;
 	this->points = 0;
-	this->lives = 0;
+	this->lives = 3;
 	this->type = ID_PERSONAJE;
 	this->ancho = MITAD_ANCHO_PERSONAJE;
 	this->alto = MITAD_ALTO_PERSONAJE;
@@ -152,6 +152,9 @@ void Personaje::beginContactBolaFuego(BolaFuego* bola, b2Contact* contacto){
 void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 
 	if (state == &Personaje::dying || state == &Personaje::rolling)
+		return;
+
+	if(enemigo->estaCongelado())
 		return;
 
 	//En otro caso, restamos vida

@@ -180,7 +180,6 @@ void Escenario::preStep() {
 			(*per)->controlarEstado();
 		}
 	}
-
 	for (auto en = enemigos_->begin(); en != enemigos_->end(); ++en) {
 		if (!(*en)->estaVivo) {
 			int puntos = (*en)->getPuntos();

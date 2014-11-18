@@ -62,7 +62,7 @@ void Drawer::loadFont() {
 		manageSDL_ttfError();
 	}
 	int sizeOfTheFont = 15;
-	fontToBeUsed = TTF_OpenFont(this->fontPath.c_str(), sizeOfTheFont);
+	fontToBeUsed = TTF_OpenFont(fontPath.c_str(), sizeOfTheFont);
 	if (fontToBeUsed == nullptr)
 		manageSDL_ttfLoadFontError();
 }
@@ -167,7 +167,7 @@ bool Drawer::loadMedia() {
 		printf("Failed to load text texture!\n");
 		success = false;
 	}
-	this->numerosLT = {&ceroLT, &unoLT, &dosLT, &tresLT, &cuatroLT, &cincoLT, &seisLT, &sieteLT, &ochoLT, &nueveLT};
+	numerosLT = {&ceroLT, &unoLT, &dosLT, &tresLT, &cuatroLT, &cincoLT, &seisLT, &sieteLT, &ochoLT, &nueveLT};
 
 	return success;
 }
@@ -191,6 +191,7 @@ Drawer::Drawer() {
 	this->congelamientoTres = nullptr;
 	this->congelamientoCuatro = nullptr;
 	this->fontToBeUsed = nullptr;
+	this->portal = nullptr;
 
 	//The music that will be played
 	gMusic = nullptr;
@@ -231,6 +232,7 @@ Drawer::Drawer() {
 	this->trapexImagePath = "resources/textures/trapecio.png";
 	this->paralelogramImagePath = "resources/textures/paralelogramo.png";
 	this->snowballImagePath = "resources/textures/snowball.png";
+	this->portalPath = "resources/sprites/portal.png";
 
 	//Text
 	this->points = "Points: ";
@@ -340,7 +342,7 @@ int altoPersonaje(float un_to_px_y) {
 // ##### Private methods ##### //
 // ########################### //
 void Drawer::clearScenary() {
-	SDL_RenderClear(this->renderer);
+	SDL_RenderClear(renderer);
 }
 
 void Drawer::drawBackground() {
@@ -387,8 +389,8 @@ void Drawer::drawScenary(dataFromClient_t data, char* name) {
  */
 void Drawer::drawFigura(figura_t objeto) {
 
-	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
-	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);
+	int ancho_imagen = (ancho_un * FACTOR_CONVERSION_UN_A_PX);
+	int alto_imagen = (alto_un * FACTOR_CONVERSION_UN_A_PX);
 
 	int ox = (ancho_imagen * currentZoomFactor) / 2;
 	int oy = (alto_imagen * currentZoomFactor) / 2;
@@ -400,14 +402,12 @@ void Drawer::drawFigura(figura_t objeto) {
 		rectangleLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
 				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
-
 	if (objeto.id == CIRCULO_CODE) {
 		float radio = objeto.alto / 2;
 
 		circleLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - radio) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + radio) + oy),
 				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
-
 	if (objeto.id == TRIANGULO_CODE) {
 		SDL_Point centro;
 		centro.x = ancho / 2 * un_to_px_x;
@@ -416,12 +416,10 @@ void Drawer::drawFigura(figura_t objeto) {
 		triangleLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 1.5) + oy),
 				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, &centro);
 	}
-
 	if (objeto.id == CUADRADO_CODE) {
 		squareLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
 				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
-
 	if (objeto.id == PENTAGONO_CODE) {
 		SDL_Point centro;
 		centro.x = (ancho * un_to_px_x) / 2;
@@ -430,12 +428,10 @@ void Drawer::drawFigura(figura_t objeto) {
 		pentagonLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
 				coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / (1 + cos(M_PI / 5))) + oy), ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, &centro);
 	}
-
 	if (objeto.id == HEXAGONO_CODE) {
 		hexagonLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
 				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
-
 	if (objeto.id == TRAPECIO_CODE) {
 		trapexLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 1.6) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
 				ancho * un_to_px_x * 1.1, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
@@ -444,6 +440,13 @@ void Drawer::drawFigura(figura_t objeto) {
 		paralelogramLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
 				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
+
+	int pos_x = coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x ) + ox);
+	int pos_y = coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y) + oy);
+
+	if(objeto.id == PORTAL_CODE){
+		drawPortal(renderer, portal, pos_x, pos_y, ANCHO_PORTAL, alto * un_to_px_y);
+	}
 }
 
 /*
@@ -451,8 +454,8 @@ void Drawer::drawFigura(figura_t objeto) {
  */
 void Drawer::drawProyectil(proyectil_t proy) {
 
-	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
-	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);
+	int ancho_imagen = (ancho_un * FACTOR_CONVERSION_UN_A_PX);
+	int alto_imagen = (alto_un * FACTOR_CONVERSION_UN_A_PX);
 
 	int ox = (ancho_imagen * currentZoomFactor) / 2;
 	int oy = (alto_imagen * currentZoomFactor) / 2;
@@ -481,8 +484,8 @@ void Drawer::drawStandardEnemy(enemigo_t enemigo){
 	SDL_Texture* imagen;
 	imagen = imagenEnemigos;
 
-	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
-	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);
+	int ancho_imagen = (ancho_un * FACTOR_CONVERSION_UN_A_PX);
+	int alto_imagen = (alto_un * FACTOR_CONVERSION_UN_A_PX);
 
 	int ox = (ancho_imagen * currentZoomFactor) / 2;
 	int oy = (alto_imagen * currentZoomFactor) / 2;
@@ -497,12 +500,11 @@ void Drawer::drawStandardEnemy(enemigo_t enemigo){
 	int pos_y = coord_relativa(coordRel.y, -un_to_px_y * (enemigo.centro.y) + oy);
 
 	if(enemigo.nivelDeCongelamiento == 7)
-		drawCongelamiento(this->renderer, congelamientoCuatro, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
-
+		drawCongelamiento(renderer, congelamientoCuatro, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
 	else{
 		switch (codigo_estado) {
 		case JUMPING:
-			drawStandardEnemyJumping(this->renderer, imagen, orientacion, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+			drawStandardEnemyJumping(renderer, imagen, orientacion, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
 			break;
 		case STANDBY:
 			drawStandardEnemyStandBy(renderer, imagen, orientacion, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
@@ -516,15 +518,15 @@ void Drawer::drawStandardEnemy(enemigo_t enemigo){
 		}
 		if(enemigo.nivelDeCongelamiento >0){
 			if(enemigo.nivelDeCongelamiento < 3){
-				drawCongelamiento(this->renderer, congelamientoUno, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+				drawCongelamiento(renderer, congelamientoUno, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
 			}
 			else{
 				if( enemigo.nivelDeCongelamiento <5){
-					drawCongelamiento(this->renderer, congelamientoDos, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+					drawCongelamiento(renderer, congelamientoDos, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
 				}
 				else{
 					if( enemigo.nivelDeCongelamiento < 7){
-						drawCongelamiento(this->renderer, congelamientoTres, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+						drawCongelamiento(renderer, congelamientoTres, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
 					}
 				}
 			}
@@ -536,8 +538,8 @@ void Drawer::drawFireEnemy(enemigo_t enemigo){
 	SDL_Texture* imagen;
 	imagen = imagenEnemigoFuego;
 
-	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
-	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);
+	int ancho_imagen = (ancho_un * FACTOR_CONVERSION_UN_A_PX);
+	int alto_imagen = (alto_un * FACTOR_CONVERSION_UN_A_PX);
 
 	int ox = (ancho_imagen * currentZoomFactor) / 2;
 	int oy = (alto_imagen * currentZoomFactor) / 2;
@@ -552,7 +554,7 @@ void Drawer::drawFireEnemy(enemigo_t enemigo){
 	int pos_y = coord_relativa(coordRel.y, -un_to_px_y * (enemigo.centro.y) + oy);
 
 	if(enemigo.nivelDeCongelamiento == 7)
-		drawCongelamiento(this->renderer, congelamientoCuatro, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+		drawCongelamiento(renderer, congelamientoCuatro, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
 
 	else{
 		switch (codigo_estado) {
@@ -568,15 +570,15 @@ void Drawer::drawFireEnemy(enemigo_t enemigo){
 		}
 		if(enemigo.nivelDeCongelamiento >0){
 			if(enemigo.nivelDeCongelamiento < 3){
-				drawCongelamiento(this->renderer, congelamientoUno, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+				drawCongelamiento(renderer, congelamientoUno, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
 			}
 			else{
 				if( enemigo.nivelDeCongelamiento <5){
-					drawCongelamiento(this->renderer, congelamientoDos, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+					drawCongelamiento(renderer, congelamientoDos, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
 				}
 				else{
 					if( enemigo.nivelDeCongelamiento < 7){
-						drawCongelamiento(this->renderer, congelamientoTres, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+						drawCongelamiento(renderer, congelamientoTres, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
 					}
 				}
 			}
@@ -605,8 +607,8 @@ void Drawer::drawCharacter(personaje_t person, int index, int connectionState) {
 
 	//insert framebreak for constant framerate here
 
-	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
-	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);
+	int ancho_imagen = (ancho_un * FACTOR_CONVERSION_UN_A_PX);
+	int alto_imagen = (alto_un * FACTOR_CONVERSION_UN_A_PX);
 
 	int ox = (ancho_imagen / 2) + (currentZoomFactor - 1) * (ancho_imagen) / 2;
 	int oy = (alto_imagen / 2) + (currentZoomFactor - 1) * (alto_imagen) / 2;
@@ -614,8 +616,8 @@ void Drawer::drawCharacter(personaje_t person, int index, int connectionState) {
 	char codigo_estado = person.estado;
 	char orientacion = person.orientacion;
 
-	float pos_x = (person.centro.x) * (this->un_to_px_x) + ox;
-	float pos_y = (person.centro.y) * -(this->un_to_px_y) + oy;
+	float pos_x = (person.centro.x) * (un_to_px_x) + ox;
+	float pos_y = (person.centro.y) * -(un_to_px_y) + oy;
 	pos_x = coord_relativa(coordRel.x, pos_x);
 	pos_y = coord_relativa(coordRel.y, pos_y);
 
@@ -706,7 +708,7 @@ void Drawer::drawWaitingScreen() {
 }
 
 void Drawer::presentScenary() {
-	SDL_RenderPresent(this->renderer);
+	SDL_RenderPresent(renderer);
 }
 
 void Drawer::setearLimitesDelNivel(int nivel){
@@ -752,8 +754,8 @@ void Drawer::inicializarCamara(personaje_t personaje) {
 	int ox = (ancho_imagen / 2) + (currentZoomFactor - 1) * (ancho_imagen) / 2;
 	int oy = (alto_imagen / 2) + (currentZoomFactor - 1) * (alto_imagen) / 2;
 
-	float pos_x = (personaje.centro.x) * (this->un_to_px_x) + ox;
-	float pos_y = personaje.centro.y * -(this->un_to_px_y) + oy;
+	float pos_x = (personaje.centro.x) * (un_to_px_x) + ox;
+	float pos_y = personaje.centro.y * -(un_to_px_y) + oy;
 
 	camera.x = pos_x - camera.w / 2;
 	camera.y = pos_y - camera.h / 2;
@@ -783,8 +785,8 @@ void Drawer::actualizarCamara(personaje_t personaje) {
 	int ox = (ancho_imagen / 2) + (currentZoomFactor - 1) * (ancho_imagen) / 2;
 	int oy = (alto_imagen / 2) + (currentZoomFactor - 1) * (alto_imagen) / 2;
 
-	float pos_x = (personaje.centro.x) * (this->un_to_px_x) + ox;
-	float pos_y = personaje.centro.y * -(this->un_to_px_y) + oy;
+	float pos_x = (personaje.centro.x) * (un_to_px_x) + ox;
+	float pos_y = personaje.centro.y * -(un_to_px_y) + oy;
 
 	float x_relativa = coord_relativa(coordRel.x + (coordRel.w / 2), pos_x);
 	float y_relativa = coord_relativa(coordRel.y + (coordRel.h / 2), pos_y);
@@ -849,53 +851,57 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 	}
 
 	//Loading the images
-	image = this->loadTexture(this->imagePath, renderer);
+	image = loadTexture(imagePath, renderer);
 	if (image == nullptr) {
 		manageLoadBackgroundError();
 	}
-	imagenPersonaje = this->loadTexture(SPRITE_PATH, this->renderer);
+	imagenPersonaje = loadTexture(SPRITE_PATH, renderer);
 	if (imagenPersonaje == nullptr) {
 		manageLoadCharacterError();
 	}
-	imagenPersonaje2 = this->loadTexture(SPRITE2_PATH, this->renderer);
+	imagenPersonaje2 = loadTexture(SPRITE2_PATH, renderer);
 	if (imagenPersonaje == nullptr) {
 		manageLoadCharacterError();
 	}
-	imagenPersonaje3 = this->loadTexture(SPRITE3_PATH, this->renderer);
+	imagenPersonaje3 = loadTexture(SPRITE3_PATH, renderer);
 	if (imagenPersonaje == nullptr) {
 		manageLoadCharacterError();
 	}
-	imagenPersonaje4 = this->loadTexture(SPRITE4_PATH, this->renderer);
+	imagenPersonaje4 = loadTexture(SPRITE4_PATH, renderer);
 	if (imagenPersonaje == nullptr) {
 		manageLoadCharacterError();
 	}
-	imagenPersonaje5 = this->loadTexture(SPRITE5_PATH, this->renderer);
+	imagenPersonaje5 = loadTexture(SPRITE5_PATH, renderer);
 	if (imagenPersonaje == nullptr) {
 		manageLoadCharacterError();
 	}
-	imagenEnemigos = this->loadTexture(ENEMY_SPRITE_PATH, this->renderer);
+	imagenEnemigos = loadTexture(ENEMY_SPRITE_PATH, renderer);
 	if (imagenEnemigos == nullptr) {
 		manageLoadCharacterError();
 	}
-	imagenEnemigoFuego = this->loadTexture(ENEMIGO_FUEGO_SPRITE_PATH, this->renderer);
+	imagenEnemigoFuego = loadTexture(ENEMIGO_FUEGO_SPRITE_PATH, renderer);
 	if (imagenEnemigoFuego == nullptr) {
 		manageLoadCharacterError();
 	}
-	congelamientoUno = this->loadTexture(CONGELAMIENTO_NIVEL_UNO_PATH, this->renderer);
+	congelamientoUno = loadTexture(CONGELAMIENTO_NIVEL_UNO_PATH, renderer);
 	if (congelamientoUno == nullptr) {
 		manageLoadCharacterError();
 	}
-	congelamientoDos = this->loadTexture(CONGELAMIENTO_NIVEL_DOS_PATH, this->renderer);
+	congelamientoDos = loadTexture(CONGELAMIENTO_NIVEL_DOS_PATH, renderer);
 	if (congelamientoDos == nullptr) {
 		manageLoadCharacterError();
 	}
-	congelamientoTres = this->loadTexture(CONGELAMIENTO_NIVEL_TRES_PATH, this->renderer);
+	congelamientoTres = loadTexture(CONGELAMIENTO_NIVEL_TRES_PATH, renderer);
 	if (congelamientoTres == nullptr) {
 		manageLoadCharacterError();
 	}
-	congelamientoCuatro = this->loadTexture(CONGELAMIENTO_NIVEL_CUATRO_PATH,this->renderer);
+	congelamientoCuatro = loadTexture(CONGELAMIENTO_NIVEL_CUATRO_PATH,renderer);
 	if (congelamientoCuatro == nullptr) {
 			manageLoadCharacterError();
+	}
+	portal = loadTexture(portalPath, renderer);
+	if (portal == nullptr) {
+		manageLoadBackgroundError();
 	}
 
 	//Aca se carga la fuente
@@ -1017,7 +1023,7 @@ void Drawer::zoomIn() {
 		//Zoom in a la escala de las figuras
 		un_to_px_x = FACTOR_CONVERSION_UN_A_PX * currentZoomFactor;
 		un_to_px_y =  FACTOR_CONVERSION_UN_A_PX * currentZoomFactor;
-		this->setearLimitesDelNivel(nivel);
+		setearLimitesDelNivel(nivel);
 	}
 }
 
@@ -1035,7 +1041,7 @@ void Drawer::zoomOut() {
 	int proximo_x_maximo = ancho_un * FACTOR_CONVERSION_UN_A_PX - 2 * camera.w + ancho_anterior;
 	int proximo_y_maximo = alto_un * FACTOR_CONVERSION_UN_A_PX - 2 * camera.h + alto_anterior;
 
-	if (proximo_x_maximo <= this->limIzqCamera || proximo_y_maximo <= this->limInfCamera) {
+	if (proximo_x_maximo <= limIzqCamera || proximo_y_maximo <= limInfCamera) {
 		currentZoomFactor += factor;
 		camera.h = alto_px / currentZoomFactor;
 		camera.w = ancho_px / currentZoomFactor;
@@ -1055,10 +1061,10 @@ void Drawer::zoomOut() {
 	coordRel.x = currentZoomFactor * camera.x;
 	coordRel.y = currentZoomFactor * camera.y;
 
-//Zoom out a la escala de las figuras
+	//Zoom out a la escala de las figuras
 	un_to_px_x = FACTOR_CONVERSION_UN_A_PX * currentZoomFactor;
 	un_to_px_y =  FACTOR_CONVERSION_UN_A_PX * currentZoomFactor;
-	this->setearLimitesDelNivel(nivel);
+	setearLimitesDelNivel(nivel);
 }
 
 SDL_Texture* Drawer::selectTexture(int index) throw (ErrorFueraDeRango) {

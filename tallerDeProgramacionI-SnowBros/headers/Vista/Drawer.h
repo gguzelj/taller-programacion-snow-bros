@@ -60,6 +60,7 @@
 #define DYING 'm'
 #define PUSHING 'p'
 #define KICKING 'k'
+
 using namespace std;
 
 const float factor = 0.005;
@@ -177,6 +178,12 @@ private:
 
 	//The music that will be played
 	Mix_Music *gMusic;
+	Mix_Chunk *gShooting;
+	Mix_Chunk *gWalking1;
+	Mix_Chunk *gWalking2;
+	Mix_Chunk *gJumping;
+	Mix_Chunk *gGameover;
+	Mix_Chunk *gKick;
 
 	//Scene texture
 	LTexture rectangleLT;
@@ -277,7 +284,7 @@ private:
 	void manageSDL_ttfLoadFontError();
 	void manageDrawMessagesError();
 
-	/**
+	/*
 	* Draw an SDL_Texture to an SDL_Renderer at some destination rect
 	* taking a clip of the texture if desired
 	* @param tex The source texture we want to draw
@@ -287,7 +294,8 @@ private:
 	*		default of nullptr draws the entire texture
 	*/
 	void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, SDL_Rect dst,SDL_Rect *clip);
-	/**
+
+	/*
 	* Draw an SDL_Texture to an SDL_Renderer at position x, y, preserving
 	* the texture's width and height and taking a clip of the texture if desired
 	* If a clip is passed, the clip's width and height will be used instead of

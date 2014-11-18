@@ -104,7 +104,8 @@ public:
 	virtual void beginContactBolaEnemigo(BolaEnemigo*,b2Contact*){};
 	virtual void beginContactBolaFuego(BolaFuego*,b2Contact*){};
 	virtual void beginContactPortal(Portal*,b2Contact*){};
-
+	virtual void beginContactBonusVidaExtra(BonusVidaExtra*, b2Contact*){};
+	virtual void beginContactBonusMoverRapido(BonusMoverRapido*, b2Contact*){};
 
 	virtual void endContactCirculo(Circulo*,b2Contact*){};
 	virtual void endContactMuro(Muro*,b2Contact*){};
@@ -118,6 +119,8 @@ public:
 	virtual void endContactBolaEnemigo(BolaEnemigo*,b2Contact*){};
 	virtual void endContactBolaFuego(BolaFuego*,b2Contact*){};
 	virtual void endContactPortal(Portal*,b2Contact*){};
+	virtual void endContactBonusVidaExtra(BonusVidaExtra*, b2Contact*){};
+	virtual void endContactBonusMoverRapido(BonusMoverRapido*, b2Contact*){};
 
 };
 

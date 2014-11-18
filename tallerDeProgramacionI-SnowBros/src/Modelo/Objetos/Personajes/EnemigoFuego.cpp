@@ -32,6 +32,8 @@ void EnemigoFuego::shoot() {
 	vel.y = 0;
 	bola->setVelocidad(vel);
 
+	bola->angulo = (orientacion == IZQUIERDA) ? 180 : 0;
+
 	this->escenario_->agregarProyectil(bola);
 }
 

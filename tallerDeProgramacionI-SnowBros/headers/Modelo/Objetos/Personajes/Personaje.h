@@ -52,6 +52,18 @@ public:
 	void beginContactEnemigo(Enemigo*, b2Contact*);
 
 	/*
+	 * Encargado de realizar las acciones pertinentes en el caso en que el
+	 * Personaje entra en contacto con un bonus de vida extra.
+	 */
+	void beginContactBonusVidaExtra(BonusVidaExtra*, b2Contact*);
+
+	/*
+	 * Encargado de realizar las acciones pertinentes en el caso en que el
+	 * Personaje entra en contacto con un bonus de movimiento rapito.
+	 */
+	void beginContactBonusMoverRapido(BonusMoverRapido*, b2Contact*);
+
+	/*
 	 * Realiza las corecciones pertinentes al estado del Personaje previo
 	 * al step.
 	 */
@@ -80,6 +92,12 @@ public:
 	 * estado correspondiente
 	 */
 	void morir();
+
+	/*
+	 * Se encarga de aumentar la velocidad al Personaje durante un tiempo
+	 * determinado. Luego vuelve a su velocidad normal.
+	 */
+	void aumentarVelocidad();
 
 	/*
 	 * Devuelve el personaje a su posicion inicial en el escenario

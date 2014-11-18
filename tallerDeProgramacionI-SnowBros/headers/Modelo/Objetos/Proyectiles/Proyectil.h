@@ -10,7 +10,6 @@
 class Proyectil : public Figura {
 
 protected:
-	float angulo;
 	float masa;
 	bool estatico;
 	b2World* world;
@@ -19,6 +18,7 @@ protected:
 public:
 	float x;
 	float y;
+	float angulo;
 
 	Proyectil();
 	virtual ~Proyectil();

@@ -168,6 +168,17 @@ void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 	// hay que sacarlo del modelo.
 }
 
+void Personaje::beginContactBonusVidaExtra(BonusVidaExtra* bonus, b2Contact* contact){
+	this->lives++;
+	bonus->desactivar();
+}
+
+void Personaje::beginContactBonusMoverRapido(BonusMoverRapido* bonus, b2Contact* contact){
+	bonus->desactivar();
+	std::thread t(&Personaje::aumentarVelocidad, this);
+	t.detach();
+}
+
 bool Personaje::estaEmpujandoEnemigo() {
 	Figura *figura;
 	b2Fixture *pared = (orientacion == DERECHA) ? paredDerecha : paredIzquierda;
@@ -263,7 +274,7 @@ void Personaje::shoot() {
 
 void Personaje::kick() {
 	kickCooldown = 12;
-//Iteramos con los contactos de nuestro personaje hasta encontrar al enemigo y luego lo matamos
+	//Iteramos con los contactos de nuestro personaje hasta encontrar al enemigo y luego lo matamos
 	for (b2ContactEdge *ce = this->body->GetContactList(); ce; ce = ce->next) {
 		b2Contact* c = ce->contact;
 		Figura *figuraA = (Figura*) c->GetFixtureA()->GetUserData();
@@ -294,6 +305,12 @@ void Personaje::morir() {
 	entrarEnPeriodoDeInmunidad();
 	this->esta_muerto = true;
 	this->points /= 2;
+}
+
+void Personaje::aumentarVelocidad() {
+	aceleracion *= 1.5;
+	sleep(15);
+	aceleracion /= 1.5;
 }
 
 void Personaje::volverAPosicionInicial() {

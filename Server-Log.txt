@@ -1288,3 +1288,831 @@ Tue Nov 18 16:05:53 2014: INFO Comienza el thread para recibir datos del cliente
 Tue Nov 18 16:05:53 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
 Tue Nov 18 16:06:11 2014: ERROR Ha ocurrido un error en la conexion con el cliente
 Tue Nov 18 16:06:11 2014: WARNING No se pueden recibir datos del cliente. ID: Fede. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 16:10:15 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 16:10:15 2014: INFO Creando Servidor
+Tue Nov 18 16:10:15 2014: INFO Validando parametros
+Tue Nov 18 16:10:15 2014: INFO Parametros Correctos
+Tue Nov 18 16:10:15 2014: INFO Creando socket
+Tue Nov 18 16:10:15 2014: INFO Socket creado correctamente
+Tue Nov 18 16:10:15 2014: INFO Bindeando Socket
+Tue Nov 18 16:10:15 2014: INFO Socket bindeado
+Tue Nov 18 16:10:15 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 16:10:15 2014: INFO Parser: Analizando escenario
+Tue Nov 18 16:10:15 2014: INFO Parser: Analizando objetos
+Tue Nov 18 16:10:15 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 16:10:15 2014: INFO Corriendo Juego
+Tue Nov 18 16:10:15 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 16:10:23 2014: INFO Nuevo cliente conectado
+Tue Nov 18 16:10:23 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 16:10:23 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 16:10:23 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 16:10:23 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 16:10:23 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 16:10:23 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+Tue Nov 18 16:10:26 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: Fede
+Tue Nov 18 16:10:33 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: Fede
+Tue Nov 18 16:11:05 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Tue Nov 18 16:11:05 2014: WARNING No se pueden recibir datos del cliente. ID: Fede. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 16:11:15 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 16:11:15 2014: INFO Creando Servidor
+Tue Nov 18 16:11:15 2014: INFO Validando parametros
+Tue Nov 18 16:11:15 2014: INFO Parametros Correctos
+Tue Nov 18 16:11:15 2014: INFO Creando socket
+Tue Nov 18 16:11:15 2014: INFO Socket creado correctamente
+Tue Nov 18 16:11:15 2014: INFO Bindeando Socket
+Tue Nov 18 16:11:15 2014: INFO Socket bindeado
+Tue Nov 18 16:11:15 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 16:11:15 2014: INFO Parser: Analizando escenario
+Tue Nov 18 16:11:15 2014: INFO Parser: Analizando objetos
+Tue Nov 18 16:11:15 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 16:11:15 2014: INFO Corriendo Juego
+Tue Nov 18 16:11:15 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 16:11:17 2014: INFO Nuevo cliente conectado
+Tue Nov 18 16:11:17 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 16:11:17 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 16:11:17 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 16:11:17 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 16:11:17 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 16:11:17 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+Tue Nov 18 16:11:27 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: Fede
+Tue Nov 18 16:11:34 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Tue Nov 18 16:11:34 2014: WARNING No se pueden recibir datos del cliente. ID: Fede. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 16:16:53 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 16:16:53 2014: INFO Creando Servidor
+Tue Nov 18 16:16:53 2014: INFO Validando parametros
+Tue Nov 18 16:16:53 2014: INFO Parametros Correctos
+Tue Nov 18 16:16:53 2014: INFO Creando socket
+Tue Nov 18 16:16:53 2014: INFO Socket creado correctamente
+Tue Nov 18 16:16:53 2014: INFO Bindeando Socket
+Tue Nov 18 16:16:53 2014: INFO Socket bindeado
+Tue Nov 18 16:16:53 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 16:16:53 2014: INFO Parser: Analizando escenario
+Tue Nov 18 16:16:53 2014: INFO Parser: Analizando objetos
+Tue Nov 18 16:16:53 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 16:16:53 2014: INFO Corriendo Juego
+Tue Nov 18 16:16:53 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 16:16:58 2014: INFO Nuevo cliente conectado
+Tue Nov 18 16:16:58 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 16:16:58 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 16:16:58 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 16:16:58 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 16:16:58 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 16:16:58 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+Tue Nov 18 16:17:30 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: Fede
+Tue Nov 18 16:17:33 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Tue Nov 18 16:17:33 2014: WARNING No se pueden recibir datos del cliente. ID: Fede. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 16:17:37 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 16:17:37 2014: INFO Creando Servidor
+Tue Nov 18 16:17:37 2014: INFO Validando parametros
+Tue Nov 18 16:17:37 2014: INFO Parametros Correctos
+Tue Nov 18 16:17:37 2014: INFO Creando socket
+Tue Nov 18 16:17:37 2014: INFO Socket creado correctamente
+Tue Nov 18 16:17:37 2014: INFO Bindeando Socket
+Tue Nov 18 16:17:37 2014: INFO Socket bindeado
+Tue Nov 18 16:17:37 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 16:17:37 2014: INFO Parser: Analizando escenario
+Tue Nov 18 16:17:37 2014: INFO Parser: Analizando objetos
+Tue Nov 18 16:17:37 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 16:17:37 2014: INFO Corriendo Juego
+Tue Nov 18 16:17:37 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 16:17:39 2014: INFO Nuevo cliente conectado
+Tue Nov 18 16:17:39 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 16:17:39 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 16:17:39 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 16:17:39 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 16:17:39 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 16:17:39 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+Tue Nov 18 16:17:45 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: Fede
+Tue Nov 18 16:17:50 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: Fede
+Tue Nov 18 16:17:51 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: Fede
+Tue Nov 18 16:18:00 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: Fede
+Tue Nov 18 16:18:14 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: Fede
+Tue Nov 18 16:18:33 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Tue Nov 18 16:18:33 2014: WARNING No se pueden recibir datos del cliente. ID: Fede. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 16:22:59 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 16:22:59 2014: INFO Creando Servidor
+Tue Nov 18 16:22:59 2014: INFO Validando parametros
+Tue Nov 18 16:22:59 2014: INFO Parametros Correctos
+Tue Nov 18 16:22:59 2014: INFO Creando socket
+Tue Nov 18 16:22:59 2014: INFO Socket creado correctamente
+Tue Nov 18 16:22:59 2014: INFO Bindeando Socket
+Tue Nov 18 16:22:59 2014: INFO Socket bindeado
+Tue Nov 18 16:22:59 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 16:22:59 2014: INFO Parser: Analizando escenario
+Tue Nov 18 16:22:59 2014: INFO Parser: Analizando objetos
+Tue Nov 18 16:22:59 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 16:22:59 2014: INFO Corriendo Juego
+Tue Nov 18 16:22:59 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 16:23:01 2014: INFO Nuevo cliente conectado
+Tue Nov 18 16:23:01 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 16:23:01 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 16:23:01 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 16:23:01 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 16:23:01 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 16:23:01 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+Tue Nov 18 16:24:13 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Tue Nov 18 16:24:13 2014: WARNING No se pueden recibir datos del cliente. ID: Fede. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 16:40:52 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 16:40:52 2014: INFO Creando Servidor
+Tue Nov 18 16:40:52 2014: INFO Validando parametros
+Tue Nov 18 16:40:52 2014: INFO Parametros Correctos
+Tue Nov 18 16:40:52 2014: INFO Creando socket
+Tue Nov 18 16:40:52 2014: INFO Socket creado correctamente
+Tue Nov 18 16:40:52 2014: INFO Bindeando Socket
+Tue Nov 18 16:40:52 2014: INFO Socket bindeado
+Tue Nov 18 16:40:52 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 16:40:52 2014: INFO Parser: Analizando escenario
+Tue Nov 18 16:40:52 2014: INFO Parser: Analizando objetos
+Tue Nov 18 16:40:52 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 16:40:52 2014: INFO Corriendo Juego
+Tue Nov 18 16:40:52 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 16:40:55 2014: INFO Nuevo cliente conectado
+Tue Nov 18 16:40:55 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 16:40:55 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 16:40:55 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 16:40:55 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 16:40:55 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 16:40:55 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 16:41:19 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 16:41:19 2014: INFO Creando Servidor
+Tue Nov 18 16:41:19 2014: INFO Validando parametros
+Tue Nov 18 16:41:19 2014: INFO Parametros Correctos
+Tue Nov 18 16:41:19 2014: INFO Creando socket
+Tue Nov 18 16:41:19 2014: INFO Socket creado correctamente
+Tue Nov 18 16:41:19 2014: INFO Bindeando Socket
+Tue Nov 18 16:41:19 2014: INFO Socket bindeado
+Tue Nov 18 16:41:19 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 16:41:19 2014: INFO Parser: Analizando escenario
+Tue Nov 18 16:41:19 2014: INFO Parser: Analizando objetos
+Tue Nov 18 16:41:19 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 16:41:19 2014: INFO Corriendo Juego
+Tue Nov 18 16:41:19 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 16:41:21 2014: INFO Nuevo cliente conectado
+Tue Nov 18 16:41:21 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 16:41:21 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 16:41:21 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 16:41:21 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 16:41:21 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 16:41:21 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 16:41:43 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 16:41:43 2014: INFO Creando Servidor
+Tue Nov 18 16:41:43 2014: INFO Validando parametros
+Tue Nov 18 16:41:43 2014: INFO Parametros Correctos
+Tue Nov 18 16:41:43 2014: INFO Creando socket
+Tue Nov 18 16:41:43 2014: INFO Socket creado correctamente
+Tue Nov 18 16:41:43 2014: INFO Bindeando Socket
+Tue Nov 18 16:41:43 2014: INFO Socket bindeado
+Tue Nov 18 16:41:43 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 16:41:43 2014: INFO Parser: Analizando escenario
+Tue Nov 18 16:41:43 2014: INFO Parser: Analizando objetos
+Tue Nov 18 16:41:43 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 16:41:43 2014: INFO Corriendo Juego
+Tue Nov 18 16:41:43 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 16:41:45 2014: INFO Nuevo cliente conectado
+Tue Nov 18 16:41:45 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 16:41:45 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 16:41:45 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 16:41:45 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 16:41:45 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 16:41:45 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 16:42:48 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 16:42:48 2014: INFO Creando Servidor
+Tue Nov 18 16:42:48 2014: INFO Validando parametros
+Tue Nov 18 16:42:48 2014: INFO Parametros Correctos
+Tue Nov 18 16:42:48 2014: INFO Creando socket
+Tue Nov 18 16:42:48 2014: INFO Socket creado correctamente
+Tue Nov 18 16:42:48 2014: INFO Bindeando Socket
+Tue Nov 18 16:42:48 2014: INFO Socket bindeado
+Tue Nov 18 16:42:48 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 16:42:48 2014: INFO Parser: Analizando escenario
+Tue Nov 18 16:42:48 2014: INFO Parser: Analizando objetos
+Tue Nov 18 16:42:48 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 16:42:48 2014: INFO Corriendo Juego
+Tue Nov 18 16:42:48 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 16:42:51 2014: INFO Nuevo cliente conectado
+Tue Nov 18 16:42:51 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 16:42:51 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 16:42:51 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 16:42:51 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 16:42:51 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 16:42:51 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+Tue Nov 18 16:43:05 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Tue Nov 18 16:43:05 2014: WARNING No se pueden recibir datos del cliente. ID: Fede. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 16:43:17 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 16:43:17 2014: INFO Creando Servidor
+Tue Nov 18 16:43:17 2014: INFO Validando parametros
+Tue Nov 18 16:43:17 2014: INFO Parametros Correctos
+Tue Nov 18 16:43:17 2014: INFO Creando socket
+Tue Nov 18 16:43:17 2014: INFO Socket creado correctamente
+Tue Nov 18 16:43:17 2014: INFO Bindeando Socket
+Tue Nov 18 16:43:17 2014: INFO Socket bindeado
+Tue Nov 18 16:43:17 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 16:43:17 2014: INFO Parser: Analizando escenario
+Tue Nov 18 16:43:17 2014: INFO Parser: Analizando objetos
+Tue Nov 18 16:43:17 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 16:43:17 2014: INFO Corriendo Juego
+Tue Nov 18 16:43:17 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 16:43:19 2014: INFO Nuevo cliente conectado
+Tue Nov 18 16:43:19 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 16:43:19 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 16:43:19 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 16:43:19 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 16:43:19 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 16:43:19 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+Tue Nov 18 16:43:37 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Tue Nov 18 16:43:37 2014: WARNING No se pueden recibir datos del cliente. ID: Fede. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 16:46:28 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 16:46:28 2014: INFO Creando Servidor
+Tue Nov 18 16:46:28 2014: INFO Validando parametros
+Tue Nov 18 16:46:28 2014: INFO Parametros Correctos
+Tue Nov 18 16:46:28 2014: INFO Creando socket
+Tue Nov 18 16:46:28 2014: INFO Socket creado correctamente
+Tue Nov 18 16:46:28 2014: INFO Bindeando Socket
+Tue Nov 18 16:46:28 2014: INFO Socket bindeado
+Tue Nov 18 16:46:28 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 16:46:28 2014: INFO Parser: Analizando escenario
+Tue Nov 18 16:46:28 2014: INFO Parser: Analizando objetos
+Tue Nov 18 16:46:28 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 16:46:28 2014: INFO Corriendo Juego
+Tue Nov 18 16:46:28 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 16:46:30 2014: INFO Nuevo cliente conectado
+Tue Nov 18 16:46:30 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 16:46:30 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 16:46:30 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 16:46:30 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 16:46:30 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 16:46:30 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+Tue Nov 18 16:47:08 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Tue Nov 18 16:47:08 2014: WARNING No se pueden recibir datos del cliente. ID: Fede. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 16:47:34 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 16:47:34 2014: INFO Creando Servidor
+Tue Nov 18 16:47:34 2014: INFO Validando parametros
+Tue Nov 18 16:47:34 2014: INFO Parametros Correctos
+Tue Nov 18 16:47:34 2014: INFO Creando socket
+Tue Nov 18 16:47:34 2014: INFO Socket creado correctamente
+Tue Nov 18 16:47:34 2014: INFO Bindeando Socket
+Tue Nov 18 16:47:34 2014: INFO Socket bindeado
+Tue Nov 18 16:47:34 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 16:47:34 2014: INFO Parser: Analizando escenario
+Tue Nov 18 16:47:34 2014: INFO Parser: Analizando objetos
+Tue Nov 18 16:47:34 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 16:47:34 2014: INFO Corriendo Juego
+Tue Nov 18 16:47:34 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 16:47:36 2014: INFO Nuevo cliente conectado
+Tue Nov 18 16:47:36 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 16:47:36 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 16:47:36 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 16:47:36 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 16:47:36 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 16:47:36 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 16:49:00 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 16:49:00 2014: INFO Creando Servidor
+Tue Nov 18 16:49:00 2014: INFO Validando parametros
+Tue Nov 18 16:49:00 2014: INFO Parametros Correctos
+Tue Nov 18 16:49:00 2014: INFO Creando socket
+Tue Nov 18 16:49:00 2014: INFO Socket creado correctamente
+Tue Nov 18 16:49:00 2014: INFO Bindeando Socket
+Tue Nov 18 16:49:00 2014: INFO Socket bindeado
+Tue Nov 18 16:49:00 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 16:49:00 2014: INFO Parser: Analizando escenario
+Tue Nov 18 16:49:00 2014: INFO Parser: Analizando objetos
+Tue Nov 18 16:49:00 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 16:49:00 2014: INFO Corriendo Juego
+Tue Nov 18 16:49:00 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 16:49:01 2014: INFO Nuevo cliente conectado
+Tue Nov 18 16:49:01 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 16:49:01 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 16:49:01 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 16:49:01 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 16:49:01 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 16:49:01 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 16:50:26 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 16:50:26 2014: INFO Creando Servidor
+Tue Nov 18 16:50:26 2014: INFO Validando parametros
+Tue Nov 18 16:50:26 2014: INFO Parametros Correctos
+Tue Nov 18 16:50:26 2014: INFO Creando socket
+Tue Nov 18 16:50:26 2014: INFO Socket creado correctamente
+Tue Nov 18 16:50:26 2014: INFO Bindeando Socket
+Tue Nov 18 16:50:26 2014: INFO Socket bindeado
+Tue Nov 18 16:50:26 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 16:50:26 2014: INFO Parser: Analizando escenario
+Tue Nov 18 16:50:26 2014: INFO Parser: Analizando objetos
+Tue Nov 18 16:50:26 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 16:50:26 2014: INFO Corriendo Juego
+Tue Nov 18 16:50:26 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 16:50:28 2014: INFO Nuevo cliente conectado
+Tue Nov 18 16:50:28 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 16:50:28 2014: INFO Agregamos al nuevo cliente. ID: Fede
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 16:50:35 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 16:50:35 2014: INFO Creando Servidor
+Tue Nov 18 16:50:35 2014: INFO Validando parametros
+Tue Nov 18 16:50:35 2014: INFO Parametros Correctos
+Tue Nov 18 16:50:35 2014: INFO Creando socket
+Tue Nov 18 16:50:35 2014: INFO Socket creado correctamente
+Tue Nov 18 16:50:35 2014: INFO Bindeando Socket
+Tue Nov 18 16:50:35 2014: ERROR Error al tratar de bindear el socket
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 16:50:41 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 16:50:41 2014: INFO Creando Servidor
+Tue Nov 18 16:50:41 2014: INFO Validando parametros
+Tue Nov 18 16:50:41 2014: INFO Parametros Correctos
+Tue Nov 18 16:50:41 2014: INFO Creando socket
+Tue Nov 18 16:50:41 2014: INFO Socket creado correctamente
+Tue Nov 18 16:50:41 2014: INFO Bindeando Socket
+Tue Nov 18 16:50:41 2014: ERROR Error al tratar de bindear el socket
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 16:51:00 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 16:51:00 2014: INFO Creando Servidor
+Tue Nov 18 16:51:00 2014: INFO Validando parametros
+Tue Nov 18 16:51:00 2014: INFO Parametros Correctos
+Tue Nov 18 16:51:00 2014: INFO Creando socket
+Tue Nov 18 16:51:00 2014: INFO Socket creado correctamente
+Tue Nov 18 16:51:00 2014: INFO Bindeando Socket
+Tue Nov 18 16:51:00 2014: INFO Socket bindeado
+Tue Nov 18 16:51:00 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 16:51:00 2014: INFO Parser: Analizando escenario
+Tue Nov 18 16:51:00 2014: INFO Parser: Analizando objetos
+Tue Nov 18 16:51:00 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 16:51:00 2014: INFO Corriendo Juego
+Tue Nov 18 16:51:00 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 16:51:02 2014: INFO Nuevo cliente conectado
+Tue Nov 18 16:51:02 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 16:51:02 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 16:51:02 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 16:51:02 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 16:51:02 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 16:51:02 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 16:51:48 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 16:51:48 2014: INFO Creando Servidor
+Tue Nov 18 16:51:48 2014: INFO Validando parametros
+Tue Nov 18 16:51:48 2014: INFO Parametros Correctos
+Tue Nov 18 16:51:48 2014: INFO Creando socket
+Tue Nov 18 16:51:48 2014: INFO Socket creado correctamente
+Tue Nov 18 16:51:48 2014: INFO Bindeando Socket
+Tue Nov 18 16:51:48 2014: INFO Socket bindeado
+Tue Nov 18 16:51:48 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 16:51:48 2014: INFO Parser: Analizando escenario
+Tue Nov 18 16:51:48 2014: INFO Parser: Analizando objetos
+Tue Nov 18 16:51:48 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 16:51:48 2014: INFO Corriendo Juego
+Tue Nov 18 16:51:48 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 16:51:51 2014: INFO Nuevo cliente conectado
+Tue Nov 18 16:51:51 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 16:51:51 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 16:51:51 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 16:51:51 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 16:51:51 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 16:51:51 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+Tue Nov 18 16:52:04 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Tue Nov 18 16:52:04 2014: WARNING No se pueden recibir datos del cliente. ID: Fede. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 16:58:14 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 16:58:14 2014: INFO Creando Servidor
+Tue Nov 18 16:58:14 2014: INFO Validando parametros
+Tue Nov 18 16:58:14 2014: INFO Parametros Correctos
+Tue Nov 18 16:58:14 2014: INFO Creando socket
+Tue Nov 18 16:58:14 2014: INFO Socket creado correctamente
+Tue Nov 18 16:58:14 2014: INFO Bindeando Socket
+Tue Nov 18 16:58:14 2014: INFO Socket bindeado
+Tue Nov 18 16:58:14 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 16:58:14 2014: INFO Parser: Analizando escenario
+Tue Nov 18 16:58:14 2014: INFO Parser: Analizando objetos
+Tue Nov 18 16:58:14 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 16:58:14 2014: INFO Corriendo Juego
+Tue Nov 18 16:58:14 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 16:58:16 2014: INFO Nuevo cliente conectado
+Tue Nov 18 16:58:16 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 16:58:16 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 16:58:16 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 16:58:16 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 16:58:16 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 16:58:16 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+Tue Nov 18 16:58:24 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Tue Nov 18 16:58:24 2014: WARNING No se pueden recibir datos del cliente. ID: Fede. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 16:59:15 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 16:59:15 2014: INFO Creando Servidor
+Tue Nov 18 16:59:15 2014: INFO Validando parametros
+Tue Nov 18 16:59:15 2014: INFO Parametros Correctos
+Tue Nov 18 16:59:15 2014: INFO Creando socket
+Tue Nov 18 16:59:15 2014: INFO Socket creado correctamente
+Tue Nov 18 16:59:15 2014: INFO Bindeando Socket
+Tue Nov 18 16:59:15 2014: INFO Socket bindeado
+Tue Nov 18 16:59:15 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 16:59:15 2014: INFO Parser: Analizando escenario
+Tue Nov 18 16:59:15 2014: INFO Parser: Analizando objetos
+Tue Nov 18 16:59:15 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 16:59:15 2014: INFO Corriendo Juego
+Tue Nov 18 16:59:15 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 16:59:17 2014: INFO Nuevo cliente conectado
+Tue Nov 18 16:59:17 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 16:59:17 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 16:59:17 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 16:59:17 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 16:59:17 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 16:59:17 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+Tue Nov 18 16:59:23 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Tue Nov 18 16:59:23 2014: WARNING No se pueden recibir datos del cliente. ID: Fede. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 17:19:50 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 17:19:50 2014: INFO Creando Servidor
+Tue Nov 18 17:19:50 2014: INFO Validando parametros
+Tue Nov 18 17:19:50 2014: INFO Parametros Correctos
+Tue Nov 18 17:19:50 2014: INFO Creando socket
+Tue Nov 18 17:19:50 2014: INFO Socket creado correctamente
+Tue Nov 18 17:19:50 2014: INFO Bindeando Socket
+Tue Nov 18 17:19:50 2014: INFO Socket bindeado
+Tue Nov 18 17:19:50 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 17:19:50 2014: INFO Parser: Analizando escenario
+Tue Nov 18 17:19:50 2014: INFO Parser: Analizando objetos
+Tue Nov 18 17:19:50 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 17:19:50 2014: INFO Corriendo Juego
+Tue Nov 18 17:19:50 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 17:19:55 2014: INFO Nuevo cliente conectado
+Tue Nov 18 17:19:55 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 17:19:55 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 17:19:55 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 17:19:55 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 17:19:55 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 17:19:55 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+Tue Nov 18 17:20:01 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Tue Nov 18 17:20:01 2014: WARNING No se pueden recibir datos del cliente. ID: Fede. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 17:20:28 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 17:20:28 2014: INFO Creando Servidor
+Tue Nov 18 17:20:28 2014: INFO Validando parametros
+Tue Nov 18 17:20:28 2014: INFO Parametros Correctos
+Tue Nov 18 17:20:28 2014: INFO Creando socket
+Tue Nov 18 17:20:28 2014: INFO Socket creado correctamente
+Tue Nov 18 17:20:28 2014: INFO Bindeando Socket
+Tue Nov 18 17:20:28 2014: INFO Socket bindeado
+Tue Nov 18 17:20:28 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 17:20:28 2014: INFO Parser: Analizando escenario
+Tue Nov 18 17:20:28 2014: INFO Parser: Analizando objetos
+Tue Nov 18 17:20:28 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 17:20:28 2014: INFO Corriendo Juego
+Tue Nov 18 17:20:28 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 17:20:33 2014: INFO Nuevo cliente conectado
+Tue Nov 18 17:20:33 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 17:20:33 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 17:20:33 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 17:20:33 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 17:20:33 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 17:20:33 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+Tue Nov 18 17:20:44 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Tue Nov 18 17:20:44 2014: WARNING No se pueden recibir datos del cliente. ID: Fede. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 17:21:42 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 17:21:42 2014: INFO Creando Servidor
+Tue Nov 18 17:21:42 2014: INFO Validando parametros
+Tue Nov 18 17:21:42 2014: INFO Parametros Correctos
+Tue Nov 18 17:21:42 2014: INFO Creando socket
+Tue Nov 18 17:21:42 2014: INFO Socket creado correctamente
+Tue Nov 18 17:21:42 2014: INFO Bindeando Socket
+Tue Nov 18 17:21:42 2014: INFO Socket bindeado
+Tue Nov 18 17:21:42 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 17:21:42 2014: INFO Parser: Analizando escenario
+Tue Nov 18 17:21:42 2014: INFO Parser: Analizando objetos
+Tue Nov 18 17:21:42 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 17:21:42 2014: INFO Corriendo Juego
+Tue Nov 18 17:21:42 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 17:21:44 2014: INFO Nuevo cliente conectado
+Tue Nov 18 17:21:44 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 17:21:44 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 17:21:44 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 17:21:44 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 17:21:44 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 17:21:44 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+Tue Nov 18 17:22:15 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: Fede
+Tue Nov 18 17:22:25 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Tue Nov 18 17:22:25 2014: WARNING No se pueden recibir datos del cliente. ID: Fede. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 17:22:37 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 17:22:37 2014: INFO Creando Servidor
+Tue Nov 18 17:22:37 2014: INFO Validando parametros
+Tue Nov 18 17:22:37 2014: INFO Parametros Correctos
+Tue Nov 18 17:22:37 2014: INFO Creando socket
+Tue Nov 18 17:22:37 2014: INFO Socket creado correctamente
+Tue Nov 18 17:22:37 2014: INFO Bindeando Socket
+Tue Nov 18 17:22:37 2014: INFO Socket bindeado
+Tue Nov 18 17:22:37 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 17:22:37 2014: INFO Parser: Analizando escenario
+Tue Nov 18 17:22:37 2014: INFO Parser: Analizando objetos
+Tue Nov 18 17:22:37 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 17:22:37 2014: INFO Corriendo Juego
+Tue Nov 18 17:22:37 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 17:22:39 2014: INFO Nuevo cliente conectado
+Tue Nov 18 17:22:39 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 17:22:39 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 17:22:39 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 17:22:39 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 17:22:39 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 17:22:39 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+Tue Nov 18 17:22:50 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: Fede
+Tue Nov 18 17:22:55 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: Fede
+Tue Nov 18 17:22:57 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: Fede
+Tue Nov 18 17:22:58 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: Fede
+Tue Nov 18 17:23:11 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: Fede
+Tue Nov 18 17:23:21 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Tue Nov 18 17:23:21 2014: WARNING No se pueden recibir datos del cliente. ID: Fede. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 17:27:52 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 17:27:52 2014: INFO Creando Servidor
+Tue Nov 18 17:27:52 2014: INFO Validando parametros
+Tue Nov 18 17:27:52 2014: INFO Parametros Correctos
+Tue Nov 18 17:27:52 2014: INFO Creando socket
+Tue Nov 18 17:27:52 2014: INFO Socket creado correctamente
+Tue Nov 18 17:27:52 2014: INFO Bindeando Socket
+Tue Nov 18 17:27:52 2014: INFO Socket bindeado
+Tue Nov 18 17:27:52 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 17:27:52 2014: INFO Parser: Analizando escenario
+Tue Nov 18 17:27:52 2014: INFO Parser: Analizando objetos
+Tue Nov 18 17:27:52 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 17:27:52 2014: INFO Corriendo Juego
+Tue Nov 18 17:27:52 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 17:28:00 2014: INFO Nuevo cliente conectado
+Tue Nov 18 17:28:00 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 17:28:00 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 17:28:00 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 17:28:00 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 17:28:00 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 17:28:00 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+Tue Nov 18 17:28:05 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: Fede
+Tue Nov 18 17:28:42 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Tue Nov 18 17:28:42 2014: WARNING No se pueden recibir datos del cliente. ID: Fede. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 17:33:00 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 17:33:00 2014: INFO Creando Servidor
+Tue Nov 18 17:33:00 2014: INFO Validando parametros
+Tue Nov 18 17:33:00 2014: INFO Parametros Correctos
+Tue Nov 18 17:33:00 2014: INFO Creando socket
+Tue Nov 18 17:33:00 2014: INFO Socket creado correctamente
+Tue Nov 18 17:33:00 2014: INFO Bindeando Socket
+Tue Nov 18 17:33:00 2014: INFO Socket bindeado
+Tue Nov 18 17:33:00 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 17:33:00 2014: INFO Parser: Analizando escenario
+Tue Nov 18 17:33:00 2014: INFO Parser: Analizando objetos
+Tue Nov 18 17:33:00 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 17:33:00 2014: INFO Corriendo Juego
+Tue Nov 18 17:33:00 2014: INFO Corriendo thread para aceptar conexiones
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 17:33:18 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 17:33:18 2014: INFO Creando Servidor
+Tue Nov 18 17:33:18 2014: INFO Validando parametros
+Tue Nov 18 17:33:18 2014: INFO Parametros Correctos
+Tue Nov 18 17:33:18 2014: INFO Creando socket
+Tue Nov 18 17:33:18 2014: INFO Socket creado correctamente
+Tue Nov 18 17:33:18 2014: INFO Bindeando Socket
+Tue Nov 18 17:33:18 2014: INFO Socket bindeado
+Tue Nov 18 17:33:18 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 17:33:18 2014: INFO Parser: Analizando escenario
+Tue Nov 18 17:33:18 2014: INFO Parser: Analizando objetos
+Tue Nov 18 17:33:18 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 17:33:18 2014: INFO Corriendo Juego
+Tue Nov 18 17:33:18 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 17:33:19 2014: INFO Nuevo cliente conectado
+Tue Nov 18 17:33:19 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 17:33:19 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 17:33:19 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 17:33:19 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 17:33:19 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 17:33:19 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+Tue Nov 18 17:33:40 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: Fede
+Tue Nov 18 17:33:41 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: Fede
+Tue Nov 18 17:33:44 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Tue Nov 18 17:33:44 2014: WARNING No se pueden recibir datos del cliente. ID: Fede. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 17:40:46 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 17:40:46 2014: INFO Creando Servidor
+Tue Nov 18 17:40:46 2014: INFO Validando parametros
+Tue Nov 18 17:40:46 2014: INFO Parametros Correctos
+Tue Nov 18 17:40:46 2014: INFO Creando socket
+Tue Nov 18 17:40:46 2014: INFO Socket creado correctamente
+Tue Nov 18 17:40:46 2014: INFO Bindeando Socket
+Tue Nov 18 17:40:46 2014: INFO Socket bindeado
+Tue Nov 18 17:40:46 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 17:40:46 2014: INFO Parser: Analizando escenario
+Tue Nov 18 17:40:46 2014: INFO Parser: Analizando objetos
+Tue Nov 18 17:40:46 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 17:40:46 2014: INFO Corriendo Juego
+Tue Nov 18 17:40:46 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 17:40:47 2014: INFO Nuevo cliente conectado
+Tue Nov 18 17:40:47 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 17:40:47 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 17:40:47 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 17:40:47 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 17:40:47 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 17:40:47 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+Tue Nov 18 17:42:30 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: Fede
+Tue Nov 18 17:44:00 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Tue Nov 18 17:44:00 2014: WARNING No se pueden recibir datos del cliente. ID: Fede. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 17:48:40 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 17:48:40 2014: INFO Creando Servidor
+Tue Nov 18 17:48:40 2014: INFO Validando parametros
+Tue Nov 18 17:48:40 2014: INFO Parametros Correctos
+Tue Nov 18 17:48:40 2014: INFO Creando socket
+Tue Nov 18 17:48:40 2014: INFO Socket creado correctamente
+Tue Nov 18 17:48:40 2014: INFO Bindeando Socket
+Tue Nov 18 17:48:40 2014: INFO Socket bindeado
+Tue Nov 18 17:48:40 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 17:48:40 2014: INFO Parser: Analizando escenario
+Tue Nov 18 17:48:40 2014: INFO Parser: Analizando objetos
+Tue Nov 18 17:48:40 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 17:48:40 2014: INFO Corriendo Juego
+Tue Nov 18 17:48:40 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 17:48:45 2014: INFO Nuevo cliente conectado
+Tue Nov 18 17:48:45 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 17:48:45 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 17:48:45 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 17:48:45 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 17:48:45 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 17:48:45 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+Tue Nov 18 17:48:50 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: Fede
+Tue Nov 18 17:49:04 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: Fede
+Tue Nov 18 17:49:28 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Tue Nov 18 17:49:28 2014: WARNING No se pueden recibir datos del cliente. ID: Fede. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 17:53:47 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 17:53:47 2014: INFO Creando Servidor
+Tue Nov 18 17:53:47 2014: INFO Validando parametros
+Tue Nov 18 17:53:47 2014: INFO Parametros Correctos
+Tue Nov 18 17:53:47 2014: INFO Creando socket
+Tue Nov 18 17:53:47 2014: INFO Socket creado correctamente
+Tue Nov 18 17:53:47 2014: INFO Bindeando Socket
+Tue Nov 18 17:53:47 2014: INFO Socket bindeado
+Tue Nov 18 17:53:47 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 17:53:47 2014: INFO Parser: Analizando escenario
+Tue Nov 18 17:53:47 2014: INFO Parser: Analizando objetos
+Tue Nov 18 17:53:47 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 17:53:47 2014: INFO Corriendo Juego
+Tue Nov 18 17:53:47 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 17:53:53 2014: INFO Nuevo cliente conectado
+Tue Nov 18 17:53:53 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 17:53:53 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 17:53:53 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 17:53:53 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 17:53:53 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 17:53:53 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+Tue Nov 18 17:54:03 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Tue Nov 18 17:54:03 2014: WARNING No se pueden recibir datos del cliente. ID: Fede. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 17:55:39 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 17:55:39 2014: INFO Creando Servidor
+Tue Nov 18 17:55:39 2014: INFO Validando parametros
+Tue Nov 18 17:55:39 2014: INFO Parametros Correctos
+Tue Nov 18 17:55:39 2014: INFO Creando socket
+Tue Nov 18 17:55:39 2014: INFO Socket creado correctamente
+Tue Nov 18 17:55:39 2014: INFO Bindeando Socket
+Tue Nov 18 17:55:39 2014: INFO Socket bindeado
+Tue Nov 18 17:55:39 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 17:55:39 2014: INFO Parser: Analizando escenario
+Tue Nov 18 17:55:39 2014: INFO Parser: Analizando objetos
+Tue Nov 18 17:55:39 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 17:55:39 2014: INFO Corriendo Juego
+Tue Nov 18 17:55:39 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 17:55:40 2014: INFO Nuevo cliente conectado
+Tue Nov 18 17:55:40 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 17:55:40 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 17:55:40 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 17:55:40 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 17:55:40 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 17:55:40 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+Tue Nov 18 17:55:45 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Tue Nov 18 17:55:45 2014: WARNING No se pueden recibir datos del cliente. ID: Fede. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Tue Nov 18 17:57:07 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Tue Nov 18 17:57:07 2014: INFO Creando Servidor
+Tue Nov 18 17:57:07 2014: INFO Validando parametros
+Tue Nov 18 17:57:07 2014: INFO Parametros Correctos
+Tue Nov 18 17:57:07 2014: INFO Creando socket
+Tue Nov 18 17:57:07 2014: INFO Socket creado correctamente
+Tue Nov 18 17:57:07 2014: INFO Bindeando Socket
+Tue Nov 18 17:57:07 2014: INFO Socket bindeado
+Tue Nov 18 17:57:07 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Tue Nov 18 17:57:07 2014: INFO Parser: Analizando escenario
+Tue Nov 18 17:57:07 2014: INFO Parser: Analizando objetos
+Tue Nov 18 17:57:07 2014: INFO Parser: Archivo JSON OK!
+Tue Nov 18 17:57:07 2014: INFO Corriendo Juego
+Tue Nov 18 17:57:07 2014: INFO Corriendo thread para aceptar conexiones
+Tue Nov 18 17:57:11 2014: INFO Nuevo cliente conectado
+Tue Nov 18 17:57:11 2014: INFO Buscamos lugar para la conexion. ID: Fede
+Tue Nov 18 17:57:11 2014: INFO Agregamos al nuevo cliente. ID: Fede
+Tue Nov 18 17:57:11 2014: INFO Se asigno un nuevo personaje al cliente. ID: Fede
+Tue Nov 18 17:57:11 2014: INFO Datos iniciales del juego enviados
+Tue Nov 18 17:57:11 2014: INFO Comienza el thread para recibir datos del cliente. ID: Fede
+Tue Nov 18 17:57:11 2014: INFO Comienza el thread para enviar datos al cliente. ID: Fede
+Tue Nov 18 17:57:24 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Tue Nov 18 17:57:24 2014: WARNING No se pueden recibir datos del cliente. ID: Fede. Se desactiva la conexion

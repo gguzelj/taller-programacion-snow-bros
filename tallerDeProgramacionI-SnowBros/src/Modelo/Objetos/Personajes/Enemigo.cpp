@@ -16,6 +16,7 @@ Enemigo::Enemigo(JsonParser *parser, int index, Escenario* escenario) {
 	this->movimientoDisparar = false;
 	this->movimientoDerecha = false;
 	this->movimientoIzquierda = false;
+	this->movimientoTeletransportando = false;
 	this->tiempoDeImpactoDeLaUltimaBola = 0.0f;
 	this->esAtravezable = false;
 	this->lives = 5;

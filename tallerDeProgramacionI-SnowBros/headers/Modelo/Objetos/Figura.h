@@ -32,6 +32,7 @@
 #define ID_ENEMIGO_BASICO 11
 #define ID_ENEMIGO_FUEGO 12
 #define ID_BOLA_FUEGO 13
+#define ID_PORTAL 14
 
 #define FIGURA_WARNING_OVERLAP "El siguiente objeto se esta superponiendo con otros ya creados \n"
 
@@ -52,6 +53,7 @@ class Personaje;
 class BolaNieve;
 class BolaEnemigo;
 class BolaFuego;
+class Portal;
 
 /*
  * Clase abstracta de la cual van a heredar todos los tipos de figuras (Rectangulo, Poligono, Circulo, Parelelogramo)
@@ -100,6 +102,8 @@ public:
 	virtual void beginContactBolaNieve(BolaNieve*,b2Contact*){};
 	virtual void beginContactBolaEnemigo(BolaEnemigo*,b2Contact*){};
 	virtual void beginContactBolaFuego(BolaFuego*,b2Contact*){};
+	virtual void beginContactPortal(Portal*,b2Contact*){};
+
 
 	virtual void endContactCirculo(Circulo*,b2Contact*){};
 	virtual void endContactMuro(Muro*,b2Contact*){};
@@ -112,6 +116,7 @@ public:
 	virtual void endContactBolaNieve(BolaNieve*,b2Contact*){};
 	virtual void endContactBolaEnemigo(BolaEnemigo*,b2Contact*){};
 	virtual void endContactBolaFuego(BolaFuego*,b2Contact*){};
+	virtual void endContactPortal(Portal*,b2Contact*){};
 
 };
 

@@ -29,6 +29,14 @@ Escenario::Escenario(JsonParser *parser) {
 	new Rectangulo(0, alto_un, 0, ancho_un/2, 0, world_);
 	new Rectangulo(0, alto_un, 0, -ancho_un/2, 0, world_);
 
+	//Creamos los portales
+	Portal *port = new Portal(0.1, 3, 0, 0, 4-alto_un/2, world_);
+	b2Vec2 destination;
+	destination.x = 0;
+	destination.y = -4;
+
+	port->setDestination(destination);
+
 	// Create all the objects
 	for (unsigned int index = 0; index < parser->getCantidadObjetos();
 			index++) {

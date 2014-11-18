@@ -13,25 +13,26 @@ EnemigoFuego::~EnemigoFuego() {
 
 void EnemigoFuego::shoot() {
 
-	BolaFuego *bola;
-	float x = getX();
-	float y = getY() + MITAD_ALTO_ENEMIGO;
-
 	if (!movimientoDisparar || shootCooldown > 0)
 		return;
 
-	shootCooldown = 10;
+	BolaFuego *bola;
+	float x = getX();
+	float y = getY();
+
+	shootCooldown = 20;
 
 	x += (orientacion == IZQUIERDA) ? -1 : 1;
 
 	bola = new BolaFuego(x, y, 1, this->world);
 
+	b2Vec2 vel = this->body->GetLinearVelocity();
+
+	vel.x -= (orientacion == IZQUIERDA) ? aceleracion * 4 : -aceleracion * 4;
+	vel.y = 0;
+	bola->setVelocidad(vel);
+
 	this->escenario_->agregarProyectil(bola);
-
-	//Lanzamos un thread para que muera la bola
-	std::thread t(&BolaFuego::morir, bola);
-	t.detach();
-
 }
 
 void EnemigoFuego::mover() {
@@ -39,44 +40,15 @@ void EnemigoFuego::mover() {
 	if (movimientoDisparar)
 		movimientoDisparar = false;
 
-	int i = 0;
-	std::list<Personaje*>* personajes_ = escenario_->getPersonajes();
-
-	float posicionesX[4];
-	float posicionesY[4];
-	for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
-		posicionesX[i] = (*personaje)->getX();
-		posicionesY[i] = (*personaje)->getY();
-		i++;
-	}
-	float posicionPersonajeX = posicionesX[0];
-	float posicionPersonajeY = posicionesY[0];
-	float posicionEnemigoX = this->getX();
-	float posicionEnemigoY = this->getY();
-
 	int v1 = rand() % 100;
-	if (v1 < 45) {
-		v1 = rand() % 100;
-		if (v1 <= 25)
+		if (v1 <= 20)
 			this->handleInput(SDLK_LEFT, SDL_KEYDOWN);
-		else {
-			if (v1 <= 50)
-				this->handleInput(SDLK_RIGHT, SDL_KEYDOWN);
-			else {
-				if (v1 <= 75)
-					this->handleInput(SDLK_RIGHT, SDL_KEYUP);
-				else
-					this->handleInput(SDLK_LEFT, SDL_KEYUP);
-			}
-		}
-	} else if (v1 < 50) {
-		if (posicionPersonajeX < posicionEnemigoX) {
-			this->handleInput(SDLK_RIGHT, SDL_KEYUP);
-			this->handleInput(SDLK_LEFT, SDL_KEYDOWN);
-		}
-		if (posicionPersonajeX > posicionEnemigoX) {
-			this->handleInput(SDLK_LEFT, SDL_KEYUP);
+		else if (v1 <= 40)
 			this->handleInput(SDLK_RIGHT, SDL_KEYDOWN);
-		}
-	}
+		else if (v1 <= 60)
+			this->handleInput(SDLK_LEFT, SDL_KEYUP);
+		else if (v1 <= 80)
+			this->handleInput(SDLK_RIGHT, SDL_KEYUP);
+		else if (v1 >= 82)
+			this->handleInput(SDLK_SPACE, SDL_KEYDOWN);
 }

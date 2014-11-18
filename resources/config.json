@@ -146,16 +146,16 @@
                        "estatico":true
                      },       
                      {
-                       "tipo":"enemigobasico",
-                       "x":10,
-                       "y":-5,
+                       "tipo":"enemigofuego",
+                       "x":5,
+                       "y":-4,
                        "escala":1,//campo obligatorio por el json
                        "rot":45,//campo obligatorio por el json
                        "masa":1,//campo obligatorio por el json
                        "estatico":false//campo obligatorio por el json
                      },
                      {
-                       "tipo":"enemigobasico",
+                       "tipo":"enemigofuego",
                        "x":-5,
                        "y":-4,
                        "escala":1,//campo obligatorio por el json

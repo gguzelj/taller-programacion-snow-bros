@@ -3,6 +3,7 @@
 
 #define RADIO_BOLA_FUEGO 0.35
 #define MASA_BOLA_FUEGO 1
+#define BOLA_FUEGO_FILTER_INDEX -2
 
 #include "Proyectil.h"
 
@@ -19,10 +20,6 @@ public:
 
 	BolaFuego(float x, float y, int potencia, b2World* world);
 	virtual ~BolaFuego();
-
-	void actualizar();
-
-	void morir();
 
 	void setVelocidad(b2Vec2 velocidad);
 

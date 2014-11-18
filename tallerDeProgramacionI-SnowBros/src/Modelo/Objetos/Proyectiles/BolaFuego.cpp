@@ -3,7 +3,6 @@
 BolaFuego::BolaFuego(float x, float y, int potencia, b2World* world) {
 
 	this->type = ID_BOLA_FUEGO;
-
 	this->potencia = potencia;
 	this->x = x;
 	this->y = y;
@@ -12,6 +11,7 @@ BolaFuego::BolaFuego(float x, float y, int potencia, b2World* world) {
 	this->angulo = 0;
 	this->estatico = false;
 	this->world = world;
+	this->destruir = false;
 
 	//Defino el body y fixture
 	b2BodyDef cuerpoDeCirculo;
@@ -22,6 +22,7 @@ BolaFuego::BolaFuego(float x, float y, int potencia, b2World* world) {
 
 	b2FixtureDef fixture;
 	fixture.density = 0.1;
+	fixture.filter.groupIndex = BOLA_FUEGO_FILTER_INDEX;
 
 	b2CircleShape circleShape;
 	circleShape.m_p.Set(0, 0);
@@ -59,31 +60,7 @@ float BolaFuego::getAncho() {
 }
 
 char BolaFuego::getId() {
-	return BOLA_NIEVE_CODE;
-}
-
-void BolaFuego::actualizar() {
-	if (this->getVelocidad().y < 0)
-		this->velocidad.y = this->getVelocidad().y;
-	else
-		this->velocidad.y = 0;
-	if (this->getVelocidad().x > 0) {
-		this->velocidad.x = 25;
-	} else
-		this->velocidad.x = -25;
-	this->setVelocidad(velocidad);
-}
-
-void BolaFuego::morir() {
-	time_t tiempoInicial, tiempoFinal;
-	time(&tiempoInicial);
-	time(&tiempoFinal);
-	while (difftime(tiempoFinal, tiempoInicial) < 3) {
-		usleep(500000);
-		this->actualizar();
-		time(&tiempoFinal);
-	}
-	destruir = true;
+	return BOLA_FUEGO_CODE;
 }
 
 b2Vec2 BolaFuego::getVelocidad() {

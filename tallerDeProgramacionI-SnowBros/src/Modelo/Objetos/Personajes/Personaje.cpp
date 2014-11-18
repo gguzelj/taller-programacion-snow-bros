@@ -234,34 +234,28 @@ void Personaje::controlarEstado() {
 
 void Personaje::shoot() {
 
-	if (!movimientoDisparar)
+	if (!movimientoDisparar || shootCooldown > 0)
 		return;
 
-	if (shootCooldown > 0)
-		return;
+	BolaNieve *bola;
+	float x = getX();
+	float y = getY() + MITAD_ALTO_PERSONAJE;
 
 	shootCooldown = 10;
 
-	BolaNieve *bola;
+	x += (orientacion == IZQUIERDA) ? -1 : 1;
 
-	if (orientacion == IZQUIERDA)
-		bola = new BolaNieve(getX() - 1, getY() + MITAD_ALTO_PERSONAJE, 1, this->world);
-	else
-		bola = new BolaNieve(getX() + 1, getY() + MITAD_ALTO_PERSONAJE, 1, this->world);
+	bola = new BolaNieve(x, y, 1, this->world);
 
 	b2Vec2 vel = this->body->GetLinearVelocity();
 
-	if (orientacion == IZQUIERDA)
-		vel.x -= aceleracion * 4;
-	else
-		vel.x += aceleracion * 4;
+	vel.x -= (orientacion == IZQUIERDA) ? aceleracion * 4 : -aceleracion * 4;
 
 	vel.y = 2;
 
 	bola->setVelocidad(vel);
 
 	this->escenario_->agregarProyectil(bola);
-
 }
 
 void Personaje::kick() {

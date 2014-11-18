@@ -113,13 +113,13 @@ bool Escenario::crearPersonaje(float x, float y, conn_id id) {
 
 void Escenario::crearPortales() {
 
-	b2Vec2 portal1Address = b2Vec2(27,-27);
-	b2Vec2 portal2Address = b2Vec2(-27,-27);
+	b2Vec2 portal1Address = b2Vec2(26.3,-27.5);
+	b2Vec2 portal2Address = b2Vec2(-26.3,-27.5);
 	b2Vec2 portal1Destination = b2Vec2(portal2Address.x+1, portal2Address.y-1);
 	b2Vec2 portal2Destination = b2Vec2(portal1Address.x-1, portal1Address.y-1);
 
-	Portal *portal1 = new Portal(0.1, 3, 0, portal1Address, world_);
-	Portal *portal2 = new Portal(0.1, 3, 0, portal2Address, world_);
+	Portal *portal1 = new Portal(0.1, 2.5, 0, portal1Address, world_);
+	Portal *portal2 = new Portal(0.1, 2.5, 0, portal2Address, world_);
 
 	portal1->setDestination(portal1Destination);
 	portal2->setDestination(portal2Destination);

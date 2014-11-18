@@ -26,6 +26,7 @@
 #include "Objetos/Figuras/Rectangulo.h"
 #include "Objetos/Figuras/Poligono.h"
 #include "Objetos/Figuras/Trapecio.h"
+#include "Objetos/Figuras/Portal.h"
 
 #include "../Exceptions/ErrorTipoDeObjeto.h"
 

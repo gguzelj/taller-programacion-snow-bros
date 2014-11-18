@@ -32,6 +32,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->movimientoDisparar = false;
 	this->movimientoDerecha = false;
 	this->movimientoIzquierda = false;
+	this->movimientoTeletransportando = false;
 	this->inmune = false;
 
 	//Defino body del personaje

@@ -52,6 +52,10 @@
 #define POS_X_CAYENDO_FUEGO 10
 #define POS_Y_CAYENDO_FUEGO 205
 
+#define ALTO_DISPARANDO_FUEGO 90
+#define ANCHO_DISPARANDO_FUEGO 44
+#define POS_X_DISPARANDO_FUEGO 120
+#define POS_Y_DISPARANDO_FUEGO 210
 
 /*
 #define ALTO_CONGELAMIENTO_UNO 11
@@ -168,6 +172,14 @@ void drawFireEnemyStandBy(SDL_Renderer *renderer,SDL_Texture *texture,const char
 void drawFireEnemyFalling(SDL_Renderer *renderer,SDL_Texture *texture,const char orientacion, int pos_x,int pos_y,int ancho,int alto){
 
 	SDL_Rect srcrect = {  POS_X_CAYENDO_FUEGO ,POS_Y_CAYENDO_FUEGO, ANCHO_CAYENDO_FUEGO, ALTO_CAYENDO_FUEGO };
+	SDL_Rect dstrect = { pos_x - (ancho/2), pos_y -( alto/2), ancho , alto};
+
+	dibujarFrame(renderer,texture,orientacion,pos_x,pos_y,&srcrect,dstrect);
+}
+
+void drawFireEnemyShooting(SDL_Renderer *renderer,SDL_Texture *texture,const char orientacion, int pos_x,int pos_y,int ancho,int alto){
+
+	SDL_Rect srcrect = {  POS_X_DISPARANDO_FUEGO ,POS_Y_DISPARANDO_FUEGO, ANCHO_DISPARANDO_FUEGO, ALTO_DISPARANDO_FUEGO };
 	SDL_Rect dstrect = { pos_x - (ancho/2), pos_y -( alto/2), ancho , alto};
 
 	dibujarFrame(renderer,texture,orientacion,pos_x,pos_y,&srcrect,dstrect);

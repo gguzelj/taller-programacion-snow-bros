@@ -438,8 +438,17 @@ void Drawer::drawProyectil(proyectil_t proy) {
 }
 
 void Drawer::drawEnemy(enemigo_t enemigo) {
+	if(enemigo.tipo == ID_ENEMIGO_BASICO){
+		drawStandardEnemy(enemigo);
+	}
+	else if(enemigo.tipo == ID_ENEMIGO_FUEGO){
+		drawFireEnemy(enemigo);
+	}
+}
 
+void Drawer::drawStandardEnemy(enemigo_t enemigo){
 	SDL_Texture* imagen;
+	imagen = imagenEnemigos;
 
 	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
 	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);
@@ -453,17 +462,12 @@ void Drawer::drawEnemy(enemigo_t enemigo) {
 	char codigo_estado = enemigo.estado;
 	char orientacion = enemigo.orientacion;
 
-
 	int pos_x = coord_relativa(coordRel.x, un_to_px_x * (enemigo.centro.x ) + ox);
 	int pos_y = coord_relativa(coordRel.y, -un_to_px_y * (enemigo.centro.y) + oy);
 
-	if(enemigo.tipo == ID_ENEMIGO_BASICO)
-		imagen = imagenEnemigos;
-	else if(enemigo.tipo == ID_ENEMIGO_FUEGO)
-		imagen = imagenEnemigoFuego;
-
 	if(enemigo.nivelDeCongelamiento == 7)
 		drawCongelamiento(this->renderer, congelamientoCuatro, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+
 	else{
 		switch (codigo_estado) {
 		case JUMPING:
@@ -477,6 +481,58 @@ void Drawer::drawEnemy(enemigo_t enemigo) {
 			break;
 		case FALLING:
 			drawStandardEnemyFalling(renderer, imagen, orientacion, pos_x, pos_y,  ancho * un_to_px_x, alto * un_to_px_y);
+			break;
+		}
+		if(enemigo.nivelDeCongelamiento >0){
+			if(enemigo.nivelDeCongelamiento < 3){
+				drawCongelamiento(this->renderer, congelamientoUno, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+			}
+			else{
+				if( enemigo.nivelDeCongelamiento <5){
+					drawCongelamiento(this->renderer, congelamientoDos, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+				}
+				else{
+					if( enemigo.nivelDeCongelamiento < 7){
+						drawCongelamiento(this->renderer, congelamientoTres, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+					}
+				}
+			}
+		}
+	}
+}
+
+void Drawer::drawFireEnemy(enemigo_t enemigo){
+	SDL_Texture* imagen;
+	imagen = imagenEnemigoFuego;
+
+	int ancho_imagen = (this->ancho_un * FACTOR_CONVERSION_UN_A_PX);
+	int alto_imagen = (this->alto_un * FACTOR_CONVERSION_UN_A_PX);
+
+	int ox = (ancho_imagen * currentZoomFactor) / 2;
+	int oy = (alto_imagen * currentZoomFactor) / 2;
+
+	float ancho = enemigo.ancho;
+	float alto = enemigo.alto;
+
+	char codigo_estado = enemigo.estado;
+	char orientacion = enemigo.orientacion;
+
+	int pos_x = coord_relativa(coordRel.x, un_to_px_x * (enemigo.centro.x ) + ox);
+	int pos_y = coord_relativa(coordRel.y, -un_to_px_y * (enemigo.centro.y) + oy);
+
+	if(enemigo.nivelDeCongelamiento == 7)
+		drawCongelamiento(this->renderer, congelamientoCuatro, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+
+	else{
+		switch (codigo_estado) {
+		case STANDBY:
+			drawFireEnemyStandBy(renderer, imagen, orientacion, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+			break;
+		case WALKING:
+			drawFireEnemyWalking(renderer, imagen, orientacion, pos_x, pos_y,  ancho * un_to_px_x, alto * un_to_px_y);
+			break;
+		case FALLING:
+			drawFireEnemyFalling(renderer, imagen, orientacion, pos_x, pos_y,  ancho * un_to_px_x, alto * un_to_px_y);
 			break;
 		}
 		if(enemigo.nivelDeCongelamiento >0){

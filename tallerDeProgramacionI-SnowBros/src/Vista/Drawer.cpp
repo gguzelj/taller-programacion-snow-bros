@@ -191,6 +191,7 @@ Drawer::Drawer() {
 	this->congelamientoTres = nullptr;
 	this->congelamientoCuatro = nullptr;
 	this->fontToBeUsed = nullptr;
+	this->portal = nullptr;
 
 	//The music that will be played
 	gMusic = nullptr;
@@ -231,6 +232,7 @@ Drawer::Drawer() {
 	this->trapexImagePath = "resources/textures/trapecio.png";
 	this->paralelogramImagePath = "resources/textures/paralelogramo.png";
 	this->snowballImagePath = "resources/textures/snowball.png";
+	this->portalPath = "resources/sprites/portal.png";
 
 	//Text
 	this->points = "Points: ";
@@ -400,14 +402,12 @@ void Drawer::drawFigura(figura_t objeto) {
 		rectangleLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
 				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
-
 	if (objeto.id == CIRCULO_CODE) {
 		float radio = objeto.alto / 2;
 
 		circleLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - radio) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + radio) + oy),
 				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
-
 	if (objeto.id == TRIANGULO_CODE) {
 		SDL_Point centro;
 		centro.x = ancho / 2 * un_to_px_x;
@@ -416,12 +416,10 @@ void Drawer::drawFigura(figura_t objeto) {
 		triangleLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 1.5) + oy),
 				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, &centro);
 	}
-
 	if (objeto.id == CUADRADO_CODE) {
 		squareLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
 				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
-
 	if (objeto.id == PENTAGONO_CODE) {
 		SDL_Point centro;
 		centro.x = (ancho * un_to_px_x) / 2;
@@ -430,12 +428,10 @@ void Drawer::drawFigura(figura_t objeto) {
 		pentagonLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox),
 				coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / (1 + cos(M_PI / 5))) + oy), ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, &centro);
 	}
-
 	if (objeto.id == HEXAGONO_CODE) {
 		hexagonLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
 				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
-
 	if (objeto.id == TRAPECIO_CODE) {
 		trapexLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 1.6) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
 				ancho * un_to_px_x * 1.1, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
@@ -443,6 +439,13 @@ void Drawer::drawFigura(figura_t objeto) {
 	if (objeto.id == PARALELOGRAMO_CODE) {
 		paralelogramLT.render(renderer, coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x - ancho / 2) + ox), coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y + alto / 2) + oy),
 				ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
+	}
+
+	int pos_x = coord_relativa(coordRel.x, un_to_px_x * (objeto.centro.x ) + ox);
+	int pos_y = coord_relativa(coordRel.y, -un_to_px_y * (objeto.centro.y) + oy);
+
+	if(objeto.id == PORTAL_CODE){
+		drawPortal(renderer, portal, pos_x, pos_y, ANCHO_PORTAL, alto * un_to_px_y);
 	}
 }
 
@@ -484,7 +487,6 @@ void Drawer::drawEnemy(enemigo_t enemigo) {
 	char codigo_estado = enemigo.estado;
 	char orientacion = enemigo.orientacion;
 
-
 	int pos_x = coord_relativa(coordRel.x, un_to_px_x * (enemigo.centro.x ) + ox);
 	int pos_y = coord_relativa(coordRel.y, -un_to_px_y * (enemigo.centro.y) + oy);
 
@@ -494,11 +496,11 @@ void Drawer::drawEnemy(enemigo_t enemigo) {
 		imagen = imagenEnemigoFuego;
 
 	if(enemigo.nivelDeCongelamiento == 7)
-		drawCongelamiento(this->renderer, congelamientoCuatro, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+		drawCongelamiento(renderer, congelamientoCuatro, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
 	else{
 		switch (codigo_estado) {
 		case JUMPING:
-			drawStandardEnemyJumping(this->renderer, imagen, orientacion, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+			drawStandardEnemyJumping(renderer, imagen, orientacion, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
 			break;
 		case STANDBY:
 			drawStandardEnemyStandBy(renderer, imagen, orientacion, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
@@ -512,15 +514,15 @@ void Drawer::drawEnemy(enemigo_t enemigo) {
 		}
 		if(enemigo.nivelDeCongelamiento >0){
 			if(enemigo.nivelDeCongelamiento < 3){
-				drawCongelamiento(this->renderer, congelamientoUno, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+				drawCongelamiento(renderer, congelamientoUno, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
 			}
 			else{
 				if( enemigo.nivelDeCongelamiento <5){
-					drawCongelamiento(this->renderer, congelamientoDos, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+					drawCongelamiento(renderer, congelamientoDos, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
 				}
 				else{
 					if( enemigo.nivelDeCongelamiento < 7){
-						drawCongelamiento(this->renderer, congelamientoTres, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
+						drawCongelamiento(renderer, congelamientoTres, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y);
 					}
 				}
 			}
@@ -840,6 +842,10 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 	congelamientoCuatro = this->loadTexture(CONGELAMIENTO_NIVEL_CUATRO_PATH,this->renderer);
 	if (congelamientoCuatro == nullptr) {
 			manageLoadCharacterError();
+	}
+	portal = this->loadTexture(portalPath, this->renderer);
+	if (portal == nullptr) {
+		manageLoadBackgroundError();
 	}
 
 	//Aca se carga la fuente

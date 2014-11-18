@@ -29,6 +29,7 @@
 #define CUADRADO_CODE '4'
 #define PENTAGONO_CODE '5'
 #define HEXAGONO_CODE '6'
+#define PORTAL_CODE 'o'
 
 #define ID_ENEMIGO_BASICO 11
 #define ID_ENEMIGO_FUEGO 12
@@ -171,6 +172,7 @@ private:
 	SDL_Texture* congelamientoDos;
 	SDL_Texture* congelamientoTres;
 	SDL_Texture* congelamientoCuatro;
+	SDL_Texture* portal;
 
 	SDL_Rect camera;
 	SDL_Rect coordRel;
@@ -227,6 +229,7 @@ private:
 	string trapexImagePath;
 	string paralelogramImagePath;
 	string snowballImagePath;
+	string portalPath;
 	//Texto de puntos y vidas.
 	string points;
 	string lives;

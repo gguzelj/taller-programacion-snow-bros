@@ -13,7 +13,6 @@ protected:
 	float masa;
 	bool estatico;
 	b2World* world;
-	b2Body* body;
 
 public:
 	float x;

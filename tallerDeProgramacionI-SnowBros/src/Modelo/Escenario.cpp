@@ -114,9 +114,9 @@ bool Escenario::crearPersonaje(float x, float y, conn_id id) {
 void Escenario::crearPortales() {
 
 	b2Vec2 portal2Address = b2Vec2(-ancho_un / 2, -1 - alto_un / 2);
-	b2Vec2 portal2Destination = b2Vec2(0, 0);
+	b2Vec2 portal2Destination = b2Vec2(0, -1);
 
-	Portal *portal2 = new Portal(7, 0.1, 0, portal2Address, world_);
+	Portal *portal2 = new Portal(20, 0.1, 0, portal2Address, world_);
 
 	portal2->setDestination(portal2Destination);
 
@@ -156,8 +156,15 @@ void Escenario::clean() {
 
 		for (b2ContactEdge *ce = body->GetContactList(); ce; ce = ce->next) {
 			b2Contact* c = ce->contact;
-			if (c->IsTouching()) {
 
+			//En caso de que estemos haciendo contacto con un portal, no borramos el objeto
+			Figura* figA = (Figura*) c->GetFixtureA()->GetUserData();
+			Figura* figB = (Figura*) c->GetFixtureB()->GetUserData();
+
+			if(figA->getId() == PORTAL_CODE || figB->getId() == PORTAL_CODE)
+				break;
+
+			if (c->IsTouching()) {
 				if ((*pro)->type == ID_BOLA_NIEVE_ENEMIGO) {
 					destruirJointsDeBolaEnemigo((BolaEnemigo*) (*pro), personajes_, world_);
 				}

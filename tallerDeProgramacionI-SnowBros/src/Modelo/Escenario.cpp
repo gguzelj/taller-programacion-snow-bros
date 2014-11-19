@@ -20,7 +20,7 @@ Escenario::Escenario(JsonParser *parser) {
 	world_->SetContactListener(&contactos);
 
 	//Create the ground
-	new Rectangulo(ancho_un, 0, 0, 0, -alto_un / 2, world_);
+	new Rectangulo(ancho_un - 3, 0, 0, 2, -alto_un / 2, world_);
 
 	//Create the roof
 	new Rectangulo(ancho_un, 0, 0, 0, ALTURA_DEL_TECHO, world_);
@@ -113,18 +113,13 @@ bool Escenario::crearPersonaje(float x, float y, conn_id id) {
 
 void Escenario::crearPortales() {
 
-	b2Vec2 portal1Address = b2Vec2(26.3,-27.5);
-	b2Vec2 portal2Address = b2Vec2(-26.3,-27.5);
-	b2Vec2 portal1Destination = b2Vec2(portal2Address.x+1, portal2Address.y-1);
-	b2Vec2 portal2Destination = b2Vec2(portal1Address.x-1, portal1Address.y-1);
+	b2Vec2 portal2Address = b2Vec2(-ancho_un/2,-1-alto_un/2);
+	b2Vec2 portal2Destination = b2Vec2(0,0);
 
-	Portal *portal1 = new Portal(0.1, 2.5, 0, portal1Address, world_);
-	Portal *portal2 = new Portal(0.1, 2.5, 0, portal2Address, world_);
+	Portal *portal2 = new Portal(7, 0.1, 0, portal2Address, world_);
 
-	portal1->setDestination(portal1Destination);
 	portal2->setDestination(portal2Destination);
 
-	figurasEstaticas_->push_back(portal1);
 	figurasEstaticas_->push_back(portal2);
 }
 

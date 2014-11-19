@@ -113,8 +113,8 @@ bool Escenario::crearPersonaje(float x, float y, conn_id id) {
 
 void Escenario::crearPortales() {
 
-	b2Vec2 portal2Address = b2Vec2(-ancho_un/2,-1-alto_un/2);
-	b2Vec2 portal2Destination = b2Vec2(0,0);
+	b2Vec2 portal2Address = b2Vec2(-ancho_un / 2, -1 - alto_un / 2);
+	b2Vec2 portal2Destination = b2Vec2(0, 0);
 
 	Portal *portal2 = new Portal(7, 0.1, 0, portal2Address, world_);
 
@@ -169,6 +169,13 @@ void Escenario::clean() {
 	}
 }
 
+void teletransportar(Figura* fig) {
+	if (fig->teletransportar) {
+		fig->getBody()->SetTransform(fig->portal->getDestination(), 0);
+		fig->teletransportar = false;
+	}
+}
+
 void Escenario::preStep() {
 	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {
 		if (!ASIGNADO((*per)->id)) {
@@ -184,6 +191,20 @@ void Escenario::preStep() {
 		} else
 			(*en)->controlarEstado();
 	}
+
+	//Teletransportamos todos los objetos que pasaron por algun portal
+	for (auto fig = figurasDinamicas_->begin(); fig != figurasDinamicas_->end(); ++fig)
+		teletransportar((*fig));
+
+	for (auto fig = personajes_->begin(); fig != personajes_->end(); ++fig)
+		teletransportar((Figura*) (*fig));
+
+	for (auto fig = enemigos_->begin(); fig != enemigos_->end(); ++fig)
+		teletransportar((Figura*) (*fig));
+
+	for (auto fig = proyectiles_->begin(); fig != proyectiles_->end(); ++fig)
+		teletransportar((Figura*) (*fig));
+
 	clean();
 }
 

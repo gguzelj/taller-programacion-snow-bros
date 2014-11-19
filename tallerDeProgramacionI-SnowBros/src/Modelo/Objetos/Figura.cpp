@@ -50,3 +50,9 @@ bool Figura::validarOverlap() {
 
 	return overlap;
 }
+
+void Figura::beginContactPortal(Portal* portal, b2Contact* contact) {
+	this->teletransportar = true;
+	this->portal = portal;
+
+}

@@ -12,6 +12,7 @@ BolaFuego::BolaFuego(float x, float y, int potencia, b2World* world) {
 	this->estatico = false;
 	this->world = world;
 	this->destruir = false;
+	this->teletransportar = false;
 
 	//Defino el body y fixture
 	b2BodyDef cuerpoDeCirculo;

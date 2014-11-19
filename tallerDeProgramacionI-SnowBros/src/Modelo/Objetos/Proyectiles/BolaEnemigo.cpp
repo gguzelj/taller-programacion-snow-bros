@@ -11,6 +11,7 @@ BolaEnemigo::BolaEnemigo(float x, float y, b2World* world) {
 	this->angulo = 0;
 	this->estatico = false;
 	this->destruir = false;
+	this->teletransportar = false;
 	this->world = world;
 	this->velocidad = {25,0};
 

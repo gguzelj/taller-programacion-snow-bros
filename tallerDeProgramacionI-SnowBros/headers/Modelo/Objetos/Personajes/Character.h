@@ -26,7 +26,6 @@
 class Character: public Figura {
 protected:
 
-	b2Body* body;
 	b2Vec2 posicion;
 	b2Fixture* paredIzquierda;
 	b2Fixture* paredDerecha;
@@ -45,7 +44,7 @@ protected:
 
 	void cambiarFilterIndex(int16 groupIndex);
 	void move();
-	void teletransportar();
+	void teletransportar2();
 	virtual void shoot();
 
 public:
@@ -55,9 +54,6 @@ public:
 	bool movimientoDerecha;
 	bool movimientoIzquierda;
 	bool movimientoDisparar;
-	bool movimientoTeletransportando;
-
-	b2Vec2 portalDestination;
 
 	static JumpingState jumping;
 	static FallingState falling;
@@ -71,8 +67,6 @@ public:
 	CharacterState* state;
 
 	virtual ~Character();
-
-	void beginContactPortal(Portal*,b2Contact*);
 
 	virtual void atravezarPlataformas();
 	virtual void noAtravezarPlataformas();

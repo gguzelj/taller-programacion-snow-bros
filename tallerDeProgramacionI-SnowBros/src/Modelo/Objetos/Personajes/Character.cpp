@@ -37,10 +37,10 @@ void Character::move() {
 
 }
 
-void Character::teletransportar() {
-	if (movimientoTeletransportando) {
-		body->SetTransform(portalDestination, 0);
-		movimientoTeletransportando = false;
+void Character::teletransportar2() {
+	if (teletransportar) {
+		body->SetTransform(portal->getDestination(), 0);
+		teletransportar = false;
 	}
 }
 
@@ -116,13 +116,6 @@ void Character::stop() {
 	if (state == &Character::walking)
 		velocidadActual.y = 0;
 	this->body->SetLinearVelocity(velocidadActual);
-}
-
-void Character::beginContactPortal(Portal* portal, b2Contact* contact) {
-
-	this->movimientoTeletransportando = true;
-	this->portalDestination = portal->getDestination();
-
 }
 
 b2Fixture* Character::GetFixtureList() {
@@ -274,6 +267,6 @@ void Character::controlarEstado() {
 	decreaseShootCooldown();
 	move();
 	shoot();
-	teletransportar();
+	//teletransportar2();
 
 }

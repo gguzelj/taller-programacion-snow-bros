@@ -14,6 +14,7 @@ Poligono::Poligono(JsonParser *parser, int index, b2World* world) {
 	this->angulo = parser->getRotObjeto(index) * DEGTORAD;
 	this->estatico = parser->esObjetoEstatico(index);
 	this->world = world;
+	this->teletransportar = false;
 
 	b2BodyDef cuerpo;
 	estatico ? cuerpo.type = b2_staticBody : cuerpo.type = b2_dynamicBody;

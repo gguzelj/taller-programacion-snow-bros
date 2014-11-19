@@ -69,9 +69,11 @@ protected:
 	float masa;
 	bool estatico;
 	b2World* world;
-	b2Body* body;
 
 public:
+	b2Body* body;
+	bool teletransportar;
+	Portal* portal;
 	int type;
 	float x;
 	float y;
@@ -105,7 +107,7 @@ public:
 	virtual void beginContactBolaNieve(BolaNieve*,b2Contact*){};
 	virtual void beginContactBolaEnemigo(BolaEnemigo*,b2Contact*){};
 	virtual void beginContactBolaFuego(BolaFuego*,b2Contact*){};
-	virtual void beginContactPortal(Portal*,b2Contact*){};
+	virtual void beginContactPortal(Portal*,b2Contact*);
 	virtual void beginContactBonusVidaExtra(BonusVidaExtra*, b2Contact*){};
 	virtual void beginContactBonusMoverRapido(BonusMoverRapido*, b2Contact*){};
 

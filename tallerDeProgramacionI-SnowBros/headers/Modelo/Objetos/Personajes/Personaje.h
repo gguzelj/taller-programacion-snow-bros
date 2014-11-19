@@ -22,7 +22,6 @@ class Escenario;
 
 class Personaje: public Character {
 public:
-
 	conn_id id;
 
 	Personaje(float x, float y, char id[], Escenario* escenario);

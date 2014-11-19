@@ -9,6 +9,7 @@ Circulo::Circulo(JsonParser *parser, int index, b2World* world){
 	this->angulo = parser->getRotObjeto(index);
 	this->estatico = parser->esObjetoEstatico(index);
 	this->world = world;
+	this->teletransportar = false;
 
 	//Defino el body y fixture
 	b2BodyDef cuerpoDeCirculo;

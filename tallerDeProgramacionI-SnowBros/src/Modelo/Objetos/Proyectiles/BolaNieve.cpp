@@ -11,6 +11,7 @@ BolaNieve::BolaNieve(float x, float y, int potencia, b2World* world) {
 	this->masa = MASA_BOLA_NIEVE * 5;
 	this->angulo = 0;
 	this->estatico = false;
+	this->teletransportar = false;
 	this->world = world;
 
 	//Defino el body y fixture

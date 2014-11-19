@@ -14,6 +14,7 @@ Trapecio::Trapecio(JsonParser *parser, int index, b2World* world){
 	this->angulo = parser->getRotObjeto(index) * DEGTORAD;
 	this->estatico = parser->esObjetoEstatico(index);
 	this->world = world;
+	this->teletransportar = false;
 
 	if(inclinacion < 90){
 		this->base_sup = parser->getBaseObjeto(index);

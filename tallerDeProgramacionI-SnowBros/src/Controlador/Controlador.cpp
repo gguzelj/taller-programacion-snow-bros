@@ -11,18 +11,15 @@ dataToSend_t* Controlador::handleEvents(bool* running){
 	dataToSend_t* data = (dataToSend_t*) malloc(size);
 	bzero(data, size);
 
-	while(SDL_PollEvent(&event) && running){
-		if(cantEventos == 0)
-			handleEvent(&event, running, &(data->keycode_1),&(data->type_1));
-		if(cantEventos == 1)
-			handleEvent(&event, running, &(data->keycode_2),&(data->type_2));
-		if(cantEventos == 2){
-			int aux1 = 0;
-			unsigned int aux2 = 0;
-			handleEvent(&event, running, &aux1, &aux2);
-		}
-	}
+	SDL_PollEvent(&event);
+
+	handleEvent(&event, running, &(data->keycode_1),&(data->type_1));
+	SDL_PollEvent(&event);
+	handleEvent(&event, running, &(data->keycode_2),&(data->type_2));
+
+
 	return data;
+
 }
 
 void Controlador::handleEvent(SDL_Event* evento,bool* running, int32_t *code, Uint32 *type){

@@ -1,4 +1,9 @@
 #include "../headers/Server.h"
+#define NIVEL_MAX 2
+#define GAME_DATA 'g'
+#define PASO_DE_NIVEL 'n'
+#include <ctime>
+
 
 Server::Server() {
 
@@ -293,7 +298,8 @@ int Server::validarComienzoJuego() {
 void Server::enviarDatosJuego(int sockfd) {
 
 	try {
-
+		datos_.nivel = model_->getNivel();
+		std::cerr<<datos_.nivel;
 		datos_.cantPersonajes = model_->getCantPersonajes();
 		datos_.cantEnemigos = model_->getCantEnemigos();
 		datos_.cantObjDinamicos = model_->getCantObjDinamicos();
@@ -377,6 +383,7 @@ void Server::enviarAClientes() {
 
 	dataToSend_t dataToBeSent;
 
+	gameData_.nivel = model_->getNivel();
 	gameData_.cantProyectiles = model_->getCantProyectiles();
 	gameData_.cantEnemigos = model_->getCantEnemigos();
 
@@ -405,11 +412,15 @@ void Server::enviarAlCliente(connection_t *conn) {
 	dataToSend_t dataToBeSent;
 	bool enviarAlCliente = true;
 
+	char msgType = GAME_DATA;
+
 	while (enviarAlCliente) {
 
 		conn->dataQueue->wait_and_pop(dataToBeSent);
 
 		try {
+
+			sendall(conn->socket,&msgType,sizeof(msgType));
 
 			enviarGameData(conn->socket, dataToBeSent.gameData);
 			enviarPersonajes(conn->socket, dataToBeSent.personajes);
@@ -462,8 +473,54 @@ void Server::step() {
 	if (!gameData_.paused)
 		model_->step();
 
+
+	if(model_->estaPasandoDeNivel()){
+		for(auto pers = model_->getPersonajes()->begin() ; pers != model_->getPersonajes()->end(); pers++){
+			b2Vec2 velocidad = {0,20};
+			(*pers)->atravezarPlataformas();
+			(*pers)->getb2Body()->SetLinearVelocity(velocidad);
+		}
+	}
+
+	if(model_->getCantEnemigos() == 0 && !model_->estaPasandoDeNivel() && model_->getNivel() < NIVEL_MAX){
+
+		std::thread t(&Server::pasarDeNivel, this);
+		t.detach();
+	}
+
+
 	SDL_Delay(30);
 }
+
+
+//Thread que maneja la logica de pasar de nivel.
+void Server::pasarDeNivel(){
+	//mando a los clientes que se esta por pasar de nivel.
+	char msgType = PASO_DE_NIVEL;
+	for(auto conn = connections_.begin(); conn != connections_.end();conn++){
+		sendall((*conn)->socket,&msgType,sizeof(msgType) );
+	}
+	//seteo que el nuevo nivel para que no cree denuevo el thread.
+	model_->setNivel((model_->getNivel()) +1);
+
+	//espero para que lleguen a agarrar los bonus que quedan.
+
+	sleep(5);
+
+
+	//seteo que se esta pasando de nivel para que los personajes vuelen.
+	model_->setPasandoDeNivel(true);
+	//saco el techo para que no se choquen
+	model_->eliminarTecho();
+	//espero hasta que todos hayan subido.
+	sleep(10);
+
+	model_->setPasandoDeNivel(false);
+	model_->pasarDeNivel();
+
+}
+
+
 
 /*
  * Validaciones de parametros.

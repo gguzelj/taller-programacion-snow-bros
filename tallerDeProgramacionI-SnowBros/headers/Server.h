@@ -87,6 +87,7 @@ typedef struct receivedData {
 } receivedData_t;
 
 typedef struct firstConnectionDetails {
+	unsigned int nivel;
 	unsigned int cantPersonajes;
 	unsigned int cantEnemigos;
 	unsigned int cantObjDinamicos;
@@ -162,6 +163,10 @@ private:
 	 * Metodo encargado de negociar la conexion con el cliente
 	 */
 	int acceptConnection(int newsockfd);
+
+
+	void pasarDeNivel();
+
 
 	/*
 	 * Manejamos el caso de un nuevo cliente

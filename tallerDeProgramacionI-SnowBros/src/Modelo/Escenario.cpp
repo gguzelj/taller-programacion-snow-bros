@@ -16,6 +16,8 @@ Escenario::Escenario(JsonParser *parser) {
 	ancho_un = parser->getAnchoUnEscenario();
 	alto_un = parser->getAltoUnEscenario();
 	world_ = new b2World(gravity);
+	this->nivel = 1;
+	this->pasandoDeNivel = false;
 
 	world_->SetContactListener(&contactos);
 
@@ -23,7 +25,7 @@ Escenario::Escenario(JsonParser *parser) {
 	new Rectangulo(ancho_un - 3, 0, 0, 2, -alto_un / 2, world_);
 
 	//Create the roof
-	new Rectangulo(ancho_un, 0, 0, 0, ALTURA_DEL_TECHO, world_);
+	this->techo = new Rectangulo(ancho_un, 0, 0, 0, ALTURA_DEL_TECHO, world_);
 
 	//And walls
 	new Rectangulo(0, alto_un, 0, ancho_un / 2, 0, world_);
@@ -224,6 +226,13 @@ void Escenario::step() {
 	getWorld()->Step(timeStep, velocityIterations, positionIterations);
 	actualizarEnemigos();
 }
+
+
+void Escenario::pasarDeNivel(){
+	//creacion del escenario y demas.
+}
+
+
 
 void Escenario::addPointsToPlayers(int puntos) {
 	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {

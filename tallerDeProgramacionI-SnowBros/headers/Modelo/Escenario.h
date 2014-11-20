@@ -61,6 +61,7 @@ typedef struct enemigo {
 } enemigo_t;
 
 typedef struct gameData {
+	unsigned int nivel;
 	bool paused;
 	unsigned int cantProyectiles;
 	unsigned int cantEnemigos;
@@ -89,6 +90,7 @@ public:
 	virtual ~Escenario();
 
 	b2World* getWorld();
+
 
 	/*
 	 * Metodos encargados de preparar la informacion a enviar a los clientes.
@@ -170,11 +172,33 @@ public:
 	 */
 	void step();
 
+	unsigned int getNivel(){
+		return this->nivel;
+	}
+
+	void pasarDeNivel();
+
+	bool estaPasandoDeNivel(){
+		return pasandoDeNivel;
+	}
+
+	void setPasandoDeNivel(bool arg){
+		pasandoDeNivel = arg;
+	}
+
+	void setNivel(unsigned int nivel){
+		this->nivel = nivel;
+	}
+
+	void eliminarTecho(){
+		delete(this->techo);
+	}
 private:
 	Contacto contactos;
 	const float32 timeStep = 1 / 40.0; 		//the length of time passed to simulate (seconds)
 	const int32 velocityIterations = 32;    //how strongly to correct velocity
 	const int32 positionIterations = 64;    //how strongly to correct position}
+	bool pasandoDeNivel;
 
 	b2World* world_;
 	std::vector<Figura*>* figurasEstaticas_;
@@ -182,6 +206,9 @@ private:
 	std::list<Proyectil*>* proyectiles_;
 	std::list<Personaje*>* personajes_;
 	std::list<Enemigo*>* enemigos_;
+	unsigned int nivel;
+
+	Rectangulo* techo;
 
 	/*
 	 * Se encarga de la limpieza y eliminacion de objetos que deben ser removidos

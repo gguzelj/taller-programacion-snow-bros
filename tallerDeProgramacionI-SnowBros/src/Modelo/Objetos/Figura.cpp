@@ -8,15 +8,15 @@ b2Vec2 Figura::GetWorldPoint(const b2Vec2& localPoint) {
 	return body->GetWorldPoint(localPoint);
 }
 
-b2Vec2 Figura::GetCenter(){
+b2Vec2 Figura::GetCenter() {
 	return body->GetWorldCenter();
 }
 
-b2Body* Figura::getBody(){
+b2Body* Figura::getBody() {
 	return this->body;
 }
 
-bool Figura::esEstatico(){
+bool Figura::esEstatico() {
 	return estatico;
 }
 
@@ -39,9 +39,8 @@ bool Figura::validarOverlap() {
 			continue;
 
 		overlap = b2TestOverlap(currBody->GetFixtureList()->GetShape(), 0,
-								this->body->GetFixtureList()->GetShape(), 0,
-								currBody->GetTransform(),
-								this->body->GetTransform());
+				this->body->GetFixtureList()->GetShape(), 0, currBody->GetTransform(),
+				this->body->GetTransform());
 		if (overlap) {
 			this->world->DestroyBody(this->body);
 			break;
@@ -52,7 +51,10 @@ bool Figura::validarOverlap() {
 }
 
 void Figura::beginContactPortal(Portal* portal, b2Contact* contact) {
+
+	if (this->type == ID_PORTAL)
+		return;
+
 	this->teletransportar = true;
 	this->portal = portal;
-
 }

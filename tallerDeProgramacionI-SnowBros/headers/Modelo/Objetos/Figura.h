@@ -8,6 +8,7 @@
 
 #define BOLA_FUEGO_CODE 'f'
 #define BOLA_NIEVE_CODE 'b'
+#define BOLA_PORTAL_CODE 'a'
 #define BOLA_NIEVE_ENEMIGO_CODE 'e'
 #define CIRCULO_CODE 'c'
 #define MURO_CODE 'm'
@@ -34,6 +35,7 @@
 #define ID_ENEMIGO_FUEGO 12
 #define ID_BOLA_FUEGO 13
 #define ID_PORTAL 14
+#define ID_BOLA_PORTAL 15
 
 #define FIGURA_WARNING_OVERLAP "El siguiente objeto se esta superponiendo con otros ya creados \n"
 
@@ -100,7 +102,7 @@ public:
 	virtual void beginContactMuro(Muro*,b2Contact*){};
 	virtual void beginContactParalelogramo(Paralelogramo*,b2Contact*){};
 	virtual void beginContactPoligono(Poligono*,b2Contact*){};
-	virtual void beginContactRectanguo(Rectangulo*,b2Contact*){};
+	virtual void beginContactRectangulo(Rectangulo*,b2Contact*){};
 	virtual void beginContactTrapecio(Trapecio*,b2Contact*){};
 	virtual void beginContactEnemigo(Enemigo*,b2Contact*){};
 	virtual void beginContactPersonaje(Personaje*,b2Contact*){};

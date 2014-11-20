@@ -113,14 +113,14 @@ bool Escenario::crearPersonaje(float x, float y, conn_id id) {
 
 void Escenario::crearPortales() {
 
-	b2Vec2 portal2Address = b2Vec2(-ancho_un / 2, -1 - alto_un / 2);
-	b2Vec2 portal2Destination = b2Vec2(0, -1);
+	b2Vec2 portalAddress = b2Vec2(-ancho_un / 2, -1 - alto_un / 2);
+	b2Vec2 portalDestination = b2Vec2(0, -1);
 
-	Portal *portal2 = new Portal(20, 0.1, 0, portal2Address, world_);
+	Portal *portal = new Portal(20, 0.1, 0, portalAddress, world_);
 
-	portal2->setDestination(portal2Destination);
+	portal->setDestination(portalDestination);
 
-	figurasEstaticas_->push_back(portal2);
+	figurasEstaticas_->push_back(portal);
 }
 
 void Escenario::setPersonajeConnectionState(conn_id id, char state) {
@@ -154,6 +154,36 @@ void Escenario::clean() {
 				continue;
 		}
 
+		//Creamos el protal, y lo asignamos al personaje
+		if ((*pro)->type == ID_BOLA_PORTAL) {
+			if (((BolaPortal*) (*pro))->crearPortal) {
+
+				Personaje* per = ((BolaPortal*) (*pro))->personaje;
+				Portal *portal = ((BolaPortal*) (*pro))->crearNuevoPortal();
+
+				if (per->portal1)
+					per->portal2 = portal;
+				else
+					per->portal1 = portal;
+
+				figurasDinamicas_->push_back(portal);
+
+				if(per->portal1 && per->portal2){
+
+					b2Vec2 portal1Address = per->portal1->getAddress();
+					b2Vec2 portal2Address = per->portal2->getAddress();
+
+					portal1Address.x += (portal1Address.x > 0)?-1:1;
+					portal2Address.x += (portal2Address.x > 0)?-1:1;
+
+					per->portal1->setDestination(portal2Address);
+					per->portal2->setDestination(portal1Address);
+				}
+
+			}
+
+		}
+
 		for (b2ContactEdge *ce = body->GetContactList(); ce; ce = ce->next) {
 			b2Contact* c = ce->contact;
 
@@ -161,7 +191,7 @@ void Escenario::clean() {
 			Figura* figA = (Figura*) c->GetFixtureA()->GetUserData();
 			Figura* figB = (Figura*) c->GetFixtureB()->GetUserData();
 
-			if(figA->getId() == PORTAL_CODE || figB->getId() == PORTAL_CODE)
+			if (figA->getId() == PORTAL_CODE || figB->getId() == PORTAL_CODE)
 				break;
 
 			if (c->IsTouching()) {

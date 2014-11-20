@@ -12,6 +12,7 @@
 #include "../Proyectiles/BolaNieve.h"
 #include "../Proyectiles/BolaEnemigo.h"
 #include "../Proyectiles/BolaFuego.h"
+#include "../Proyectiles/BolaPortal.h"
 #include "../Figuras/Portal.h"
 
 #include "../Figura.h"

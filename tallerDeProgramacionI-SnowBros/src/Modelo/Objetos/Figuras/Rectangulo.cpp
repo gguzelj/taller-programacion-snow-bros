@@ -17,6 +17,7 @@ Rectangulo::Rectangulo(JsonParser *parser, int index, b2World* world){
 	this->estatico = parser->esObjetoEstatico(index);
 	this->world = world;
 	this->teletransportar = false;
+	this->muro = false;
 
 	b2BodyDef cuerpo;
 	estatico ? cuerpo.type = b2_staticBody : cuerpo.type = b2_dynamicBody;
@@ -45,6 +46,7 @@ Rectangulo::Rectangulo(float ancho, float alto, int rot, float pos_x, float pos_
 	this->x = pos_x;
 	this->angulo = rot * DEGTORAD;
 	this->estatico = true;
+	this->muro = true;
 	this->world = world;
 
 	b2BodyDef cuerpo;
@@ -66,6 +68,13 @@ Rectangulo::Rectangulo(float ancho, float alto, int rot, float pos_x, float pos_
 	fixture->SetUserData(this);
 }
 
+void Rectangulo::beginContact(Figura* figura,b2Contact* contact){
+
+
+	figura->beginContactRectangulo(this, contact);
+
+}
+
 float Rectangulo::getAncho(){
 	return ancho;
 }
@@ -76,4 +85,8 @@ float Rectangulo::getAlto(){
 
 char Rectangulo::getId(){
 	return RECTANGULO_CODE;
+}
+
+bool Rectangulo::esMuro(){
+	return muro;
 }

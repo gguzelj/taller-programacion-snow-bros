@@ -19,8 +19,11 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->state = &Personaje::standby;
 	this->orientacion = ORIENTACION_INICIAL;
 	this->esta_muerto = false;
+	this->arma_portal = true;
 	this->arrastradoPor = nullptr;
 	this->joint = nullptr;
+	this->portal1 = nullptr;
+	this->portal2 = nullptr;
 
 	this->connectionState = CONECTADO;
 	this->points = 0;
@@ -130,7 +133,7 @@ void Personaje::beginContactBolaEnemigo(BolaEnemigo * bola, b2Contact* contact) 
 	return;
 }
 
-void Personaje::beginContactBolaFuego(BolaFuego* bola, b2Contact* contacto){
+void Personaje::beginContactBolaFuego(BolaFuego* bola, b2Contact* contacto) {
 
 	bola->destruir = true;
 
@@ -154,7 +157,7 @@ void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 	if (state == &Personaje::dying || state == &Personaje::rolling)
 		return;
 
-	if(enemigo->estaCongelado())
+	if (enemigo->estaCongelado())
 		return;
 
 	//En otro caso, restamos vida
@@ -168,12 +171,12 @@ void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 	// hay que sacarlo del modelo.
 }
 
-void Personaje::beginContactBonusVidaExtra(BonusVidaExtra* bonus, b2Contact* contact){
+void Personaje::beginContactBonusVidaExtra(BonusVidaExtra* bonus, b2Contact* contact) {
 	this->lives++;
 	bonus->desactivar();
 }
 
-void Personaje::beginContactBonusMoverRapido(BonusMoverRapido* bonus, b2Contact* contact){
+void Personaje::beginContactBonusMoverRapido(BonusMoverRapido* bonus, b2Contact* contact) {
 	bonus->desactivar();
 	std::thread t(&Personaje::aumentarVelocidad, this);
 	t.detach();
@@ -209,6 +212,10 @@ void Personaje::controlarEstado() {
 	if (state == &Character::walking)
 		if (estaEmpujandoEnemigo())
 			state = &Character::pushing;
+
+	//Si ya disparamos los dos portales, cambiamos el arma
+	if (portal1 && portal2)
+		arma_portal = false;
 
 //Seteamos esto aca que me parece lo mas facil, e intuitivo.
 //Disminuyo el cooldown de patear.
@@ -251,24 +258,54 @@ void Personaje::shoot() {
 	if (!movimientoDisparar || shootCooldown > 0)
 		return;
 
-	BolaNieve *bola;
+	shootCooldown = 10;
+
+	if (arma_portal)
+		this->escenario_->agregarProyectil(crearBolaPortal());
+	else
+		this->escenario_->agregarProyectil(crearBolaNieve());
+
+}
+
+Proyectil* Personaje::crearBolaPortal() {
+
+	BolaPortal *bola;
+	b2Vec2 vel;
+
 	float x = getX();
 	float y = getY() + MITAD_ALTO_PERSONAJE;
 
-	shootCooldown = 10;
+	x += (orientacion == IZQUIERDA) ? -1 : 1;
+
+	bola = new BolaPortal(x, y, 1, this->world, this);
+
+	vel = this->body->GetLinearVelocity();
+	vel.x -= (orientacion == IZQUIERDA) ? aceleracion * 4 : -aceleracion * 4;
+	vel.y = 0;
+
+	bola->setVelocidad(vel);
+
+	return (Proyectil*) bola;
+}
+Proyectil* Personaje::crearBolaNieve() {
+
+	BolaNieve *bola;
+	b2Vec2 vel;
+
+	float x = getX();
+	float y = getY() + MITAD_ALTO_PERSONAJE;
 
 	x += (orientacion == IZQUIERDA) ? -1 : 1;
 
 	bola = new BolaNieve(x, y, 1, this->world);
 
-	b2Vec2 vel = this->body->GetLinearVelocity();
-
+	vel = this->body->GetLinearVelocity();
 	vel.x -= (orientacion == IZQUIERDA) ? aceleracion * 4 : -aceleracion * 4;
 	vel.y = 2;
 
 	bola->setVelocidad(vel);
 
-	this->escenario_->agregarProyectil(bola);
+	return (Proyectil*) bola;
 }
 
 void Personaje::kick() {

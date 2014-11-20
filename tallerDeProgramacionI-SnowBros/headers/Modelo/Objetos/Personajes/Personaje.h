@@ -23,6 +23,8 @@ class Escenario;
 class Personaje: public Character {
 public:
 	conn_id id;
+	Portal *portal1;
+	Portal *portal2;
 
 	Personaje(float x, float y, char id[], Escenario* escenario);
 	~Personaje();
@@ -219,6 +221,7 @@ private:
 	b2Joint* joint;
 	BolaEnemigo* arrastradoPor;
 	b2Vec2* posicionInicial;
+	bool arma_portal;
 	bool esta_muerto;
 	bool arrastrado;
 	char connectionState;
@@ -234,6 +237,9 @@ private:
 	 * El Personaje no es afectado por los enemigos
 	 */
 	void hacerInmune();
+
+	Proyectil* crearBolaPortal();
+	Proyectil* crearBolaNieve();
 };
 
 #endif /* PERSONAJE_H_ */

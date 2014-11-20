@@ -14,6 +14,7 @@
 #include "../Parser/JsonParser.h"
 
 #include "Objetos/Proyectiles/BolaEnemigo.h"
+#include "Objetos/Proyectiles/BolaPortal.h"
 
 #include "Objetos/Personajes/Character.h"
 #include "Objetos/Personajes/Personaje.h"
@@ -63,6 +64,7 @@ typedef struct gameData {
 	bool paused;
 	unsigned int cantProyectiles;
 	unsigned int cantEnemigos;
+	unsigned int cantDinamicos;
 } gameData_t;
 
 typedef struct figura {

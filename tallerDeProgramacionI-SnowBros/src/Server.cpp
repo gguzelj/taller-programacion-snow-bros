@@ -379,6 +379,7 @@ void Server::enviarAClientes() {
 
 	gameData_.cantProyectiles = model_->getCantProyectiles();
 	gameData_.cantEnemigos = model_->getCantEnemigos();
+	gameData_.cantDinamicos = model_->getCantObjDinamicos();
 
 	dataToBeSent.gameData = &gameData_;
 	dataToBeSent.personajes = model_->getPersonajesParaEnvio();
@@ -450,6 +451,7 @@ void Server::step() {
 				if (data != nullptr) {
 					personaje->handleInput(data->keycode_1, data->type_1);
 					personaje->handleInput(data->keycode_2, data->type_2);
+					personaje->handleInput(data->keycode_3, data->type_3);
 				}
 			}
 
@@ -508,7 +510,7 @@ void Server::enviarProyectiles(int sock, proyectil_t* dinamicos) {
 }
 
 void Server::enviarDinamicos(int sock, figura_t* dinamicos) {
-	int size = sizeof(figura_t) * datos_.cantObjDinamicos;
+	int size = sizeof(figura_t) * gameData_.cantDinamicos;
 	sendall(sock, dinamicos, size);
 }
 

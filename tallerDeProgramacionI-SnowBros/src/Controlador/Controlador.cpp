@@ -11,15 +11,20 @@ dataToSend_t* Controlador::handleEvents(bool* running){
 	dataToSend_t* data = (dataToSend_t*) malloc(size);
 	bzero(data, size);
 
-	SDL_PollEvent(&event);
-
-	handleEvent(&event, running, &(data->keycode_1),&(data->type_1));
-	SDL_PollEvent(&event);
-	handleEvent(&event, running, &(data->keycode_2),&(data->type_2));
-
-
+	while(SDL_PollEvent(&event) && running){
+		if(cantEventos == 0)
+			handleEvent(&event, running, &(data->keycode_1),&(data->type_1));
+		if(cantEventos == 1)
+			handleEvent(&event, running, &(data->keycode_2),&(data->type_2));
+		if(cantEventos == 2)
+			handleEvent(&event, running, &(data->keycode_3),&(data->type_3));
+		if(cantEventos == 3){
+			int aux1 = 0;
+			unsigned int aux2 = 0;
+			handleEvent(&event, running, &aux1, &aux2);
+		}
+	}
 	return data;
-
 }
 
 void Controlador::handleEvent(SDL_Event* evento,bool* running, int32_t *code, Uint32 *type){
@@ -85,9 +90,10 @@ void Controlador::handleEvent(SDL_Event* evento,bool* running, int32_t *code, Ui
 				}
 			}
 			break;
-		}break;
+		}
 
-			case SDL_KEYUP:{
+		case SDL_KEYUP:{
+			switch(evento->key.keysym.sym){
 				case SDLK_LEFT:{
 					*type = SDL_KEYUP;
 					*code= evento->key.keysym.sym;
@@ -114,4 +120,5 @@ void Controlador::handleEvent(SDL_Event* evento,bool* running, int32_t *code, Ui
 				}
 			}break;
 		}
+	}
 }

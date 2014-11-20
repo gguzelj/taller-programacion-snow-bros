@@ -245,7 +245,7 @@ void Client::enviarAlServer() {
 		while (running_) {
 
 			dataToSend_t* data = onEvent();
-			if (data->keycode_1 == 0 && data->keycode_2 == 0) {
+			if (data->keycode_1 == 0 && data->keycode_2 == 0 && data->keycode_3 == 0) {
 				free(data);
 				continue;
 			}

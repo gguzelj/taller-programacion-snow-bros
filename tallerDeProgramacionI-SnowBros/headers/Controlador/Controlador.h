@@ -11,6 +11,8 @@ typedef struct dataToSend{
 	uint32_t type_1;
 	int32_t keycode_2;
 	uint32_t type_2;
+	int32_t keycode_3;
+	uint32_t type_3;
 } dataToSend_t;
 
 class Controlador{

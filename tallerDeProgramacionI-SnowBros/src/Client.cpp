@@ -194,7 +194,7 @@ int Client::initialize() {
 
 		//Recibimos la cantidad de objetos creados
 		recibirEstaticos(estaticos_);
-		recibirDinamicos(dinamicos_);
+		recibirDinamicos(dinamicos_, gameDetails_.cantObjDinamicos);
 		recibirPersonajes(personajes_);
 		recibirEnemigos(enemigos_, gameDetails_.cantEnemigos);
 		//Inicializamos la vista para el personaje principal
@@ -323,7 +323,7 @@ void Client::onRender(dataFromServer_t data) {
 	dataFromClient_t dataToBeDraw;
 
 	dataToBeDraw.cantPersonajes = gameDetails_.cantPersonajes;
-	dataToBeDraw.cantObjDinamicos = data.gameData->cantObjetosDinamicos;
+	dataToBeDraw.cantObjDinamicos = data.gameData->cantDinamicos;
 	dataToBeDraw.cantObjEstaticos = gameDetails_.cantObjEstaticos;
 	dataToBeDraw.gameData = data.gameData;
 	dataToBeDraw.personajes = data.personajes;

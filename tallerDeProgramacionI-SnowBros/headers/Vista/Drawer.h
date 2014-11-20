@@ -119,7 +119,6 @@ typedef struct enemigo{
 
 typedef struct gameData{
 	bool paused;
-	unsigned int cantObjetosDinamicos;
 	unsigned int cantProyectiles;
 	unsigned int cantEnemigos;
 	unsigned int cantDinamicos;
@@ -241,9 +240,6 @@ private:
 	string portalballImagePath;
 	string fireballImagePath;
 	string portalPath;
-	string bonus_veImagePath;
-	string bonus_mrImagePath;
-	string bonus_apImagePath;
 
 	//Texto de puntos y vidas.
 	string points;

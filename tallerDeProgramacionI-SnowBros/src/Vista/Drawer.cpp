@@ -25,19 +25,11 @@ void Drawer::loadMusic(){
 	}
 
 	//Load background music
-	gMusic = Mix_LoadMUS( "resources/SoundEffects/background.mid" );
+	gMusic = Mix_LoadMUS( "resources/SoundEffects/beat.wav" );
 	if(!gMusic){
 		printf( "Failed to load background music! SDL_mixer Error: %s\n", Mix_GetError() );
 	}
 	//Load soundeffects
-	gWalking1 = Mix_LoadWAV("resources/SoundEffects/walking1.wav");
-	if(!gWalking1){
-		printf( "Failed to load walking1 wav! SDL_mixer Error: %s\n", Mix_GetError() );
-	}
-	gWalking2 = Mix_LoadWAV("resources/SoundEffects/walking2.wav");
-	if(!gWalking2){
-		printf( "Failed to load walking2 wav! SDL_mixer Error: %s\n", Mix_GetError() );
-	}
 	gShooting = Mix_LoadWAV("resources/SoundEffects/shooting.wav");
 	if(!gShooting){
 		printf( "Failed to load shooting wav! SDL_mixer Error: %s\n", Mix_GetError() );
@@ -45,10 +37,6 @@ void Drawer::loadMusic(){
 	gJumping = Mix_LoadWAV("resources/SoundEffects/jumping.wav");
 	if(!gJumping){
 		printf( "Failed to load jumping wav! SDL_mixer Error: %s\n", Mix_GetError() );
-	}
-	gKick = Mix_LoadWAV("resources/SoundEffects/kick.wav");
-	if(!gKick){
-		printf( "Failed to load walking wav! SDL_mixer Error: %s\n", Mix_GetError() );
 	}
 	gGameover = Mix_LoadWAV("resources/SoundEffects/gameover.wav");
 	if(!gGameover){
@@ -116,7 +104,6 @@ bool Drawer::loadMedia() {
 		printf("Failed to load fireball texture!\n");
 		success = false;
 	}
-
 
 	SDL_Color textColor = { 255, 255, 255, 0xFF };
 
@@ -204,9 +191,6 @@ Drawer::Drawer() {
 
 	//The music that will be played
 	gMusic = nullptr;
-	gKick = nullptr;
-	gWalking1 = nullptr;
-	gWalking2 = nullptr;
 	gShooting = nullptr;
 	gJumping = nullptr;
 	gGameover = nullptr;
@@ -314,6 +298,17 @@ void Drawer::updateView(dataFromClient_t data, char* name) {
 	this->drawScenary(data, name);
 	this->drawMessages(data, personajePrincipal);
 	this->presentScenary();
+}
+
+void Drawer::reproducirSonidos(int* &sonidos, unsigned int size) {
+	for(unsigned int i = 0; i < size; i++){
+		if(sonidos[i] == SHOOTING){
+			Mix_PlayChannel( -1, gShooting, 0 );
+		}
+		if(sonidos[i] == JUMPING){
+			Mix_PlayChannel( -1, gJumping, 0 );
+		}
+	}
 }
 
 // ############################### //

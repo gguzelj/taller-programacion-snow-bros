@@ -143,6 +143,12 @@ public:
 	~Drawer();
 
 	void updateView(dataFromClient_t data,char* name);
+
+	/*
+	 * Reproduce los sonidos recibidos del servidor.
+	 */
+	void reproducirSonidos(int* &sonidos, unsigned int size);
+
 	void inicializarCamara(personaje_t personaje);
 	//Zooms in in a factor of 1.01x
 	void zoomIn();
@@ -188,11 +194,8 @@ private:
 	//The music that will be played
 	Mix_Music *gMusic;
 	Mix_Chunk *gShooting;
-	Mix_Chunk *gWalking1;
-	Mix_Chunk *gWalking2;
 	Mix_Chunk *gJumping;
 	Mix_Chunk *gGameover;
-	Mix_Chunk *gKick;
 
 	//Scene texture
 	LTexture rectangleLT;

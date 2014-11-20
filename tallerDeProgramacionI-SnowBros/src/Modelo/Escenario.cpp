@@ -130,8 +130,7 @@ void Escenario::setPersonajeConnectionState(conn_id id, char state) {
 	}
 }
 
-void destruirJointsDeBolaEnemigo(BolaEnemigo* enemigo, std::list<Personaje*>* personajes_,
-		b2World* world_) {
+void destruirJointsDeBolaEnemigo(BolaEnemigo* enemigo, std::list<Personaje*>* personajes_, b2World* world_) {
 	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {
 		if (!ASIGNADO((*per)->id)) {
 			if ((*per)->getArrastradoPor() == enemigo) {
@@ -154,6 +153,11 @@ void Escenario::clean() {
 				continue;
 		}
 
+		if ((*pro)->type == ID_BOLA_PORTAL) {
+			if (((BolaPortal*) (*pro))->crearPortal)
+				figurasDinamicas_->push_back(((BolaPortal*) (*pro))->crearNuevoPortal());
+		}
+
 		for (b2ContactEdge *ce = body->GetContactList(); ce; ce = ce->next) {
 			b2Contact* c = ce->contact;
 
@@ -161,7 +165,7 @@ void Escenario::clean() {
 			Figura* figA = (Figura*) c->GetFixtureA()->GetUserData();
 			Figura* figB = (Figura*) c->GetFixtureB()->GetUserData();
 
-			if(figA->getId() == PORTAL_CODE || figB->getId() == PORTAL_CODE)
+			if (figA->getId() == PORTAL_CODE || figB->getId() == PORTAL_CODE)
 				break;
 
 			if (c->IsTouching()) {

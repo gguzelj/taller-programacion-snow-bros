@@ -102,7 +102,7 @@ public:
 	virtual void beginContactMuro(Muro*,b2Contact*){};
 	virtual void beginContactParalelogramo(Paralelogramo*,b2Contact*){};
 	virtual void beginContactPoligono(Poligono*,b2Contact*){};
-	virtual void beginContactRectanguo(Rectangulo*,b2Contact*){};
+	virtual void beginContactRectangulo(Rectangulo*,b2Contact*){};
 	virtual void beginContactTrapecio(Trapecio*,b2Contact*){};
 	virtual void beginContactEnemigo(Enemigo*,b2Contact*){};
 	virtual void beginContactPersonaje(Personaje*,b2Contact*){};

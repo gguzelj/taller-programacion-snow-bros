@@ -1,10 +1,9 @@
 #include "../../../../headers/Modelo/Objetos/Proyectiles/BolaPortal.h"
 
-BolaPortal::BolaPortal(float x, float y, int potencia, b2World* world) {
+BolaPortal::BolaPortal(float x, float y, int potencia, b2World* world, Portal* port) {
 
 	this->type = ID_BOLA_PORTAL;
 
-	this->potencia = potencia;
 	this->x = x;
 	this->y = y;
 	this->radio = RADIO_BOLA_PORTAL;
@@ -13,12 +12,14 @@ BolaPortal::BolaPortal(float x, float y, int potencia, b2World* world) {
 	this->estatico = false;
 	this->teletransportar = false;
 	this->world = world;
+	this->portal = port;
+	this->crearPortal = false;
 
 	//Defino el body y fixture
 	b2BodyDef cuerpoDeCirculo;
 	cuerpoDeCirculo.type = b2_dynamicBody;
 	cuerpoDeCirculo.position.Set(x, y);
-	cuerpoDeCirculo.gravityScale = 8;
+	cuerpoDeCirculo.gravityScale = 0;
 	this->body = this->world->CreateBody(&cuerpoDeCirculo);
 
 	b2FixtureDef fixture;
@@ -40,6 +41,24 @@ BolaPortal::~BolaPortal() {
 	// TODO Auto-generated destructor stub
 }
 
+void BolaPortal::beginContactRectangulo(Rectangulo* rec, b2Contact* contact) {
+
+	if (!rec->esMuro())
+		return;
+
+	crearPortal = true;
+}
+
+Portal* BolaPortal::crearNuevoPortal() {
+	b2Vec2 portalAddress = b2Vec2(body->GetPosition().x, body->GetPosition().y);
+	b2Vec2 portalDestination = b2Vec2(0, -1);
+
+	Portal *portal = new Portal(0.1, 2.5, 0, portalAddress, world);
+	portal->setDestination(portalDestination);
+
+	return portal;
+
+}
 
 void BolaPortal::setVelocidad(b2Vec2 velocidad) {
 	this->body->SetLinearVelocity(velocidad);

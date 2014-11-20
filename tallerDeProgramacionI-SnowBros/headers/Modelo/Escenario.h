@@ -14,6 +14,7 @@
 #include "../Parser/JsonParser.h"
 
 #include "Objetos/Proyectiles/BolaEnemigo.h"
+#include "Objetos/Proyectiles/BolaPortal.h"
 
 #include "Objetos/Personajes/Character.h"
 #include "Objetos/Personajes/Personaje.h"

@@ -271,18 +271,13 @@ Proyectil* Personaje::crearBolaPortal() {
 
 	BolaPortal *bola;
 	b2Vec2 vel;
-	Portal *port;
-
-	if (portal1 == nullptr)
-		port = portal2;
-	else
-		port = portal1;
 
 	float x = getX();
 	float y = getY() + MITAD_ALTO_PERSONAJE;
 
 	x += (orientacion == IZQUIERDA) ? -1 : 1;
 
+	bola = new BolaPortal(x, y, 1, this->world, this);
 
 	vel = this->body->GetLinearVelocity();
 	vel.x -= (orientacion == IZQUIERDA) ? aceleracion * 4 : -aceleracion * 4;

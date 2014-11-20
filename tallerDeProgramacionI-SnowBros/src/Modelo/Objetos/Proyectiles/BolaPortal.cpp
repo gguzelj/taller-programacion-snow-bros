@@ -38,7 +38,6 @@ BolaPortal::BolaPortal(float x, float y, int potencia, b2World* world, Personaje
 }
 
 BolaPortal::~BolaPortal() {
-	// TODO Auto-generated destructor stub
 }
 
 void BolaPortal::beginContactRectangulo(Rectangulo* rec, b2Contact* contact) {

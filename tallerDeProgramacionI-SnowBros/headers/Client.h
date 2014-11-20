@@ -170,7 +170,7 @@ private:
 	/*
 	 * Metodo para recibir los objetos dinamicos
 	 */
-	void recibirDinamicos(figura_t* &dinamicos)throw (receiveException);
+	void recibirDinamicos(figura_t* &dinamicos, unsigned int cant)throw (receiveException);
 
 	/*
 	 * Recibimos los proyectiles del juego

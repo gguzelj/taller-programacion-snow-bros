@@ -291,7 +291,7 @@ void Client::recibirDelServer() {
 			recibirEnemigos(data.enemigos, data.gameData->cantEnemigos);
 
 			//Recibimos los objetos dinamicos
-			recibirDinamicos(data.dinamicos);
+			recibirDinamicos(data.dinamicos, data.gameData->cantDinamicos);
 
 			//Recibimos los proyectiles del juego
 			recibirProyectiles(data.proyectiles, data.gameData->cantProyectiles);
@@ -369,9 +369,9 @@ int Client::validateParameters(int argc, char* argv[]) {
 	return CLIENT_OK;
 }
 
-void Client::recibirDinamicos(figura_t* &dinamicos) throw (receiveException){
+void Client::recibirDinamicos(figura_t* &dinamicos, unsigned int cant) throw (receiveException){
 
-	int size = sizeof(figura_t) * gameDetails_.cantObjDinamicos;
+	int size = sizeof(figura_t) * cant;
 	dinamicos = (figura_t*) malloc(size);
 
 	recvall(sock, dinamicos, size);

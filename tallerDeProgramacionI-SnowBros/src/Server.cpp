@@ -377,7 +377,6 @@ void Server::enviarAClientes() {
 
 	dataToSend_t dataToBeSent;
 
-	gameData_.cantObjetosDinamicos = model_->getCantObjDinamicos();
 	gameData_.cantProyectiles = model_->getCantProyectiles();
 	gameData_.cantEnemigos = model_->getCantEnemigos();
 	gameData_.cantDinamicos = model_->getCantObjDinamicos();

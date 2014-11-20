@@ -65,6 +65,7 @@ typedef struct gameData {
 	unsigned int cantProyectiles;
 	unsigned int cantEnemigos;
 	unsigned int cantDinamicos;
+	unsigned int cantSonidos;
 } gameData_t;
 
 typedef struct figura {
@@ -100,6 +101,7 @@ public:
 	figura_t* getFiguras(std::vector<Figura*>*);
 	personaje_t* getPersonajesParaEnvio();
 	proyectil_t* getProyectiles();
+	int* getSonidosParaEnvio();
 
 	/*
 	 * Devuelve la lista de Personajes
@@ -149,6 +151,12 @@ public:
 	float getAnchoUn();
 
 	/*
+	 * En base a las acciones realizadas por los personajes, guarda los sonidos que se
+	 * enviaran al cliente para que se reproduzcan.
+	 */
+	void tomarSonidos();
+
+	/*
 	 * Metodos que devuelven cantidad de objetos en el momento de ejecucion
 	 */
 	unsigned int getCantObjDinamicos();
@@ -156,6 +164,7 @@ public:
 	unsigned int getCantPersonajes();
 	unsigned int getCantEnemigos();
 	unsigned int getCantProyectiles();
+	unsigned int getCantSonidos();
 
 	/*
 	 * Actualiza la accion y por consecuente la posicion de cada enemigo en juego
@@ -185,6 +194,7 @@ private:
 	std::list<Proyectil*>* proyectiles_;
 	std::list<Personaje*>* personajes_;
 	std::list<Enemigo*>* enemigos_;
+	std::list<int>* sonidos_;
 
 	/*
 	 * Se encarga de la limpieza y eliminacion de objetos que deben ser removidos

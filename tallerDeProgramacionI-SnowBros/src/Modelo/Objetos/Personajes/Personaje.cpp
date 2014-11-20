@@ -253,20 +253,6 @@ void Personaje::controlarEstado() {
 		crearJoint(this, arrastradoPor, world);
 }
 
-void Personaje::shoot() {
-
-	if (!movimientoDisparar || shootCooldown > 0)
-		return;
-
-	shootCooldown = 10;
-
-	if (arma_portal)
-		this->escenario_->agregarProyectil(crearBolaPortal());
-	else
-		this->escenario_->agregarProyectil(crearBolaNieve());
-
-}
-
 Proyectil* Personaje::crearBolaPortal() {
 
 	BolaPortal *bola;
@@ -308,6 +294,21 @@ Proyectil* Personaje::crearBolaNieve() {
 	return (Proyectil*) bola;
 }
 
+
+void Personaje::shoot() {
+
+	if (!movimientoDisparar || shootCooldown > 0)
+		return;
+
+	shootCooldown = SHOOTCOOLDOWN;
+
+	if (arma_portal)
+		this->escenario_->agregarProyectil(crearBolaPortal());
+	else
+		this->escenario_->agregarProyectil(crearBolaNieve());
+
+}
+
 void Personaje::kick() {
 	kickCooldown = 12;
 	//Iteramos con los contactos de nuestro personaje hasta encontrar al enemigo y luego lo matamos
@@ -328,7 +329,7 @@ void Personaje::jump() {
 		return;
 
 	if (this->jumpCooldown <= 0) {
-		this->jumpCooldown = 18;
+		this->jumpCooldown = JUMPCOOLDOWN;
 		b2Vec2 velocidadActual = this->body->GetLinearVelocity();
 		velocidadActual.y = 25;
 		this->body->SetLinearVelocity(velocidadActual);
@@ -412,6 +413,14 @@ b2Joint* Personaje::getJoint() {
 
 BolaEnemigo* Personaje::getArrastradoPor() {
 	return arrastradoPor;
+}
+
+int Personaje::getJumpCooldown(){
+	return jumpCooldown;
+}
+
+int Personaje::getShootCooldown(){
+	return shootCooldown;
 }
 
 bool Personaje::esArrastrado() {

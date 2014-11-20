@@ -99,6 +99,7 @@ typedef struct dataToSend {
 	enemigo_t* enemigos;
 	figura_t* dinamicos;
 	proyectil_t* proyectiles;
+	int* sonidos;
 } dataToSend_t;
 
 typedef char conn_id[TAM];

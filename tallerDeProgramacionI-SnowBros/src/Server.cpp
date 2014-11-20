@@ -380,12 +380,14 @@ void Server::enviarAClientes() {
 	gameData_.cantProyectiles = model_->getCantProyectiles();
 	gameData_.cantEnemigos = model_->getCantEnemigos();
 	gameData_.cantDinamicos = model_->getCantObjDinamicos();
+	gameData_.cantSonidos = model_->getCantSonidos();
 
 	dataToBeSent.gameData = &gameData_;
 	dataToBeSent.personajes = model_->getPersonajesParaEnvio();
 	dataToBeSent.enemigos = model_->getEnemigosParaEnvio();
 	dataToBeSent.dinamicos = model_->getObjetosDinamicos();
 	dataToBeSent.proyectiles = model_->getProyectiles();
+	dataToBeSent.sonidos = model_->getSonidosParaEnvio();
 
 	for (unsigned int i = 0; i < connections_.size(); i++) {
 

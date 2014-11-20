@@ -47,6 +47,21 @@
 #define ANCHO_PORTAL 43
 #define ALTO_PORTAL 64
 
+#define ALTO_BONUS 11
+#define ANCHO_BONUS 9
+
+#define POS_X_BONUSVE 174
+#define POS_Y_BONUSVE 275
+
+#define POS_X_BONUSMR 165
+#define POS_Y_BONUSMR 283
+
+#define POS_X_BONUSAP 154
+#define POS_Y_BONUSAP 299
+
+/*
+ * Todas las demas funciones llaman a esta para hacer los dibujos.
+ */
 void dibujarFrame(SDL_Renderer *renderer,SDL_Texture *texture,char orientacion, int pos_x,int pos_y,SDL_Rect* srcrect, SDL_Rect dstrect){
 	switch(orientacion){
 		case 'l':{
@@ -59,6 +74,36 @@ void dibujarFrame(SDL_Renderer *renderer,SDL_Texture *texture,char orientacion, 
 			break;
 		}
 	}
+}
+
+void drawBonusVE(SDL_Renderer *renderer,SDL_Texture *texture,int pos_x,int pos_y,int ancho,int alto){
+
+	char orientacion = 'l';
+
+	SDL_Rect srcrect = { POS_X_BONUSVE, POS_Y_BONUSVE, ANCHO_BONUS, ALTO_BONUS };
+	SDL_Rect dstrect = { pos_x, pos_y, ancho, alto};
+
+	dibujarFrame(renderer,texture,orientacion,pos_x,pos_y,&srcrect,dstrect);
+}
+
+void drawBonusMR(SDL_Renderer *renderer,SDL_Texture *texture,int pos_x,int pos_y,int ancho,int alto){
+
+	char orientacion = 'l';
+
+	SDL_Rect srcrect = { POS_X_BONUSMR, POS_Y_BONUSMR, ANCHO_BONUS, ALTO_BONUS };
+	SDL_Rect dstrect = { pos_x, pos_y, ancho, alto};
+
+	dibujarFrame(renderer,texture,orientacion,pos_x,pos_y,&srcrect,dstrect);
+}
+
+void drawBonusAP(SDL_Renderer *renderer,SDL_Texture *texture,int pos_x,int pos_y,int ancho,int alto){
+
+	char orientacion = 'l';
+
+	SDL_Rect srcrect = { POS_X_BONUSAP, POS_Y_BONUSAP, ANCHO_BONUS, ALTO_BONUS };
+	SDL_Rect dstrect = { pos_x, pos_y, ancho, alto};
+
+	dibujarFrame(renderer,texture,orientacion,pos_x,pos_y,&srcrect,dstrect);
 }
 
 //orientacion l = izquierda ; r = derecha;
@@ -160,7 +205,7 @@ void drawPortal(SDL_Renderer *renderer,SDL_Texture *texture, int pos_x,int pos_y
 	Uint32 sprite = (ticks / 120  ) % FRAMES_PORTAL;
 
 	SDL_Rect srcrect = { POS_X_PORTAL + (sprite * ANCHO_PORTAL) ,POS_Y_PORTAL, ANCHO_PORTAL, ALTO_PORTAL };
-	SDL_Rect dstrect = { pos_x - (ancho/2), pos_y -( alto/2), ancho, alto};
+	SDL_Rect dstrect = { pos_x, pos_y, ancho, alto};
 
 	dibujarFrame(renderer,texture,orientacion,pos_x,pos_y,&srcrect,dstrect);
 }

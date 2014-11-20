@@ -324,26 +324,8 @@ float coord_relativa(float referencia, float coord) {
 	return coord - referencia;
 }
 
-//Convierte un color representado a partir de una cadena de caracteres a su valor numerico red green blue.
-//la cadena debe ser del tipo "#02FF12"
-char* convertir_hex_a_rgb(std::string color) {
-
-	char* resultado = new char[3];
-
-	const char *red = (color.substr(1, 2)).c_str();
-	resultado[0] = strtol(red, NULL, 16);
-
-	const char *green = (color.substr(3, 2)).c_str();
-	resultado[1] = strtol(green, NULL, 16);
-
-	const char *blue = (color.substr(5, 2)).c_str();
-	resultado[2] = strtol(blue, NULL, 16);
-
-	return resultado;
-}
-
 int anchoPersonaje(float un_to_px_x) {
-	return (MITAD_ANCHO_PERSONAJE * 2) * un_to_px_x + 15;
+	return (MITAD_ANCHO_PERSONAJE * 2) * un_to_px_x;
 }
 int altoPersonaje(float un_to_px_y) {
 	return ((MITAD_ALTO_PERSONAJE * 2) * un_to_px_y);
@@ -449,7 +431,7 @@ void Drawer::drawFigura(figura_t objeto) {
 		paralelogramLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
 	if(objeto.id == PORTAL_CODE){
-		drawPortal(renderer, portal, pos_x, pos_y, ANCHO_PORTAL, alto * un_to_px_y);
+		drawPortal(renderer, portal, pos_x - ANCHO_PORTAL / 2 - ancho * un_to_px_x / 2, pos_y, ANCHO_PORTAL, alto * un_to_px_y);
 	}
 	if(objeto.id == BONUS_VE_CODE){
 		drawBonusVE(renderer, imagenEnemigos, pos_x, pos_y, ancho, alto);

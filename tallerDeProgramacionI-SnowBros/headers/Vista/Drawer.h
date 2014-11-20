@@ -51,8 +51,8 @@
 #define COTA_SUP_Y	(coordRel.h)/5
 
 //defines que eran del Personaje.cpp
-#define MITAD_ANCHO_PERSONAJE 0.5f
-#define MITAD_ALTO_PERSONAJE 0.85
+#define MITAD_ANCHO_PERSONAJE 0.65f
+#define MITAD_ALTO_PERSONAJE 0.85f
 
 //Mensaje de espera
 #define WAITING_MSG "Esperando a todos los jugadores"
@@ -122,6 +122,7 @@ typedef struct gameData{
 	unsigned int cantProyectiles;
 	unsigned int cantEnemigos;
 	unsigned int cantDinamicos;
+	unsigned int cantSonidos;
 }gameData_t;
 
 typedef struct dataFromClient{

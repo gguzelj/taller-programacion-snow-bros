@@ -114,7 +114,7 @@ void Enemigo::morir() {
 	//Modificar las chances para que aparezca de forma random
 		Figura* figura_i;
 		//ponerle donde esta ubicado el enemigo
-		figura_i = new BonusMoverRapido(5,-4,this->world);
+		figura_i = new BonusMoverRapido(getX(),getY(),this->world);
 		this->escenario_->agregarBonusVelocidad(figura_i);
 }
 

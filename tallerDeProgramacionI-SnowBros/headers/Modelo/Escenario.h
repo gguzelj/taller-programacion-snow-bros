@@ -64,6 +64,7 @@ typedef struct gameData {
 	bool paused;
 	unsigned int cantProyectiles;
 	unsigned int cantEnemigos;
+	unsigned int cantDinamicos;
 } gameData_t;
 
 typedef struct figura {

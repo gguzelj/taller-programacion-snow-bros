@@ -7,12 +7,15 @@
 #include "../Bonus/BonusVidaExtra.h"
 #include "../Bonus/BonusMoverRapido.h"
 
-#define MITAD_ANCHO_PERSONAJE 0.5f
+#define MITAD_ANCHO_PERSONAJE 0.65f
 #define MITAD_ALTO_PERSONAJE 0.85
 
 #define DESCONECTADO -1
 #define ESPERANDO 0
 #define CONECTADO 1
+
+#define JUMPCOOLDOWN 18
+#define SHOOTCOOLDOWN 10
 
 #define TIEMPO_INMUNIDAD 5
 
@@ -196,6 +199,16 @@ public:
 	 * o nullptr si no hay ninguno.
 	 */
 	BolaEnemigo* getArrastradoPor();
+
+	/*
+	 * Devuelve el atributo jumpcooldown
+	 */
+	int getJumpCooldown();
+
+	/*
+	 * Devuelve el atributo shootcooldown
+	 */
+	int getShootCooldown();
 
 	/*
 	 * Devuelve true si el Personaje esta_muerto o false en caso contrario

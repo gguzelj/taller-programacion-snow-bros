@@ -13,6 +13,7 @@ Escenario::Escenario(JsonParser *parser) {
 	proyectiles_ = new std::list<Proyectil*>;
 	personajes_ = new std::list<Personaje*>;
 	enemigos_ = new std::list<Enemigo*>;
+	sonidos_ = new std::list<int>;
 	ancho_un = parser->getAnchoUnEscenario();
 	alto_un = parser->getAltoUnEscenario();
 	world_ = new b2World(gravity);
@@ -245,8 +246,18 @@ void Escenario::preStep() {
 	clean();
 }
 
+void Escenario::tomarSonidos(){
+	for (auto per = personajes_->begin(); per != personajes_->end(); ++per){
+		if((*per)->getShootCooldown() == SHOOTCOOLDOWN)
+			sonidos_->push_back(SHOOTING);
+		if((*per)->getJumpCooldown() == JUMPCOOLDOWN)
+			sonidos_->push_back(JUMPING);
+	}
+}
+
 void Escenario::step() {
 	preStep();
+	tomarSonidos();
 	getWorld()->Step(timeStep, velocityIterations, positionIterations);
 	actualizarEnemigos();
 }
@@ -274,6 +285,10 @@ unsigned int Escenario::getCantObjDinamicos() {
 
 unsigned int Escenario::getCantObjEstaticos() {
 	return figurasEstaticas_->size();
+}
+
+unsigned int Escenario::getCantSonidos(){
+	return sonidos_->size();
 }
 
 figura_t* Escenario::getObjetosEstaticos() {
@@ -374,6 +389,17 @@ enemigo_t* Escenario::getEnemigosParaEnvio() {
 		i++;
 	}
 	return enems;
+}
+
+int* Escenario::getSonidosParaEnvio(){
+	int* sonidos = (int*) malloc(sizeof(int) * enemigos_->size());
+
+	int i = 0;
+	for (auto sonido = sonidos_->begin(); sonido != sonidos_->end(); ++sonido) {
+		sonidos[i] = (*sonido);
+	}
+	sonidos_->clear();
+	return sonidos;
 }
 
 Personaje* Escenario::getPersonaje(conn_id id) {

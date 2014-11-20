@@ -315,7 +315,6 @@ figura_t* Escenario::getFiguras(std::vector<Figura*>* vector) {
 		obj[i].rotacion = fig->getAngulo();
 		obj[i].centro.x = fig->GetCenter().x;
 		obj[i].centro.y = fig->GetCenter().y;
-
 	}
 	return obj;
 }
@@ -418,7 +417,9 @@ float Escenario::getAnchoUn() {
 void Escenario::agregarProyectil(Proyectil* proy) {
 	proyectiles_->push_back(proy);
 }
-
+void Escenario::agregarBonusVelocidad(Figura* figura){
+	figurasDinamicas_->push_back(figura);
+}
 void Escenario::actualizarEnemigos() {
 
 	for (auto en = enemigos_->begin(); en != enemigos_->end(); en++) {

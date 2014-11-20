@@ -115,6 +115,7 @@ typedef struct enemigo{
 }enemigo_t;
 
 typedef struct gameData{
+	unsigned int nivel;
 	bool paused;
 	unsigned int cantProyectiles;
 	unsigned int cantEnemigos;
@@ -143,10 +144,18 @@ public:
 	void zoomIn();
 	//Zooms out in a factor of 0.99x
 	void zoomOut();
+	void setNivel(unsigned int nivel){
+		if(!this->pasandoDeNivel){
+			this->nivel = nivel;
+			this->setearLimitesDelNivel(nivel);
+		}
+	}
+	void transicionNivel();
+	void finalizarTransicionNivel();
 
 private:
 
-	int nivel;
+	unsigned int nivel;
 
 	int limIzqCamera ;
 	int limDerCamera ;
@@ -158,6 +167,7 @@ private:
 	int limiteInferior ;
 	int limiteSuperior ;
 
+	bool pasandoDeNivel;
 
 	//SDL Attributes
 	SDL_Renderer *renderer;
@@ -261,13 +271,14 @@ private:
 
 	//Private Methods
 	//General purpose methods
-	void setearLimitesDelNivel(int nivel);
+	void setearLimitesDelNivel(unsigned int nivel);
 	void loadFont();
 	bool loadMedia();
 	void loadMusic();
 	void runWindow(int ancho_px ,int alto_px ,string imagePath);
 	void actualizarCamara(personaje_t personaje);
 	SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren);
+	void setearLimiteInferiorDelNivel(unsigned int nivel);
 
 	//Drawing methods
 	void drawBackground();

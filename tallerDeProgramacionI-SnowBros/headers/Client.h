@@ -53,6 +53,7 @@ using namespace std;
 
 //Estructuras necesarias para conectarse con el servidor
 typedef struct firstConnectionDetails{
+	unsigned int nivel;
 	unsigned int cantPersonajes;
 	unsigned int cantEnemigos;
 	unsigned int cantObjDinamicos;

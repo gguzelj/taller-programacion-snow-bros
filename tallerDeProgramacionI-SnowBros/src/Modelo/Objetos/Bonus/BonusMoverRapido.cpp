@@ -32,7 +32,7 @@ BonusMoverRapido::BonusMoverRapido(float posicionX, float posicionY, b2World* wo
 }
 
 BonusMoverRapido::~BonusMoverRapido(){
-
+	this->world->DestroyBody(this->body);
 }
 
 void BonusMoverRapido::desactivar(){
@@ -49,6 +49,14 @@ float BonusMoverRapido::getAncho(){
 float BonusMoverRapido::getAlto(){
 	return alto;
 }
+
+void BonusMoverRapido::beginContact(Figura* figura, b2Contact* contact) {
+	//todo solo si lo toca el personaje deberia moverse rapido
+//	if(lo toca el personaje, su sensor)
+	figura->beginContactBonusMoverRapido(this, contact);
+//	avisarle que tiene que ser destruido en la siguiente iteracion
+}
+
 char BonusMoverRapido::getId(){
 	return 'c';
 }

@@ -21,6 +21,7 @@ public:
 	float getAncho();
 	float getAlto();
 	char getId();
+	void beginContact(Figura* figura, b2Contact* contact);
 
 
 };

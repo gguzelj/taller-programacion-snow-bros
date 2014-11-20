@@ -269,7 +269,6 @@ unsigned int Escenario::getCantProyectiles() {
 }
 
 unsigned int Escenario::getCantObjDinamicos() {
-	std::cout << "cantidad de objetos dinamicos: " << figurasDinamicas_->size() << std::endl;
 	return figurasDinamicas_->size();
 }
 
@@ -301,9 +300,6 @@ figura_t* Escenario::getFiguras(std::vector<Figura*>* vector) {
 		obj[i].rotacion = fig->getAngulo();
 		obj[i].centro.x = fig->GetCenter().x;
 		obj[i].centro.y = fig->GetCenter().y;
-//		std::cout << "id:"<< fig->getId() << std::endl;
-//		std::cout << "alto:"<< fig->getAlto()<< std::endl;
-//		std::cout << "ancho:"<< fig->getAncho() << std::endl;
 	}
 	return obj;
 }
@@ -395,7 +391,6 @@ void Escenario::agregarProyectil(Proyectil* proy) {
 	proyectiles_->push_back(proy);
 }
 void Escenario::agregarBonusVelocidad(Figura* figura){
-	std::cout << "agregarBonusVelocidad ENGAGED" << std::endl;
 	figurasDinamicas_->push_back(figura);
 }
 void Escenario::actualizarEnemigos() {

@@ -32,6 +32,9 @@
 #define PENTAGONO_CODE '5'
 #define HEXAGONO_CODE '6'
 #define PORTAL_CODE 'o'
+#define BONUS_VE_CODE 'v'
+#define BONUS_AP_CODE 'l'
+#define BONUS_MR_CODE 'm'
 
 #define ID_ENEMIGO_BASICO 11
 #define ID_ENEMIGO_FUEGO 12
@@ -119,6 +122,7 @@ typedef struct gameData{
 	unsigned int cantObjetosDinamicos;
 	unsigned int cantProyectiles;
 	unsigned int cantEnemigos;
+	unsigned int cantDinamicos;
 }gameData_t;
 
 typedef struct dataFromClient{
@@ -237,6 +241,10 @@ private:
 	string portalballImagePath;
 	string fireballImagePath;
 	string portalPath;
+	string bonus_veImagePath;
+	string bonus_mrImagePath;
+	string bonus_apImagePath;
+
 	//Texto de puntos y vidas.
 	string points;
 	string lives;

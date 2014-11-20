@@ -105,17 +105,18 @@ bool Drawer::loadMedia() {
 		success = false;
 	}
 	if (!snowballLT.loadFromFile(snowballImagePath, renderer)) {
-		printf("Failed to load paralelogram texture!\n");
+		printf("Failed to load snowball texture!\n");
 		success = false;
 	}
 	if (!portalballLT.loadFromFile(portalballImagePath, renderer)) {
-		printf("Failed to load paralelogram texture!\n");
+		printf("Failed to load portalball texture!\n");
 		success = false;
 	}
 	if (!fireballLT.loadFromFile(fireballImagePath, renderer)) {
-		printf("Failed to load paralelogram texture!\n");
+		printf("Failed to load fireball texture!\n");
 		success = false;
 	}
+
 
 	SDL_Color textColor = { 255, 255, 255, 0xFF };
 
@@ -449,6 +450,15 @@ void Drawer::drawFigura(figura_t objeto) {
 	}
 	if(objeto.id == PORTAL_CODE){
 		drawPortal(renderer, portal, pos_x, pos_y, ANCHO_PORTAL, alto * un_to_px_y);
+	}
+	if(objeto.id == BONUS_VE_CODE){
+		drawBonusVE(renderer, imagenEnemigos, pos_x, pos_y, ancho, alto);
+	}
+	if(objeto.id == BONUS_AP_CODE){
+		drawBonusAP(renderer, imagenEnemigos, pos_x, pos_y, ancho, alto);
+	}
+	if(objeto.id == BONUS_MR_CODE){
+		drawBonusMR(renderer, imagenEnemigos, pos_x, pos_y, ancho, alto);
 	}
 }
 

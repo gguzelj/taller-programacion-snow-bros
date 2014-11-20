@@ -13,7 +13,6 @@ EnemigoBasico::~EnemigoBasico() {
 }
 
 void EnemigoBasico::mover() {
-
 	int i = 0;
 	std::list<Personaje*>* personajes_ = escenario_->getPersonajes();
 

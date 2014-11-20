@@ -1,4 +1,5 @@
 #include "../../../../headers/Modelo/Objetos/Proyectiles/BolaEnemigo.h"
+#include "../../../../headers/Modelo/Objetos/Bonus/BonusMoverRapido.h"
 #include <ctime>
 
 BolaEnemigo::BolaEnemigo(float x, float y, b2World* world) {
@@ -86,6 +87,7 @@ void BolaEnemigo::morir(){
 		this->actualizar();
 		time(&tiempoFinal);
 	}
+
 	destruir = true;
 }
 

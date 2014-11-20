@@ -106,6 +106,10 @@ void Enemigo::morir() {
 
 	this->escenario_->agregarProyectil(bola);
 
+	Figura* figura_i;
+	figura_i = new BonusMoverRapido(5,-4,this->world);
+	this->escenario_->agregarBonusVelocidad(figura_i);
+
 	//Lanzamos un thread para que muera la bola
 	std::thread t(&BolaEnemigo::morir, bola);
 	t.detach();

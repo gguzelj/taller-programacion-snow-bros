@@ -12,7 +12,7 @@ protected:
 	bool activado; //Con este atributo se determinara si hay que sacar o no al bonus del escenario.
 
 public:
-	virtual ~Bonus();
+	virtual ~Bonus(){}
 	void desactivar();
 	bool activo();
 

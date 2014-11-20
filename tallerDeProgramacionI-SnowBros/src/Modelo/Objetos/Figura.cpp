@@ -52,7 +52,7 @@ bool Figura::validarOverlap() {
 
 void Figura::beginContactPortal(Portal* portal, b2Contact* contact) {
 
-	if (this->type == ID_PORTAL)
+	if (this->type == ID_PORTAL || this->type == ID_BOLA_PORTAL)
 		return;
 
 	this->teletransportar = true;

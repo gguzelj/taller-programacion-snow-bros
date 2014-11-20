@@ -261,7 +261,7 @@ Proyectil* Personaje::crearBolaPortal() {
 	float x = getX();
 	float y = getY() + MITAD_ALTO_PERSONAJE;
 
-	x += (orientacion == IZQUIERDA) ? -1 : 1;
+	x += (orientacion == IZQUIERDA) ? -1.5 : 1.5;
 
 	bola = new BolaPortal(x, y, 1, this->world, this);
 
@@ -281,7 +281,7 @@ Proyectil* Personaje::crearBolaNieve() {
 	float x = getX();
 	float y = getY() + MITAD_ALTO_PERSONAJE;
 
-	x += (orientacion == IZQUIERDA) ? -1 : 1;
+	x += (orientacion == IZQUIERDA) ? -1.5 : 1.5;
 
 	bola = new BolaNieve(x, y, 1, this->world);
 

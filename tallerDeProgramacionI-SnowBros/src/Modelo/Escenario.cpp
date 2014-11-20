@@ -182,7 +182,6 @@ void Escenario::clean() {
 				}
 
 			}
-
 		}
 
 		for (b2ContactEdge *ce = body->GetContactList(); ce; ce = ce->next) {

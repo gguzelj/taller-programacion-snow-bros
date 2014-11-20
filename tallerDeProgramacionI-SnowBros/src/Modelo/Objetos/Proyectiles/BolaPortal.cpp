@@ -51,7 +51,7 @@ void BolaPortal::beginContactRectangulo(Rectangulo* rec, b2Contact* contact) {
 Portal* BolaPortal::crearNuevoPortal() {
 	b2Vec2 portalAddress = b2Vec2(body->GetPosition().x, body->GetPosition().y);
 
-	Portal *portal = new Portal(0.1, 2.5, 0, portalAddress, world);
+	Portal *portal = new Portal(0.1, 5, 0, portalAddress, world);
 	portal->setDestination(portalAddress);
 
 	return portal;

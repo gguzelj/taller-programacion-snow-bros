@@ -108,6 +108,10 @@ bool Drawer::loadMedia() {
 		printf("Failed to load paralelogram texture!\n");
 		success = false;
 	}
+	if (!portalballLT.loadFromFile(portalballImagePath, renderer)) {
+		printf("Failed to load paralelogram texture!\n");
+		success = false;
+	}
 	if (!fireballLT.loadFromFile(fireballImagePath, renderer)) {
 		printf("Failed to load paralelogram texture!\n");
 		success = false;
@@ -236,6 +240,7 @@ Drawer::Drawer() {
 	this->trapexImagePath = "resources/textures/trapecio.png";
 	this->paralelogramImagePath = "resources/textures/paralelogramo.png";
 	this->snowballImagePath = "resources/textures/snowball.png";
+	this->portalballImagePath = "resources/textures/portalball.png";
 	this->fireballImagePath = "resources/textures/bolaDeFuego.png";
 	this->portalPath = "resources/sprites/portal.png";
 
@@ -466,6 +471,9 @@ void Drawer::drawProyectil(proyectil_t proy) {
 
 	if (proy.id == BOLA_NIEVE_CODE) {
 		snowballLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y, nullptr, proy.rotacion, nullptr);
+	}
+	else if (proy.id == BOLA_PORTAL_CODE) {
+		portalballLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y, nullptr, proy.rotacion, nullptr);
 	}
 	else if (proy.id == BOLA_FUEGO_CODE) {
 		fireballLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y, nullptr, proy.rotacion, nullptr);

@@ -20,6 +20,7 @@
 #include <arpa/inet.h>
 
 #define ZOOM_MAX 1.7
+#define BOLA_PORTAL_CODE 'a'
 #define BOLA_NIEVE_CODE 'b'
 #define BOLA_FUEGO_CODE 'f'
 #define CIRCULO_CODE 'c'
@@ -198,6 +199,7 @@ private:
 	LTexture trapexLT;
 	LTexture paralelogramLT;
 	LTexture snowballLT;
+	LTexture portalballLT;
 	LTexture fireballLT;
 
 	//Ahora los puntos y vidas son LTextures.
@@ -231,6 +233,7 @@ private:
 	string trapexImagePath;
 	string paralelogramImagePath;
 	string snowballImagePath;
+	string portalballImagePath;
 	string fireballImagePath;
 	string portalPath;
 	//Texto de puntos y vidas.

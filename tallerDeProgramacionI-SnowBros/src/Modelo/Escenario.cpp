@@ -113,14 +113,14 @@ bool Escenario::crearPersonaje(float x, float y, conn_id id) {
 
 void Escenario::crearPortales() {
 
-	b2Vec2 portal2Address = b2Vec2(-ancho_un / 2, -1 - alto_un / 2);
-	b2Vec2 portal2Destination = b2Vec2(0, -1);
+	b2Vec2 portalAddress = b2Vec2(-ancho_un / 2, -1 - alto_un / 2);
+	b2Vec2 portalDestination = b2Vec2(0, -1);
 
-	Portal *portal2 = new Portal(20, 0.1, 0, portal2Address, world_);
+	Portal *portal = new Portal(20, 0.1, 0, portalAddress, world_);
 
-	portal2->setDestination(portal2Destination);
+	portal->setDestination(portalDestination);
 
-	figurasEstaticas_->push_back(portal2);
+	figurasEstaticas_->push_back(portal);
 }
 
 void Escenario::setPersonajeConnectionState(conn_id id, char state) {

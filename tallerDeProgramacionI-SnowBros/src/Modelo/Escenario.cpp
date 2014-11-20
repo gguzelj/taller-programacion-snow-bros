@@ -167,6 +167,19 @@ void Escenario::clean() {
 					per->portal1 = portal;
 
 				figurasDinamicas_->push_back(portal);
+
+				if(per->portal1 && per->portal2){
+
+					b2Vec2 portal1Address = per->portal1->getAddress();
+					b2Vec2 portal2Address = per->portal2->getAddress();
+
+					portal1Address.x += (portal1Address.x > 0)?-1:1;
+					portal2Address.x += (portal2Address.x > 0)?-1:1;
+
+					per->portal1->setDestination(portal2Address);
+					per->portal2->setDestination(portal1Address);
+				}
+
 			}
 
 		}

@@ -130,7 +130,8 @@ void Escenario::setPersonajeConnectionState(conn_id id, char state) {
 	}
 }
 
-void destruirJointsDeBolaEnemigo(BolaEnemigo* enemigo, std::list<Personaje*>* personajes_, b2World* world_) {
+void destruirJointsDeBolaEnemigo(BolaEnemigo* enemigo, std::list<Personaje*>* personajes_,
+		b2World* world_) {
 	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {
 		if (!ASIGNADO((*per)->id)) {
 			if ((*per)->getArrastradoPor() == enemigo) {
@@ -153,9 +154,34 @@ void Escenario::clean() {
 				continue;
 		}
 
+		//Creamos el protal, y lo asignamos al personaje
 		if ((*pro)->type == ID_BOLA_PORTAL) {
-			if (((BolaPortal*) (*pro))->crearPortal)
-				figurasDinamicas_->push_back(((BolaPortal*) (*pro))->crearNuevoPortal());
+			if (((BolaPortal*) (*pro))->crearPortal) {
+
+				Personaje* per = ((BolaPortal*) (*pro))->personaje;
+				Portal *portal = ((BolaPortal*) (*pro))->crearNuevoPortal();
+
+				if (per->portal1)
+					per->portal2 = portal;
+				else
+					per->portal1 = portal;
+
+				figurasDinamicas_->push_back(portal);
+
+				if(per->portal1 && per->portal2){
+
+					b2Vec2 portal1Address = per->portal1->getAddress();
+					b2Vec2 portal2Address = per->portal2->getAddress();
+
+					portal1Address.x += (portal1Address.x > 0)?-1:1;
+					portal2Address.x += (portal2Address.x > 0)?-1:1;
+
+					per->portal1->setDestination(portal2Address);
+					per->portal2->setDestination(portal1Address);
+				}
+
+			}
+
 		}
 
 		for (b2ContactEdge *ce = body->GetContactList(); ce; ce = ce->next) {

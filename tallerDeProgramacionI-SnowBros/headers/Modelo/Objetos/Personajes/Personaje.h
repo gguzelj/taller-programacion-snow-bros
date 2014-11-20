@@ -23,6 +23,8 @@ class Escenario;
 class Personaje: public Character {
 public:
 	conn_id id;
+	Portal *portal1;
+	Portal *portal2;
 
 	Personaje(float x, float y, char id[], Escenario* escenario);
 	~Personaje();
@@ -219,8 +221,6 @@ private:
 	b2Joint* joint;
 	BolaEnemigo* arrastradoPor;
 	b2Vec2* posicionInicial;
-	Portal *portal1;
-	Portal *portal2;
 	bool arma_portal;
 	bool esta_muerto;
 	bool arrastrado;

@@ -283,7 +283,6 @@ Proyectil* Personaje::crearBolaPortal() {
 
 	x += (orientacion == IZQUIERDA) ? -1 : 1;
 
-	bola = new BolaPortal(x, y, 1, this->world, port);
 
 	vel = this->body->GetLinearVelocity();
 	vel.x -= (orientacion == IZQUIERDA) ? aceleracion * 4 : -aceleracion * 4;

@@ -1,6 +1,6 @@
 #include "../../../../headers/Modelo/Objetos/Proyectiles/BolaPortal.h"
 
-BolaPortal::BolaPortal(float x, float y, int potencia, b2World* world, Portal* port) {
+BolaPortal::BolaPortal(float x, float y, int potencia, b2World* world, Personaje* per) {
 
 	this->type = ID_BOLA_PORTAL;
 
@@ -12,7 +12,7 @@ BolaPortal::BolaPortal(float x, float y, int potencia, b2World* world, Portal* p
 	this->estatico = false;
 	this->teletransportar = false;
 	this->world = world;
-	this->portal = port;
+	this->personaje = per;
 	this->crearPortal = false;
 
 	//Defino el body y fixture

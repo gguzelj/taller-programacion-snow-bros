@@ -111,16 +111,18 @@ void Enemigo::morir() {
 	std::thread t(&BolaEnemigo::morir, bola);
 	t.detach();
 
-	//Modificar las chances para que aparezca de forma random
-		Figura* figura_i;
-		//ponerle donde esta ubicado el enemigo
-		figura_i = new BonusMoverRapido(getX(),getY(),this->world);
-		this->escenario_->agregarBonusVelocidad(figura_i);
+
 }
 
 void Enemigo::morirDelay() {
 	sleep(1);
 	this->estaVivo = false;
+	//Modificar las chances para que aparezca de forma random
+		//notar que puede aparecer antes el bonus porque la pelota sigue rotando y no espera un segundo
+		Figura* figura_i;
+		//ponerle donde esta ubicado el enemigo
+		figura_i = new BonusMoverRapido(getX(),getY(),this->world);
+		this->escenario_->agregarBonusVelocidad(figura_i);
 }
 
 void Enemigo::beginContactBolaEnemigo(BolaEnemigo* bola, b2Contact* contact) {

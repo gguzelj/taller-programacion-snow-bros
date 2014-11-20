@@ -388,7 +388,6 @@ void Server::enviarAClientes() {
 	dataToBeSent.dinamicos = model_->getObjetosDinamicos();
 	dataToBeSent.proyectiles = model_->getProyectiles();
 	dataToBeSent.sonidos = model_->getSonidosParaEnvio();
-
 	for (unsigned int i = 0; i < connections_.size(); i++) {
 
 		if (!connections_[i]->activa)
@@ -419,6 +418,7 @@ void Server::enviarAlCliente(connection_t *conn) {
 			enviarEnemigos(conn->socket, dataToBeSent.enemigos);
 			enviarDinamicos(conn->socket, dataToBeSent.dinamicos);
 			enviarProyectiles(conn->socket, dataToBeSent.proyectiles);
+			enviarSonidos(conn->socket, dataToBeSent.sonidos);
 
 		} catch (const sendException& e) {
 
@@ -533,6 +533,11 @@ void Server::enviarPersonajes(int sock, personaje_t* personajes) {
 void Server::enviarEnemigos(int sock, enemigo_t* enemigos) {
 	int size = sizeof(enemigo_t) * gameData_.cantEnemigos;
 	sendall(sock, enemigos, size);
+}
+
+void Server::enviarSonidos(int sock, int* sonidos) {
+	int size = sizeof(int) * gameData_.cantSonidos;
+	sendall(sock, sonidos, size);
 }
 
 void Server::sendall(int s, void* data, int len) throw (sendException) {

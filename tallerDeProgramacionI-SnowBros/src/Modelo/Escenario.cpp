@@ -250,7 +250,7 @@ void Escenario::tomarSonidos(){
 	for (auto per = personajes_->begin(); per != personajes_->end(); ++per){
 		if((*per)->getShootCooldown() == SHOOTCOOLDOWN)
 			sonidos_->push_back(SHOOTING);
-		if((*per)->getJumpCooldown() == JUMPCOOLDOWN)
+		if((*per)->getJumpCooldown() == JUMPCOOLDOWN-1)
 			sonidos_->push_back(JUMPING);
 	}
 }
@@ -392,13 +392,14 @@ enemigo_t* Escenario::getEnemigosParaEnvio() {
 }
 
 int* Escenario::getSonidosParaEnvio(){
-	int* sonidos = (int*) malloc(sizeof(int) * enemigos_->size());
+	int* sonidos = (int*) malloc(sizeof(int) * sonidos_->size());
 
 	int i = 0;
 	for (auto sonido = sonidos_->begin(); sonido != sonidos_->end(); ++sonido) {
 		sonidos[i] = (*sonido);
+		sonidos_->erase(sonido++);
+		i++;
 	}
-	sonidos_->clear();
 	return sonidos;
 }
 

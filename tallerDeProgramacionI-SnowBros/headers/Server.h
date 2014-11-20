@@ -269,6 +269,11 @@ private:
 	void enviarEnemigos(int sock, enemigo_t* enemigos);
 
 	/*
+	 * Metodo para enviar los sonidos a reproducir
+	 */
+	void enviarSonidos(int sock, int* sonidos);
+
+	/*
 	 * Metodo de bajo nivel de sockets para enviar hasta una cierta
 	 * cantidad de bytes determinada.
 	 */

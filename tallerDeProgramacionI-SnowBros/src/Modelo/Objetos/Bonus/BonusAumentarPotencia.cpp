@@ -13,5 +13,5 @@ void BonusAumentarPotencia::beginContact(Figura* figura, b2Contact* contact) {
 }
 
 char BonusAumentarPotencia::getId(){
-	return RECTANGULO_CODE;
+	return BONUS_POTENCIA_CODE;
 }

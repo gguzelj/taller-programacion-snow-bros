@@ -13,5 +13,5 @@ void BonusMoverRapido::beginContact(Figura* figura, b2Contact* contact) {
 }
 
 char BonusMoverRapido::getId(){
-	return RECTANGULO_CODE;
+	return BONUS_VELOCIDAD_CODE;
 }

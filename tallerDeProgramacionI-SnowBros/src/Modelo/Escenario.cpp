@@ -151,10 +151,9 @@ void Escenario::clean() {
 	//Elimino figuras dinamicas
 	for (auto fig = figurasDinamicas_->begin(); fig != figurasDinamicas_->end(); ++fig) {
 
-		if ((*fig)->type == ID_BONUS_MOVER_RAPIDO ||
-			(*fig)->type == ID_BONUS_VIDA_EXTRA ||
-			(*fig)->type == ID_BONUS_AUMENTAR_POTENCIA ||
-			(*fig)->type == ID_BONUS_BOLA_PORTAL ) {
+		if ((*fig)->type == ID_BONUS_MOVER_RAPIDO || (*fig)->type == ID_BONUS_VIDA_EXTRA
+				|| (*fig)->type == ID_BONUS_AUMENTAR_POTENCIA
+				|| (*fig)->type == ID_BONUS_BOLA_PORTAL) {
 
 			if (!((Bonus*) (*fig))->activo()) {
 				world_->DestroyBody((*fig)->getBody());
@@ -289,7 +288,6 @@ void Escenario::addPointsToPlayers(int puntos) {
 	}
 }
 
-
 bool Escenario::debeCrearBonus() {
 	return (rand() % 100 < 100);
 }
@@ -301,7 +299,7 @@ Figura* Escenario::crearBonus(Figura* enem) {
 	//Cambiar el modulo por la cant de bonus
 	switch (rand() % 4) {
 	case 1:
-		fig =  (Figura*) new BonusMoverRapido(enem->getX(), enem->getY(), world_);
+		fig = (Figura*) new BonusMoverRapido(enem->getX(), enem->getY(), world_);
 		break;
 	case 2:
 		fig = (Figura*) new BonusVidaExtra(enem->getX(), enem->getY(), world_);

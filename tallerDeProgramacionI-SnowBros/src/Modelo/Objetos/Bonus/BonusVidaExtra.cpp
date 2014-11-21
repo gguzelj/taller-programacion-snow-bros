@@ -13,5 +13,5 @@ void BonusVidaExtra::beginContact(Figura* figura, b2Contact* contact) {
 }
 
 char BonusVidaExtra::getId(){
-	return RECTANGULO_CODE;
+	return BONUS_VIDA_CODE;
 }

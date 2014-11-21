@@ -13,5 +13,5 @@ void BonusBolaPortal::beginContact(Figura* figura, b2Contact* contact) {
 }
 
 char BonusBolaPortal::getId(){
-	return RECTANGULO_CODE;
+	return BONUS_PORTAL_CODE;
 }

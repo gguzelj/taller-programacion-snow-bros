@@ -132,8 +132,7 @@ void Escenario::setPersonajeConnectionState(conn_id id, char state) {
 	}
 }
 
-void destruirJointsDeBolaEnemigo(BolaEnemigo* enemigo, std::list<Personaje*>* personajes_,
-		b2World* world_) {
+void destruirJointsDeBolaEnemigo(BolaEnemigo* enemigo, std::list<Personaje*>* personajes_, b2World* world_) {
 	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {
 		if (!ASIGNADO((*per)->id)) {
 			if ((*per)->getArrastradoPor() == enemigo) {
@@ -152,9 +151,7 @@ void Escenario::clean() {
 	//Elimino figuras dinamicas
 	for (auto fig = figurasDinamicas_->begin(); fig != figurasDinamicas_->end(); ++fig) {
 
-		if ((*fig)->type == ID_BONUS_MOVER_RAPIDO || (*fig)->type == ID_BONUS_VIDA_EXTRA
-				|| (*fig)->type == ID_BONUS_AUMENTAR_POTENCIA
-				|| (*fig)->type == ID_BONUS_BOLA_PORTAL) {
+		if ((*fig)->type == ID_BONUS_MOVER_RAPIDO || (*fig)->type == ID_BONUS_VIDA_EXTRA || (*fig)->type == ID_BONUS_AUMENTAR_POTENCIA || (*fig)->type == ID_BONUS_BOLA_PORTAL) {
 
 			if (!((Bonus*) (*fig))->activo()) {
 				world_->DestroyBody((*fig)->getBody());
@@ -226,7 +223,12 @@ void Escenario::clean() {
 }
 
 void teletransportar(Figura* fig) {
+
 	if (fig->teletransportar) {
+
+		//Solo teletransportamos si se setearon ambos portales
+		if (fig->portal->getDestination() == fig->portal->getAddress())
+			return;
 
 		fig->getBody()->SetTransform(fig->portal->getDestination(), 0);
 		fig->teletransportar = false;
@@ -484,9 +486,9 @@ void Escenario::actualizarEnemigos() {
 		(*en)->mover();
 	}
 }
-void Escenario::setNivel(unsigned int level){
+void Escenario::setNivel(unsigned int level) {
 	nivel = level;
 }
-unsigned int Escenario::getNivel(){
+unsigned int Escenario::getNivel() {
 	return nivel;
 }

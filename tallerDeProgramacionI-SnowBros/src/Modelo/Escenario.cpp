@@ -8,8 +8,8 @@ Escenario::Escenario(JsonParser *parser) {
 	b2Vec2 gravity(0.0f, parser->getGravedad());
 
 	cantidadMaximaDePersonajes = parser->getConnectionsLimit();
-	figurasEstaticas_ = new std::vector<Figura*>;
-	figurasDinamicas_ = new std::vector<Figura*>;
+	figurasEstaticas_ = new std::list<Figura*>;
+	figurasDinamicas_ = new std::list<Figura*>;
 	proyectiles_ = new std::list<Proyectil*>;
 	personajes_ = new std::list<Personaje*>;
 	enemigos_ = new std::list<Enemigo*>;
@@ -147,6 +147,20 @@ void destruirJointsDeBolaEnemigo(BolaEnemigo* enemigo, std::list<Personaje*>* pe
 }
 
 void Escenario::clean() {
+
+	//Elimino figuras dinamicas
+	for (auto fig = figurasDinamicas_->begin(); fig != figurasDinamicas_->end(); ++fig) {
+
+		if ((*fig)->type == ID_BONUS_MOVER_RAPIDO || (*fig)->type == ID_BONUS_VIDA_EXTRA) {
+			if (!((Bonus*) (*fig))->activo()) {
+				world_->DestroyBody((*fig)->getBody());
+				figurasDinamicas_->erase(fig++);
+			}
+		}
+
+	}
+
+	//Elimino proyectiles
 	for (auto pro = proyectiles_->begin(); pro != proyectiles_->end(); ++pro) {
 		b2Body* body = (*pro)->getb2Body();
 
@@ -169,13 +183,13 @@ void Escenario::clean() {
 
 				figurasDinamicas_->push_back(portal);
 
-				if(per->portal1 && per->portal2){
+				if (per->portal1 && per->portal2) {
 
 					b2Vec2 portal1Address = per->portal1->getAddress();
 					b2Vec2 portal2Address = per->portal2->getAddress();
 
-					portal1Address.x += (portal1Address.x > 0)?-1:1;
-					portal2Address.x += (portal2Address.x > 0)?-1:1;
+					portal1Address.x += (portal1Address.x > 0) ? -1 : 1;
+					portal2Address.x += (portal2Address.x > 0) ? -1 : 1;
 
 					per->portal1->setDestination(portal2Address);
 					per->portal2->setDestination(portal1Address);
@@ -245,11 +259,11 @@ void Escenario::preStep() {
 	clean();
 }
 
-void Escenario::tomarSonidos(){
-	for (auto per = personajes_->begin(); per != personajes_->end(); ++per){
-		if((*per)->getShootCooldown() == SHOOTCOOLDOWN)
+void Escenario::tomarSonidos() {
+	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {
+		if ((*per)->getShootCooldown() == SHOOTCOOLDOWN)
 			sonidos_->push_back(SHOOTING);
-		if((*per)->getJumpCooldown() == JUMPCOOLDOWN-1)
+		if ((*per)->getJumpCooldown() == JUMPCOOLDOWN - 1)
 			sonidos_->push_back(JUMPING);
 	}
 }
@@ -286,7 +300,7 @@ unsigned int Escenario::getCantObjEstaticos() {
 	return figurasEstaticas_->size();
 }
 
-unsigned int Escenario::getCantSonidos(){
+unsigned int Escenario::getCantSonidos() {
 	return sonidos_->size();
 }
 
@@ -298,22 +312,21 @@ figura_t* Escenario::getObjetosDinamicos() {
 	return getFiguras(figurasDinamicas_);
 }
 
-figura_t* Escenario::getFiguras(std::vector<Figura*>* vector) {
+figura_t* Escenario::getFiguras(std::list<Figura*>* list) {
 
 	figura_t* obj;
-	Figura* fig;
-	obj = (figura_t*) malloc(sizeof(figura_t) * vector->size());
+	obj = (figura_t*) malloc(sizeof(figura_t) * list->size());
 
-	for (unsigned int i = 0; i < vector->size(); i++) {
+	int i = 0;
+	for (auto fig = list->begin(); fig != list->end(); ++fig) {
 
-		fig = (*vector)[i];
-
-		obj[i].id = fig->getId();
-		obj[i].alto = fig->getAlto();
-		obj[i].ancho = fig->getAncho();
-		obj[i].rotacion = fig->getAngulo();
-		obj[i].centro.x = fig->GetCenter().x;
-		obj[i].centro.y = fig->GetCenter().y;
+		obj[i].id = (*fig)->getId();
+		obj[i].alto = (*fig)->getAlto();
+		obj[i].ancho = (*fig)->getAncho();
+		obj[i].rotacion = (*fig)->getAngulo();
+		obj[i].centro.x = (*fig)->GetCenter().x;
+		obj[i].centro.y = (*fig)->GetCenter().y;
+		i++;
 	}
 	return obj;
 }
@@ -389,7 +402,7 @@ enemigo_t* Escenario::getEnemigosParaEnvio() {
 	return enems;
 }
 
-int* Escenario::getSonidosParaEnvio(){
+int* Escenario::getSonidosParaEnvio() {
 	int* sonidos = (int*) malloc(sizeof(int) * sonidos_->size());
 
 	int i = 0;
@@ -416,7 +429,7 @@ float Escenario::getAnchoUn() {
 void Escenario::agregarProyectil(Proyectil* proy) {
 	proyectiles_->push_back(proy);
 }
-void Escenario::agregarBonusVelocidad(Figura* figura){
+void Escenario::agregarBonusVelocidad(Figura* figura) {
 	figurasDinamicas_->push_back(figura);
 }
 void Escenario::actualizarEnemigos() {

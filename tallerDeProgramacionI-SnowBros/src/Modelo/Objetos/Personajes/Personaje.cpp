@@ -173,7 +173,7 @@ void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 
 void Personaje::beginContactBonusVidaExtra(BonusVidaExtra* bonus, b2Contact* contact) {
 	this->lives++;
-	bonus->desactivar();
+	((Bonus*)bonus)->desactivar();
 }
 
 void Personaje::beginContactBonusMoverRapido(BonusMoverRapido* bonus, b2Contact* contact) {

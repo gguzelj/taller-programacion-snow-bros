@@ -36,6 +36,8 @@
 #define ID_BOLA_FUEGO 13
 #define ID_PORTAL 14
 #define ID_BOLA_PORTAL 15
+#define ID_BONUS_MOVER_RAPIDO 16
+#define ID_BONUS_VIDA_EXTRA 17
 
 #define FIGURA_WARNING_OVERLAP "El siguiente objeto se esta superponiendo con otros ya creados \n"
 

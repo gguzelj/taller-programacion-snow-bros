@@ -98,7 +98,7 @@ public:
 	enemigo_t* getEnemigosParaEnvio();
 	figura_t* getObjetosEstaticos();
 	figura_t* getObjetosDinamicos();
-	figura_t* getFiguras(std::vector<Figura*>*);
+	figura_t* getFiguras(std::list<Figura*>*);
 	personaje_t* getPersonajesParaEnvio();
 	proyectil_t* getProyectiles();
 	int* getSonidosParaEnvio();
@@ -189,8 +189,8 @@ private:
 	const int32 positionIterations = 64;    //how strongly to correct position}
 
 	b2World* world_;
-	std::vector<Figura*>* figurasEstaticas_;
-	std::vector<Figura*>* figurasDinamicas_;
+	std::list<Figura*>* figurasEstaticas_;
+	std::list<Figura*>* figurasDinamicas_;
 	std::list<Proyectil*>* proyectiles_;
 	std::list<Personaje*>* personajes_;
 	std::list<Enemigo*>* enemigos_;

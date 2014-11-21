@@ -127,7 +127,7 @@ bool Enemigo::debeCrearBonus() {
 Figura* Enemigo::crearBonus() {
 
 	//Cambiar el modulo por la cant de bonus
-	switch (rand() % 3) {
+	switch (rand() % 4) {
 	case 1:
 		return (Figura*) new BonusMoverRapido(getX(), getY(), world);
 		break;
@@ -136,6 +136,9 @@ Figura* Enemigo::crearBonus() {
 		break;
 	case 3:
 		return (Figura*) new BonusAumentarPotencia(getX(), getY(), world);
+		break;
+	case 4:
+		return (Figura*) new BonusBolaPortal(getX(), getY(), world);
 		break;
 	}
 

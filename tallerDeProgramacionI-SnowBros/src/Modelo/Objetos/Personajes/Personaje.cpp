@@ -19,7 +19,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->state = &Personaje::standby;
 	this->orientacion = ORIENTACION_INICIAL;
 	this->esta_muerto = false;
-	this->arma_portal = true;
+	this->arma_portal = false;
 	this->arrastradoPor = nullptr;
 	this->joint = nullptr;
 	this->portal1 = nullptr;
@@ -186,6 +186,13 @@ void Personaje::beginContactBonusMoverRapido(BonusMoverRapido* bonus, b2Contact*
 void Personaje::beginContactBonusAumentarPotencia(BonusAumentarPotencia* bonus, b2Contact* contact) {
 	bonus->desactivar();
 	this->potencia +=4;
+}
+
+void Personaje::beginContactBonusBolaPortal(BonusBolaPortal* bonus, b2Contact* contact) {
+	bonus->desactivar();
+	this->arma_portal = true;
+	this->portal1 = nullptr;
+	this->portal2 = nullptr;
 }
 
 bool Personaje::estaEmpujandoEnemigo() {

@@ -39,6 +39,7 @@
 #define ID_BONUS_MOVER_RAPIDO 16
 #define ID_BONUS_VIDA_EXTRA 17
 #define ID_BONUS_AUMENTAR_POTENCIA 18
+#define ID_BONUS_BOLA_PORTAL 19
 
 #define FIGURA_WARNING_OVERLAP "El siguiente objeto se esta superponiendo con otros ya creados \n"
 
@@ -63,6 +64,7 @@ class Portal;
 class BonusVidaExtra;
 class BonusMoverRapido;
 class BonusAumentarPotencia;
+class BonusBolaPortal;
 
 /*
  * Clase abstracta de la cual van a heredar todos los tipos de figuras (Rectangulo, Poligono, Circulo, Parelelogramo)
@@ -117,6 +119,7 @@ public:
 	virtual void beginContactBonusVidaExtra(BonusVidaExtra*, b2Contact*){};
 	virtual void beginContactBonusMoverRapido(BonusMoverRapido*, b2Contact*){};
 	virtual void beginContactBonusAumentarPotencia(BonusAumentarPotencia*, b2Contact*){};
+	virtual void beginContactBonusBolaPortal(BonusBolaPortal*, b2Contact*){};
 
 	virtual void endContactCirculo(Circulo*,b2Contact*){};
 	virtual void endContactMuro(Muro*,b2Contact*){};
@@ -133,6 +136,7 @@ public:
 	virtual void endContactBonusVidaExtra(BonusVidaExtra*, b2Contact*){};
 	virtual void endContactBonusMoverRapido(BonusMoverRapido*, b2Contact*){};
 	virtual void endContactBonusAumentarPotencia(BonusAumentarPotencia*, b2Contact*){};
+	virtual void endContactBonusBolaPortal(BonusBolaPortal*, b2Contact*){};
 
 };
 

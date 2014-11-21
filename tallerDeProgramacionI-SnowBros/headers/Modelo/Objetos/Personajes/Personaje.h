@@ -7,6 +7,7 @@
 #include "../Bonus/BonusVidaExtra.h"
 #include "../Bonus/BonusMoverRapido.h"
 #include "../Bonus/BonusAumentarPotencia.h"
+#include "../Bonus/BonusBolaPortal.h"
 
 #define MITAD_ANCHO_PERSONAJE 0.65f
 #define MITAD_ALTO_PERSONAJE 0.85
@@ -66,15 +67,22 @@ public:
 
 	/*
 	 * Encargado de realizar las acciones pertinentes en el caso en que el
-	 * Personaje entra en contacto con un bonus de movimiento rapito.
+	 * Personaje entra en contacto con un bonus de movimiento rapido.
 	 */
 	void beginContactBonusMoverRapido(BonusMoverRapido*, b2Contact*);
 
 	/*
 	 * Encargado de realizar las acciones pertinentes en el caso en que el
-	 * Personaje entra en contacto con un bonus de movimiento rapito.
+	 * Personaje entra en contacto con un bonus de Aumentar Potencia.
 	 */
 	void beginContactBonusAumentarPotencia(BonusAumentarPotencia*, b2Contact*);
+
+	/*
+	 * Encargado de realizar las acciones pertinentes en el caso en que el
+	 * Personaje entra en contacto con un bonus de bola portal.
+	 */
+	void beginContactBonusBolaPortal(BonusBolaPortal*, b2Contact*);
+
 
 	/*
 	 * Realiza las corecciones pertinentes al estado del Personaje previo

@@ -85,6 +85,7 @@ protected:
 public:
 	b2Body* body;
 	bool teletransportar;
+	b2Vec2 velocidadAntesTeletransportar;
 	Portal* portal;
 	int type;
 	float x;

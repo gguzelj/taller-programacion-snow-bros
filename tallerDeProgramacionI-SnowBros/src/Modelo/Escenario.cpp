@@ -226,8 +226,18 @@ void Escenario::clean() {
 
 void teletransportar(Figura* fig) {
 	if (fig->teletransportar) {
+
 		fig->getBody()->SetTransform(fig->portal->getDestination(), 0);
 		fig->teletransportar = false;
+
+		//Cambiamos la velocidad en X para que siempre apunte al centro
+		b2Vec2 vel = fig->velocidadAntesTeletransportar;
+		b2Vec2 pos = fig->getBody()->GetPosition();
+
+		vel.x *= (pos.x > 0) ? -1 : 1;
+
+		fig->getBody()->SetLinearVelocity(vel);
+
 	}
 }
 

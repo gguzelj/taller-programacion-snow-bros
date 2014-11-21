@@ -66,6 +66,7 @@ typedef struct gameData {
 	unsigned int cantEnemigos;
 	unsigned int cantDinamicos;
 	unsigned int cantSonidos;
+	unsigned int nivel;
 } gameData_t;
 
 typedef struct figura {
@@ -191,6 +192,9 @@ public:
 	 */
 	void step();
 
+	void setNivel(unsigned int nivel);
+	unsigned int getNivel();
+
 private:
 	Contacto contactos;
 	const float32 timeStep = 1 / 40.0; 		//the length of time passed to simulate (seconds)
@@ -218,6 +222,7 @@ private:
 	float ancho_un;
 	float alto_un;
 	unsigned int cantidadMaximaDePersonajes;
+	unsigned int nivel;
 };
 
 #endif /* ESCENARIO_H_ */

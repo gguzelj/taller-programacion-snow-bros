@@ -17,6 +17,7 @@ Escenario::Escenario(JsonParser *parser) {
 	ancho_un = parser->getAnchoUnEscenario();
 	alto_un = parser->getAltoUnEscenario();
 	world_ = new b2World(gravity);
+	nivel = 1;
 
 	world_->SetContactListener(&contactos);
 
@@ -471,4 +472,10 @@ void Escenario::actualizarEnemigos() {
 		(*en)->decreaseEspera();
 		(*en)->mover();
 	}
+}
+void Escenario::setNivel(unsigned int level){
+	nivel = level;
+}
+unsigned int Escenario::getNivel(){
+	return nivel;
 }

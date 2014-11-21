@@ -381,6 +381,7 @@ void Server::enviarAClientes() {
 	gameData_.cantEnemigos = model_->getCantEnemigos();
 	gameData_.cantDinamicos = model_->getCantObjDinamicos();
 	gameData_.cantSonidos = model_->getCantSonidos();
+	gameData_.nivel = model_->getNivel();
 
 	dataToBeSent.gameData = &gameData_;
 	dataToBeSent.personajes = model_->getPersonajesParaEnvio();

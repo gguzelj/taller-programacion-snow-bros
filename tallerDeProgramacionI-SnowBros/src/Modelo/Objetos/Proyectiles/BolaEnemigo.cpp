@@ -1,4 +1,6 @@
 #include "../../../../headers/Modelo/Objetos/Proyectiles/BolaEnemigo.h"
+#include "../../../../headers/Modelo/Escenario.h"
+
 #include <ctime>
 
 BolaEnemigo::BolaEnemigo(float x, float y, b2World* world, Escenario* esc) {
@@ -89,7 +91,7 @@ void BolaEnemigo::morir(){
 	}
 	destruir = true;
 	if (escenario->debeCrearBonus())
-		escenario->agregarBonus(escenario->crearBonus());
+		escenario->agregarBonus(escenario->crearBonus(this));
 }
 
 void BolaEnemigo::beginContact(Figura *fig, b2Contact* contact){

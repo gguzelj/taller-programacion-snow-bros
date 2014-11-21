@@ -335,10 +335,10 @@ void Drawer::reproducirSonidos(int* &sonidos, unsigned int size) {
 			Mix_PlayChannel( -1, gBallBreaking, 0 );
 		}
 		else if(sonidos[i] == BONUS){
-			Mix_PlayChannel( -1, gBallBreaking, 0 );
+			Mix_PlayChannel( -1, gBonus, 0 );
 		}
 		else if(sonidos[i] == ONEUP){
-			Mix_PlayChannel( -1, gBallBreaking, 0 );
+			Mix_PlayChannel( -1, gOneUp, 0 );
 		}
 		else if(sonidos[i] == GAMEOVER){
 			Mix_PlayChannel( -1, gGameover, 0 );

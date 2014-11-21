@@ -23,12 +23,12 @@ Portal::Portal(float ancho, float alto, int rot, b2Vec2 address, b2World* world)
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shape;
 	fixtureDef.density = (float) masa / (alto * ancho);
-	//fixtureDef.isSensor = true;
 	fixtureDef.filter.groupIndex = MURO_FILTER_INDEX;
 	fixtureDef.friction = 0.7f;
 
 	b2Fixture* fixture = body->CreateFixture(&fixtureDef);
 	fixture->SetUserData(this);
+
 }
 
 Portal::~Portal() {

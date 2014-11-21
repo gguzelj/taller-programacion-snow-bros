@@ -63,6 +63,7 @@ void Figura::beginContactPortal(Portal* portal, b2Contact* contact) {
 	if (this->type == ID_PORTAL || this->type == ID_BOLA_PORTAL)
 		return;
 
+	this->velocidadAntesTeletransportar = this->body->GetLinearVelocity();
 	this->teletransportar = true;
 	this->portal = portal;
 }

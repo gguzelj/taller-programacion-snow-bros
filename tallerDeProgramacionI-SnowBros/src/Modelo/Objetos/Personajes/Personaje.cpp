@@ -19,7 +19,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->state = &Personaje::standby;
 	this->orientacion = ORIENTACION_INICIAL;
 	this->esta_muerto = false;
-	this->arma_portal = false;
+	this->arma_portal = true;
 	this->arrastradoPor = nullptr;
 	this->joint = nullptr;
 	this->portal1 = nullptr;

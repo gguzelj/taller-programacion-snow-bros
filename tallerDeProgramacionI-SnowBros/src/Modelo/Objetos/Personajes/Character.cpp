@@ -152,6 +152,11 @@ void Character::decreaseShootCooldown() {
 		this->shootCooldown -= 1;
 }
 
+void Character::decreaseEspera(){
+	if (this->espera >0)
+		this->espera -=1;
+}
+
 int Character::getJumpCooldown() {
 	return (this->jumpCooldown);
 }

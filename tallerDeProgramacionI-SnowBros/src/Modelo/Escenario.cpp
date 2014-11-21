@@ -466,6 +466,7 @@ void Escenario::agregarBonus(Figura* figura) {
 void Escenario::actualizarEnemigos() {
 
 	for (auto en = enemigos_->begin(); en != enemigos_->end(); en++) {
+		(*en)->decreaseEspera();
 		(*en)->mover();
 	}
 }

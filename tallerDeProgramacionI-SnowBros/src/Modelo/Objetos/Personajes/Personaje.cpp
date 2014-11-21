@@ -358,9 +358,9 @@ void Personaje::morir() {
 }
 
 void Personaje::aumentarVelocidad() {
-	aceleracion *= 1.5;
+	aceleracion += 1.5;
 	sleep(15);
-	aceleracion /= 1.5;
+	aceleracion -= 1.5;
 }
 
 void Personaje::volverAPosicionInicial() {

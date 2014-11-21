@@ -16,6 +16,14 @@ b2Body* Figura::getBody() {
 	return this->body;
 }
 
+float Figura::getX() {
+	return (this->body->GetPosition().x);
+}
+
+float Figura::getY() {
+	return (this->body->GetPosition().y);
+}
+
 bool Figura::esEstatico() {
 	return estatico;
 }

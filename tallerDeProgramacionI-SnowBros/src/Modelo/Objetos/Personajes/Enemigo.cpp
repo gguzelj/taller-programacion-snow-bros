@@ -1,5 +1,6 @@
 #include "../../../../headers/Modelo/Objetos/Personajes/Enemigo.h"
 #include "../../../../headers/Modelo/Escenario.h"
+
 #include <ctime>
 #define ORIENTACION_INICIAL 'l'
 
@@ -113,7 +114,7 @@ void Enemigo::morir() {
 
 void Enemigo::morirDelay() {
 	if (escenario_->debeCrearBonus())
-		escenario_->agregarBonus(escenario_->crearBonus());
+		escenario_->agregarBonus(escenario_->crearBonus(this));
 	sleep(1);
 	this->estaVivo = false;
 }

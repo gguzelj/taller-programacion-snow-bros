@@ -107,8 +107,6 @@ public:
 	int getShootCooldown();
 	float getAncho();
 	float getAlto();
-	float getX();
-	float getY();
 
 };
 

@@ -10,6 +10,8 @@
 
 #define NIVEL_CONGELAMIENTO_MAX 7
 
+class Escenario;
+
 class Enemigo: public Character {
 protected:
 

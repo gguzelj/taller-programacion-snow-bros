@@ -6,6 +6,8 @@
 #define RADIO_BOLA_NIEVE_ENEMIGO 1
 #define MASA_BOLA_NIEVE_ENEMIGO 100
 
+class Escenario;
+
 class BolaEnemigo: public Proyectil {
 
 private:

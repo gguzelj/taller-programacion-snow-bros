@@ -179,14 +179,6 @@ Character::~Character() {
 	return;
 }
 
-float Character::getX() {
-	return (this->body->GetPosition().x);
-}
-
-float Character::getY() {
-	return (this->body->GetPosition().y);
-}
-
 float Character::getAncho() {
 	return ancho;
 }

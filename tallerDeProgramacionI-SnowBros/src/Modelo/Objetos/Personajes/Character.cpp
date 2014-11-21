@@ -162,7 +162,7 @@ int Character::getJumpCooldown() {
 }
 
 int Character::getShootCooldown() {
-	return (this->jumpCooldown);
+	return (this->shootCooldown);
 }
 
 void Character::atravezarPlataformas() {

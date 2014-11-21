@@ -197,6 +197,7 @@ void Escenario::clean() {
 
 					per->portal1->setDestination(portal2Address);
 					per->portal2->setDestination(portal1Address);
+
 				}
 
 			}
@@ -232,9 +233,9 @@ void teletransportar(Figura* fig) {
 
 		//Cambiamos la velocidad en X para que siempre apunte al centro
 		b2Vec2 vel = fig->velocidadAntesTeletransportar;
-		b2Vec2 pos = fig->getBody()->GetPosition();
+		b2Vec2 pos = fig->portal->getDestination();
 
-		vel.x *= (pos.x > 0) ? -1 : 1;
+		vel.x *= ((pos.x > 0 && vel.x > 0) || (pos.x < 0 && vel.x < 0)) ? -1 : 1;
 
 		fig->getBody()->SetLinearVelocity(vel);
 

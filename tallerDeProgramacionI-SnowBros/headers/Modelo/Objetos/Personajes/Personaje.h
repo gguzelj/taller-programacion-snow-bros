@@ -244,13 +244,14 @@ public:
 	 * Suma los puntos ganados
 	 */
 	void addPoints(int puntos);
+
+	bool esta_muerto;
 private:
 	Escenario *escenario_;
 	b2Joint* joint;
 	BolaEnemigo* arrastradoPor;
 	b2Vec2* posicionInicial;
 	bool arma_portal;
-	bool esta_muerto;
 	bool arrastrado;
 	char connectionState;
 	int points;

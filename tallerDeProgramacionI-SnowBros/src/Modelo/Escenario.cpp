@@ -244,7 +244,12 @@ void teletransportar(Figura* fig) {
 void Escenario::preStep() {
 	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {
 		if (!ASIGNADO((*per)->id)) {
-			(*per)->controlarEstado();
+			if((*per)->esta_muerto && (*per)->getLives()==0){
+				world_->DestroyBody((*per)->getb2Body());
+				personajes_->erase(per++);
+			}
+			else
+				(*per)->controlarEstado();
 		}
 	}
 	for (auto en = enemigos_->begin(); en != enemigos_->end(); ++en) {

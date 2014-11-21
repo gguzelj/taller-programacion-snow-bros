@@ -56,6 +56,8 @@ void EnemigoFuego::mover() {
 			else if (v1 >= 82 && shootCooldown == 0){
 				this->handleInput(SDLK_SPACE, SDL_KEYDOWN);
 				this->espera = 7;
+				this->handleInput(SDLK_RIGHT, SDL_KEYUP);
+				this->handleInput(SDLK_LEFT, SDL_KEYUP);
 			}
 	}
 	else this->handleInput(SDLK_SPACE, SDL_KEYDOWN);

@@ -153,7 +153,8 @@ void Escenario::clean() {
 
 		if ((*fig)->type == ID_BONUS_MOVER_RAPIDO ||
 			(*fig)->type == ID_BONUS_VIDA_EXTRA ||
-			(*fig)->type == ID_BONUS_AUMENTAR_POTENCIA ) {
+			(*fig)->type == ID_BONUS_AUMENTAR_POTENCIA ||
+			(*fig)->type == ID_BONUS_BOLA_PORTAL ) {
 
 			if (!((Bonus*) (*fig))->activo()) {
 				world_->DestroyBody((*fig)->getBody());

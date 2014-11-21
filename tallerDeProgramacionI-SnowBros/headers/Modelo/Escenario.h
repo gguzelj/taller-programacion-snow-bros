@@ -156,6 +156,11 @@ public:
 	 */
 	void tomarSonidos();
 
+	/*
+	 * Agrega un elemento a la lista de sonidos
+	 */
+	void agregarSonido(int s);
+
 	bool debeCrearBonus();
 
 	Figura* crearBonus(Figura* enem);

@@ -165,6 +165,10 @@ void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 	if (lives > 0 && !inmune) {
 		state = &Personaje::dying;
 		sacarVida();
+		if(lives > 0)
+			escenario_->agregarSonido(DYING);
+		else
+			escenario_->agregarSonido(GAMEOVER);
 		std::thread t(&Personaje::morir, this);
 		t.detach();
 	}
@@ -173,22 +177,26 @@ void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 }
 
 void Personaje::beginContactBonusVidaExtra(BonusVidaExtra* bonus, b2Contact* contact) {
+	escenario_->agregarSonido(ONEUP);
 	bonus->desactivar();
 	this->lives++;
 }
 
 void Personaje::beginContactBonusMoverRapido(BonusMoverRapido* bonus, b2Contact* contact) {
 	bonus->desactivar();
+	escenario_->agregarSonido(BONUS);
 	std::thread t(&Personaje::aumentarVelocidad, this);
 	t.detach();
 }
 
 void Personaje::beginContactBonusAumentarPotencia(BonusAumentarPotencia* bonus, b2Contact* contact) {
+	escenario_->agregarSonido(BONUS);
 	bonus->desactivar();
 	this->potencia +=4;
 }
 
 void Personaje::beginContactBonusBolaPortal(BonusBolaPortal* bonus, b2Contact* contact) {
+	escenario_->agregarSonido(BONUS);
 	bonus->desactivar();
 	this->arma_portal = true;
 	this->portal1 = nullptr;

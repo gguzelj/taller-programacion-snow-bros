@@ -1,6 +1,8 @@
 #ifndef BOLAENEMIGO_H_
 #define BOLAENEMIGO_H_
 
+#include <ctime>
+
 #include "Proyectil.h"
 
 #define RADIO_BOLA_NIEVE_ENEMIGO 1

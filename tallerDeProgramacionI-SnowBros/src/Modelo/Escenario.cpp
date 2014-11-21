@@ -266,10 +266,14 @@ void Escenario::preStep() {
 void Escenario::tomarSonidos() {
 	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {
 		if ((*per)->getShootCooldown() == SHOOTCOOLDOWN)
-			sonidos_->push_back(SHOOTING);
+			agregarSonido(SHOOTING);
 		if ((*per)->getJumpCooldown() == JUMPCOOLDOWN - 1)
-			sonidos_->push_back(JUMPING);
+			agregarSonido(JUMPING);
 	}
+}
+
+void Escenario::agregarSonido(int s) {
+	sonidos_->push_back(s);
 }
 
 void Escenario::step() {

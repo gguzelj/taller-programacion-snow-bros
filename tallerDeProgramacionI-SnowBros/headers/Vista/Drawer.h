@@ -32,9 +32,10 @@
 #define PENTAGONO_CODE '5'
 #define HEXAGONO_CODE '6'
 #define PORTAL_CODE 'o'
-#define BONUS_VE_CODE 'v'
-#define BONUS_AP_CODE 'l'
-#define BONUS_MR_CODE 'm'
+#define BONUS_POTENCIA_CODE 'g'
+#define BONUS_VELOCIDAD_CODE 'h'
+#define BONUS_VIDA_CODE 'i'
+#define BONUS_PORTAL_CODE 'j'
 
 #define ID_ENEMIGO_BASICO 11
 #define ID_ENEMIGO_FUEGO 12
@@ -218,6 +219,10 @@ private:
 	LTexture snowballLT;
 	LTexture portalballLT;
 	LTexture fireballLT;
+	LTexture bonusPortalLT;
+	LTexture bonusPotenciaLT;
+	LTexture bonusVelocidadLT;
+	LTexture bonusVidaLT;
 
 	//Ahora los puntos y vidas son LTextures.
 	LTexture pointsLT;
@@ -252,6 +257,10 @@ private:
 	string snowballImagePath;
 	string portalballImagePath;
 	string fireballImagePath;
+	string bonusPortalPath;
+	string bonusPotenciaPath;
+	string bonusVelocidadPath;
+	string bonusVidaPath;
 	string portalPath;
 
 	//Texto de puntos y vidas.

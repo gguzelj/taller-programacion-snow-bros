@@ -120,6 +120,28 @@ bool Drawer::loadMedia() {
 		printf("Failed to load fireball texture!\n");
 		success = false;
 	}
+	if (!bonusPortalLT.loadFromFile(bonusPortalPath, renderer)) {
+		printf("Failed to load bonusPortal texture!\n");
+		success = false;
+	}
+	if (!bonusPotenciaLT.loadFromFile(bonusPotenciaPath, renderer)) {
+		printf("Failed to load bonusPotencia texture!\n");
+		success = false;
+	}
+	if (!bonusVelocidadLT.loadFromFile(bonusVelocidadPath, renderer)) {
+		printf("Failed to load bonusVelocidad texture!\n");
+		success = false;
+	}
+	if (!bonusVidaLT.loadFromFile(bonusVidaPath, renderer)) {
+		printf("Failed to load bonusVida texture!\n");
+		success = false;
+	}
+
+
+	LTexture imagenBonusPortal;
+	LTexture imagenBonusPotencia;
+	LTexture imagenBonusVelocidad;
+	LTexture imagenBonusVida;
 
 	SDL_Color textColor = { 255, 255, 255, 0xFF };
 
@@ -247,6 +269,10 @@ Drawer::Drawer() {
 	this->snowballImagePath = "resources/textures/snowball.png";
 	this->portalballImagePath = "resources/textures/portalball.png";
 	this->fireballImagePath = "resources/textures/bolaDeFuego.png";
+	this->bonusPortalPath = "resources/textures/BonusPortal.png";
+	this->bonusPotenciaPath = "resources/textures/BonusPotencia.png";
+	this->bonusVelocidadPath = "resources/textures/BonusVelocidad.png";
+	this->bonusVidaPath = "resources/textures/BonusVida.png";
 	this->portalPath = "resources/sprites/portal.png";
 
 	//Text
@@ -463,14 +489,17 @@ void Drawer::drawFigura(figura_t objeto) {
 	if(objeto.id == PORTAL_CODE){
 		drawPortal(renderer, portal, pos_x - ANCHO_PORTAL / 2 - ancho * un_to_px_x / 2, pos_y, ANCHO_PORTAL, alto * un_to_px_y);
 	}
-	if(objeto.id == BONUS_VE_CODE){
-		drawBonusVE(renderer, imagenEnemigos, pos_x, pos_y, ancho, alto);
+	if(objeto.id == BONUS_PORTAL_CODE){
+		bonusPortalLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
-	if(objeto.id == BONUS_AP_CODE){
-		drawBonusAP(renderer, imagenEnemigos, pos_x, pos_y, ancho, alto);
+	if(objeto.id == BONUS_POTENCIA_CODE){
+		bonusPotenciaLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
-	if(objeto.id == BONUS_MR_CODE){
-		drawBonusMR(renderer, imagenEnemigos, pos_x, pos_y, ancho, alto);
+	if(objeto.id == BONUS_VELOCIDAD_CODE){
+		bonusVelocidadLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
+	}
+	if(objeto.id == BONUS_VIDA_CODE){
+		bonusVidaLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
 }
 

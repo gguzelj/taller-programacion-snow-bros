@@ -76,36 +76,6 @@ void dibujarFrame(SDL_Renderer *renderer,SDL_Texture *texture,char orientacion, 
 	}
 }
 
-void drawBonusVE(SDL_Renderer *renderer,SDL_Texture *texture,int pos_x,int pos_y,int ancho,int alto){
-
-	char orientacion = 'l';
-
-	SDL_Rect srcrect = { POS_X_BONUSVE, POS_Y_BONUSVE, ANCHO_BONUS, ALTO_BONUS };
-	SDL_Rect dstrect = { pos_x, pos_y, ancho, alto};
-
-	dibujarFrame(renderer,texture,orientacion,pos_x,pos_y,&srcrect,dstrect);
-}
-
-void drawBonusMR(SDL_Renderer *renderer,SDL_Texture *texture,int pos_x,int pos_y,int ancho,int alto){
-
-	char orientacion = 'l';
-
-	SDL_Rect srcrect = { POS_X_BONUSMR, POS_Y_BONUSMR, ANCHO_BONUS, ALTO_BONUS };
-	SDL_Rect dstrect = { pos_x, pos_y, ancho, alto};
-
-	dibujarFrame(renderer,texture,orientacion,pos_x,pos_y,&srcrect,dstrect);
-}
-
-void drawBonusAP(SDL_Renderer *renderer,SDL_Texture *texture,int pos_x,int pos_y,int ancho,int alto){
-
-	char orientacion = 'l';
-
-	SDL_Rect srcrect = { POS_X_BONUSAP, POS_Y_BONUSAP, ANCHO_BONUS, ALTO_BONUS };
-	SDL_Rect dstrect = { pos_x, pos_y, ancho, alto};
-
-	dibujarFrame(renderer,texture,orientacion,pos_x,pos_y,&srcrect,dstrect);
-}
-
 //orientacion l = izquierda ; r = derecha;
 void drawPersonajeWalking(SDL_Renderer *renderer,SDL_Texture *texture,const char orientacion, int pos_x,int pos_y,int ancho,int alto){
 

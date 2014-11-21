@@ -532,7 +532,7 @@ void Drawer::drawStandardEnemy(enemigo_t enemigo){
 
 void Drawer::drawFireEnemy(enemigo_t enemigo){
 	SDL_Texture* imagen;
-	imagen = imagenEnemigoFuego;
+	imagen = imagenEnemigos;
 
 	int ancho_imagen = (ancho_un * FACTOR_CONVERSION_UN_A_PX);
 	int alto_imagen = (alto_un * FACTOR_CONVERSION_UN_A_PX);

@@ -36,26 +36,26 @@
 
 // Parametros del enemigo fuego
 
-#define ALTO_CAMINAR_FUEGO 60
-#define ANCHO_CAMINAR_FUEGO 36
-#define FRAMES_CAMINAR_FUEGO 4
-#define POS_X_CAMINAR_FUEGO 200
-#define POS_Y_CAMINAR_FUEGO 195
+#define ALTO_CAMINAR_FUEGO 18
+#define ANCHO_CAMINAR_FUEGO 20
+#define FRAMES_CAMINAR_FUEGO 2
+#define POS_X_CAMINAR_FUEGO 98
+#define POS_Y_CAMINAR_FUEGO 0
 
-#define ALTO_STANDBY_FUEGO 60
-#define ANCHO_STANDBY_FUEGO 36
-#define POS_X_STANDBY_FUEGO 235
-#define POS_Y_STANDBY_FUEGO 111
+#define ALTO_STANDBY_FUEGO 18
+#define ANCHO_STANDBY_FUEGO 20
+#define POS_X_STANDBY_FUEGO 98
+#define POS_Y_STANDBY_FUEGO 0
 
-#define ALTO_CAYENDO_FUEGO 60
-#define ANCHO_CAYENDO_FUEGO 36
-#define POS_X_CAYENDO_FUEGO 181
-#define POS_Y_CAYENDO_FUEGO 195
+#define ALTO_CAYENDO_FUEGO 20
+#define ANCHO_CAYENDO_FUEGO 20
+#define POS_X_CAYENDO_FUEGO 119
+#define POS_Y_CAYENDO_FUEGO 17
 
-#define ALTO_DISPARANDO_FUEGO 60
-#define ANCHO_DISPARANDO_FUEGO 36
-#define POS_X_DISPARANDO_FUEGO 289
-#define POS_Y_DISPARANDO_FUEGO 373
+#define ALTO_DISPARANDO_FUEGO 17
+#define ANCHO_DISPARANDO_FUEGO 20
+#define POS_X_DISPARANDO_FUEGO 76
+#define POS_Y_DISPARANDO_FUEGO 19
 
 void drawCongelamiento(SDL_Renderer *renderer,SDL_Texture *texture, int pos_x,int pos_y,int ancho,int alto){
 	SDL_Rect dstrect = { pos_x - ancho / 2, pos_y - alto / 2, ancho, alto};
@@ -102,7 +102,7 @@ void drawFireEnemyWalking(SDL_Renderer *renderer,SDL_Texture *texture,const char
 	//Get ticks te da el tiempo en milisegundo desde el arranque de la ejecucion.
 	Uint32 ticks = SDL_GetTicks();
 	//con 150 me parece que se ve bien, aumentar para verlo mas lendo o disminuir el parametro para verlo mas rapido.
-	Uint32 sprite = (ticks / 120 ) % FRAMES_CAMINAR_FUEGO;
+	Uint32 sprite = (ticks / 150 ) % FRAMES_CAMINAR_FUEGO;
 	//defino srcrect posee la info del frame a dibujar
 	SDL_Rect srcrect = { POS_X_CAMINAR_FUEGO + (sprite *ANCHO_CAMINAR_FUEGO) ,POS_Y_CAMINAR_FUEGO, ANCHO_CAMINAR_FUEGO, ALTO_CAMINAR_FUEGO };
 	SDL_Rect dstrect = { pos_x - (ancho/2), pos_y -( alto/2), ancho, alto};
@@ -127,7 +127,6 @@ void drawFireEnemyFalling(SDL_Renderer *renderer,SDL_Texture *texture,const char
 }
 
 void drawFireEnemyShooting(SDL_Renderer *renderer,SDL_Texture *texture,const char orientacion, int pos_x,int pos_y,int ancho,int alto){
-
 	SDL_Rect srcrect = {  POS_X_DISPARANDO_FUEGO ,POS_Y_DISPARANDO_FUEGO, ANCHO_DISPARANDO_FUEGO, ALTO_DISPARANDO_FUEGO };
 	SDL_Rect dstrect = { pos_x - (ancho/2), pos_y -( alto/2), ancho , alto};
 

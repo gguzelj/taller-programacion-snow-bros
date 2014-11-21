@@ -67,6 +67,11 @@
 #define PUSHING 'p'
 #define KICKING 'k'
 
+#define BALLBREAKING 'K'
+#define GAMEOVER 'G'
+#define BONUS 'B'
+#define ONEUP 'O'
+
 using namespace std;
 
 const float factor = 0.005;
@@ -195,6 +200,10 @@ private:
 	Mix_Music *gMusic;
 	Mix_Chunk *gShooting;
 	Mix_Chunk *gJumping;
+	Mix_Chunk *gDying;
+	Mix_Chunk *gBallBreaking;
+	Mix_Chunk *gBonus;
+	Mix_Chunk *gOneUp;
 	Mix_Chunk *gGameover;
 
 	//Scene texture

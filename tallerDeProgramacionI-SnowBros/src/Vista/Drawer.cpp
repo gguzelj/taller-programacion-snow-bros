@@ -38,6 +38,22 @@ void Drawer::loadMusic(){
 	if(!gJumping){
 		printf( "Failed to load jumping wav! SDL_mixer Error: %s\n", Mix_GetError() );
 	}
+	gDying = Mix_LoadWAV("resources/SoundEffects/dying.wav");
+	if(!gDying){
+		printf( "Failed to load dying wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	gBallBreaking = Mix_LoadWAV("resources/SoundEffects/breakball.wav");
+	if(!gBallBreaking){
+		printf( "Failed to load ball breaking wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	gBonus = Mix_LoadWAV("resources/SoundEffects/bonus.wav");
+	if(!gBonus){
+		printf( "Failed to load bonus wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	gOneUp = Mix_LoadWAV("resources/SoundEffects/oneup.wav");
+	if(!gOneUp){
+		printf( "Failed to load oneup wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
 	gGameover = Mix_LoadWAV("resources/SoundEffects/gameover.wav");
 	if(!gGameover){
 		printf( "Failed to load gameover wav! SDL_mixer Error: %s\n", Mix_GetError() );
@@ -193,6 +209,10 @@ Drawer::Drawer() {
 	gMusic = nullptr;
 	gShooting = nullptr;
 	gJumping = nullptr;
+	gDying = nullptr;
+	gBallBreaking = nullptr;
+	gBonus = nullptr;
+	gOneUp = nullptr;
 	gGameover = nullptr;
 
 	//Tamaños para dibujar el texto en pantalla. Los inicializo en 0, despues se modifican.
@@ -305,8 +325,23 @@ void Drawer::reproducirSonidos(int* &sonidos, unsigned int size) {
 		if(sonidos[i] == SHOOTING){
 			Mix_PlayChannel( -1, gShooting, 0 );
 		}
-		if(sonidos[i] == JUMPING){
+		else if(sonidos[i] == JUMPING){
 			Mix_PlayChannel( -1, gJumping, 0 );
+		}
+		else if(sonidos[i] == DYING){
+			Mix_PlayChannel( -1, gDying, 0 );
+		}
+		else if(sonidos[i] == BALLBREAKING){
+			Mix_PlayChannel( -1, gBallBreaking, 0 );
+		}
+		else if(sonidos[i] == BONUS){
+			Mix_PlayChannel( -1, gBallBreaking, 0 );
+		}
+		else if(sonidos[i] == ONEUP){
+			Mix_PlayChannel( -1, gBallBreaking, 0 );
+		}
+		else if(sonidos[i] == GAMEOVER){
+			Mix_PlayChannel( -1, gGameover, 0 );
 		}
 	}
 }

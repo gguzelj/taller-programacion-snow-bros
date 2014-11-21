@@ -39,23 +39,23 @@
 #define ALTO_CAMINAR_FUEGO 18
 #define ANCHO_CAMINAR_FUEGO 20
 #define FRAMES_CAMINAR_FUEGO 2
-#define POS_X_CAMINAR_FUEGO 98
-#define POS_Y_CAMINAR_FUEGO 0
+#define POS_X_CAMINAR_FUEGO 22
+#define POS_Y_CAMINAR_FUEGO 188
 
 #define ALTO_STANDBY_FUEGO 18
 #define ANCHO_STANDBY_FUEGO 20
-#define POS_X_STANDBY_FUEGO 98
-#define POS_Y_STANDBY_FUEGO 0
+#define POS_X_STANDBY_FUEGO 22
+#define POS_Y_STANDBY_FUEGO 188
 
-#define ALTO_CAYENDO_FUEGO 20
+#define ALTO_CAYENDO_FUEGO 18
 #define ANCHO_CAYENDO_FUEGO 20
-#define POS_X_CAYENDO_FUEGO 119
-#define POS_Y_CAYENDO_FUEGO 17
+#define POS_X_CAYENDO_FUEGO 22
+#define POS_Y_CAYENDO_FUEGO 188
 
-#define ALTO_DISPARANDO_FUEGO 17
+#define ALTO_DISPARANDO_FUEGO 18
 #define ANCHO_DISPARANDO_FUEGO 20
-#define POS_X_DISPARANDO_FUEGO 76
-#define POS_Y_DISPARANDO_FUEGO 19
+#define POS_X_DISPARANDO_FUEGO 60
+#define POS_Y_DISPARANDO_FUEGO 208
 
 void drawCongelamiento(SDL_Renderer *renderer,SDL_Texture *texture, int pos_x,int pos_y,int ancho,int alto){
 	SDL_Rect dstrect = { pos_x - ancho / 2, pos_y - alto / 2, ancho, alto};

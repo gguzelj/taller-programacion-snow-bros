@@ -143,7 +143,7 @@ public:
 	 */
 	void agregarProyectil(Proyectil* proy);
 
-	void agregarBonusVelocidad(Figura* figura);
+	void agregarBonus(Figura* figura);
 
 	/*
 	 * Devuelve el ancho en unidades del escenario

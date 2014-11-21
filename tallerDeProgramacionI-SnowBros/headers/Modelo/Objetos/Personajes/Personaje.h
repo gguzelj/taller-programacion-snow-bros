@@ -6,6 +6,7 @@
 #include "Enemigo.h"
 #include "../Bonus/BonusVidaExtra.h"
 #include "../Bonus/BonusMoverRapido.h"
+#include "../Bonus/BonusAumentarPotencia.h"
 
 #define MITAD_ANCHO_PERSONAJE 0.65f
 #define MITAD_ALTO_PERSONAJE 0.85
@@ -68,6 +69,12 @@ public:
 	 * Personaje entra en contacto con un bonus de movimiento rapito.
 	 */
 	void beginContactBonusMoverRapido(BonusMoverRapido*, b2Contact*);
+
+	/*
+	 * Encargado de realizar las acciones pertinentes en el caso en que el
+	 * Personaje entra en contacto con un bonus de movimiento rapito.
+	 */
+	void beginContactBonusAumentarPotencia(BonusAumentarPotencia*, b2Contact*);
 
 	/*
 	 * Realiza las corecciones pertinentes al estado del Personaje previo
@@ -239,6 +246,7 @@ private:
 	bool arrastrado;
 	char connectionState;
 	int points;
+	int potencia;
 	int kickCooldown;
 
 	/*

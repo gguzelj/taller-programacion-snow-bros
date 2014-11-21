@@ -151,7 +151,10 @@ void Escenario::clean() {
 	//Elimino figuras dinamicas
 	for (auto fig = figurasDinamicas_->begin(); fig != figurasDinamicas_->end(); ++fig) {
 
-		if ((*fig)->type == ID_BONUS_MOVER_RAPIDO || (*fig)->type == ID_BONUS_VIDA_EXTRA) {
+		if ((*fig)->type == ID_BONUS_MOVER_RAPIDO ||
+			(*fig)->type == ID_BONUS_VIDA_EXTRA ||
+			(*fig)->type == ID_BONUS_AUMENTAR_POTENCIA ) {
+
 			if (!((Bonus*) (*fig))->activo()) {
 				world_->DestroyBody((*fig)->getBody());
 				figurasDinamicas_->erase(fig++);
@@ -429,7 +432,7 @@ float Escenario::getAnchoUn() {
 void Escenario::agregarProyectil(Proyectil* proy) {
 	proyectiles_->push_back(proy);
 }
-void Escenario::agregarBonusVelocidad(Figura* figura) {
+void Escenario::agregarBonus(Figura* figura) {
 	figurasDinamicas_->push_back(figura);
 }
 void Escenario::actualizarEnemigos() {

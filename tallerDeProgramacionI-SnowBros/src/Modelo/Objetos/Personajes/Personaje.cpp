@@ -26,6 +26,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->portal2 = nullptr;
 
 	this->connectionState = CONECTADO;
+	this->potencia = 1;
 	this->points = 0;
 	this->lives = 3;
 	this->type = ID_PERSONAJE;
@@ -172,14 +173,19 @@ void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 }
 
 void Personaje::beginContactBonusVidaExtra(BonusVidaExtra* bonus, b2Contact* contact) {
+	bonus->desactivar();
 	this->lives++;
-	((Bonus*)bonus)->desactivar();
 }
 
 void Personaje::beginContactBonusMoverRapido(BonusMoverRapido* bonus, b2Contact* contact) {
 	bonus->desactivar();
 	std::thread t(&Personaje::aumentarVelocidad, this);
 	t.detach();
+}
+
+void Personaje::beginContactBonusAumentarPotencia(BonusAumentarPotencia* bonus, b2Contact* contact) {
+	bonus->desactivar();
+	this->potencia +=4;
 }
 
 bool Personaje::estaEmpujandoEnemigo() {
@@ -283,7 +289,7 @@ Proyectil* Personaje::crearBolaNieve() {
 
 	x += (orientacion == IZQUIERDA) ? -1.5 : 1.5;
 
-	bola = new BolaNieve(x, y, 1, this->world);
+	bola = new BolaNieve(x, y, potencia, this->world);
 
 	vel = this->body->GetLinearVelocity();
 	vel.x -= (orientacion == IZQUIERDA) ? aceleracion * 4 : -aceleracion * 4;

@@ -4,8 +4,8 @@ Bonus::Bonus(float posicionX, float posicionY, b2World* world) {
 
 	this->x = posicionX;
 	this->y = posicionY;
-	this->alto = 3.14;
-	this->ancho = 3.14;
+	this->alto = 1.5;
+	this->ancho = 1.5;
 	this->masa = 1;
 	this->angulo = 0;
 	this->estatico = false;

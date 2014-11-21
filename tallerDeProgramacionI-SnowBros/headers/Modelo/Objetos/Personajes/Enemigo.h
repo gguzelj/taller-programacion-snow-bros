@@ -21,6 +21,8 @@ protected:
 	time_t tiempoDeImpactoDeLaUltimaBola;
 
 	void morirDelay();
+	bool debeCrearBonus();
+	Figura* crearBonus();
 
 public:
 

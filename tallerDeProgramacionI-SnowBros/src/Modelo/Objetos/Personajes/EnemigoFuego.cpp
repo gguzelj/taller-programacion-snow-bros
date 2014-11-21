@@ -5,7 +5,7 @@ EnemigoFuego::EnemigoFuego(JsonParser *parser, int index, Escenario* escenario) 
 		Enemigo(parser, index, escenario) {
 
 	this->type = ID_ENEMIGO_FUEGO;
-
+	this->shootCooldown = 0;
 }
 
 EnemigoFuego::~EnemigoFuego() {
@@ -13,8 +13,9 @@ EnemigoFuego::~EnemigoFuego() {
 
 void EnemigoFuego::shoot() {
 
-	if (!movimientoDisparar || shootCooldown > 0)
+	if (!movimientoDisparar || shootCooldown > 0){
 		return;
+	}
 
 	BolaFuego *bola;
 	float x = getX();

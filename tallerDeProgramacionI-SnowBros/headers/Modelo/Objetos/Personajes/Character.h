@@ -14,7 +14,6 @@
 #include "../Proyectiles/BolaFuego.h"
 #include "../Proyectiles/BolaPortal.h"
 #include "../Figuras/Portal.h"
-
 #include "../Figura.h"
 
 #define IZQUIERDA 'l'

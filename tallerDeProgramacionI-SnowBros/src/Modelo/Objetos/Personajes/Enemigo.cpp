@@ -96,53 +96,26 @@ void Enemigo::morir() {
 	BolaEnemigo *bola;
 
 	if (orientacion == IZQUIERDA)
-		bola = new BolaEnemigo(getX() - 1, getY() + MITAD_ALTO_ENEMIGO, this->world);
+		bola = new BolaEnemigo(getX() - 1, getY() + MITAD_ALTO_ENEMIGO, world, escenario_);
 	else
-		bola = new BolaEnemigo(getX() + 1, getY() + MITAD_ALTO_ENEMIGO, this->world);
+		bola = new BolaEnemigo(getX() + 1, getY() + MITAD_ALTO_ENEMIGO, world, escenario_);
 
 	vel.x = (orientacion == IZQUIERDA) ? -15 : 15;
 	vel.y = 5;
 	bola->setVelocidad(vel);
 
-	this->escenario_->agregarProyectil(bola);
+	escenario_->agregarProyectil(bola);
 
 	//Lanzamos un thread para que muera la bola
 	std::thread t(&BolaEnemigo::morir, bola);
 	t.detach();
-
-	if (debeCrearBonus())
-		this->escenario_->agregarBonus(crearBonus());
-
 }
 
 void Enemigo::morirDelay() {
+	if (escenario_->debeCrearBonus())
+		escenario_->agregarBonus(escenario_->crearBonus());
 	sleep(1);
 	this->estaVivo = false;
-}
-
-bool Enemigo::debeCrearBonus() {
-	return (rand() % 100 < 100);
-}
-
-Figura* Enemigo::crearBonus() {
-
-	//Cambiar el modulo por la cant de bonus
-	switch (rand() % 4) {
-	case 1:
-		return (Figura*) new BonusMoverRapido(getX(), getY(), world);
-		break;
-	case 2:
-		return (Figura*) new BonusVidaExtra(getX(), getY(), world);
-		break;
-	case 3:
-		return (Figura*) new BonusAumentarPotencia(getX(), getY(), world);
-		break;
-	case 4:
-		return (Figura*) new BonusBolaPortal(getX(), getY(), world);
-		break;
-	}
-
-	return (Figura*) new BonusVidaExtra(getX(), getY(), world);
 }
 
 void Enemigo::beginContactBolaEnemigo(BolaEnemigo* bola, b2Contact* contact) {

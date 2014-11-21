@@ -285,6 +285,33 @@ void Escenario::addPointsToPlayers(int puntos) {
 	}
 }
 
+
+bool Escenario::debeCrearBonus() {
+	return (rand() % 100 < 100);
+}
+
+Figura* Escenario::crearBonus(Figura* enem) {
+
+	Figura* fig;
+
+	//Cambiar el modulo por la cant de bonus
+	switch (rand() % 4) {
+	case 1:
+		fig =  (Figura*) new BonusMoverRapido(enem->getX(), enem->getY(), world_);
+		break;
+	case 2:
+		fig = (Figura*) new BonusVidaExtra(enem->getX(), enem->getY(), world_);
+		break;
+	case 3:
+		fig = (Figura*) new BonusAumentarPotencia(enem->getX(), enem->getY(), world_);
+		break;
+	case 4:
+		fig = (Figura*) new BonusBolaPortal(enem->getX(), enem->getY(), world_);
+		break;
+	}
+	return fig;
+}
+
 unsigned int Escenario::getCantPersonajes() {
 	return cantidadMaximaDePersonajes;
 }

@@ -1,8 +1,7 @@
 #include "../../../../headers/Modelo/Objetos/Proyectiles/BolaEnemigo.h"
-#include "../../../../headers/Modelo/Objetos/Bonus/BonusMoverRapido.h"
 #include <ctime>
 
-BolaEnemigo::BolaEnemigo(float x, float y, b2World* world) {
+BolaEnemigo::BolaEnemigo(float x, float y, b2World* world, Escenario* esc) {
 	this->type = ID_BOLA_NIEVE_ENEMIGO;
 
 	this->x = x;
@@ -14,6 +13,7 @@ BolaEnemigo::BolaEnemigo(float x, float y, b2World* world) {
 	this->destruir = false;
 	this->teletransportar = false;
 	this->world = world;
+	this->escenario = esc;
 	this->velocidad = {25,0};
 
 
@@ -87,8 +87,9 @@ void BolaEnemigo::morir(){
 		this->actualizar();
 		time(&tiempoFinal);
 	}
-
 	destruir = true;
+	if (escenario->debeCrearBonus())
+		escenario->agregarBonus(escenario->crearBonus());
 }
 
 void BolaEnemigo::beginContact(Figura *fig, b2Contact* contact){

@@ -10,8 +10,6 @@
 
 #define NIVEL_CONGELAMIENTO_MAX 7
 
-class Escenario;
-
 class Enemigo: public Character {
 protected:
 
@@ -21,8 +19,6 @@ protected:
 	time_t tiempoDeImpactoDeLaUltimaBola;
 
 	void morirDelay();
-	bool debeCrearBonus();
-	Figura* crearBonus();
 
 public:
 

@@ -156,6 +156,10 @@ public:
 	 */
 	void tomarSonidos();
 
+	bool debeCrearBonus();
+
+	Figura* crearBonus(Figura* enem);
+
 	/*
 	 * Metodos que devuelven cantidad de objetos en el momento de ejecucion
 	 */

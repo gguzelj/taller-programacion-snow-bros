@@ -1,22 +1,23 @@
 #ifndef BOLAENEMIGO_H_
 #define BOLAENEMIGO_H_
 
+#include "Proyectil.h"
+
 #define RADIO_BOLA_NIEVE_ENEMIGO 1
 #define MASA_BOLA_NIEVE_ENEMIGO 100
-
-#include "Proyectil.h"
 
 class BolaEnemigo: public Proyectil {
 
 private:
 	b2Vec2 velocidad;
 	float radio;
+	Escenario* escenario;
 
 public:
 
 	bool destruir;
 
-	BolaEnemigo(float x, float y,b2World* world);
+	BolaEnemigo(float x, float y,b2World* world, Escenario* esc);
 	virtual ~BolaEnemigo();
 
 	b2Vec2 getPosicion(){

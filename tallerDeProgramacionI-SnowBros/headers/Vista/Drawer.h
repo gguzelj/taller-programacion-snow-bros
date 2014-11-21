@@ -129,6 +129,7 @@ typedef struct gameData{
 	unsigned int cantEnemigos;
 	unsigned int cantDinamicos;
 	unsigned int cantSonidos;
+	unsigned int nivel;
 }gameData_t;
 
 typedef struct dataFromClient{
@@ -224,9 +225,10 @@ private:
 	LTexture bonusVelocidadLT;
 	LTexture bonusVidaLT;
 
-	//Ahora los puntos y vidas son LTextures.
+	//Ahora los puntos, niveles y vidas son LTextures.
 	LTexture pointsLT;
 	LTexture livesLT;
+	LTexture levelsLT;
 	LTexture waitingScreenLT;
 
 	//Cargo los numeros del 0 al 9
@@ -266,6 +268,7 @@ private:
 	//Texto de puntos y vidas.
 	string points;
 	string lives;
+	string level;
 
 	//General Attributes
 	std::vector<bool> personajeOn;
@@ -281,6 +284,7 @@ private:
 	float currentZoomFactor;
 	int anchoLives;
 	int anchoPoints;
+	int anchoLevel;
 	int altoText;
 	int anchoNumber;
 	int anchoWaiting;

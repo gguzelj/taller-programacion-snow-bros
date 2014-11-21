@@ -155,6 +155,11 @@ bool Drawer::loadMedia() {
 		success = false;
 	}
 
+	if(!levelsLT.loadFromRenderedText(renderer, fontToBeUsed, level, textColor, &anchoLevel, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+
 	if(!waitingScreenLT.loadFromRenderedText(renderer, fontToBeUsed, WAITING_MSG, textColor, &anchoWaiting, &altoWaiting)){
 		printf("Failed to load text texture!\n");
 		success = false;
@@ -241,6 +246,7 @@ Drawer::Drawer() {
 	this->altoText = 0;
 	this->anchoPoints = 0;
 	this->anchoLives = 0;
+	this->anchoLevel = 0;
 	this->anchoNumber = 0;
 	this->anchoWaiting = 0;
 	this->altoWaiting = 0;
@@ -278,6 +284,7 @@ Drawer::Drawer() {
 	//Text
 	this->points = "Points: ";
 	this->lives = "Lives: ";
+	this->level = "Level ";
 
 	//Hardcodeo esto por ahora.
 	this->ancho_px = 1366;
@@ -752,6 +759,12 @@ void Drawer::drawMessages(dataFromClient_t data, personaje_t personaje) {
 			coordYDelMensaje -= altoText + 5;
 		}
 	}
+
+	//Dibujamos el indicador de nivel
+	levelsLT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoPoints, altoText);
+	coordXDelMensaje += anchoLevel/2;
+	coordYDelMensaje += altoText + 5;
+	numerosLT[data.gameData->nivel]->render(renderer, coordXDelMensaje, coordYDelMensaje, anchoNumber, altoText);
 
 	//Dibujamos la pantalla de espera
 	if (data.gameData->paused)

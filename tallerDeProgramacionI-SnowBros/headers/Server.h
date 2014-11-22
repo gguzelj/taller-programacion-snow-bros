@@ -129,6 +129,8 @@ public:
 	 */
 	void run();
 
+	void reiniciar();
+
 private:
 
 	bool running_;
@@ -306,6 +308,8 @@ private:
 	 */
 	float getInitialX();
 	float getInitialY();
+
+	void borrarJugadoresInactivos();
 };
 
 #endif /* SERVER_H_ */

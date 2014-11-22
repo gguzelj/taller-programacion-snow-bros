@@ -120,6 +120,9 @@ void Server::run() {
 		step();
 		enviarAClientes();
 
+		if (model_->getCantPersonajes() == 0 && !connections_.empty()){
+			reiniciar();
+		}
 	}
 
 	Log::ins()->add(SRV_MSG_END_GAME, Log::INFO);
@@ -633,4 +636,25 @@ void Server::initSendingThread(connection_t* connection) {
 	t.detach();
 
 	Log::ins()->add(SRV_MSG_SEND_THREAD + std::string(connection->id), Log::INFO);
+}
+
+void Server::reiniciar(){
+	gameData_.paused = true;
+
+	//Reiniciamos el modelo
+	delete model_;
+	model_ = new Escenario(parser_);
+
+	//Quitamos a los jugadores que no esten activos
+	borrarJugadoresInactivos();
+
+	//Creamos jugadores para todos los clientes existentes
+	for (unsigned int i = 0; i < connections_.size(); i++) {
+		if (connections_[i]->activa)
+			crearPersonaje(connections_[i],false);
+	}
+}
+
+void Server::borrarJugadoresInactivos(){
+
 }

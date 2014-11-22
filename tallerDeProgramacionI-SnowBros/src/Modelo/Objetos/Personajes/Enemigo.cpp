@@ -19,7 +19,7 @@ Enemigo::Enemigo(JsonParser *parser, int index, Escenario* escenario) {
 	this->movimientoIzquierda = false;
 	this->teletransportar = false;
 	this->tiempoDeImpactoDeLaUltimaBola = 0.0f;
-	this->esAtravezable = false;
+//	this->esAtravezable = false;
 	this->lives = 5;
 	this->ancho = MITAD_ANCHO_ENEMIGO;
 	this->alto = MITAD_ALTO_ENEMIGO;
@@ -174,7 +174,8 @@ void Enemigo::congelar() {
 	while (nivelDeCongelamiento != 0) {
 		//En caso de que este hecho bola de nieve, lo hacemos
 		//No atravezable, para que pueda empujarlo
-		esAtravezable = (nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX);
+		if((nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX))
+			noAtravezarPlataformas();
 
 		if (difftime(time(nullptr), tiempoDeImpactoDeLaUltimaBola) > tiempoDeEsperaMaximo) {
 			this->nivelDeCongelamiento -= 2;
@@ -184,9 +185,10 @@ void Enemigo::congelar() {
 		}
 		//En caso de que este hecho bola de nieve, lo hacemos
 		//No atravezable, para que pueda empujarlo
-		esAtravezable = (nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX);
+		if((nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX))
+			noAtravezarPlataformas();
 	}
-	esAtravezable = false;
+	noAtravezarPlataformas();
 	aceleracion = 7.0f;
 }
 
@@ -195,6 +197,7 @@ bool Enemigo::estaCongelado() {
 }
 
 void Enemigo::jump() {
+	atravezarPlataformas();
 	if (this->nivelDeCongelamiento == 0) {
 		if (this->jumpCooldown <= 0) {
 			this->jumpCooldown = 18;
@@ -209,7 +212,7 @@ void Enemigo::hacerAtravezable() {
 	this->cambiarFilterIndex(PERSONAJE_FILTER_INDEX);
 }
 
-void Enemigo::hacerNoAtravezable() {
+void Enemigo::noAtravezarPlataformas(){
 	this->cambiarFilterIndex(ENEMIGO_FILTER_INDEX);
 }
 
@@ -227,12 +230,6 @@ int Enemigo::getPuntos() {
 
 void Enemigo::controlarEstado() {
 	Character::controlarEstado();
-
-	//Analizamos si el enemigo es atravezable
-	if (esAtravezable)
-		hacerAtravezable();
-	else
-		hacerNoAtravezable();
 }
 
 void Enemigo::mover() {

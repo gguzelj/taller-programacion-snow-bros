@@ -196,6 +196,7 @@ char Character::getId() {
 }
 
 void Character::jump() {
+	this->atravezarPlataformas();
 	return;
 }
 void Character::handleInput(SDL_Keycode input, Uint32 input_type) {
@@ -238,7 +239,7 @@ void Character::detectarEstado() {
 	}
 
 	//Esta quieto?
-	if (getVelocity().y == 0.0f && getVelocity().x == 0.0f) {
+	if (getVelocity().y <= 0.005f && abs(getVelocity().x) <= 0.005f) {
 		state = &Character::standby;
 		return;
 	}

@@ -12,7 +12,7 @@ Server::Server() {
 	jsonPath_ = "";
 	shared_rcv_queue_ = new Threadsafe_queue<receivedData_t*>();
 
-	gameData_.paused = false;
+	gameData_.paused = true;
 
 	//Inicializo el generador de randoms
 	srand(static_cast<unsigned>(time(0)));
@@ -120,7 +120,7 @@ void Server::run() {
 		step();
 		enviarAClientes();
 
-		if (model_->getCantPersonajes() == 0 && !connections_.empty()){
+		if (model_->getCantidadDePersonajesVivos() == 0 && !connections_.empty()){
 			reiniciar();
 		}
 	}
@@ -653,6 +653,9 @@ void Server::reiniciar(){
 		if (connections_[i]->activa)
 			crearPersonaje(connections_[i],false);
 	}
+
+	if (connections_.size() == connectionsLimit_)
+		gameData_.paused = false;
 }
 
 void Server::borrarJugadoresInactivos(){

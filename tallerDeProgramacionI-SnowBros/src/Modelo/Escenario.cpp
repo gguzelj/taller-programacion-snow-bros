@@ -334,6 +334,9 @@ Figura* Escenario::crearBonus(Figura* enem) {
 }
 
 unsigned int Escenario::getCantPersonajes() {
+	return cantidadMaximaDePersonajes;
+}
+unsigned int Escenario::getCantidadDePersonajesVivos(){
 	return personajes_->size();
 }
 unsigned int Escenario::getCantEnemigos() {

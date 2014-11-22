@@ -173,6 +173,7 @@ public:
 	unsigned int getCantObjDinamicos();
 	unsigned int getCantObjEstaticos();
 	unsigned int getCantPersonajes();
+	unsigned int getCantidadDePersonajesVivos();
 	unsigned int getCantEnemigos();
 	unsigned int getCantProyectiles();
 	unsigned int getCantSonidos();

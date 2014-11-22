@@ -162,7 +162,26 @@
                        "rot":45,//campo obligatorio por el json
                        "masa":1,//campo obligatorio por el json
                        "estatico":false//campo obligatorio por el json
+                     },
+                     {
+                       "tipo":"enemigobasico",
+                       "x":-2,
+                       "y":-10,
+                       "escala":1,//campo obligatorio por el json
+                       "rot":45,//campo obligatorio por el json
+                       "masa":1,//campo obligatorio por el json
+                       "estatico":false//campo obligatorio por el json
+                     },
+                     {
+                       "tipo":"enemigobasico",
+                       "x":-5,
+                       "y":-4,
+                       "escala":1,//campo obligatorio por el json
+                       "rot":45,//campo obligatorio por el json
+                       "masa":1,//campo obligatorio por el json
+                       "estatico":false//campo obligatorio por el json
                      }
+
                    ]
     }
 }

@@ -57,6 +57,7 @@
 
 //Mensaje de espera
 #define WAITING_MSG "Esperando a todos los jugadores"
+#define GAMEOVER_MSG "Game over"
 
 //defines que eran de Estados.h
 #define JUMPING 'j'
@@ -127,6 +128,7 @@ typedef struct gameData{
 	bool paused;
 	unsigned int cantProyectiles;
 	unsigned int cantEnemigos;
+	unsigned int cantPersonajes;
 	unsigned int cantDinamicos;
 	unsigned int cantSonidos;
 	unsigned int nivel;
@@ -230,6 +232,7 @@ private:
 	LTexture livesLT;
 	LTexture levelsLT;
 	LTexture waitingScreenLT;
+	LTexture gameOverScreenLT;
 
 	//Cargo los numeros del 0 al 9
 	LTexture ceroLT;
@@ -309,6 +312,7 @@ private:
 	void drawEnemy(enemigo_t enemigo);
 	void drawMessages(dataFromClient_t data, personaje_t personaje);
 	void drawWaitingScreen();
+	void drawGameOverScreen();
 	void presentScenary();
 	void clearScenary();
 	bool blinkCharacter(personaje_t person, int index);

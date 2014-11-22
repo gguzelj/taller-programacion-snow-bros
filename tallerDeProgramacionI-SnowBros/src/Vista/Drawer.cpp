@@ -165,6 +165,10 @@ bool Drawer::loadMedia() {
 		success = false;
 	}
 
+	if(!gameOverScreenLT.loadFromRenderedText(renderer, fontToBeUsed, GAMEOVER_MSG, textColor, &anchoWaiting, &altoWaiting)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
 	//Load numbers
 	if(!ceroLT.loadFromRenderedText(renderer, fontToBeUsed, "0", textColor, &anchoNumber, &altoText)){
 		printf("Failed to load text texture!\n");
@@ -631,7 +635,6 @@ void Drawer::drawFireEnemy(enemigo_t enemigo){
 		case WALKING:
 			drawFireEnemyWalking(renderer, imagen, orientacion, pos_x, pos_y,  ancho * un_to_px_x, alto * un_to_px_y);
 			break;
-		case FALLING:
 			drawFireEnemyFalling(renderer, imagen, orientacion, pos_x, pos_y,  ancho * un_to_px_x, alto * un_to_px_y);
 			break;
 		case SHOOTING:
@@ -732,34 +735,35 @@ void Drawer::drawMessages(dataFromClient_t data, personaje_t personaje) {
 	float coordXDelMensaje = 10; //Por ahora lo puse asi, despues lo acomodamos bien con los demas mensajes.
 	float coordYDelMensaje = 10; //Parte superior de la pantalla
 
-	int desplazamientoEnX = (ancho_px - (anchoLives + anchoNumber*5)) / data.cantPersonajes;
+	if(data.cantPersonajes >0){
+		int desplazamientoEnX = (ancho_px - (anchoLives + anchoNumber*5)) / data.cantPersonajes;
 
-	for (unsigned int p = 0; p < data.cantPersonajes; p++){
-		if (data.personajes[p].connectionState >= 0){
-			int puntos = data.personajes[p].points;
-			int vidas = data.personajes[p].lives;
+		for (unsigned int p = 0; p < data.cantPersonajes; p++){
+			if (data.personajes[p].connectionState >= 0){
+				int puntos = data.personajes[p].points;
+				int vidas = data.personajes[p].lives;
 
-			//Render the first message
-			pointsLT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoPoints, altoText);
-			coordXDelMensaje += anchoPoints;
-			for(int i = 5; i > 0; i--){
-				numerosLT[puntos%10]->render(renderer, coordXDelMensaje+anchoNumber*(i-1), coordYDelMensaje, anchoNumber, altoText);
-				puntos/=10;
+				//Render the first message
+				pointsLT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoPoints, altoText);
+				coordXDelMensaje += anchoPoints;
+				for(int i = 5; i > 0; i--){
+					numerosLT[puntos%10]->render(renderer, coordXDelMensaje+anchoNumber*(i-1), coordYDelMensaje, anchoNumber, altoText);
+					puntos/=10;
+				}
+
+				//Render the other message
+				coordYDelMensaje += altoText + 5;
+				coordXDelMensaje -= anchoPoints;
+				livesLT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoLives, altoText);
+				coordXDelMensaje += anchoLives;
+				numerosLT[vidas]->render(renderer, coordXDelMensaje, coordYDelMensaje, anchoNumber, altoText);
+
+				//Corijo la posicion para el proximo personaje
+				coordXDelMensaje += desplazamientoEnX - anchoLives;
+				coordYDelMensaje -= altoText + 5;
 			}
-
-			//Render the other message
-			coordYDelMensaje += altoText + 5;
-			coordXDelMensaje -= anchoPoints;
-			livesLT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoLives, altoText);
-			coordXDelMensaje += anchoLives;
-			numerosLT[vidas]->render(renderer, coordXDelMensaje, coordYDelMensaje, anchoNumber, altoText);
-
-			//Corijo la posicion para el proximo personaje
-			coordXDelMensaje += desplazamientoEnX - anchoLives;
-			coordYDelMensaje -= altoText + 5;
 		}
 	}
-
 	//Dibujamos el indicador de nivel
 	levelsLT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoPoints, altoText);
 	coordXDelMensaje += anchoLevel/2;
@@ -769,6 +773,11 @@ void Drawer::drawMessages(dataFromClient_t data, personaje_t personaje) {
 	//Dibujamos la pantalla de espera
 	if (data.gameData->paused)
 		drawWaitingScreen();
+
+	//Dibujamos la pantalla de gameOver
+	if (data.cantPersonajes == 0){
+		drawGameOverScreen();
+	}
 }
 
 void Drawer::drawWaitingScreen() {
@@ -781,6 +790,17 @@ void Drawer::drawWaitingScreen() {
 	float oy = 300;
 
 	waitingScreenLT.render(renderer, ox, oy, anchoT, altoT);
+}
+
+void Drawer::drawGameOverScreen(){
+	int anchoT = 500;
+	int altoT = 100;
+
+	//Pense que esto lo dibujaba en medio de la pantall, pero no..
+	float ox = 500;
+	float oy = 300;
+
+	gameOverScreenLT.render(renderer, ox, oy, anchoT, altoT);
 }
 
 void Drawer::presentScenary() {

@@ -252,7 +252,7 @@ Drawer::Drawer() {
 
 	//Hardcodeo esto por ahora.
 	this->ancho_px = 1366;
-	this->alto_px = 720;
+	this->alto_px = 690;
 
 	std::ifstream in(imagePath);
 	unsigned int width, height;

@@ -151,7 +151,10 @@ public:
 		}
 	}
 	void transicionNivel();
-	void finalizarTransicionNivel();
+	void finalizarTransicionNivel(){
+		this->pasandoDeNivel = false;
+	}
+
 
 private:
 

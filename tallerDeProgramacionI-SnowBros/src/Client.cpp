@@ -1,6 +1,7 @@
 #include "../headers/Client.h"
 #define GAME_DATA 'g'
 #define PASO_DE_NIVEL 'n'
+#define TERMINO_EL_PASO_DE_NIVEL 't'
 
 
 void help();
@@ -309,6 +310,9 @@ void Client::recibirDelServer() {
 			if(msgType == PASO_DE_NIVEL){
 				view_->transicionNivel();
 				std::cerr<< "se genera la transicion";
+			}
+			if(msgType == TERMINO_EL_PASO_DE_NIVEL){
+				view_->finalizarTransicionNivel();
 			}
 
 		}

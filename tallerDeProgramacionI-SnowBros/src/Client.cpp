@@ -325,7 +325,8 @@ void Client::onRender(dataFromServer_t data) {
 
 	dataFromClient_t dataToBeDraw;
 
-	dataToBeDraw.cantPersonajes = data.gameData->cantPersonajes;
+//	dataToBeDraw.cantPersonajes = data.gameData->cantPersonajes;
+	dataToBeDraw.cantPersonajes = gameDetails_.cantPersonajes;
 	dataToBeDraw.cantObjDinamicos = data.gameData->cantDinamicos;
 	dataToBeDraw.cantObjEstaticos = gameDetails_.cantObjEstaticos;
 	dataToBeDraw.gameData = data.gameData;

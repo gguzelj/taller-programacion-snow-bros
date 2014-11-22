@@ -64,6 +64,7 @@ typedef struct gameData {
 	bool paused;
 	unsigned int cantProyectiles;
 	unsigned int cantEnemigos;
+	unsigned int cantPersonajes;
 	unsigned int cantDinamicos;
 	unsigned int cantSonidos;
 	unsigned int nivel;

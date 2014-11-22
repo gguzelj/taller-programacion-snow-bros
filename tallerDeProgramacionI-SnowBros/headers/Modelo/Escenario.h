@@ -161,6 +161,8 @@ public:
 	 */
 	void actualizarEnemigos();
 
+
+	void crearEnemigosSiguienteNivel();
 	/*
 	 * Lleva a cabo la actualizacion de estados requerida antes de cada step
 	 */

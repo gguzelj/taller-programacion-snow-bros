@@ -228,8 +228,25 @@ void Escenario::step() {
 }
 
 
+void Escenario::crearEnemigosSiguienteNivel(){
+	for( int i = 0; i< 10; i++){
+		//Pensar la logica para crear los enemigos en el nuevo nivel.
+	}
+}
+
 void Escenario::pasarDeNivel(){
 	//creacion del escenario y demas.
+	new Rectangulo(ancho_un, 0, 0, 0, 28.8, world_);
+	//Freno la velocidad que le puse al personaje para hacerlo subir
+	b2Vec2 velocidad = {0,0};
+	//logica para volver a aparecer en el nuevo nivel.
+
+	for(auto pers = personajes_->begin(); pers != personajes_->end(); pers++){
+		(*pers)->getb2Body()->SetLinearVelocity(velocidad);
+		(*pers)->setPosicionInicial((*pers)->getPosicionInicial().x,-(*pers)->getPosicionInicial().y);
+		(*pers)->entrarEnPeriodoDeInmunidad();
+		(*pers)->volverAPosicionInicial();
+	}
 }
 
 

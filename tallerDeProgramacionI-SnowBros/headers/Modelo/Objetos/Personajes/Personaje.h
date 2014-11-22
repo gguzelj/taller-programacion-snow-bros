@@ -214,6 +214,17 @@ public:
 	 * Suma los puntos ganados
 	 */
 	void addPoints(int puntos);
+
+	void setPosicionInicial(float x, float y){
+		this->posicionInicial->x = x;
+		this->posicionInicial->y = y;
+	}
+
+	b2Vec2 getPosicionInicial(){
+		return *posicionInicial;
+	}
+
+	void entrarEnPeriodoDeInmunidad();
 private:
 	Escenario *escenario_;
 	b2Joint* joint;
@@ -231,7 +242,7 @@ private:
 	/*
 	 * Hace que el Personaje sea inmune
 	 */
-	void entrarEnPeriodoDeInmunidad();
+
 
 	/*
 	 * El Personaje no es afectado por los enemigos

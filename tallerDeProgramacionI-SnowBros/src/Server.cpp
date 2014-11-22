@@ -2,7 +2,9 @@
 #define NIVEL_MAX 2
 #define GAME_DATA 'g'
 #define PASO_DE_NIVEL 'n'
+#define TERMINO_EL_PASO_DE_NIVEL 't'
 #include <ctime>
+
 
 
 Server::Server() {
@@ -495,6 +497,7 @@ void Server::step() {
 
 //Thread que maneja la logica de pasar de nivel.
 void Server::pasarDeNivel(){
+	model_->crearEnemigosSiguienteNivel();
 	//mando a los clientes que se esta por pasar de nivel.
 	char msgType = PASO_DE_NIVEL;
 	for(auto conn = connections_.begin(); conn != connections_.end();conn++){
@@ -514,6 +517,11 @@ void Server::pasarDeNivel(){
 	model_->eliminarTecho();
 	//espero hasta que todos hayan subido.
 	sleep(10);
+
+	msgType = TERMINO_EL_PASO_DE_NIVEL;
+		for(auto conn = connections_.begin(); conn != connections_.end();conn++){
+			sendall((*conn)->socket,&msgType,sizeof(msgType) );
+		}
 
 	model_->setPasandoDeNivel(false);
 	model_->pasarDeNivel();

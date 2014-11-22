@@ -176,12 +176,7 @@ int Server::acceptConnection(int newsockfd) {
 				return SRV_ERROR;
 
 		} else {
-
-			reconexion = true;
-
-			if (manejarReconexion(connection) == SRV_ERROR)
-				return SRV_ERROR;
-
+			return SRV_ERROR;
 		}
 
 		//Creamos el personaje y enviamos los datos del juego
@@ -357,7 +352,7 @@ void Server::recibirDelCliente(connection_t *conn) {
 			if (data)
 				free(data);
 
-			gameData_.paused = true;
+//			gameData_.paused = true;
 
 			conn->activa = false;
 			model_->setPersonajeConnectionState(conn->id, ESPERANDO);
@@ -646,7 +641,7 @@ void Server::reiniciar(){
 	model_ = new Escenario(parser_);
 
 	//Quitamos a los jugadores que no esten activos
-	borrarJugadoresInactivos();
+//	borrarJugadoresInactivos();
 
 	//Creamos jugadores para todos los clientes existentes
 	for (unsigned int i = 0; i < connections_.size(); i++) {
@@ -659,5 +654,13 @@ void Server::reiniciar(){
 }
 
 void Server::borrarJugadoresInactivos(){
+	//Borramos al personaje del modelo
+	model_->borrarPersonajesInactivos();
 
+	//Quitamos la conexion de la lista
+	for (auto con = connections_.begin(); con != connections_.end(); ++con) {
+		if (!(*con)->activa){
+				connections_.erase(con++);
+		}
+	}
 }

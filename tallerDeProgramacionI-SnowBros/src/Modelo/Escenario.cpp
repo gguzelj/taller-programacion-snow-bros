@@ -337,7 +337,13 @@ unsigned int Escenario::getCantPersonajes() {
 	return cantidadMaximaDePersonajes;
 }
 unsigned int Escenario::getCantidadDePersonajesVivos(){
-	return personajes_->size();
+	unsigned int personajesEnJuego = 0;
+	for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
+		if ((*personaje)->getConnectionState() != ESPERANDO)
+			personajesEnJuego++;
+	}
+
+	return personajesEnJuego;
 }
 unsigned int Escenario::getCantEnemigos() {
 	return enemigos_->size();
@@ -499,4 +505,13 @@ void Escenario::setNivel(unsigned int level) {
 }
 unsigned int Escenario::getNivel() {
 	return nivel;
+}
+
+void Escenario::borrarPersonajesInactivos(){
+	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {
+		if ((*per)->getConnectionState() != CONECTADO){
+			world_->DestroyBody((*per)->getb2Body());
+			personajes_->erase(per++);
+		}
+	}
 }

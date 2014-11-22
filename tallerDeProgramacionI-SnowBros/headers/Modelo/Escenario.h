@@ -197,6 +197,7 @@ public:
 	void setNivel(unsigned int nivel);
 	unsigned int getNivel();
 
+	void borrarPersonajesInactivos();
 private:
 	Contacto contactos;
 	const float32 timeStep = 1 / 40.0; 		//the length of time passed to simulate (seconds)

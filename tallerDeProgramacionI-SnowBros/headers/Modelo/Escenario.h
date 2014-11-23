@@ -62,6 +62,7 @@ typedef struct enemigo {
 
 typedef struct gameData {
 	bool paused;
+	bool gameOver;
 	unsigned int cantProyectiles;
 	unsigned int cantEnemigos;
 	unsigned int cantPersonajes;

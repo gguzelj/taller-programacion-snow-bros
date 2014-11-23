@@ -45,6 +45,7 @@
 #define EVENT_MSG_TYPE 2
 
 #define TAM 20
+#define TIEMPO_GAMEOVER 3
 
 //MENSAJES
 #define SRV_MSG_CREATE					"Creando Servidor"
@@ -310,6 +311,8 @@ private:
 	float getInitialY();
 
 	void borrarJugadoresInactivos();
+
+	void gameOver();
 };
 
 #endif /* SERVER_H_ */

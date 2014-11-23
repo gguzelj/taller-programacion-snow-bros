@@ -121,6 +121,8 @@ void Server::run() {
 		enviarAClientes();
 
 		if (model_->getCantidadDePersonajesVivos() == 0 && !connections_.empty()){
+			std::thread t(&Server::gameOver, this);
+			t.detach();
 			reiniciar();
 		}
 	}
@@ -665,4 +667,12 @@ void Server::borrarJugadoresInactivos(){
 			return;
 		}
 	}
+}
+
+void Server::gameOver(){
+	gameData_.gameOver = true;
+
+	sleep(TIEMPO_GAMEOVER);
+
+	gameData_.gameOver = false;
 }

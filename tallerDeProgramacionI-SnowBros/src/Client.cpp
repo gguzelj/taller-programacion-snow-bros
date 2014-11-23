@@ -87,6 +87,7 @@ int Client::run() {
 			free(data.enemigos);
 			free(data.dinamicos);
 			free(data.personajes);
+			free(data.sonidos);
 			free(data.gameData);
 		}
 		SDL_Delay(1);
@@ -199,7 +200,7 @@ int Client::initialize() {
 
 		//Recibimos la cantidad de objetos creados
 		recibirEstaticos(estaticos_);
-		recibirDinamicos(dinamicos_);
+		recibirDinamicos(dinamicos_, gameDetails_.cantObjDinamicos);
 		recibirPersonajes(personajes_);
 		recibirEnemigos(enemigos_, gameDetails_.cantEnemigos);
 		//Inicializamos la vista para el personaje principal
@@ -300,10 +301,15 @@ void Client::recibirDelServer() {
 				recibirEnemigos(data.enemigos, data.gameData->cantEnemigos);
 
 				//Recibimos los objetos dinamicos
-				recibirDinamicos(data.dinamicos);
+				recibirDinamicos(data.dinamicos, data.gameData->cantDinamicos);
+
 
 				//Recibimos los proyectiles del juego
 				recibirProyectiles(data.proyectiles, data.gameData->cantProyectiles);
+
+				//Recibimos los sonidos a reproducir
+				recibirSonidos(&(data.sonidos), data.gameData->cantSonidos);
+
 
 				shared_rcv_queue_->push(data);
 			}
@@ -315,6 +321,10 @@ void Client::recibirDelServer() {
 				view_->finalizarTransicionNivel();
 			}
 
+
+
+
+			shared_rcv_queue_->push(data);
 		}
 
 	} catch (const receiveException& e) {
@@ -339,8 +349,9 @@ void Client::onRender(dataFromServer_t data) {
 
 	dataFromClient_t dataToBeDraw;
 
+//	dataToBeDraw.cantPersonajes = data.gameData->cantPersonajes;
 	dataToBeDraw.cantPersonajes = gameDetails_.cantPersonajes;
-	dataToBeDraw.cantObjDinamicos = gameDetails_.cantObjDinamicos;
+	dataToBeDraw.cantObjDinamicos = data.gameData->cantDinamicos;
 	dataToBeDraw.cantObjEstaticos = gameDetails_.cantObjEstaticos;
 	dataToBeDraw.gameData = data.gameData;
 	dataToBeDraw.personajes = data.personajes;
@@ -350,7 +361,7 @@ void Client::onRender(dataFromServer_t data) {
 	dataToBeDraw.estaticos = estaticos_;
 
 	view_->updateView(dataToBeDraw, name);
-
+	view_->reproducirSonidos(data.sonidos, data.gameData->cantSonidos);
 }
 
 void Client::onCleanup() {
@@ -386,9 +397,9 @@ int Client::validateParameters(int argc, char* argv[]) {
 	return CLIENT_OK;
 }
 
-void Client::recibirDinamicos(figura_t* &dinamicos) throw (receiveException){
+void Client::recibirDinamicos(figura_t* &dinamicos, unsigned int cant) throw (receiveException){
 
-	int size = sizeof(figura_t) * gameDetails_.cantObjDinamicos;
+	int size = sizeof(figura_t) * cant;
 	dinamicos = (figura_t*) malloc(size);
 
 	recvall(sock, dinamicos, size);
@@ -424,7 +435,6 @@ void Client::recibirEnemigos(enemigo_t* &enemigos, unsigned int cant)throw (rece
 	enemigos = (enemigo_t*) malloc(size);
 
 	recvall(sock, enemigos, size);
-
 }
 
 void Client::recibirGameData(gameData_t* &gameData)throw (receiveException) {
@@ -433,7 +443,14 @@ void Client::recibirGameData(gameData_t* &gameData)throw (receiveException) {
 	gameData = (gameData_t*) malloc(size);
 
 	recvall(sock, gameData, size);
+}
 
+void Client::recibirSonidos(int** sonidos, unsigned int cant)throw (receiveException) {
+
+	int size = sizeof(int) * cant;
+	(*sonidos) = (int*) malloc(size);
+
+	recvall(sock, (*sonidos), size);
 }
 
 void Client::sendall(int s, void* data, int len) throw (sendException) {

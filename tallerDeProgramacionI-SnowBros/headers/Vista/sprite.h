@@ -48,11 +48,29 @@
 #define ALTO_PORTAL 64
 
 
+
 #define POS_X_VOLANDO 245
 #define POS_Y_VOLANDO 240
 #define FRAMES_VOLANDO 2
 #define ALTO_VOLANDO 32
 
+
+
+#define ALTO_BONUS 11
+#define ANCHO_BONUS 9
+
+#define POS_X_BONUSVE 174
+#define POS_Y_BONUSVE 275
+
+#define POS_X_BONUSMR 165
+#define POS_Y_BONUSMR 283
+
+#define POS_X_BONUSAP 154
+#define POS_Y_BONUSAP 299
+
+/*
+ * Todas las demas funciones llaman a esta para hacer los dibujos.
+ */
 
 void dibujarFrame(SDL_Renderer *renderer,SDL_Texture *texture,char orientacion, int pos_x,int pos_y,SDL_Rect* srcrect, SDL_Rect dstrect){
 	switch(orientacion){
@@ -167,7 +185,7 @@ void drawPortal(SDL_Renderer *renderer,SDL_Texture *texture, int pos_x,int pos_y
 	Uint32 sprite = (ticks / 120  ) % FRAMES_PORTAL;
 
 	SDL_Rect srcrect = { POS_X_PORTAL + (sprite * ANCHO_PORTAL) ,POS_Y_PORTAL, ANCHO_PORTAL, ALTO_PORTAL };
-	SDL_Rect dstrect = { pos_x - (ancho/2), pos_y -( alto/2), ancho, alto};
+	SDL_Rect dstrect = { pos_x, pos_y, ancho, alto};
 
 	dibujarFrame(renderer,texture,orientacion,pos_x,pos_y,&srcrect,dstrect);
 }

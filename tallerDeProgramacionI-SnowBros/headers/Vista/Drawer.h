@@ -32,6 +32,10 @@
 #define PENTAGONO_CODE '5'
 #define HEXAGONO_CODE '6'
 #define PORTAL_CODE 'o'
+#define BONUS_POTENCIA_CODE 'g'
+#define BONUS_VELOCIDAD_CODE 'h'
+#define BONUS_VIDA_CODE 'i'
+#define BONUS_PORTAL_CODE 'j'
 
 #define ID_ENEMIGO_BASICO 11
 #define ID_ENEMIGO_FUEGO 12
@@ -48,11 +52,12 @@
 #define COTA_SUP_Y	(coordRel.h)/5
 
 //defines que eran del Personaje.cpp
-#define MITAD_ANCHO_PERSONAJE 0.5f
-#define MITAD_ALTO_PERSONAJE 0.85
+#define MITAD_ANCHO_PERSONAJE 0.65f
+#define MITAD_ALTO_PERSONAJE 0.85f
 
 //Mensaje de espera
 #define WAITING_MSG "Esperando a todos los jugadores"
+#define GAMEOVER_MSG "Game over"
 
 //defines que eran de Estados.h
 #define JUMPING 'j'
@@ -63,7 +68,15 @@
 #define DYING 'm'
 #define PUSHING 'p'
 #define KICKING 'k'
+
 #define FLYING 'y'
+
+
+#define BALLBREAKING 'K'
+#define GAMEOVER 'G'
+#define BONUS 'B'
+#define ONEUP 'O'
+
 
 using namespace std;
 
@@ -120,6 +133,10 @@ typedef struct gameData{
 	bool paused;
 	unsigned int cantProyectiles;
 	unsigned int cantEnemigos;
+	unsigned int cantPersonajes;
+	unsigned int cantDinamicos;
+	unsigned int cantSonidos;
+	unsigned int nivel;
 }gameData_t;
 
 typedef struct dataFromClient{
@@ -140,6 +157,12 @@ public:
 	~Drawer();
 
 	void updateView(dataFromClient_t data,char* name);
+
+	/*
+	 * Reproduce los sonidos recibidos del servidor.
+	 */
+	void reproducirSonidos(int* &sonidos, unsigned int size);
+
 	void inicializarCamara(personaje_t personaje);
 	//Zooms in in a factor of 1.01x
 	void zoomIn();
@@ -197,11 +220,12 @@ private:
 	//The music that will be played
 	Mix_Music *gMusic;
 	Mix_Chunk *gShooting;
-	Mix_Chunk *gWalking1;
-	Mix_Chunk *gWalking2;
 	Mix_Chunk *gJumping;
+	Mix_Chunk *gDying;
+	Mix_Chunk *gBallBreaking;
+	Mix_Chunk *gBonus;
+	Mix_Chunk *gOneUp;
 	Mix_Chunk *gGameover;
-	Mix_Chunk *gKick;
 
 	//Scene texture
 	LTexture rectangleLT;
@@ -215,11 +239,17 @@ private:
 	LTexture snowballLT;
 	LTexture portalballLT;
 	LTexture fireballLT;
+	LTexture bonusPortalLT;
+	LTexture bonusPotenciaLT;
+	LTexture bonusVelocidadLT;
+	LTexture bonusVidaLT;
 
-	//Ahora los puntos y vidas son LTextures.
+	//Ahora los puntos, niveles y vidas son LTextures.
 	LTexture pointsLT;
 	LTexture livesLT;
+	LTexture levelsLT;
 	LTexture waitingScreenLT;
+	LTexture gameOverScreenLT;
 
 	//Cargo los numeros del 0 al 9
 	LTexture ceroLT;
@@ -249,10 +279,16 @@ private:
 	string snowballImagePath;
 	string portalballImagePath;
 	string fireballImagePath;
+	string bonusPortalPath;
+	string bonusPotenciaPath;
+	string bonusVelocidadPath;
+	string bonusVidaPath;
 	string portalPath;
+
 	//Texto de puntos y vidas.
 	string points;
 	string lives;
+	string level;
 
 	//General Attributes
 	std::vector<bool> personajeOn;
@@ -268,6 +304,7 @@ private:
 	float currentZoomFactor;
 	int anchoLives;
 	int anchoPoints;
+	int anchoLevel;
 	int altoText;
 	int anchoNumber;
 	int anchoWaiting;
@@ -293,6 +330,7 @@ private:
 	void drawEnemy(enemigo_t enemigo);
 	void drawMessages(dataFromClient_t data, personaje_t personaje);
 	void drawWaitingScreen();
+	void drawGameOverScreen();
 	void presentScenary();
 	void clearScenary();
 	bool blinkCharacter(personaje_t person, int index);

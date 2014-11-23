@@ -25,19 +25,11 @@ void Drawer::loadMusic(){
 	}
 
 	//Load background music
-	gMusic = Mix_LoadMUS( "resources/SoundEffects/background.mid" );
+	gMusic = Mix_LoadMUS( "resources/SoundEffects/beat.wav" );
 	if(!gMusic){
 		printf( "Failed to load background music! SDL_mixer Error: %s\n", Mix_GetError() );
 	}
 	//Load soundeffects
-	gWalking1 = Mix_LoadWAV("resources/SoundEffects/walking1.wav");
-	if(!gWalking1){
-		printf( "Failed to load walking1 wav! SDL_mixer Error: %s\n", Mix_GetError() );
-	}
-	gWalking2 = Mix_LoadWAV("resources/SoundEffects/walking2.wav");
-	if(!gWalking2){
-		printf( "Failed to load walking2 wav! SDL_mixer Error: %s\n", Mix_GetError() );
-	}
 	gShooting = Mix_LoadWAV("resources/SoundEffects/shooting.wav");
 	if(!gShooting){
 		printf( "Failed to load shooting wav! SDL_mixer Error: %s\n", Mix_GetError() );
@@ -46,9 +38,21 @@ void Drawer::loadMusic(){
 	if(!gJumping){
 		printf( "Failed to load jumping wav! SDL_mixer Error: %s\n", Mix_GetError() );
 	}
-	gKick = Mix_LoadWAV("resources/SoundEffects/kick.wav");
-	if(!gKick){
-		printf( "Failed to load walking wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	gDying = Mix_LoadWAV("resources/SoundEffects/dying.wav");
+	if(!gDying){
+		printf( "Failed to load dying wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	gBallBreaking = Mix_LoadWAV("resources/SoundEffects/breakball.wav");
+	if(!gBallBreaking){
+		printf( "Failed to load ball breaking wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	gBonus = Mix_LoadWAV("resources/SoundEffects/bonus.wav");
+	if(!gBonus){
+		printf( "Failed to load bonus wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	gOneUp = Mix_LoadWAV("resources/SoundEffects/oneup.wav");
+	if(!gOneUp){
+		printf( "Failed to load oneup wav! SDL_mixer Error: %s\n", Mix_GetError() );
 	}
 	gGameover = Mix_LoadWAV("resources/SoundEffects/gameover.wav");
 	if(!gGameover){
@@ -105,17 +109,39 @@ bool Drawer::loadMedia() {
 		success = false;
 	}
 	if (!snowballLT.loadFromFile(snowballImagePath, renderer)) {
-		printf("Failed to load paralelogram texture!\n");
+		printf("Failed to load snowball texture!\n");
 		success = false;
 	}
 	if (!portalballLT.loadFromFile(portalballImagePath, renderer)) {
-		printf("Failed to load paralelogram texture!\n");
+		printf("Failed to load portalball texture!\n");
 		success = false;
 	}
 	if (!fireballLT.loadFromFile(fireballImagePath, renderer)) {
-		printf("Failed to load paralelogram texture!\n");
+		printf("Failed to load fireball texture!\n");
 		success = false;
 	}
+	if (!bonusPortalLT.loadFromFile(bonusPortalPath, renderer)) {
+		printf("Failed to load bonusPortal texture!\n");
+		success = false;
+	}
+	if (!bonusPotenciaLT.loadFromFile(bonusPotenciaPath, renderer)) {
+		printf("Failed to load bonusPotencia texture!\n");
+		success = false;
+	}
+	if (!bonusVelocidadLT.loadFromFile(bonusVelocidadPath, renderer)) {
+		printf("Failed to load bonusVelocidad texture!\n");
+		success = false;
+	}
+	if (!bonusVidaLT.loadFromFile(bonusVidaPath, renderer)) {
+		printf("Failed to load bonusVida texture!\n");
+		success = false;
+	}
+
+
+	LTexture imagenBonusPortal;
+	LTexture imagenBonusPotencia;
+	LTexture imagenBonusVelocidad;
+	LTexture imagenBonusVida;
 
 	SDL_Color textColor = { 255, 255, 255, 0xFF };
 
@@ -129,11 +155,20 @@ bool Drawer::loadMedia() {
 		success = false;
 	}
 
+	if(!levelsLT.loadFromRenderedText(renderer, fontToBeUsed, level, textColor, &anchoLevel, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+
 	if(!waitingScreenLT.loadFromRenderedText(renderer, fontToBeUsed, WAITING_MSG, textColor, &anchoWaiting, &altoWaiting)){
 		printf("Failed to load text texture!\n");
 		success = false;
 	}
 
+	if(!gameOverScreenLT.loadFromRenderedText(renderer, fontToBeUsed, GAMEOVER_MSG, textColor, &anchoWaiting, &altoWaiting)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
 	//Load numbers
 	if(!ceroLT.loadFromRenderedText(renderer, fontToBeUsed, "0", textColor, &anchoNumber, &altoText)){
 		printf("Failed to load text texture!\n");
@@ -205,17 +240,19 @@ Drawer::Drawer() {
 	this->pasandoDeNivel = false;
 	//The music that will be played
 	gMusic = nullptr;
-	gKick = nullptr;
-	gWalking1 = nullptr;
-	gWalking2 = nullptr;
 	gShooting = nullptr;
 	gJumping = nullptr;
+	gDying = nullptr;
+	gBallBreaking = nullptr;
+	gBonus = nullptr;
+	gOneUp = nullptr;
 	gGameover = nullptr;
 
 	//Tamaños para dibujar el texto en pantalla. Los inicializo en 0, despues se modifican.
 	this->altoText = 0;
 	this->anchoPoints = 0;
 	this->anchoLives = 0;
+	this->anchoLevel = 0;
 	this->anchoNumber = 0;
 	this->anchoWaiting = 0;
 	this->altoWaiting = 0;
@@ -244,11 +281,16 @@ Drawer::Drawer() {
 	this->snowballImagePath = "resources/textures/snowball.png";
 	this->portalballImagePath = "resources/textures/portalball.png";
 	this->fireballImagePath = "resources/textures/bolaDeFuego.png";
+	this->bonusPortalPath = "resources/textures/BonusPortal.png";
+	this->bonusPotenciaPath = "resources/textures/BonusPotencia.png";
+	this->bonusVelocidadPath = "resources/textures/BonusVelocidad.png";
+	this->bonusVidaPath = "resources/textures/BonusVida.png";
 	this->portalPath = "resources/sprites/portal.png";
 
 	//Text
 	this->points = "Points: ";
 	this->lives = "Lives: ";
+	this->level = "Level ";
 
 	//Hardcodeo esto por ahora.
 	this->ancho_px = 1366;
@@ -318,6 +360,32 @@ void Drawer::updateView(dataFromClient_t data, char* name) {
 	this->presentScenary();
 }
 
+void Drawer::reproducirSonidos(int* &sonidos, unsigned int size) {
+	for(unsigned int i = 0; i < size; i++){
+		if(sonidos[i] == SHOOTING){
+			Mix_PlayChannel( -1, gShooting, 0 );
+		}
+		else if(sonidos[i] == JUMPING){
+			Mix_PlayChannel( -1, gJumping, 0 );
+		}
+		else if(sonidos[i] == DYING){
+			Mix_PlayChannel( -1, gDying, 0 );
+		}
+		else if(sonidos[i] == BALLBREAKING){
+			Mix_PlayChannel( -1, gBallBreaking, 0 );
+		}
+		else if(sonidos[i] == BONUS){
+			Mix_PlayChannel( -1, gBonus, 0 );
+		}
+		else if(sonidos[i] == ONEUP){
+			Mix_PlayChannel( -1, gOneUp, 0 );
+		}
+		else if(sonidos[i] == GAMEOVER){
+			Mix_PlayChannel( -1, gGameover, 0 );
+		}
+	}
+}
+
 // ############################### //
 // ##### Auxiliray functions ##### //
 // ############################### //
@@ -326,26 +394,8 @@ float coord_relativa(float referencia, float coord) {
 	return coord - referencia;
 }
 
-//Convierte un color representado a partir de una cadena de caracteres a su valor numerico red green blue.
-//la cadena debe ser del tipo "#02FF12"
-char* convertir_hex_a_rgb(std::string color) {
-
-	char* resultado = new char[3];
-
-	const char *red = (color.substr(1, 2)).c_str();
-	resultado[0] = strtol(red, NULL, 16);
-
-	const char *green = (color.substr(3, 2)).c_str();
-	resultado[1] = strtol(green, NULL, 16);
-
-	const char *blue = (color.substr(5, 2)).c_str();
-	resultado[2] = strtol(blue, NULL, 16);
-
-	return resultado;
-}
-
 int anchoPersonaje(float un_to_px_x) {
-	return (MITAD_ANCHO_PERSONAJE * 2) * un_to_px_x + 15;
+	return (MITAD_ANCHO_PERSONAJE * 2) * un_to_px_x;
 }
 int altoPersonaje(float un_to_px_y) {
 	return ((MITAD_ALTO_PERSONAJE * 2) * un_to_px_y);
@@ -451,7 +501,19 @@ void Drawer::drawFigura(figura_t objeto) {
 		paralelogramLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
 	if(objeto.id == PORTAL_CODE){
-		drawPortal(renderer, portal, pos_x, pos_y, ANCHO_PORTAL, alto * un_to_px_y);
+		drawPortal(renderer, portal, pos_x - ANCHO_PORTAL / 2 - ancho * un_to_px_x / 2, pos_y, ANCHO_PORTAL, alto * un_to_px_y);
+	}
+	if(objeto.id == BONUS_PORTAL_CODE){
+		bonusPortalLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
+	}
+	if(objeto.id == BONUS_POTENCIA_CODE){
+		bonusPotenciaLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
+	}
+	if(objeto.id == BONUS_VELOCIDAD_CODE){
+		bonusVelocidadLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
+	}
+	if(objeto.id == BONUS_VIDA_CODE){
+		bonusVidaLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
 }
 
@@ -548,7 +610,7 @@ void Drawer::drawStandardEnemy(enemigo_t enemigo){
 
 void Drawer::drawFireEnemy(enemigo_t enemigo){
 	SDL_Texture* imagen;
-	imagen = imagenEnemigoFuego;
+	imagen = imagenEnemigos;
 
 	int ancho_imagen = (ancho_un * FACTOR_CONVERSION_UN_A_PX);
 	int alto_imagen = (alto_un * FACTOR_CONVERSION_UN_A_PX);
@@ -576,7 +638,6 @@ void Drawer::drawFireEnemy(enemigo_t enemigo){
 		case WALKING:
 			drawFireEnemyWalking(renderer, imagen, orientacion, pos_x, pos_y,  ancho * un_to_px_x, alto * un_to_px_y);
 			break;
-		case FALLING:
 			drawFireEnemyFalling(renderer, imagen, orientacion, pos_x, pos_y,  ancho * un_to_px_x, alto * un_to_px_y);
 			break;
 		case SHOOTING:
@@ -679,37 +740,49 @@ void Drawer::drawMessages(dataFromClient_t data, personaje_t personaje) {
 	float coordXDelMensaje = 10; //Por ahora lo puse asi, despues lo acomodamos bien con los demas mensajes.
 	float coordYDelMensaje = 10; //Parte superior de la pantalla
 
-	int desplazamientoEnX = (ancho_px - (anchoLives + anchoNumber*5)) / data.cantPersonajes;
+	if(data.cantPersonajes >0){
+		int desplazamientoEnX = (ancho_px - (anchoLives + anchoNumber*5)) / data.cantPersonajes;
 
-	for (unsigned int p = 0; p < data.cantPersonajes; p++){
-		if (data.personajes[p].connectionState >= 0){
-			int puntos = data.personajes[p].points;
-			int vidas = data.personajes[p].lives;
+		for (unsigned int p = 0; p < data.cantPersonajes; p++){
+			if (data.personajes[p].connectionState >= 0){
+				int puntos = data.personajes[p].points;
+				int vidas = data.personajes[p].lives;
 
-			//Render the first message
-			pointsLT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoPoints, altoText);
-			coordXDelMensaje += anchoPoints;
-			for(int i = 5; i > 0; i--){
-				numerosLT[puntos%10]->render(renderer, coordXDelMensaje+anchoNumber*(i-1), coordYDelMensaje, anchoNumber, altoText);
-				puntos/=10;
+				//Render the first message
+				pointsLT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoPoints, altoText);
+				coordXDelMensaje += anchoPoints;
+				for(int i = 5; i > 0; i--){
+					numerosLT[puntos%10]->render(renderer, coordXDelMensaje+anchoNumber*(i-1), coordYDelMensaje, anchoNumber, altoText);
+					puntos/=10;
+				}
+
+				//Render the other message
+				coordYDelMensaje += altoText + 5;
+				coordXDelMensaje -= anchoPoints;
+				livesLT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoLives, altoText);
+				coordXDelMensaje += anchoLives;
+				numerosLT[vidas]->render(renderer, coordXDelMensaje, coordYDelMensaje, anchoNumber, altoText);
+
+				//Corijo la posicion para el proximo personaje
+				coordXDelMensaje += desplazamientoEnX - anchoLives;
+				coordYDelMensaje -= altoText + 5;
 			}
-
-			//Render the other message
-			coordYDelMensaje += altoText + 5;
-			coordXDelMensaje -= anchoPoints;
-			livesLT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoLives, altoText);
-			coordXDelMensaje += anchoLives;
-			numerosLT[vidas]->render(renderer, coordXDelMensaje, coordYDelMensaje, anchoNumber, altoText);
-
-			//Corijo la posicion para el proximo personaje
-			coordXDelMensaje += desplazamientoEnX - anchoLives;
-			coordYDelMensaje -= altoText + 5;
 		}
 	}
+	//Dibujamos el indicador de nivel
+	levelsLT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoPoints, altoText);
+	coordXDelMensaje += anchoLevel/2;
+	coordYDelMensaje += altoText + 5;
+	numerosLT[data.gameData->nivel]->render(renderer, coordXDelMensaje, coordYDelMensaje, anchoNumber, altoText);
 
 	//Dibujamos la pantalla de espera
 	if (data.gameData->paused)
 		drawWaitingScreen();
+
+	//Dibujamos la pantalla de gameOver
+	if (data.cantPersonajes == 0){
+		drawGameOverScreen();
+	}
 }
 
 void Drawer::drawWaitingScreen() {
@@ -722,6 +795,17 @@ void Drawer::drawWaitingScreen() {
 	float oy = 300;
 
 	waitingScreenLT.render(renderer, ox, oy, anchoT, altoT);
+}
+
+void Drawer::drawGameOverScreen(){
+	int anchoT = 500;
+	int altoT = 100;
+
+	//Pense que esto lo dibujaba en medio de la pantall, pero no..
+	float ox = 500;
+	float oy = 300;
+
+	gameOverScreenLT.render(renderer, ox, oy, anchoT, altoT);
 }
 
 void Drawer::presentScenary() {

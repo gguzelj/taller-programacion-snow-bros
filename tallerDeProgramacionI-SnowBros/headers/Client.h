@@ -68,6 +68,7 @@ typedef struct dataFromServer{
 	enemigo_t* enemigos;
 	figura_t* dinamicos;
 	proyectil_t* proyectiles;
+	int* sonidos;
 } dataFromServer_t;
 
 class Client{
@@ -171,7 +172,7 @@ private:
 	/*
 	 * Metodo para recibir los objetos dinamicos
 	 */
-	void recibirDinamicos(figura_t* &dinamicos)throw (receiveException);
+	void recibirDinamicos(figura_t* &dinamicos, unsigned int cant)throw (receiveException);
 
 	/*
 	 * Recibimos los proyectiles del juego
@@ -197,6 +198,11 @@ private:
 	 * Metodo para recibir info general del juego
 	 */
 	void recibirGameData(gameData_t* &gameData)throw (receiveException);
+
+	/*
+	 * Metodo para recibir los sonidos a reproducir
+	 */
+	void recibirSonidos(int** sonidos, unsigned int cant)throw (receiveException);
 
 	/*
      * Metodo de bajo nivel de sockets para recibir hasta una cierta

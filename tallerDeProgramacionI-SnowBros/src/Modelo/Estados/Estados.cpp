@@ -41,16 +41,17 @@ void StandByState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 		case SDLK_SPACE:
 			character.disparar();
 			break;
+
+		case SDLK_RCTRL:
+			if (Personaje* personaje = dynamic_cast<Personaje*>(&character))
+				personaje->dispararPortal();
+			break;
 		}
 		break;
 
 	case SDL_KEYUP:
 
 		switch (input) {
-
-		case SDLK_SPACE:
-			character.dejarDisparar();
-			break;
 
 		case SDLK_LEFT:
 			orientacion = IZQUIERDA;
@@ -59,6 +60,16 @@ void StandByState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 		case SDLK_RIGHT:
 			orientacion = DERECHA;
 			break;
+
+		case SDLK_SPACE:
+			character.dejarDisparar();
+			break;
+
+		case SDLK_RCTRL:
+			if (Personaje* personaje = dynamic_cast<Personaje*>(&character))
+				personaje->dejarDispararPortal();
+			break;
+
 		}
 
 		//Detiene si la orientacion es la misma que tenia
@@ -94,6 +105,11 @@ void WalkingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 		case SDLK_SPACE:
 			character.disparar();
 			break;
+
+		case SDLK_RCTRL:
+			if (Personaje* personaje = dynamic_cast<Personaje*>(&character))
+				personaje->dispararPortal();
+			break;
 		}
 		break;
 
@@ -101,16 +117,21 @@ void WalkingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 
 		switch (input) {
 
-		case SDLK_SPACE:
-			character.dejarDisparar();
-			break;
-
 		case SDLK_LEFT:
 			orientacion = IZQUIERDA;
 			break;
 
 		case SDLK_RIGHT:
 			orientacion = DERECHA;
+			break;
+
+		case SDLK_SPACE:
+			character.dejarDisparar();
+			break;
+
+		case SDLK_RCTRL:
+			if (Personaje* personaje = dynamic_cast<Personaje*>(&character))
+				personaje->dejarDispararPortal();
 			break;
 		}
 
@@ -133,6 +154,11 @@ void OnAirState::handleInput(Character &character, SDL_Keycode input, Uint32 inp
 
 		case SDLK_SPACE:
 			character.disparar();
+			break;
+
+		case SDLK_RCTRL:
+			if (Personaje* personaje = dynamic_cast<Personaje*>(&character))
+				personaje->dispararPortal();
 			break;
 
 		case SDLK_LEFT:
@@ -158,6 +184,11 @@ void OnAirState::handleInput(Character &character, SDL_Keycode input, Uint32 inp
 
 		case SDLK_SPACE:
 			character.dejarDisparar();
+			break;
+
+		case SDLK_RCTRL:
+			if (Personaje* personaje = dynamic_cast<Personaje*>(&character))
+				personaje->dejarDispararPortal();
 			break;
 
 		}
@@ -209,6 +240,11 @@ void ShootingState::handleInput(Character &character, SDL_Keycode input, Uint32 
 			character.dejarDisparar();
 			break;
 
+		case SDLK_RCTRL:
+			if (Personaje* personaje = dynamic_cast<Personaje*>(&character))
+				personaje->dejarDispararPortal();
+			break;
+
 		}
 
 		character.detener(orientacion);
@@ -221,8 +257,6 @@ void ShootingState::handleInput(Character &character, SDL_Keycode input, Uint32 
  * personaje se encuentra en un estado Dying
  */
 void DyingState::handleInput(Character &character, SDL_Keycode input, Uint32 input_type) {
-	character.detener(IZQUIERDA);
-	character.detener(DERECHA);
 	return;
 }
 
@@ -270,11 +304,15 @@ void PushingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 			character.dejarDisparar();
 			break;
 
+		case SDLK_RCTRL:
+			if (Personaje* personaje = dynamic_cast<Personaje*>(&character))
+				personaje->dejarDispararPortal();
+			break;
+
 		}
 
 		character.detener(orientacion);
 		break;
-
 	}
 }
 
@@ -300,7 +338,9 @@ void KickingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 	case SDL_KEYUP:
 		character.detener(IZQUIERDA);
 		character.detener(DERECHA);
-
+		character.dejarDisparar();
+		if (Personaje* personaje = dynamic_cast<Personaje*>(&character))
+			personaje->dejarDispararPortal();
 	}
 }
 

@@ -8,9 +8,6 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	//Parametros generales
 	this->escenario_ = escenario;
 	this->world = escenario->getWorld();
-	this->jumpCooldown = 0;
-	this->shootCooldown = 0;
-	this->kickCooldown = 0;
 	this->aceleracion = 10.0f;
 	this->x = x;
 	this->y = y;
@@ -18,8 +15,12 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	strcpy(this->id, id);
 	this->state = &Personaje::standby;
 	this->orientacion = ORIENTACION_INICIAL;
-	this->esta_muerto = false;
-	this->arma_portal = true;
+
+	this->jumpCooldown = 0;
+	this->shootCooldown = 0;
+	this->kickCooldown = 0;
+	this->portalCooldown = 0;
+
 	this->arrastradoPor = nullptr;
 	this->joint = nullptr;
 	this->portal1 = nullptr;
@@ -33,6 +34,9 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->ancho = MITAD_ANCHO_PERSONAJE;
 	this->alto = MITAD_ALTO_PERSONAJE;
 
+	this->esta_muerto = false;
+	this->arma_portal = true;
+	this->disparar_portal = false;
 	this->movimientoDisparar = false;
 	this->movimientoDerecha = false;
 	this->movimientoIzquierda = false;
@@ -89,7 +93,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 }
 
 Personaje::~Personaje() {
-	this->world->DestroyBody(this->body);
+	world->DestroyBody(this->body);
 }
 
 //////////////////////////////////////////////////////////
@@ -113,7 +117,9 @@ void crearJoint(Personaje* personaje, BolaEnemigo* bolaEnemigo, b2World* world_)
 void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
 
 	if (state == &Personaje::dying) {
-		state->handleInput(*this, input, input_type);
+		dejarDisparar();
+		detener(IZQUIERDA);
+		detener(DERECHA);
 		return;
 	}
 	state->handleInput(*this, input, input_type);
@@ -121,16 +127,16 @@ void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
 
 void Personaje::beginContactBolaEnemigo(BolaEnemigo * bola, b2Contact* contact) {
 
-	if (this->state == &Personaje::jumping)
+	if (state == &Personaje::jumping)
 		return;
 
 	bola->cambiarFilterIndex(PERSONAJE_FILTER_INDEX);
 
-	this->movimientoDerecha = false;
-	this->movimientoIzquierda = false;
-	this->arrastrado = true;
-	this->arrastradoPor = bola;
-	this->state = &Personaje::rolling;
+	movimientoDerecha = false;
+	movimientoIzquierda = false;
+	arrastrado = true;
+	arrastradoPor = bola;
+	state = &Personaje::rolling;
 	return;
 }
 
@@ -172,14 +178,12 @@ void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 		std::thread t(&Personaje::morir, this);
 		t.detach();
 	}
-	// TODO En caso que el personaje pierda todas sus vidas, el mismo no debe aparecer mas en la pantalla. Es decir,
-	// hay que sacarlo del modelo.
 }
 
 void Personaje::beginContactBonusVidaExtra(BonusVidaExtra* bonus, b2Contact* contact) {
 	escenario_->agregarSonido(ONEUP);
 	bonus->desactivar();
-	this->lives++;
+	lives++;
 }
 
 void Personaje::beginContactBonusMoverRapido(BonusMoverRapido* bonus, b2Contact* contact) {
@@ -192,15 +196,15 @@ void Personaje::beginContactBonusMoverRapido(BonusMoverRapido* bonus, b2Contact*
 void Personaje::beginContactBonusAumentarPotencia(BonusAumentarPotencia* bonus, b2Contact* contact) {
 	escenario_->agregarSonido(BONUS);
 	bonus->desactivar();
-	this->potencia +=4;
+	potencia +=4;
 }
 
 void Personaje::beginContactBonusBolaPortal(BonusBolaPortal* bonus, b2Contact* contact) {
 	escenario_->agregarSonido(BONUS);
 	bonus->desactivar();
-	this->arma_portal = true;
-	this->portal1 = nullptr;
-	this->portal2 = nullptr;
+	arma_portal = true;
+	portal1 = nullptr;
+	portal2 = nullptr;
 }
 
 bool Personaje::estaEmpujandoEnemigo() {
@@ -208,7 +212,7 @@ bool Personaje::estaEmpujandoEnemigo() {
 	b2Fixture *pared = (orientacion == DERECHA) ? paredDerecha : paredIzquierda;
 
 	//Buscamos si el piso esta haciendo contacto con algo
-	for (b2ContactEdge *ce = this->body->GetContactList(); ce; ce = ce->next) {
+	for (b2ContactEdge *ce = body->GetContactList(); ce; ce = ce->next) {
 		b2Contact* c = ce->contact;
 
 		if (c->GetFixtureA() == pared)
@@ -229,6 +233,9 @@ bool Personaje::estaEmpujandoEnemigo() {
 void Personaje::controlarEstado() {
 
 	Character::controlarEstado();
+
+	decreaseShootPortalCooldown();
+	shootPortal();
 
 	if (state == &Character::walking)
 		if (estaEmpujandoEnemigo())
@@ -262,7 +269,7 @@ void Personaje::controlarEstado() {
 		joint = nullptr;
 
 		b2Transform tra = body->GetTransform();
-		tra.p.y += 3;
+		tra.p.y += 1;
 		body->SetTransform(tra.p, 0);
 
 		state = &Character::jumping;
@@ -284,9 +291,9 @@ Proyectil* Personaje::crearBolaPortal() {
 
 	x += (orientacion == IZQUIERDA) ? -1.5 : 1.5;
 
-	bola = new BolaPortal(x, y, 1, this->world, this);
+	bola = new BolaPortal(x, y, 1, world, this);
 
-	vel = this->body->GetLinearVelocity();
+	vel = body->GetLinearVelocity();
 	vel.x -= (orientacion == IZQUIERDA) ? aceleracion * 4 : -aceleracion * 4;
 	vel.y = 0;
 
@@ -304,9 +311,9 @@ Proyectil* Personaje::crearBolaNieve() {
 
 	x += (orientacion == IZQUIERDA) ? -1.5 : 1.5;
 
-	bola = new BolaNieve(x, y, potencia, this->world);
+	bola = new BolaNieve(x, y, potencia, world);
 
-	vel = this->body->GetLinearVelocity();
+	vel = body->GetLinearVelocity();
 	vel.x -= (orientacion == IZQUIERDA) ? aceleracion * 4 : -aceleracion * 4;
 	vel.y = 2;
 
@@ -323,21 +330,27 @@ void Personaje::shoot() {
 
 	shootCooldown = SHOOTCOOLDOWN;
 
-	if (arma_portal)
-		this->escenario_->agregarProyectil(crearBolaPortal());
-	else
-		this->escenario_->agregarProyectil(crearBolaNieve());
+	escenario_->agregarProyectil(crearBolaNieve());
+}
 
+void Personaje::shootPortal(){
+	if(!disparar_portal || portalCooldown > 0)
+		return;
+
+	portalCooldown = PORTALCOOLDOWN;
+
+	if (arma_portal)
+		escenario_->agregarProyectil(crearBolaPortal());
 }
 
 void Personaje::kick() {
 	kickCooldown = 12;
 	//Iteramos con los contactos de nuestro personaje hasta encontrar al enemigo y luego lo matamos
-	for (b2ContactEdge *ce = this->body->GetContactList(); ce; ce = ce->next) {
+	for (b2ContactEdge *ce = body->GetContactList(); ce; ce = ce->next) {
 		b2Contact* c = ce->contact;
 		Figura *figuraA = (Figura*) c->GetFixtureA()->GetUserData();
 		if (figuraA->type == ID_ENEMIGO_BASICO || figuraA->type == ID_ENEMIGO_FUEGO) {
-			((Enemigo*) figuraA)->setOrientacion(this->orientacion);
+			((Enemigo*) figuraA)->setOrientacion(orientacion);
 			((Enemigo*) figuraA)->morir();
 			return;
 		}
@@ -349,30 +362,38 @@ void Personaje::jump() {
 	if (estaEnAire())
 		return;
 
-	if (this->jumpCooldown <= 0) {
-		this->jumpCooldown = JUMPCOOLDOWN;
-		b2Vec2 velocidadActual = this->body->GetLinearVelocity();
+	if (jumpCooldown <= 0) {
+		jumpCooldown = JUMPCOOLDOWN;
+		b2Vec2 velocidadActual = body->GetLinearVelocity();
 		velocidadActual.y = 25;
-		this->body->SetLinearVelocity(velocidadActual);
+		body->SetLinearVelocity(velocidadActual);
 		atravezarPlataformas();
 	}
+}
+
+void Personaje::dispararPortal(){
+	disparar_portal = true;
+}
+
+void Personaje::dejarDispararPortal(){
+	disparar_portal = false;
 }
 
 void Personaje::morir() {
 	sleep(1);
 	entrarEnPeriodoDeInmunidad();
-	this->esta_muerto = true;
-	this->points /= 2;
+	esta_muerto = true;
+	points /= 2;
 }
 
 void Personaje::aumentarVelocidad() {
-	aceleracion += 1.5;
+	aceleracion += 5;
 	sleep(15);
-	aceleracion -= 1.5;
+	aceleracion -= 5;
 }
 
 void Personaje::volverAPosicionInicial() {
-	this->body->SetTransform(*posicionInicial, body->GetAngle());
+	body->SetTransform(*posicionInicial, body->GetAngle());
 }
 
 void Personaje::noAtravezarPlataformas() {
@@ -380,8 +401,13 @@ void Personaje::noAtravezarPlataformas() {
 }
 
 void Personaje::decreaseKickCooldown() {
-	if (this->kickCooldown > 0)
-		this->kickCooldown -= 1;
+	if (kickCooldown > 0)
+		kickCooldown--;
+}
+
+void Personaje::decreaseShootPortalCooldown() {
+	if(portalCooldown > 0)
+		portalCooldown--;
 }
 
 void Personaje::sacarVida() {
@@ -393,7 +419,7 @@ void Personaje::setConnectionState(char state) {
 }
 
 void Personaje::setJoint(b2RevoluteJoint* joint) {
-	this->joint = joint;
+	joint = joint;
 }
 
 void Personaje::setArrastrado(bool valor) {

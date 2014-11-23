@@ -18,6 +18,7 @@
 
 #define JUMPCOOLDOWN 18
 #define SHOOTCOOLDOWN 10
+#define PORTALCOOLDOWN 50
 
 #define TIEMPO_INMUNIDAD 5
 
@@ -109,6 +110,21 @@ public:
 	void jump();
 
 	/*
+	 * Se encarga de setear que se debe disparar una bola portal
+	 */
+	void dispararPortal();
+
+	/*
+	 *
+	 */
+	void dejarDispararPortal();
+
+	/*
+	 * Se encarga de disparar una bola portal
+	 */
+	void shootPortal();
+
+	/*
 	 * Se encarga de realizar la accion de morir y pasar al Personaje al
 	 * estado correspondiente
 	 */
@@ -140,6 +156,11 @@ public:
 	 * Disminuye el kickCooldown en una unidad
 	 */
 	void decreaseKickCooldown();
+
+	/*
+	 * Disminuye el shootPortalCooldown en una unidad
+	 */
+	void decreaseShootPortalCooldown();
 
 	/*
 	 * Setea el connectionState del Personaje al pasado por parametro
@@ -226,6 +247,11 @@ public:
 	int getShootCooldown();
 
 	/*
+	 * Devuelve el atributo portalCooldown
+	 */
+	int getPortalCooldown();
+
+	/*
 	 * Devuelve true si el Personaje esta_muerto o false en caso contrario
 	 */
 	bool estaMuerto();
@@ -257,6 +283,8 @@ private:
 	int points;
 	int potencia;
 	int kickCooldown;
+	int portalCooldown;
+	bool disparar_portal;
 
 	/*
 	 * Hace que el Personaje sea inmune

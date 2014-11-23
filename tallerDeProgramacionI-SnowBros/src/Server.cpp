@@ -1,9 +1,6 @@
 #include "../headers/Server.h"
 
 Server::Server() {
-
-	acceptNewClients_ = true;
-	running_ = false;
 	sockfd_ = 0;
 	port_ = 0;
 	connectionsLimit_ = 0;
@@ -13,6 +10,10 @@ Server::Server() {
 	shared_rcv_queue_ = new Threadsafe_queue<receivedData_t*>();
 
 	gameData_.paused = true;
+	gameData_.gameOver = false;
+
+	acceptNewClients_ = true;
+	running_ = false;
 
 	//Inicializo el generador de randoms
 	srand(static_cast<unsigned>(time(0)));

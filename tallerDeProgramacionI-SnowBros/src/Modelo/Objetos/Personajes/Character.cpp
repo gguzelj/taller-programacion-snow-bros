@@ -84,6 +84,7 @@ void Character::dejarDisparar() {
 }
 
 void Character::shoot() {
+
 }
 
 void Character::moveLeft() {

@@ -244,6 +244,7 @@ void Escenario::crearEnemigosSiguienteNivel(){
 
 void Escenario::pasarDeNivel(){
 	if(this->nivel == 1){
+		this->pasandoDeNivel = false;
 		this->nivel++;
 		//creacion del escenario y demas.
 		this->techo = new Rectangulo(ancho_un, 0, 0, 0, 28.8, world_);

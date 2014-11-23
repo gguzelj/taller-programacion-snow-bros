@@ -470,20 +470,12 @@ void Server::step() {
 
 	}
 
-	if(model_->estaPasandoDeNivel()){
-		for(auto pers = model_->getPersonajes()->begin() ; pers != model_->getPersonajes()->end(); pers++){
-			b2Vec2 velocidad = {0,20};
-			(*pers)->state = &Character::flying;
-			(*pers)->atravezarPlataformas();
-			(*pers)->getb2Body()->SetLinearVelocity(velocidad);
-		}
-	}
-
 	//Solo simulamos mientras el juego no esta pausado
 	if (!gameData_.paused)
 		model_->step();
 
 
+	//si se esta pasndo de nivel hago subir a los personajes.
 	if(model_->estaPasandoDeNivel()){
 		for(auto pers = model_->getPersonajes()->begin() ; pers != model_->getPersonajes()->end(); pers++){
 			b2Vec2 velocidad = {0,20};
@@ -492,7 +484,7 @@ void Server::step() {
 			(*pers)->getb2Body()->SetLinearVelocity(velocidad);
 		}
 	}
-
+	// si se dan las condiciones de paso de nivel creo el thread.
 	if(model_->getCantEnemigos() == 0 && !model_->estaPasandoDeNivel() && model_->getNivel() < NIVEL_MAX){
 		std::thread t(&Server::pasarDeNivel, this);
 		t.detach();
@@ -505,20 +497,22 @@ void Server::step() {
 
 //Thread que maneja la logica de pasar de nivel.
 void Server::pasarDeNivel(){
-
+	//seteo a la lista los enemigos del nivel 2 para que no cree el thread nuevamente
 	model_->setearEnemigos(model_->getNivel()+1);
-
-	for(auto en = model_->getEnemigos()->begin(); en !=model_->getEnemigos()->end(); en++){
-		(*en)->hacerAtravezable();
-	}
 
 	//espero para que lleguen a agarrar los bonus que quedan.
 
 	sleep(5);
 
+	//aviso a los clientes que se paso de nivel, no lo hago antes para que no modifiquen sus camaras
+	//y se pueda ver el nivel siguiente al saltar muy alto.
 	char msgType = PASO_DE_NIVEL;
 	for(auto conn = connections_.begin(); conn != connections_.end();conn++){
 		sendall((*conn)->socket,&msgType,sizeof(msgType) );
+	}
+
+	for(auto pers = model_->getPersonajes()->begin() ; pers != model_->getPersonajes()->end(); pers++){
+		(*pers)->entrarEnPeriodoDeInmunidad();
 	}
 
 	//seteo que se esta pasando de nivel para que los personajes vuelen.
@@ -528,15 +522,12 @@ void Server::pasarDeNivel(){
 	//espero hasta que todos hayan subido.
 	sleep(8);
 
+	//aviso que termino de pasar asi el cliente modifica el limite inferior de la camara.
 	msgType = TERMINO_EL_PASO_DE_NIVEL;
 		for(auto conn = connections_.begin(); conn != connections_.end();conn++){
 			sendall((*conn)->socket,&msgType,sizeof(msgType) );
 		}
 
-	model_->setPasandoDeNivel(false);
-	for(auto en = model_->getEnemigos()->begin(); en !=model_->getEnemigos()->end(); en++){
-			(*en)->hacerNoAtravezable();
-	}
 	model_->pasarDeNivel();
 }
 

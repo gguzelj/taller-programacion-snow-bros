@@ -165,11 +165,6 @@ bool Drawer::loadMedia() {
 		success = false;
 	}
 
-	if(!waitingScreenLT.loadFromRenderedText(renderer, fontToBeUsed, WAITING_MSG, textColor, &anchoWaiting, &altoWaiting)){
-		printf("Failed to load text texture!\n");
-		success = false;
-	}
-
 	//Load numbers
 	if(!ceroLT.loadFromRenderedText(renderer, fontToBeUsed, "0", textColor, &anchoNumber, &altoText)){
 		printf("Failed to load text texture!\n");
@@ -223,6 +218,7 @@ Drawer::Drawer() {
 	this->renderer = nullptr;
 	this->window = nullptr;
 	this->image = nullptr;
+	this->waitingImage = nullptr;
 	this->imagenPersonaje = nullptr;
 	this->imagenPersonaje2 = nullptr;
 	this->imagenPersonaje3 = nullptr;
@@ -253,8 +249,6 @@ Drawer::Drawer() {
 	this->anchoLives = 0;
 	this->anchoLevel = 0;
 	this->anchoNumber = 0;
-	this->anchoWaiting = 0;
-	this->altoWaiting = 0;
 
 	//Limites
 	this->limDerCamera = 0;
@@ -286,6 +280,7 @@ Drawer::Drawer() {
 	this->bonusVidaPath = "resources/textures/BonusVida.png";
 	this->portalPath = "resources/sprites/portal.png";
 	this->gameOverScreenPath = "resources/textures/gameOver.png";
+	this->waitingScreenPath = "resources/textures/waitingBackground.png";
 
 	//Text
 	this->points = "Points: ";
@@ -293,8 +288,8 @@ Drawer::Drawer() {
 	this->level = "Level ";
 
 	//Hardcodeo esto por ahora.
-	this->ancho_px = 1366;
-	this->alto_px = 720;
+	this->ancho_px = 1024;
+	this->alto_px = 703;
 
 	std::ifstream in(imagePath);
 	unsigned int width, height;
@@ -324,6 +319,7 @@ Drawer::Drawer() {
 Drawer::~Drawer() {
 	Mix_FreeMusic(gMusic);
 	SDL_DestroyTexture(image);
+	SDL_DestroyTexture(waitingImage);
 	SDL_DestroyTexture(imagenPersonaje);
 	SDL_DestroyTexture(imagenPersonaje2);
 	SDL_DestroyTexture(imagenPersonaje3);
@@ -353,9 +349,14 @@ void Drawer::updateView(dataFromClient_t data, char* name) {
 	this->actualizarCamara(personajePrincipal);
 
 	this->clearScenary();
-	this->drawBackground();
-	this->drawScenary(data, name);
-	this->drawMessages(data, personajePrincipal);
+	//Evaluamos si dibujar la pantalla de espera o el escenario normal
+	if (data.gameData->paused && !data.gameData->gameOver)
+		drawWaitingScreen();
+	else{
+		this->drawBackground();
+		this->drawScenary(data, name);
+		this->drawMessages(data, personajePrincipal);
+	}
 	this->presentScenary();
 }
 
@@ -772,10 +773,6 @@ void Drawer::drawMessages(dataFromClient_t data, personaje_t personaje) {
 	coordYDelMensaje += altoText + 5;
 	numerosLT[data.gameData->nivel]->render(renderer, coordXDelMensaje, coordYDelMensaje, anchoNumber, altoText);
 
-	//Dibujamos la pantalla de espera
-	if (data.gameData->paused && !data.gameData->gameOver)
-		drawWaitingScreen();
-
 	//Dibujamos la pantalla de gameOver
 	if (data.gameData->gameOver){
 		drawGameOverScreen();
@@ -783,15 +780,7 @@ void Drawer::drawMessages(dataFromClient_t data, personaje_t personaje) {
 }
 
 void Drawer::drawWaitingScreen() {
-
-	int anchoT = 500;
-	int altoT = 100;
-
-	//Pense que esto lo dibujaba en medio de la pantall, pero no..
-	float ox = 300;
-	float oy = 300;
-
-	waitingScreenLT.render(renderer, ox, oy, anchoT, altoT);
+	renderTexture(waitingImage, renderer, 0, 0);
 }
 
 void Drawer::drawGameOverScreen(){
@@ -799,7 +788,7 @@ void Drawer::drawGameOverScreen(){
 	int altoT = 100;
 
 	//Pense que esto lo dibujaba en medio de la pantall, pero no..
-	float ox = 400;
+	float ox = 200;
 	float oy = 300;
 
 	gameOverScreenLT.render(renderer, ox, oy, anchoT, altoT);
@@ -1027,6 +1016,10 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 	//Loading the images
 	image = loadTexture(imagePath, renderer);
 	if (image == nullptr) {
+		manageLoadBackgroundError();
+	}
+	waitingImage = loadTexture(waitingScreenPath, renderer);
+	if (waitingImage == nullptr) {
 		manageLoadBackgroundError();
 	}
 	imagenPersonaje = loadTexture(SPRITE_PATH, renderer);

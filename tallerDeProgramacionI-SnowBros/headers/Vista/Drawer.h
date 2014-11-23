@@ -184,6 +184,7 @@ private:
 	SDL_Renderer *renderer;
 	SDL_Window *window;
 	SDL_Texture *image;
+	SDL_Texture *waitingImage;
 	SDL_Texture* imagenPersonaje;
 	SDL_Texture* imagenPersonaje2;
 	SDL_Texture* imagenPersonaje3;
@@ -269,6 +270,7 @@ private:
 	string bonusVidaPath;
 	string portalPath;
 	string gameOverScreenPath;
+	string waitingScreenPath;
 
 	//Texto de puntos y vidas.
 	string points;

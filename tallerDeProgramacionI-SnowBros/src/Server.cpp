@@ -127,6 +127,11 @@ void Server::run() {
 		step();
 		enviarAClientes();
 
+		if (model_->getCantidadDePersonajesVivos() == 0 && !connections_.empty()){
+			std::thread t(&Server::gameOver, this);
+			t.detach();
+			reiniciar();
+		}
 	}
 
 	Log::ins()->add(SRV_MSG_END_GAME, Log::INFO);
@@ -180,12 +185,7 @@ int Server::acceptConnection(int newsockfd) {
 				return SRV_ERROR;
 
 		} else {
-
-			reconexion = true;
-
-			if (manejarReconexion(connection) == SRV_ERROR)
-				return SRV_ERROR;
-
+			return SRV_ERROR;
 		}
 
 		//Creamos el personaje y enviamos los datos del juego
@@ -361,7 +361,7 @@ void Server::recibirDelCliente(connection_t *conn) {
 			if (data)
 				free(data);
 
-			gameData_.paused = true;
+//			gameData_.paused = true;
 
 			conn->activa = false;
 			model_->setPersonajeConnectionState(conn->id, ESPERANDO);
@@ -387,13 +387,16 @@ void Server::enviarAClientes() {
 	gameData_.nivel = model_->getNivel();
 	gameData_.cantProyectiles = model_->getCantProyectiles();
 	gameData_.cantEnemigos = model_->getCantEnemigos();
+	gameData_.cantPersonajes = model_->getCantPersonajes();
+	gameData_.cantDinamicos = model_->getCantObjDinamicos();
+	gameData_.cantSonidos = model_->getCantSonidos();
 
 	dataToBeSent.gameData = &gameData_;
 	dataToBeSent.personajes = model_->getPersonajesParaEnvio();
 	dataToBeSent.enemigos = model_->getEnemigosParaEnvio();
 	dataToBeSent.dinamicos = model_->getObjetosDinamicos();
 	dataToBeSent.proyectiles = model_->getProyectiles();
-
+	dataToBeSent.sonidos = model_->getSonidosParaEnvio();
 	for (unsigned int i = 0; i < connections_.size(); i++) {
 
 		if (!connections_[i]->activa)
@@ -428,6 +431,7 @@ void Server::enviarAlCliente(connection_t *conn) {
 			enviarEnemigos(conn->socket, dataToBeSent.enemigos);
 			enviarDinamicos(conn->socket, dataToBeSent.dinamicos);
 			enviarProyectiles(conn->socket, dataToBeSent.proyectiles);
+			enviarSonidos(conn->socket, dataToBeSent.sonidos);
 
 		} catch (const sendException& e) {
 
@@ -577,7 +581,7 @@ void Server::enviarProyectiles(int sock, proyectil_t* dinamicos) {
 }
 
 void Server::enviarDinamicos(int sock, figura_t* dinamicos) {
-	int size = sizeof(figura_t) * datos_.cantObjDinamicos;
+	int size = sizeof(figura_t) * gameData_.cantDinamicos;
 	sendall(sock, dinamicos, size);
 }
 
@@ -598,6 +602,11 @@ void Server::enviarPersonajes(int sock, personaje_t* personajes) {
 void Server::enviarEnemigos(int sock, enemigo_t* enemigos) {
 	int size = sizeof(enemigo_t) * gameData_.cantEnemigos;
 	sendall(sock, enemigos, size);
+}
+
+void Server::enviarSonidos(int sock, int* sonidos) {
+	int size = sizeof(int) * gameData_.cantSonidos;
+	sendall(sock, sonidos, size);
 }
 
 void Server::sendall(int s, void* data, int len) throw (sendException) {
@@ -691,4 +700,46 @@ void Server::initSendingThread(connection_t* connection) {
 	t.detach();
 
 	Log::ins()->add(SRV_MSG_SEND_THREAD + std::string(connection->id), Log::INFO);
+}
+
+void Server::reiniciar(){
+	gameData_.paused = true;
+
+	//Reiniciamos el modelo
+	delete model_;
+	model_ = new Escenario(parser_);
+
+	//Quitamos a los jugadores que no esten activos
+	borrarJugadoresInactivos();
+
+	//Creamos jugadores para todos los clientes existentes
+	for (unsigned int i = 0; i < connections_.size(); i++) {
+		crearPersonaje(connections_[i],false);
+	}
+
+	if (connections_.size() == connectionsLimit_)
+		gameData_.paused = false;
+}
+
+void Server::borrarJugadoresInactivos(){
+	//Borramos al personaje del modelo
+	model_->borrarPersonajesInactivos();
+
+	//Quitamos la conexion de la lista
+	for (auto con = connections_.begin(); con != connections_.end(); ++con) {
+		if (!(*con)->activa){
+			connections_.erase(con);
+		}
+		if(con == connections_.end()){
+			return;
+		}
+	}
+}
+
+void Server::gameOver(){
+	gameData_.gameOver = true;
+
+	sleep(TIEMPO_GAMEOVER);
+
+	gameData_.gameOver = false;
 }

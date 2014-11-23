@@ -8,15 +8,18 @@ Escenario::Escenario(JsonParser *parser) {
 	b2Vec2 gravity(0.0f, parser->getGravedad());
 
 	cantidadMaximaDePersonajes = parser->getConnectionsLimit();
-	figurasEstaticas_ = new std::vector<Figura*>;
-	figurasDinamicas_ = new std::vector<Figura*>;
+	figurasEstaticas_ = new std::list<Figura*>;
+	figurasDinamicas_ = new std::list<Figura*>;
 	proyectiles_ = new std::list<Proyectil*>;
 	personajes_ = new std::list<Personaje*>;
 	enemigos_ = new std::list<Enemigo*>;
 	enemigosNivelDos_ = new std::list<Enemigo*>;
+	sonidos_ = new std::list<int>;
+
 	ancho_un = parser->getAnchoUnEscenario();
 	alto_un = parser->getAltoUnEscenario();
 	world_ = new b2World(gravity);
+
 	this->nivel = 1;
 	this->pasandoDeNivel = false;
 
@@ -155,6 +158,21 @@ void destruirJointsDeBolaEnemigo(BolaEnemigo* enemigo, std::list<Personaje*>* pe
 }
 
 void Escenario::clean() {
+
+	//Elimino figuras dinamicas
+	for (auto fig = figurasDinamicas_->begin(); fig != figurasDinamicas_->end(); ++fig) {
+
+		if ((*fig)->type == ID_BONUS_MOVER_RAPIDO || (*fig)->type == ID_BONUS_VIDA_EXTRA || (*fig)->type == ID_BONUS_AUMENTAR_POTENCIA || (*fig)->type == ID_BONUS_BOLA_PORTAL) {
+
+			if (!((Bonus*) (*fig))->activo()) {
+				world_->DestroyBody((*fig)->getBody());
+				figurasDinamicas_->erase(fig++);
+			}
+		}
+
+	}
+
+	//Elimino proyectiles
 	for (auto pro = proyectiles_->begin(); pro != proyectiles_->end(); ++pro) {
 		b2Body* body = (*pro)->getb2Body();
 
@@ -163,9 +181,34 @@ void Escenario::clean() {
 				continue;
 		}
 
+		//Creamos el protal, y lo asignamos al personaje
 		if ((*pro)->type == ID_BOLA_PORTAL) {
-			if (((BolaPortal*) (*pro))->crearPortal)
-				figurasDinamicas_->push_back(((BolaPortal*) (*pro))->crearNuevoPortal());
+			if (((BolaPortal*) (*pro))->crearPortal) {
+
+				Personaje* per = ((BolaPortal*) (*pro))->personaje;
+				Portal *portal = ((BolaPortal*) (*pro))->crearNuevoPortal();
+
+				if (per->portal1)
+					per->portal2 = portal;
+				else
+					per->portal1 = portal;
+
+				figurasDinamicas_->push_back(portal);
+
+				if (per->portal1 && per->portal2) {
+
+					b2Vec2 portal1Address = per->portal1->getAddress();
+					b2Vec2 portal2Address = per->portal2->getAddress();
+
+					portal1Address.x += (portal1Address.x > 0) ? -1 : 1;
+					portal2Address.x += (portal2Address.x > 0) ? -1 : 1;
+
+					per->portal1->setDestination(portal2Address);
+					per->portal2->setDestination(portal1Address);
+
+				}
+
+			}
 		}
 
 		for (b2ContactEdge *ce = body->GetContactList(); ce; ce = ce->next) {
@@ -191,16 +234,36 @@ void Escenario::clean() {
 }
 
 void teletransportar(Figura* fig) {
+
 	if (fig->teletransportar) {
+
+		//Solo teletransportamos si se setearon ambos portales
+		if (fig->portal->getDestination() == fig->portal->getAddress())
+			return;
+
 		fig->getBody()->SetTransform(fig->portal->getDestination(), 0);
 		fig->teletransportar = false;
+
+		//Cambiamos la velocidad en X para que siempre apunte al centro
+		b2Vec2 vel = fig->velocidadAntesTeletransportar;
+		b2Vec2 pos = fig->portal->getDestination();
+
+		vel.x *= ((pos.x > 0 && vel.x > 0) || (pos.x < 0 && vel.x < 0)) ? -1 : 1;
+
+		fig->getBody()->SetLinearVelocity(vel);
+
 	}
 }
 
 void Escenario::preStep() {
 	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {
 		if (!ASIGNADO((*per)->id)) {
-			(*per)->controlarEstado();
+			if((*per)->esta_muerto && (*per)->getLives()==0){
+				world_->DestroyBody((*per)->getb2Body());
+				personajes_->erase(per++);
+			}
+			else
+				(*per)->controlarEstado();
 		}
 	}
 	for (auto en = enemigos_->begin(); en != enemigos_->end(); ++en) {
@@ -229,8 +292,22 @@ void Escenario::preStep() {
 	clean();
 }
 
+void Escenario::tomarSonidos() {
+	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {
+		if ((*per)->getShootCooldown() == SHOOTCOOLDOWN)
+			agregarSonido(SHOOTING);
+		if ((*per)->getJumpCooldown() == JUMPCOOLDOWN - 1)
+			agregarSonido(JUMPING);
+	}
+}
+
+void Escenario::agregarSonido(int s) {
+	sonidos_->push_back(s);
+}
+
 void Escenario::step() {
 	preStep();
+	tomarSonidos();
 	getWorld()->Step(timeStep, velocityIterations, positionIterations);
 	actualizarEnemigos();
 }
@@ -269,8 +346,43 @@ void Escenario::addPointsToPlayers(int puntos) {
 	}
 }
 
+bool Escenario::debeCrearBonus() {
+	return (rand() % 100 < 100);
+}
+
+Figura* Escenario::crearBonus(Figura* enem) {
+
+	Figura* fig;
+
+	//Cambiar el modulo por la cant de bonus
+	switch (rand() % 4) {
+	case 1:
+		fig = (Figura*) new BonusMoverRapido(enem->getX(), enem->getY(), world_);
+		break;
+	case 2:
+		fig = (Figura*) new BonusVidaExtra(enem->getX(), enem->getY(), world_);
+		break;
+	case 3:
+		fig = (Figura*) new BonusAumentarPotencia(enem->getX(), enem->getY(), world_);
+		break;
+	case 4:
+		fig = (Figura*) new BonusBolaPortal(enem->getX(), enem->getY(), world_);
+		break;
+	}
+	return fig;
+}
+
 unsigned int Escenario::getCantPersonajes() {
 	return cantidadMaximaDePersonajes;
+}
+unsigned int Escenario::getCantidadDePersonajesVivos(){
+	unsigned int personajesEnJuego = 0;
+	for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
+		if ((*personaje)->getConnectionState() != ESPERANDO)
+			personajesEnJuego++;
+	}
+
+	return personajesEnJuego;
 }
 unsigned int Escenario::getCantEnemigos() {
 	return enemigos_->size();
@@ -288,6 +400,10 @@ unsigned int Escenario::getCantObjEstaticos() {
 	return figurasEstaticas_->size();
 }
 
+unsigned int Escenario::getCantSonidos() {
+	return sonidos_->size();
+}
+
 figura_t* Escenario::getObjetosEstaticos() {
 	return getFiguras(figurasEstaticas_);
 }
@@ -296,23 +412,21 @@ figura_t* Escenario::getObjetosDinamicos() {
 	return getFiguras(figurasDinamicas_);
 }
 
-figura_t* Escenario::getFiguras(std::vector<Figura*>* vector) {
+figura_t* Escenario::getFiguras(std::list<Figura*>* list) {
 
 	figura_t* obj;
-	Figura* fig;
-	obj = (figura_t*) malloc(sizeof(figura_t) * vector->size());
+	obj = (figura_t*) malloc(sizeof(figura_t) * list->size());
 
-	for (unsigned int i = 0; i < vector->size(); i++) {
+	int i = 0;
+	for (auto fig = list->begin(); fig != list->end(); ++fig) {
 
-		fig = (*vector)[i];
-
-		obj[i].id = fig->getId();
-		obj[i].alto = fig->getAlto();
-		obj[i].ancho = fig->getAncho();
-		obj[i].rotacion = fig->getAngulo();
-		obj[i].centro.x = fig->GetCenter().x;
-		obj[i].centro.y = fig->GetCenter().y;
-
+		obj[i].id = (*fig)->getId();
+		obj[i].alto = (*fig)->getAlto();
+		obj[i].ancho = (*fig)->getAncho();
+		obj[i].rotacion = (*fig)->getAngulo();
+		obj[i].centro.x = (*fig)->GetCenter().x;
+		obj[i].centro.y = (*fig)->GetCenter().y;
+		i++;
 	}
 	return obj;
 }
@@ -388,6 +502,18 @@ enemigo_t* Escenario::getEnemigosParaEnvio() {
 	return enems;
 }
 
+int* Escenario::getSonidosParaEnvio() {
+	int* sonidos = (int*) malloc(sizeof(int) * sonidos_->size());
+
+	int i = 0;
+	for (auto sonido = sonidos_->begin(); sonido != sonidos_->end(); ++sonido) {
+		sonidos[i] = (*sonido);
+		sonidos_->erase(sonido++);
+		i++;
+	}
+	return sonidos;
+}
+
 Personaje* Escenario::getPersonaje(conn_id id) {
 	for (auto personaje = personajes_->begin(); personaje != personajes_->end(); ++personaje) {
 		if (strcmp((*personaje)->id, id) == 0)
@@ -403,10 +529,28 @@ float Escenario::getAnchoUn() {
 void Escenario::agregarProyectil(Proyectil* proy) {
 	proyectiles_->push_back(proy);
 }
-
+void Escenario::agregarBonus(Figura* figura) {
+	figurasDinamicas_->push_back(figura);
+}
 void Escenario::actualizarEnemigos() {
 
 	for (auto en = enemigos_->begin(); en != enemigos_->end(); en++) {
+		(*en)->decreaseEspera();
 		(*en)->mover();
+	}
+}
+void Escenario::setNivel(unsigned int level) {
+	nivel = level;
+}
+unsigned int Escenario::getNivel() {
+	return nivel;
+}
+
+void Escenario::borrarPersonajesInactivos(){
+	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {
+		if ((*per)->getConnectionState() != CONECTADO){
+			world_->DestroyBody((*per)->getb2Body());
+			personajes_->erase(per++);
+		}
 	}
 }

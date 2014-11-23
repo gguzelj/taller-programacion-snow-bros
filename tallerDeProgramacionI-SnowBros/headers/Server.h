@@ -45,6 +45,7 @@
 #define EVENT_MSG_TYPE 2
 
 #define TAM 20
+#define TIEMPO_GAMEOVER 3
 
 //MENSAJES
 #define SRV_MSG_CREATE					"Creando Servidor"
@@ -100,6 +101,7 @@ typedef struct dataToSend {
 	enemigo_t* enemigos;
 	figura_t* dinamicos;
 	proyectil_t* proyectiles;
+	int* sonidos;
 } dataToSend_t;
 
 typedef char conn_id[TAM];
@@ -128,6 +130,8 @@ public:
 	 * Metodo que se encarga de la ejecucion del servidor
 	 */
 	void run();
+
+	void reiniciar();
 
 private:
 
@@ -273,6 +277,11 @@ private:
 	void enviarEnemigos(int sock, enemigo_t* enemigos);
 
 	/*
+	 * Metodo para enviar los sonidos a reproducir
+	 */
+	void enviarSonidos(int sock, int* sonidos);
+
+	/*
 	 * Metodo de bajo nivel de sockets para enviar hasta una cierta
 	 * cantidad de bytes determinada.
 	 */
@@ -305,6 +314,10 @@ private:
 	 */
 	float getInitialX();
 	float getInitialY();
+
+	void borrarJugadoresInactivos();
+
+	void gameOver();
 };
 
 #endif /* SERVER_H_ */

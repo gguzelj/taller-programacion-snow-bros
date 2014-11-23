@@ -6,18 +6,15 @@
 /*
  * Clase abstracta de la cual heredan los distintos tipos de bonus a usar.
  */
-class BonusMoverRapido : Bonus{
-
-private:
+class BonusMoverRapido: public Bonus {
 
 public:
-	BonusMoverRapido();
+	BonusMoverRapido(float, float, b2World*);
 	~BonusMoverRapido();
 
-	void desactivar();
-	bool activo();
+	char getId();
+	void beginContact(Figura* figura, b2Contact* contact);
 
 };
-
 
 #endif  /* BONUSMOVERRAPIDO_H_ */

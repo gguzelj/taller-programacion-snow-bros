@@ -14,7 +14,6 @@
 #include "../Proyectiles/BolaFuego.h"
 #include "../Proyectiles/BolaPortal.h"
 #include "../Figuras/Portal.h"
-
 #include "../Figura.h"
 
 #define IZQUIERDA 'l'
@@ -39,6 +38,7 @@ protected:
 	int jumpCooldown;
 	int lives;
 	int shootCooldown;
+	int espera = 5;
 
 	float ancho;
 	float alto;
@@ -95,6 +95,7 @@ public:
 	void pushLeft();
 	void pushRight();
 	void stop();
+	void decreaseEspera();
 	void decreaseJumpCooldown();
 	void decreaseShootCooldown();
 	void setOrientacion(char orientacion);
@@ -109,8 +110,6 @@ public:
 	int getShootCooldown();
 	float getAncho();
 	float getAlto();
-	float getX();
-	float getY();
 
 };
 

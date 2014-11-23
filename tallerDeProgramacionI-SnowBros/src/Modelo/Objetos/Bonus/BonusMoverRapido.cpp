@@ -1,9 +1,17 @@
 #include "../../../../headers/Modelo/Objetos/Bonus/BonusMoverRapido.h"
 
-void BonusMoverRapido::desactivar(){
-	this->activado = false;
+BonusMoverRapido::BonusMoverRapido(float posicionX, float posicionY, b2World* world) :
+Bonus(posicionX, posicionY, world){
+	this->type = ID_BONUS_MOVER_RAPIDO;
 }
 
-bool BonusMoverRapido::activo(){
-	return this->activado;
+BonusMoverRapido::~BonusMoverRapido(){
+}
+
+void BonusMoverRapido::beginContact(Figura* figura, b2Contact* contact) {
+	figura->beginContactBonusMoverRapido(this, contact);
+}
+
+char BonusMoverRapido::getId(){
+	return BONUS_VELOCIDAD_CODE;
 }

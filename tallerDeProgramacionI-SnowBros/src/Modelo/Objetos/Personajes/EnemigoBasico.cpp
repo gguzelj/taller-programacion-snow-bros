@@ -13,7 +13,6 @@ EnemigoBasico::~EnemigoBasico() {
 }
 
 void EnemigoBasico::mover() {
-
 	int i = 0;
 	std::list<Personaje*>* personajes_ = escenario_->getPersonajes();
 
@@ -60,7 +59,6 @@ void EnemigoBasico::mover() {
 	if (v1 > 5) {
 		if ((posicionPersonajeY + 1) < posicionEnemigoY && this->getNivelDeCongelamiento() == 0) {
 			this->handleInput(SDLK_UP, SDL_KEYUP);
-			this->atravezarPlataformas();
 		}
 	}
 

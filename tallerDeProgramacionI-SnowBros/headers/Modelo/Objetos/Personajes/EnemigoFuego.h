@@ -4,7 +4,6 @@
 #include "Enemigo.h"
 
 class EnemigoFuego: public Enemigo {
-
 protected:
 	void shoot();
 

@@ -26,6 +26,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->portal2 = nullptr;
 
 	this->connectionState = CONECTADO;
+	this->potencia = 1;
 	this->points = 0;
 	this->lives = 3;
 	this->type = ID_PERSONAJE;
@@ -164,6 +165,10 @@ void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 	if (lives > 0 && !inmune) {
 		state = &Personaje::dying;
 		sacarVida();
+		if(lives > 0)
+			escenario_->agregarSonido(DYING);
+		else
+			escenario_->agregarSonido(GAMEOVER);
 		std::thread t(&Personaje::morir, this);
 		t.detach();
 	}
@@ -172,14 +177,30 @@ void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 }
 
 void Personaje::beginContactBonusVidaExtra(BonusVidaExtra* bonus, b2Contact* contact) {
-	this->lives++;
+	escenario_->agregarSonido(ONEUP);
 	bonus->desactivar();
+	this->lives++;
 }
 
 void Personaje::beginContactBonusMoverRapido(BonusMoverRapido* bonus, b2Contact* contact) {
 	bonus->desactivar();
+	escenario_->agregarSonido(BONUS);
 	std::thread t(&Personaje::aumentarVelocidad, this);
 	t.detach();
+}
+
+void Personaje::beginContactBonusAumentarPotencia(BonusAumentarPotencia* bonus, b2Contact* contact) {
+	escenario_->agregarSonido(BONUS);
+	bonus->desactivar();
+	this->potencia +=4;
+}
+
+void Personaje::beginContactBonusBolaPortal(BonusBolaPortal* bonus, b2Contact* contact) {
+	escenario_->agregarSonido(BONUS);
+	bonus->desactivar();
+	this->arma_portal = true;
+	this->portal1 = nullptr;
+	this->portal2 = nullptr;
 }
 
 bool Personaje::estaEmpujandoEnemigo() {
@@ -258,37 +279,17 @@ void Personaje::controlarEstado() {
 		crearJoint(this, arrastradoPor, world);
 }
 
-void Personaje::shoot() {
-
-	if (!movimientoDisparar || shootCooldown > 0)
-		return;
-
-	shootCooldown = 10;
-
-	if (arma_portal)
-		this->escenario_->agregarProyectil(crearBolaPortal());
-	else
-		this->escenario_->agregarProyectil(crearBolaNieve());
-
-}
-
 Proyectil* Personaje::crearBolaPortal() {
 
 	BolaPortal *bola;
 	b2Vec2 vel;
-	Portal *port;
-
-	if (portal1 == nullptr)
-		port = portal2;
-	else
-		port = portal1;
 
 	float x = getX();
 	float y = getY() + MITAD_ALTO_PERSONAJE;
 
-	x += (orientacion == IZQUIERDA) ? -1 : 1;
+	x += (orientacion == IZQUIERDA) ? -1.5 : 1.5;
 
-	bola = new BolaPortal(x, y, 1, this->world, port);
+	bola = new BolaPortal(x, y, 1, this->world, this);
 
 	vel = this->body->GetLinearVelocity();
 	vel.x -= (orientacion == IZQUIERDA) ? aceleracion * 4 : -aceleracion * 4;
@@ -306,9 +307,9 @@ Proyectil* Personaje::crearBolaNieve() {
 	float x = getX();
 	float y = getY() + MITAD_ALTO_PERSONAJE;
 
-	x += (orientacion == IZQUIERDA) ? -1 : 1;
+	x += (orientacion == IZQUIERDA) ? -1.5 : 1.5;
 
-	bola = new BolaNieve(x, y, 1, this->world);
+	bola = new BolaNieve(x, y, potencia, this->world);
 
 	vel = this->body->GetLinearVelocity();
 	vel.x -= (orientacion == IZQUIERDA) ? aceleracion * 4 : -aceleracion * 4;
@@ -317,6 +318,21 @@ Proyectil* Personaje::crearBolaNieve() {
 	bola->setVelocidad(vel);
 
 	return (Proyectil*) bola;
+}
+
+
+void Personaje::shoot() {
+
+	if (!movimientoDisparar || shootCooldown > 0)
+		return;
+
+	shootCooldown = SHOOTCOOLDOWN;
+
+	if (arma_portal)
+		this->escenario_->agregarProyectil(crearBolaPortal());
+	else
+		this->escenario_->agregarProyectil(crearBolaNieve());
+
 }
 
 void Personaje::kick() {
@@ -339,7 +355,7 @@ void Personaje::jump() {
 		return;
 
 	if (this->jumpCooldown <= 0) {
-		this->jumpCooldown = 18;
+		this->jumpCooldown = JUMPCOOLDOWN;
 		b2Vec2 velocidadActual = this->body->GetLinearVelocity();
 		velocidadActual.y = 25;
 		this->body->SetLinearVelocity(velocidadActual);
@@ -355,9 +371,9 @@ void Personaje::morir() {
 }
 
 void Personaje::aumentarVelocidad() {
-	aceleracion *= 1.5;
+	aceleracion += 1.5;
 	sleep(15);
-	aceleracion /= 1.5;
+	aceleracion -= 1.5;
 }
 
 void Personaje::volverAPosicionInicial() {
@@ -423,6 +439,14 @@ b2Joint* Personaje::getJoint() {
 
 BolaEnemigo* Personaje::getArrastradoPor() {
 	return arrastradoPor;
+}
+
+int Personaje::getJumpCooldown(){
+	return jumpCooldown;
+}
+
+int Personaje::getShootCooldown(){
+	return shootCooldown;
 }
 
 bool Personaje::esArrastrado() {

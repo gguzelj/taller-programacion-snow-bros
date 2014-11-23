@@ -70,7 +70,6 @@ Rectangulo::Rectangulo(float ancho, float alto, int rot, float pos_x, float pos_
 
 void Rectangulo::beginContact(Figura* figura,b2Contact* contact){
 
-
 	figura->beginContactRectangulo(this, contact);
 
 }

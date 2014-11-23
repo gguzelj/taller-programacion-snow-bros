@@ -6,13 +6,18 @@
 #include "Enemigo.h"
 #include "../Bonus/BonusVidaExtra.h"
 #include "../Bonus/BonusMoverRapido.h"
+#include "../Bonus/BonusAumentarPotencia.h"
+#include "../Bonus/BonusBolaPortal.h"
 
-#define MITAD_ANCHO_PERSONAJE 0.5f
+#define MITAD_ANCHO_PERSONAJE 0.65f
 #define MITAD_ALTO_PERSONAJE 0.85
 
 #define DESCONECTADO -1
 #define ESPERANDO 0
 #define CONECTADO 1
+
+#define JUMPCOOLDOWN 18
+#define SHOOTCOOLDOWN 10
 
 #define TIEMPO_INMUNIDAD 5
 
@@ -23,6 +28,8 @@ class Escenario;
 class Personaje: public Character {
 public:
 	conn_id id;
+	Portal *portal1;
+	Portal *portal2;
 
 	Personaje(float x, float y, char id[], Escenario* escenario);
 	~Personaje();
@@ -60,9 +67,22 @@ public:
 
 	/*
 	 * Encargado de realizar las acciones pertinentes en el caso en que el
-	 * Personaje entra en contacto con un bonus de movimiento rapito.
+	 * Personaje entra en contacto con un bonus de movimiento rapido.
 	 */
 	void beginContactBonusMoverRapido(BonusMoverRapido*, b2Contact*);
+
+	/*
+	 * Encargado de realizar las acciones pertinentes en el caso en que el
+	 * Personaje entra en contacto con un bonus de Aumentar Potencia.
+	 */
+	void beginContactBonusAumentarPotencia(BonusAumentarPotencia*, b2Contact*);
+
+	/*
+	 * Encargado de realizar las acciones pertinentes en el caso en que el
+	 * Personaje entra en contacto con un bonus de bola portal.
+	 */
+	void beginContactBonusBolaPortal(BonusBolaPortal*, b2Contact*);
+
 
 	/*
 	 * Realiza las corecciones pertinentes al estado del Personaje previo
@@ -196,6 +216,16 @@ public:
 	BolaEnemigo* getArrastradoPor();
 
 	/*
+	 * Devuelve el atributo jumpcooldown
+	 */
+	int getJumpCooldown();
+
+	/*
+	 * Devuelve el atributo shootcooldown
+	 */
+	int getShootCooldown();
+
+	/*
 	 * Devuelve true si el Personaje esta_muerto o false en caso contrario
 	 */
 	bool estaMuerto();
@@ -215,6 +245,7 @@ public:
 	 */
 	void addPoints(int puntos);
 
+
 	void setPosicionInicial(float x, float y){
 		this->posicionInicial->x = x;
 		this->posicionInicial->y = y;
@@ -225,18 +256,19 @@ public:
 	}
 
 	void entrarEnPeriodoDeInmunidad();
+
+	bool esta_muerto;
+
 private:
 	Escenario *escenario_;
 	b2Joint* joint;
 	BolaEnemigo* arrastradoPor;
 	b2Vec2* posicionInicial;
-	Portal *portal1;
-	Portal *portal2;
 	bool arma_portal;
-	bool esta_muerto;
 	bool arrastrado;
 	char connectionState;
 	int points;
+	int potencia;
 	int kickCooldown;
 
 	/*

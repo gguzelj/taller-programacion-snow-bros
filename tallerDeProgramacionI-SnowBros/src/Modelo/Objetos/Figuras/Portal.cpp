@@ -4,6 +4,7 @@ Portal::Portal(float ancho, float alto, int rot, b2Vec2 address, b2World* world)
 	this->type = ID_PORTAL;
 	this->ancho = ancho;
 	this->alto = alto;
+	this->address = address;
 	this->y = address.y;
 	this->x = address.x;
 	this->angulo = rot * DEGTORAD;
@@ -27,6 +28,7 @@ Portal::Portal(float ancho, float alto, int rot, b2Vec2 address, b2World* world)
 
 	b2Fixture* fixture = body->CreateFixture(&fixtureDef);
 	fixture->SetUserData(this);
+
 }
 
 Portal::~Portal() {
@@ -55,4 +57,12 @@ void Portal::setDestination(const b2Vec2& destination) {
 
 const b2Vec2& Portal::getDestination() {
 	return destination;
+}
+
+void Portal::setAddress(const b2Vec2& address) {
+	this->address = address;
+}
+
+const b2Vec2& Portal::getAddress() {
+	return address;
 }

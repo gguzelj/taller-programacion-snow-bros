@@ -1,6 +1,6 @@
 #include "../../../../headers/Modelo/Objetos/Proyectiles/BolaPortal.h"
 
-BolaPortal::BolaPortal(float x, float y, int potencia, b2World* world, Portal* port) {
+BolaPortal::BolaPortal(float x, float y, int potencia, b2World* world, Personaje* per) {
 
 	this->type = ID_BOLA_PORTAL;
 
@@ -12,7 +12,7 @@ BolaPortal::BolaPortal(float x, float y, int potencia, b2World* world, Portal* p
 	this->estatico = false;
 	this->teletransportar = false;
 	this->world = world;
-	this->portal = port;
+	this->personaje = per;
 	this->crearPortal = false;
 
 	//Defino el body y fixture
@@ -38,7 +38,6 @@ BolaPortal::BolaPortal(float x, float y, int potencia, b2World* world, Portal* p
 }
 
 BolaPortal::~BolaPortal() {
-	// TODO Auto-generated destructor stub
 }
 
 void BolaPortal::beginContactRectangulo(Rectangulo* rec, b2Contact* contact) {
@@ -51,10 +50,9 @@ void BolaPortal::beginContactRectangulo(Rectangulo* rec, b2Contact* contact) {
 
 Portal* BolaPortal::crearNuevoPortal() {
 	b2Vec2 portalAddress = b2Vec2(body->GetPosition().x, body->GetPosition().y);
-	b2Vec2 portalDestination = b2Vec2(0, -1);
 
-	Portal *portal = new Portal(0.1, 2.5, 0, portalAddress, world);
-	portal->setDestination(portalDestination);
+	Portal *portal = new Portal(0.1, 5, 0, portalAddress, world);
+	portal->setDestination(portalAddress);
 
 	return portal;
 

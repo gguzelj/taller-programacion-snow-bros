@@ -152,12 +152,17 @@ void Character::decreaseShootCooldown() {
 		this->shootCooldown -= 1;
 }
 
+void Character::decreaseEspera(){
+	if (this->espera >0)
+		this->espera -=1;
+}
+
 int Character::getJumpCooldown() {
 	return (this->jumpCooldown);
 }
 
 int Character::getShootCooldown() {
-	return (this->jumpCooldown);
+	return (this->shootCooldown);
 }
 
 void Character::atravezarPlataformas() {
@@ -179,14 +184,6 @@ Character::~Character() {
 	return;
 }
 
-float Character::getX() {
-	return (this->body->GetPosition().x);
-}
-
-float Character::getY() {
-	return (this->body->GetPosition().y);
-}
-
 float Character::getAncho() {
 	return ancho;
 }
@@ -199,6 +196,7 @@ char Character::getId() {
 }
 
 void Character::jump() {
+	this->atravezarPlataformas();
 	return;
 }
 void Character::handleInput(SDL_Keycode input, Uint32 input_type) {
@@ -241,7 +239,7 @@ void Character::detectarEstado() {
 	}
 
 	//Esta quieto?
-	if (getVelocity().y == 0.0f && getVelocity().x == 0.0f) {
+	if (getVelocity().y <= 0.005f && abs(getVelocity().x) <= 0.005f) {
 		state = &Character::standby;
 		return;
 	}

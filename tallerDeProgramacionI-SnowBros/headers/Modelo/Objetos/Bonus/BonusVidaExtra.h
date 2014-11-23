@@ -6,17 +6,15 @@
 /*
  * Clase abstracta de la cual heredan los distintos tipos de bonus a usar.
  */
-class BonusVidaExtra : Bonus{
-
-private:
+class BonusVidaExtra: public Bonus {
 
 public:
-	BonusVidaExtra();
+	BonusVidaExtra(float, float, b2World*);
 	~BonusVidaExtra();
 
-	void desactivar();
-	bool activo();
-};
+	char getId();
+	void beginContact(Figura* figura, b2Contact* contact);
 
+};
 
 #endif  /* BONUSVIDAEXTRA_H_ */

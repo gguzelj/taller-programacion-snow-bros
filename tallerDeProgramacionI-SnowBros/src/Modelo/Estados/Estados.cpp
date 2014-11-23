@@ -48,6 +48,7 @@ void StandByState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 	case SDL_KEYUP:
 
 		switch (input) {
+
 		case SDLK_SPACE:
 			character.dejarDisparar();
 			break;

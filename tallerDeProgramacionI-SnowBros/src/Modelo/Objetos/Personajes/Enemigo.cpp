@@ -1,5 +1,6 @@
 #include "../../../../headers/Modelo/Objetos/Personajes/Enemigo.h"
 #include "../../../../headers/Modelo/Escenario.h"
+
 #include <ctime>
 #define ORIENTACION_INICIAL 'l'
 
@@ -18,7 +19,7 @@ Enemigo::Enemigo(JsonParser *parser, int index, Escenario* escenario) {
 	this->movimientoIzquierda = false;
 	this->teletransportar = false;
 	this->tiempoDeImpactoDeLaUltimaBola = 0.0f;
-	this->esAtravezable = false;
+//	this->esAtravezable = false;
 	this->lives = 5;
 	this->ancho = MITAD_ANCHO_ENEMIGO;
 	this->alto = MITAD_ALTO_ENEMIGO;
@@ -96,15 +97,15 @@ void Enemigo::morir() {
 	BolaEnemigo *bola;
 
 	if (orientacion == IZQUIERDA)
-		bola = new BolaEnemigo(getX() - 1, getY() + MITAD_ALTO_ENEMIGO, this->world);
+		bola = new BolaEnemigo(getX() - 1, getY() + MITAD_ALTO_ENEMIGO, world, escenario_);
 	else
-		bola = new BolaEnemigo(getX() + 1, getY() + MITAD_ALTO_ENEMIGO, this->world);
+		bola = new BolaEnemigo(getX() + 1, getY() + MITAD_ALTO_ENEMIGO, world, escenario_);
 
 	vel.x = (orientacion == IZQUIERDA) ? -15 : 15;
 	vel.y = 5;
 	bola->setVelocidad(vel);
 
-	this->escenario_->agregarProyectil(bola);
+	escenario_->agregarProyectil(bola);
 
 	//Lanzamos un thread para que muera la bola
 	std::thread t(&BolaEnemigo::morir, bola);
@@ -112,6 +113,8 @@ void Enemigo::morir() {
 }
 
 void Enemigo::morirDelay() {
+	if (escenario_->debeCrearBonus())
+		escenario_->agregarBonus(escenario_->crearBonus(this));
 	sleep(1);
 	this->estaVivo = false;
 }
@@ -171,7 +174,8 @@ void Enemigo::congelar() {
 	while (nivelDeCongelamiento != 0) {
 		//En caso de que este hecho bola de nieve, lo hacemos
 		//No atravezable, para que pueda empujarlo
-		esAtravezable = (nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX);
+		if((nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX))
+			noAtravezarPlataformas();
 
 		if (difftime(time(nullptr), tiempoDeImpactoDeLaUltimaBola) > tiempoDeEsperaMaximo) {
 			this->nivelDeCongelamiento -= 2;
@@ -181,9 +185,10 @@ void Enemigo::congelar() {
 		}
 		//En caso de que este hecho bola de nieve, lo hacemos
 		//No atravezable, para que pueda empujarlo
-		esAtravezable = (nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX);
+		if((nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX))
+			noAtravezarPlataformas();
 	}
-	esAtravezable = false;
+	noAtravezarPlataformas();
 	aceleracion = 7.0f;
 }
 
@@ -192,6 +197,7 @@ bool Enemigo::estaCongelado() {
 }
 
 void Enemigo::jump() {
+	atravezarPlataformas();
 	if (this->nivelDeCongelamiento == 0) {
 		if (this->jumpCooldown <= 0) {
 			this->jumpCooldown = 18;
@@ -206,7 +212,7 @@ void Enemigo::hacerAtravezable() {
 	this->cambiarFilterIndex(PERSONAJE_FILTER_INDEX);
 }
 
-void Enemigo::hacerNoAtravezable() {
+void Enemigo::noAtravezarPlataformas(){
 	this->cambiarFilterIndex(ENEMIGO_FILTER_INDEX);
 }
 
@@ -224,12 +230,6 @@ int Enemigo::getPuntos() {
 
 void Enemigo::controlarEstado() {
 	Character::controlarEstado();
-
-	//Analizamos si el enemigo es atravezable
-	if (esAtravezable)
-		hacerAtravezable();
-	else
-		hacerNoAtravezable();
 }
 
 void Enemigo::mover() {

@@ -15,6 +15,10 @@
 #define PARALELOGRAMO_CODE 'p'
 #define RECTANGULO_CODE 'r'
 #define PORTAL_CODE 'o'
+#define BONUS_POTENCIA_CODE 'g'
+#define BONUS_VELOCIDAD_CODE 'h'
+#define BONUS_VIDA_CODE 'i'
+#define BONUS_PORTAL_CODE 'j'
 #define TRAPECIO_CODE 't'
 #define TRIANGULO_CODE '3'
 #define CUADRADO_CODE '4'
@@ -36,6 +40,10 @@
 #define ID_BOLA_FUEGO 13
 #define ID_PORTAL 14
 #define ID_BOLA_PORTAL 15
+#define ID_BONUS_MOVER_RAPIDO 16
+#define ID_BONUS_VIDA_EXTRA 17
+#define ID_BONUS_AUMENTAR_POTENCIA 18
+#define ID_BONUS_BOLA_PORTAL 19
 
 #define FIGURA_WARNING_OVERLAP "El siguiente objeto se esta superponiendo con otros ya creados \n"
 
@@ -59,6 +67,8 @@ class BolaFuego;
 class Portal;
 class BonusVidaExtra;
 class BonusMoverRapido;
+class BonusAumentarPotencia;
+class BonusBolaPortal;
 
 /*
  * Clase abstracta de la cual van a heredar todos los tipos de figuras (Rectangulo, Poligono, Circulo, Parelelogramo)
@@ -75,6 +85,7 @@ protected:
 public:
 	b2Body* body;
 	bool teletransportar;
+	b2Vec2 velocidadAntesTeletransportar;
 	Portal* portal;
 	int type;
 	float x;
@@ -112,6 +123,8 @@ public:
 	virtual void beginContactPortal(Portal*,b2Contact*);
 	virtual void beginContactBonusVidaExtra(BonusVidaExtra*, b2Contact*){};
 	virtual void beginContactBonusMoverRapido(BonusMoverRapido*, b2Contact*){};
+	virtual void beginContactBonusAumentarPotencia(BonusAumentarPotencia*, b2Contact*){};
+	virtual void beginContactBonusBolaPortal(BonusBolaPortal*, b2Contact*){};
 
 	virtual void endContactCirculo(Circulo*,b2Contact*){};
 	virtual void endContactMuro(Muro*,b2Contact*){};
@@ -127,6 +140,8 @@ public:
 	virtual void endContactPortal(Portal*,b2Contact*){};
 	virtual void endContactBonusVidaExtra(BonusVidaExtra*, b2Contact*){};
 	virtual void endContactBonusMoverRapido(BonusMoverRapido*, b2Contact*){};
+	virtual void endContactBonusAumentarPotencia(BonusAumentarPotencia*, b2Contact*){};
+	virtual void endContactBonusBolaPortal(BonusBolaPortal*, b2Contact*){};
 
 };
 

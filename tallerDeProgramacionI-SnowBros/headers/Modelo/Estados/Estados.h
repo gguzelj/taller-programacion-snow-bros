@@ -15,6 +15,11 @@
 #define ROLLING 'r'
 #define FLYING 'y'
 
+#define BALLBREAKING 'K'
+#define GAMEOVER 'G'
+#define BONUS 'B'
+#define ONEUP 'O'
+
 class OnAirState: public CharacterState{
 public:
 	void handleInput(Character &character,SDL_Keycode input,Uint32 input_type);

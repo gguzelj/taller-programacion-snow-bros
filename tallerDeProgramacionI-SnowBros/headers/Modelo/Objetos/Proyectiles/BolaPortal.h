@@ -10,12 +10,12 @@ class BolaPortal: public Proyectil {
 
 private:
 	float radio;
-	Portal *portal;
 
 public:
 	bool crearPortal;
+	Personaje* personaje;
 
-	BolaPortal(float x, float y, int potencia, b2World* world, Portal*);
+	BolaPortal(float x, float y, int potencia, b2World* world, Personaje*);
 	virtual ~BolaPortal();
 
 	void beginContactRectangulo(Rectangulo* rec,b2Contact* contact);

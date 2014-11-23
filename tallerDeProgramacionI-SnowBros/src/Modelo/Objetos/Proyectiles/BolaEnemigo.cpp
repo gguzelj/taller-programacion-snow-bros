@@ -1,9 +1,8 @@
 #include "../../../../headers/Modelo/Objetos/Proyectiles/BolaEnemigo.h"
-#include <ctime>
+#include "../../../../headers/Modelo/Escenario.h"
 
-BolaEnemigo::BolaEnemigo(float x, float y, b2World* world) {
+BolaEnemigo::BolaEnemigo(float x, float y, b2World* world, Escenario* esc) {
 	this->type = ID_BOLA_NIEVE_ENEMIGO;
-
 	this->x = x;
 	this->y = y;
 	this->radio = RADIO_BOLA_NIEVE_ENEMIGO;
@@ -13,8 +12,8 @@ BolaEnemigo::BolaEnemigo(float x, float y, b2World* world) {
 	this->destruir = false;
 	this->teletransportar = false;
 	this->world = world;
+	this->escenario = esc;
 	this->velocidad = {25,0};
-
 
 	//Defino el body y fixture
 	b2BodyDef cuerpoDeCirculo;
@@ -62,7 +61,6 @@ char BolaEnemigo::getId() {
 	return BOLA_NIEVE_CODE;
 }
 
-
 void BolaEnemigo::actualizar(){
 	if(this->getVelocidad().y <0)
 		this->velocidad.y = this->getVelocidad().y;
@@ -76,7 +74,6 @@ void BolaEnemigo::actualizar(){
 	this->setVelocidad(velocidad);
 }
 
-
 void BolaEnemigo::morir(){
 	time_t tiempoInicial, tiempoFinal;
 	time(&tiempoInicial);
@@ -87,6 +84,9 @@ void BolaEnemigo::morir(){
 		time(&tiempoFinal);
 	}
 	destruir = true;
+	escenario->agregarSonido(BALLBREAKING);
+	if (escenario->debeCrearBonus())
+		escenario->agregarBonus(escenario->crearBonus(this));
 }
 
 void BolaEnemigo::beginContact(Figura *fig, b2Contact* contact){

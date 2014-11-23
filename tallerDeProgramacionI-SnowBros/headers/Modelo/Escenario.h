@@ -63,8 +63,12 @@ typedef struct enemigo {
 typedef struct gameData {
 	unsigned int nivel;
 	bool paused;
+	bool gameOver;
 	unsigned int cantProyectiles;
 	unsigned int cantEnemigos;
+	unsigned int cantPersonajes;
+	unsigned int cantDinamicos;
+	unsigned int cantSonidos;
 } gameData_t;
 
 typedef struct figura {
@@ -98,9 +102,10 @@ public:
 	enemigo_t* getEnemigosParaEnvio();
 	figura_t* getObjetosEstaticos();
 	figura_t* getObjetosDinamicos();
-	figura_t* getFiguras(std::vector<Figura*>*);
+	figura_t* getFiguras(std::list<Figura*>*);
 	personaje_t* getPersonajesParaEnvio();
 	proyectil_t* getProyectiles();
+	int* getSonidosParaEnvio();
 
 	/*
 	 * Devuelve la lista de Personajes
@@ -142,10 +147,27 @@ public:
 	 */
 	void agregarProyectil(Proyectil* proy);
 
+	void agregarBonus(Figura* figura);
+
 	/*
 	 * Devuelve el ancho en unidades del escenario
 	 */
 	float getAnchoUn();
+
+	/*
+	 * En base a las acciones realizadas por los personajes, guarda los sonidos que se
+	 * enviaran al cliente para que se reproduzcan.
+	 */
+	void tomarSonidos();
+
+	/*
+	 * Agrega un elemento a la lista de sonidos
+	 */
+	void agregarSonido(int s);
+
+	bool debeCrearBonus();
+
+	Figura* crearBonus(Figura* enem);
 
 	/*
 	 * Metodos que devuelven cantidad de objetos en el momento de ejecucion
@@ -153,8 +175,10 @@ public:
 	unsigned int getCantObjDinamicos();
 	unsigned int getCantObjEstaticos();
 	unsigned int getCantPersonajes();
+	unsigned int getCantidadDePersonajesVivos();
 	unsigned int getCantEnemigos();
 	unsigned int getCantProyectiles();
+	unsigned int getCantSonidos();
 
 	/*
 	 * Actualiza la accion y por consecuente la posicion de cada enemigo en juego
@@ -174,9 +198,8 @@ public:
 	 */
 	void step();
 
-	unsigned int getNivel(){
-		return this->nivel;
-	}
+
+	unsigned int getNivel();
 
 	void pasarDeNivel();
 
@@ -188,9 +211,7 @@ public:
 		pasandoDeNivel = arg;
 	}
 
-	void setNivel(unsigned int nivel){
-		this->nivel = nivel;
-	}
+	void setNivel(unsigned int nivel);
 
 	void eliminarTecho(){
 		delete(this->techo);
@@ -207,6 +228,9 @@ public:
 	std::list<Enemigo*>* getEnemigos(){
 		return this->enemigos_;
 	}
+
+	void borrarPersonajesInactivos();
+
 private:
 	Contacto contactos;
 	const float32 timeStep = 1 / 40.0; 		//the length of time passed to simulate (seconds)
@@ -215,8 +239,8 @@ private:
 	bool pasandoDeNivel;
 
 	b2World* world_;
-	std::vector<Figura*>* figurasEstaticas_;
-	std::vector<Figura*>* figurasDinamicas_;
+	std::list<Figura*>* figurasEstaticas_;
+	std::list<Figura*>* figurasDinamicas_;
 	std::list<Proyectil*>* proyectiles_;
 	std::list<Personaje*>* personajes_;
 	std::list<Enemigo*>* enemigos_;
@@ -224,6 +248,9 @@ private:
 	unsigned int nivel;
 
 	Rectangulo* techo;
+
+	std::list<int>* sonidos_;
+
 
 	/*
 	 * Se encarga de la limpieza y eliminacion de objetos que deben ser removidos

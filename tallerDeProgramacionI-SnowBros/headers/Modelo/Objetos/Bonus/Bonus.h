@@ -9,12 +9,21 @@
 class Bonus: public Figura {
 
 protected:
-	bool activado; //Con este atributo se determinara si hay que sacar o no al bonus del escenario.
+	float alto;
+	float ancho;
+	bool activado;
 
 public:
-	virtual ~Bonus();
-	void desactivar();
+
+	Bonus(float posicionX, float posicionY, b2World* world);
+	virtual ~Bonus(){}
+
 	bool activo();
+	void desactivar();
+
+	float getAncho();
+	float getAlto();
+	char getId();
 
 };
 

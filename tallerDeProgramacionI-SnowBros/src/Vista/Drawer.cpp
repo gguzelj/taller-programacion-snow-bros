@@ -138,6 +138,11 @@ bool Drawer::loadMedia() {
 	}
 
 
+	if(!gameOverScreenLT.loadFromFile(gameOverScreenPath, renderer)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+
 	LTexture imagenBonusPortal;
 	LTexture imagenBonusPotencia;
 	LTexture imagenBonusVelocidad;
@@ -165,10 +170,6 @@ bool Drawer::loadMedia() {
 		success = false;
 	}
 
-	if(!gameOverScreenLT.loadFromRenderedText(renderer, fontToBeUsed, GAMEOVER_MSG, textColor, &anchoWaiting, &altoWaiting)){
-		printf("Failed to load text texture!\n");
-		success = false;
-	}
 	//Load numbers
 	if(!ceroLT.loadFromRenderedText(renderer, fontToBeUsed, "0", textColor, &anchoNumber, &altoText)){
 		printf("Failed to load text texture!\n");
@@ -284,6 +285,7 @@ Drawer::Drawer() {
 	this->bonusVelocidadPath = "resources/textures/BonusVelocidad.png";
 	this->bonusVidaPath = "resources/textures/BonusVida.png";
 	this->portalPath = "resources/sprites/portal.png";
+	this->gameOverScreenPath = "resources/textures/gameOver.png";
 
 	//Text
 	this->points = "Points: ";
@@ -771,11 +773,11 @@ void Drawer::drawMessages(dataFromClient_t data, personaje_t personaje) {
 	numerosLT[data.gameData->nivel]->render(renderer, coordXDelMensaje, coordYDelMensaje, anchoNumber, altoText);
 
 	//Dibujamos la pantalla de espera
-	if (data.gameData->paused)
+	if (data.gameData->paused && !data.gameData->gameOver)
 		drawWaitingScreen();
 
 	//Dibujamos la pantalla de gameOver
-	if (data.cantPersonajes == 0){
+	if (data.gameData->gameOver){
 		drawGameOverScreen();
 	}
 }
@@ -797,7 +799,7 @@ void Drawer::drawGameOverScreen(){
 	int altoT = 100;
 
 	//Pense que esto lo dibujaba en medio de la pantall, pero no..
-	float ox = 500;
+	float ox = 400;
 	float oy = 300;
 
 	gameOverScreenLT.render(renderer, ox, oy, anchoT, altoT);

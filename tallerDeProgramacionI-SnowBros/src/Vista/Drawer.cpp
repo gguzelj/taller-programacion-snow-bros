@@ -668,6 +668,8 @@ void Drawer::drawCharacter(personaje_t person, int index, int connectionState) {
 	case KICKING:
 		drawPersonajePateando(renderer, textura, orientacion, pos_x, pos_y, anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
 		break;
+	case FLYING:
+		drawPersonajeVolando(renderer, textura, orientacion, pos_x, pos_y, anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
 	}
 }
 

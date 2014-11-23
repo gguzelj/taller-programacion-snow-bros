@@ -63,6 +63,7 @@
 #define DYING 'm'
 #define PUSHING 'p'
 #define KICKING 'k'
+#define FLYING 'y'
 
 using namespace std;
 

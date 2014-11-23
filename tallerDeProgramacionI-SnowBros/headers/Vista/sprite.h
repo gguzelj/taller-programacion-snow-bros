@@ -47,6 +47,13 @@
 #define ANCHO_PORTAL 43
 #define ALTO_PORTAL 64
 
+
+#define POS_X_VOLANDO 245
+#define POS_Y_VOLANDO 240
+#define FRAMES_VOLANDO 2
+#define ALTO_VOLANDO 32
+
+
 void dibujarFrame(SDL_Renderer *renderer,SDL_Texture *texture,char orientacion, int pos_x,int pos_y,SDL_Rect* srcrect, SDL_Rect dstrect){
 	switch(orientacion){
 		case 'l':{
@@ -163,4 +170,18 @@ void drawPortal(SDL_Renderer *renderer,SDL_Texture *texture, int pos_x,int pos_y
 	SDL_Rect dstrect = { pos_x - (ancho/2), pos_y -( alto/2), ancho, alto};
 
 	dibujarFrame(renderer,texture,orientacion,pos_x,pos_y,&srcrect,dstrect);
+}
+
+
+void drawPersonajeVolando(SDL_Renderer *renderer,SDL_Texture *texture,const char orientacion, int pos_x,int pos_y,int ancho,int alto){
+	//Get ticks te da el tiempo en milisegundo desde el arranque de la ejecucion.
+		Uint32 ticks = SDL_GetTicks();
+		//Aumentar para verlo mas lento o disminuir el parametro para verlo mas rapido.
+		Uint32 sprite = (ticks / 120  ) % FRAMES_VOLANDO;
+
+		SDL_Rect srcrect = { POS_X_VOLANDO + (sprite * ANCHO_DEFAULT) ,POS_Y_VOLANDO, ANCHO_DEFAULT, ALTO_VOLANDO };
+		SDL_Rect dstrect = { pos_x - (ancho/2), pos_y -( alto/2), ancho, alto};
+
+		dibujarFrame(renderer,texture,orientacion,pos_x,pos_y,&srcrect,dstrect);
+
 }

@@ -8038,3 +8038,145 @@ Sun Nov 23 14:49:22 2014: INFO Comienza el thread para recibir datos del cliente
 Sun Nov 23 14:49:22 2014: INFO Comienza el thread para enviar datos al cliente. ID: pepe123
 Sun Nov 23 14:49:23 2014: ERROR Ha ocurrido un error en la conexion con el cliente
 Sun Nov 23 14:49:23 2014: WARNING No se pueden recibir datos del cliente. ID: pepe123. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Sun Nov 23 19:50:47 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Sun Nov 23 19:50:47 2014: INFO Creando Servidor
+Sun Nov 23 19:50:47 2014: INFO Validando parametros
+Sun Nov 23 19:50:47 2014: INFO Parametros Correctos
+Sun Nov 23 19:50:47 2014: INFO Creando socket
+Sun Nov 23 19:50:47 2014: INFO Socket creado correctamente
+Sun Nov 23 19:50:47 2014: INFO Bindeando Socket
+Sun Nov 23 19:50:47 2014: INFO Socket bindeado
+Sun Nov 23 19:50:47 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Sun Nov 23 19:50:47 2014: INFO Parser: Analizando escenario
+Sun Nov 23 19:50:47 2014: INFO Parser: Analizando objetos
+Sun Nov 23 19:50:47 2014: INFO Parser: Archivo JSON OK!
+Sun Nov 23 19:50:47 2014: INFO Corriendo Juego
+Sun Nov 23 19:50:47 2014: INFO Corriendo thread para aceptar conexiones
+Sun Nov 23 19:51:03 2014: INFO Nuevo cliente conectado
+Sun Nov 23 19:51:03 2014: INFO Buscamos lugar para la conexion. ID: pepe123
+Sun Nov 23 19:51:03 2014: INFO Agregamos al nuevo cliente. ID: pepe123
+Sun Nov 23 19:51:03 2014: INFO Se asigno un nuevo personaje al cliente. ID: pepe123
+Sun Nov 23 19:51:03 2014: INFO Datos iniciales del juego enviados
+Sun Nov 23 19:51:03 2014: INFO Comienza el thread para recibir datos del cliente. ID: pepe123
+Sun Nov 23 19:51:03 2014: INFO Comienza el thread para enviar datos al cliente. ID: pepe123
+Sun Nov 23 19:51:03 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Sun Nov 23 19:51:03 2014: WARNING No se pueden recibir datos del cliente. ID: pepe123. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Sun Nov 23 19:53:32 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Sun Nov 23 19:53:32 2014: INFO Creando Servidor
+Sun Nov 23 19:53:32 2014: INFO Validando parametros
+Sun Nov 23 19:53:32 2014: INFO Parametros Correctos
+Sun Nov 23 19:53:32 2014: INFO Creando socket
+Sun Nov 23 19:53:32 2014: INFO Socket creado correctamente
+Sun Nov 23 19:53:32 2014: INFO Bindeando Socket
+Sun Nov 23 19:53:32 2014: INFO Socket bindeado
+Sun Nov 23 19:53:32 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Sun Nov 23 19:53:32 2014: INFO Parser: Analizando escenario
+Sun Nov 23 19:53:32 2014: INFO Parser: Analizando objetos
+Sun Nov 23 19:53:32 2014: INFO Parser: Archivo JSON OK!
+Sun Nov 23 19:53:32 2014: INFO Corriendo Juego
+Sun Nov 23 19:53:32 2014: INFO Corriendo thread para aceptar conexiones
+Sun Nov 23 19:53:38 2014: INFO Nuevo cliente conectado
+Sun Nov 23 19:53:38 2014: INFO Buscamos lugar para la conexion. ID: pepe123
+Sun Nov 23 19:53:38 2014: INFO Agregamos al nuevo cliente. ID: pepe123
+Sun Nov 23 19:53:38 2014: INFO Se asigno un nuevo personaje al cliente. ID: pepe123
+Sun Nov 23 19:53:38 2014: INFO Datos iniciales del juego enviados
+Sun Nov 23 19:53:38 2014: INFO Comienza el thread para recibir datos del cliente. ID: pepe123
+Sun Nov 23 19:53:38 2014: INFO Comienza el thread para enviar datos al cliente. ID: pepe123
+Sun Nov 23 19:53:45 2014: INFO Nuevo cliente conectado
+Sun Nov 23 19:53:45 2014: INFO Buscamos lugar para la conexion. ID: diego1
+Sun Nov 23 19:53:45 2014: INFO Agregamos al nuevo cliente. ID: diego1
+Sun Nov 23 19:53:45 2014: INFO Se asigno un nuevo personaje al cliente. ID: diego1
+Sun Nov 23 19:53:45 2014: INFO Datos iniciales del juego enviados
+Sun Nov 23 19:53:45 2014: INFO Comienza el thread para recibir datos del cliente. ID: diego1
+Sun Nov 23 19:53:45 2014: INFO Comienza el thread para enviar datos al cliente. ID: diego1
+Sun Nov 23 19:53:48 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Sun Nov 23 19:53:48 2014: WARNING No se pueden recibir datos del cliente. ID: diego1. Se desactiva la conexion
+Sun Nov 23 19:53:48 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Sun Nov 23 19:53:48 2014: WARNING No se pueden recibir datos del cliente. ID: pepe123. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Sun Nov 23 20:01:56 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Sun Nov 23 20:01:56 2014: INFO Creando Servidor
+Sun Nov 23 20:01:56 2014: INFO Validando parametros
+Sun Nov 23 20:01:56 2014: INFO Parametros Correctos
+Sun Nov 23 20:01:56 2014: INFO Creando socket
+Sun Nov 23 20:01:56 2014: INFO Socket creado correctamente
+Sun Nov 23 20:01:56 2014: INFO Bindeando Socket
+Sun Nov 23 20:01:56 2014: INFO Socket bindeado
+Sun Nov 23 20:01:56 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Sun Nov 23 20:01:56 2014: INFO Parser: Analizando escenario
+Sun Nov 23 20:01:56 2014: INFO Parser: Analizando objetos
+Sun Nov 23 20:01:56 2014: INFO Parser: Archivo JSON OK!
+Sun Nov 23 20:01:56 2014: INFO Corriendo Juego
+Sun Nov 23 20:01:56 2014: INFO Corriendo thread para aceptar conexiones
+Sun Nov 23 20:02:00 2014: INFO Nuevo cliente conectado
+Sun Nov 23 20:02:00 2014: INFO Buscamos lugar para la conexion. ID: diego1
+Sun Nov 23 20:02:00 2014: INFO Agregamos al nuevo cliente. ID: diego1
+Sun Nov 23 20:02:00 2014: INFO Se asigno un nuevo personaje al cliente. ID: diego1
+Sun Nov 23 20:02:00 2014: INFO Datos iniciales del juego enviados
+Sun Nov 23 20:02:00 2014: INFO Comienza el thread para recibir datos del cliente. ID: diego1
+Sun Nov 23 20:02:00 2014: INFO Comienza el thread para enviar datos al cliente. ID: diego1
+Sun Nov 23 20:02:07 2014: INFO Nuevo cliente conectado
+Sun Nov 23 20:02:07 2014: INFO Buscamos lugar para la conexion. ID: pepe123
+Sun Nov 23 20:02:07 2014: INFO Agregamos al nuevo cliente. ID: pepe123
+Sun Nov 23 20:02:07 2014: INFO Se asigno un nuevo personaje al cliente. ID: pepe123
+Sun Nov 23 20:02:07 2014: INFO Datos iniciales del juego enviados
+Sun Nov 23 20:02:07 2014: INFO Comienza el thread para recibir datos del cliente. ID: pepe123
+Sun Nov 23 20:02:07 2014: INFO Comienza el thread para enviar datos al cliente. ID: pepe123
+Sun Nov 23 20:02:14 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: diego1
+Sun Nov 23 20:02:21 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: diego1
+Sun Nov 23 20:02:30 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: diego1
+Sun Nov 23 20:02:33 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Sun Nov 23 20:02:33 2014: WARNING No se pueden recibir datos del cliente. ID: diego1. Se desactiva la conexion
+Sun Nov 23 20:02:33 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Sun Nov 23 20:02:33 2014: WARNING No se pueden recibir datos del cliente. ID: pepe123. Se desactiva la conexion
+*&------------------------------------------------------------------------------------------------------*&
+*&                               Comienzo de nuevo juego                                                *&
+*&------------------------------------------------------------------------------------------------------*&
+*& Corrida correspondiente a la fecha: Sun Nov 23 20:07:58 2014                                         *&
+*&------------------------------------------------------------------------------------------------------*&
+Sun Nov 23 20:07:58 2014: INFO Creando Servidor
+Sun Nov 23 20:07:58 2014: INFO Validando parametros
+Sun Nov 23 20:07:58 2014: INFO Parametros Correctos
+Sun Nov 23 20:07:58 2014: INFO Creando socket
+Sun Nov 23 20:07:58 2014: INFO Socket creado correctamente
+Sun Nov 23 20:07:58 2014: INFO Bindeando Socket
+Sun Nov 23 20:07:58 2014: INFO Socket bindeado
+Sun Nov 23 20:07:58 2014: INFO Parser: Comenzamos a parsear el archivo resources/config.json
+Sun Nov 23 20:07:58 2014: INFO Parser: Analizando escenario
+Sun Nov 23 20:07:58 2014: INFO Parser: Analizando objetos
+Sun Nov 23 20:07:58 2014: INFO Parser: Archivo JSON OK!
+Sun Nov 23 20:07:58 2014: INFO Corriendo Juego
+Sun Nov 23 20:07:58 2014: INFO Corriendo thread para aceptar conexiones
+Sun Nov 23 20:08:02 2014: INFO Nuevo cliente conectado
+Sun Nov 23 20:08:02 2014: INFO Buscamos lugar para la conexion. ID: pepe123
+Sun Nov 23 20:08:02 2014: INFO Agregamos al nuevo cliente. ID: pepe123
+Sun Nov 23 20:08:02 2014: INFO Se asigno un nuevo personaje al cliente. ID: pepe123
+Sun Nov 23 20:08:02 2014: INFO Datos iniciales del juego enviados
+Sun Nov 23 20:08:02 2014: INFO Comienza el thread para recibir datos del cliente. ID: pepe123
+Sun Nov 23 20:08:02 2014: INFO Comienza el thread para enviar datos al cliente. ID: pepe123
+Sun Nov 23 20:08:07 2014: INFO Nuevo cliente conectado
+Sun Nov 23 20:08:07 2014: INFO Buscamos lugar para la conexion. ID: diego1
+Sun Nov 23 20:08:07 2014: INFO Agregamos al nuevo cliente. ID: diego1
+Sun Nov 23 20:08:07 2014: INFO Se asigno un nuevo personaje al cliente. ID: diego1
+Sun Nov 23 20:08:07 2014: INFO Datos iniciales del juego enviados
+Sun Nov 23 20:08:07 2014: INFO Comienza el thread para recibir datos del cliente. ID: diego1
+Sun Nov 23 20:08:07 2014: INFO Comienza el thread para enviar datos al cliente. ID: diego1
+Sun Nov 23 20:08:11 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: diego1
+Sun Nov 23 20:08:18 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: diego1
+Sun Nov 23 20:08:19 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: diego1
+Sun Nov 23 20:08:19 2014: WARNING No se puede mapear el cliente con un personaje del juego. ID: diego1
+Sun Nov 23 20:08:27 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Sun Nov 23 20:08:27 2014: WARNING No se pueden recibir datos del cliente. ID: pepe123. Se desactiva la conexion
+Sun Nov 23 20:08:27 2014: ERROR Ha ocurrido un error en la conexion con el cliente
+Sun Nov 23 20:08:27 2014: WARNING No se pueden recibir datos del cliente. ID: diego1. Se desactiva la conexion

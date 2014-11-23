@@ -8,9 +8,6 @@
 
 
 Server::Server() {
-
-	acceptNewClients_ = true;
-	running_ = false;
 	sockfd_ = 0;
 	port_ = 0;
 	connectionsLimit_ = 0;
@@ -20,6 +17,10 @@ Server::Server() {
 	shared_rcv_queue_ = new Threadsafe_queue<receivedData_t*>();
 
 	gameData_.paused = true;
+	gameData_.gameOver = false;
+
+	acceptNewClients_ = true;
+	running_ = false;
 
 	//Inicializo el generador de randoms
 	srand(static_cast<unsigned>(time(0)));
@@ -572,7 +573,7 @@ float Server::getInitialX() {
 }
 
 float Server::getInitialY() {
-	return -10.0;
+	return -28.5;
 }
 
 void Server::enviarProyectiles(int sock, proyectil_t* dinamicos) {

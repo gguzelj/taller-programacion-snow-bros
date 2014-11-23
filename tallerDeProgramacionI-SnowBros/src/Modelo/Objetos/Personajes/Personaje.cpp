@@ -137,7 +137,7 @@ void Personaje::beginContactBolaFuego(BolaFuego* bola, b2Contact* contacto) {
 
 	bola->destruir = true;
 
-	if (state == &Personaje::dying || state == &Personaje::rolling)
+	if (state == &Personaje::dying || state == &Personaje::rolling || state == &Personaje::flying)
 		return;
 
 	//En otro caso, restamos vida
@@ -154,7 +154,7 @@ void Personaje::beginContactBolaFuego(BolaFuego* bola, b2Contact* contacto) {
 
 void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 
-	if (state == &Personaje::dying || state == &Personaje::rolling)
+	if (state == &Personaje::dying || state == &Personaje::rolling || state == &Personaje::flying)
 		return;
 
 	if (enemigo->estaCongelado())
@@ -208,6 +208,11 @@ bool Personaje::estaEmpujandoEnemigo() {
 void Personaje::controlarEstado() {
 
 	Character::controlarEstado();
+
+	if(state == &Character::flying){
+		this->movimientoDerecha = false;
+		this->movimientoIzquierda = false;
+	}
 
 	if (state == &Character::walking)
 		if (estaEmpujandoEnemigo())

@@ -470,6 +470,15 @@ void Server::step() {
 
 	}
 
+	if(model_->estaPasandoDeNivel()){
+		for(auto pers = model_->getPersonajes()->begin() ; pers != model_->getPersonajes()->end(); pers++){
+			b2Vec2 velocidad = {0,20};
+			(*pers)->state = &Character::flying;
+			(*pers)->atravezarPlataformas();
+			(*pers)->getb2Body()->SetLinearVelocity(velocidad);
+		}
+	}
+
 	//Solo simulamos mientras el juego no esta pausado
 	if (!gameData_.paused)
 		model_->step();
@@ -478,6 +487,7 @@ void Server::step() {
 	if(model_->estaPasandoDeNivel()){
 		for(auto pers = model_->getPersonajes()->begin() ; pers != model_->getPersonajes()->end(); pers++){
 			b2Vec2 velocidad = {0,20};
+			(*pers)->state = &Character::flying;
 			(*pers)->atravezarPlataformas();
 			(*pers)->getb2Body()->SetLinearVelocity(velocidad);
 		}
@@ -495,7 +505,12 @@ void Server::step() {
 
 //Thread que maneja la logica de pasar de nivel.
 void Server::pasarDeNivel(){
-	model_->setearEnemigos(2);
+
+	model_->setearEnemigos(model_->getNivel()+1);
+
+	for(auto en = model_->getEnemigos()->begin(); en !=model_->getEnemigos()->end(); en++){
+		(*en)->hacerAtravezable();
+	}
 
 	//espero para que lleguen a agarrar los bonus que quedan.
 
@@ -519,8 +534,10 @@ void Server::pasarDeNivel(){
 		}
 
 	model_->setPasandoDeNivel(false);
+	for(auto en = model_->getEnemigos()->begin(); en !=model_->getEnemigos()->end(); en++){
+			(*en)->hacerNoAtravezable();
+	}
 	model_->pasarDeNivel();
-
 }
 
 

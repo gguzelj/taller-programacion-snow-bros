@@ -203,6 +203,10 @@ public:
 			}
 		}
 	}
+
+	std::list<Enemigo*>* getEnemigos(){
+		return this->enemigos_;
+	}
 private:
 	Contacto contactos;
 	const float32 timeStep = 1 / 40.0; 		//the length of time passed to simulate (seconds)

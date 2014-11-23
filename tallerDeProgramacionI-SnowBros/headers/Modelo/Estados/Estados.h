@@ -13,6 +13,7 @@
 #define PUSHING 'p'
 #define KICKING 'k'
 #define ROLLING 'r'
+#define FLYING 'y'
 
 class OnAirState: public CharacterState{
 public:
@@ -86,6 +87,16 @@ public:
 	void handleInput(Character &character,SDL_Keycode input,Uint32 input_type);
 	char getCode(){
 		return ROLLING;
+	}
+};
+
+class FlyingState: public CharacterState{
+public:
+	void handleInput(Character &character,SDL_Keycode input,Uint32 input_type){
+
+	}
+	char getCode(){
+		return FLYING;
 	}
 };
 

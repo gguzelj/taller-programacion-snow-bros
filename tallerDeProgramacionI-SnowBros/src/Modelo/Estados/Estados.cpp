@@ -11,6 +11,7 @@ DyingState Character::dying;
 PushingState Character::pushing;
 KickingState Character::kicking;
 RollingState Character::rolling;
+FlyingState Character::flying;
 
 /**
  * StandByState: Clase encargada de manejar los eventos cuando el

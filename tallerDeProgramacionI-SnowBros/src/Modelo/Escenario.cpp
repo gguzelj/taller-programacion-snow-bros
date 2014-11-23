@@ -243,18 +243,20 @@ void Escenario::crearEnemigosSiguienteNivel(){
 }
 
 void Escenario::pasarDeNivel(){
-	this->nivel++;
-	//creacion del escenario y demas.
-	new Rectangulo(ancho_un, 0, 0, 0, 28.8, world_);
-	//Freno la velocidad que le puse al personaje para hacerlo subir
-	b2Vec2 velocidad = {0,0};
-	//logica para volver a aparecer en el nuevo nivel.
+	if(this->nivel == 1){
+		this->nivel++;
+		//creacion del escenario y demas.
+		this->techo = new Rectangulo(ancho_un, 0, 0, 0, 28.8, world_);
+		//Freno la velocidad que le puse al personaje para hacerlo subir
+		b2Vec2 velocidad = {0,0};
+		//logica para volver a aparecer en el nuevo nivel.
 
-	for(auto pers = personajes_->begin(); pers != personajes_->end(); pers++){
-		(*pers)->getb2Body()->SetLinearVelocity(velocidad);
-		(*pers)->setPosicionInicial((*pers)->getPosicionInicial().x,-(*pers)->getPosicionInicial().y);
-		(*pers)->entrarEnPeriodoDeInmunidad();
-		(*pers)->volverAPosicionInicial();
+		for(auto pers = personajes_->begin(); pers != personajes_->end(); pers++){
+			(*pers)->getb2Body()->SetLinearVelocity(velocidad);
+			(*pers)->setPosicionInicial((*pers)->getPosicionInicial().x,-(*pers)->getPosicionInicial().y);
+			(*pers)->entrarEnPeriodoDeInmunidad();
+			(*pers)->volverAPosicionInicial();
+		}
 	}
 }
 

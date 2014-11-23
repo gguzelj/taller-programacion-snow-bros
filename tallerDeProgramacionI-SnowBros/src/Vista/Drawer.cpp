@@ -1,6 +1,136 @@
 #include "../../headers/Vista/Drawer.h"
 #include "../../headers/Vista/standardEnemySprite.h"
 
+Drawer::Drawer() {
+	this->personajeOn = {true,true,true,true,true};
+	this->contadorOn = {5,5,5,5,5};
+
+	this->renderer = nullptr;
+	this->window = nullptr;
+	this->image = nullptr;
+	this->waitingImage = nullptr;
+	this->imagenPersonaje = nullptr;
+	this->imagenPersonaje2 = nullptr;
+	this->imagenPersonaje3 = nullptr;
+	this->imagenPersonaje4 = nullptr;
+	this->imagenPersonaje5 = nullptr;
+	this->imagenEnemigos = nullptr;
+	this->imagenEnemigoFuego = nullptr;
+	this->congelamientoUno = nullptr;
+	this->congelamientoDos = nullptr;
+	this->congelamientoTres = nullptr;
+	this->congelamientoCuatro = nullptr;
+	this->fontToBeUsed = nullptr;
+	this->portal = nullptr;
+
+	//The music that will be played
+	gMusic = nullptr;
+	gShooting = nullptr;
+	gJumping = nullptr;
+	gDying = nullptr;
+	gBallBreaking = nullptr;
+	gBonus = nullptr;
+	gOneUp = nullptr;
+	gGameover = nullptr;
+
+	//Tamaños para dibujar el texto en pantalla. Los inicializo en 0, despues se modifican.
+	this->altoText = 0;
+	this->anchoPoints = 0;
+	this->anchoLives = 0;
+	this->anchoLevel = 0;
+	this->anchoNumber = 0;
+	this->altoWaiting = 0;
+	this->anchoWaiting = 0;
+
+	//Limites
+	this->limDerCamera = 0;
+	this->limInfCamera = 0;
+	this->limIzqCamera = 0;
+	this->limSupCamera = 0;
+	this->limiteDerecho = 0;
+	this->limiteInferior = 0;
+	this->limiteIzquierdo = 0;
+	this->limiteSuperior = 0;
+
+	//Paths
+	this->imagePath = "resources/background1.png";
+	this->fontPath = "resources/dailypla.ttf";
+	this->rectangleImage = "resources/textures/rectangle.png";
+	this->circleImage = "resources/textures/circle.png";
+	this->triangleImagePath = "resources/textures/triangle.png";
+	this->squareImagePath = "resources/textures/cuadrado.png";
+	this->pentagonImagePath = "resources/textures/pentagon.png";
+	this->hexagonImagePath = "resources/textures/hexagon.png";
+	this->trapexImagePath = "resources/textures/trapecio.png";
+	this->paralelogramImagePath = "resources/textures/paralelogramo.png";
+	this->snowballImagePath = "resources/textures/snowball.png";
+	this->portalballImagePath = "resources/textures/portalball.png";
+	this->fireballImagePath = "resources/textures/bolaDeFuego.png";
+	this->bonusPortalPath = "resources/textures/BonusPortal.png";
+	this->bonusPotenciaPath = "resources/textures/BonusPotencia.png";
+	this->bonusVelocidadPath = "resources/textures/BonusVelocidad.png";
+	this->bonusVidaPath = "resources/textures/BonusVida.png";
+	this->portalPath = "resources/sprites/portal.png";
+	this->gameOverScreenPath = "resources/textures/gameOver.png";
+	this->waitingScreenPath = "resources/textures/waitingBackground.png";
+
+	//Text
+	this->points = "Points: ";
+	this->lives = "Lives: ";
+	this->level = "Level ";
+
+	//Hardcodeo esto por ahora.
+	this->ancho_px = 1024;
+	this->alto_px = 703;
+
+	std::ifstream in(imagePath);
+	unsigned int width, height;
+
+	in.seekg(16);
+	in.read((char *) &width, 4);
+	in.read((char *) &height, 4);
+
+	width = ntohl(width);
+	height = ntohl(height);
+
+	this->alto_un = (float)height / FACTOR_CONVERSION_UN_A_PX;//Alto de la imagen dividido factor de conversion
+	this->ancho_un = (float) width / FACTOR_CONVERSION_UN_A_PX;//Ancho de la imagen dividido factor de conversion
+	this->currentZoomFactor = 1.0;
+	this->camera = {0,0,ancho_px / currentZoomFactor,alto_px / (currentZoomFactor)};
+	this->coordRel = {0,0,ancho_px,alto_px};
+
+	this->nivel = 1;
+	this->setearLimitesDelNivel(nivel);
+
+	this->un_to_px_x = this->un_to_px_x_inicial = currentZoomFactor * FACTOR_CONVERSION_UN_A_PX;
+	this->un_to_px_y = this->un_to_px_y_inicial = currentZoomFactor * FACTOR_CONVERSION_UN_A_PX;
+
+	this->runWindow(ancho_px, alto_px, imagePath);
+}
+
+Drawer::~Drawer() {
+	Mix_FreeMusic(gMusic);
+	SDL_DestroyTexture(image);
+	SDL_DestroyTexture(waitingImage);
+	SDL_DestroyTexture(imagenPersonaje);
+	SDL_DestroyTexture(imagenPersonaje2);
+	SDL_DestroyTexture(imagenPersonaje3);
+	SDL_DestroyTexture(imagenPersonaje4);
+	SDL_DestroyTexture(imagenPersonaje5);
+	SDL_DestroyTexture(imagenEnemigos);
+	SDL_DestroyTexture(imagenEnemigoFuego);
+	SDL_DestroyTexture(congelamientoUno);
+	SDL_DestroyTexture(congelamientoDos);
+	SDL_DestroyTexture(congelamientoTres);
+	SDL_DestroyTexture(congelamientoCuatro);
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	TTF_CloseFont(fontToBeUsed);
+	TTF_Quit();
+	SDL_Quit();
+	IMG_Quit();
+}
+
 void Drawer::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, SDL_Rect dst, SDL_Rect *clip = nullptr) {
 	SDL_RenderCopy(ren, tex, clip, &dst);
 }
@@ -137,7 +267,6 @@ bool Drawer::loadMedia() {
 		success = false;
 	}
 
-
 	if(!gameOverScreenLT.loadFromFile(gameOverScreenPath, renderer)){
 		printf("Failed to load text texture!\n");
 		success = false;
@@ -209,134 +338,6 @@ bool Drawer::loadMedia() {
 	numerosLT = {&ceroLT, &unoLT, &dosLT, &tresLT, &cuatroLT, &cincoLT, &seisLT, &sieteLT, &ochoLT, &nueveLT};
 
 	return success;
-}
-
-Drawer::Drawer() {
-	this->personajeOn = {true,true,true,true,true};
-	this->contadorOn = {5,5,5,5,5};
-
-	this->renderer = nullptr;
-	this->window = nullptr;
-	this->image = nullptr;
-	this->waitingImage = nullptr;
-	this->imagenPersonaje = nullptr;
-	this->imagenPersonaje2 = nullptr;
-	this->imagenPersonaje3 = nullptr;
-	this->imagenPersonaje4 = nullptr;
-	this->imagenPersonaje5 = nullptr;
-	this->imagenEnemigos = nullptr;
-	this->imagenEnemigoFuego = nullptr;
-	this->congelamientoUno = nullptr;
-	this->congelamientoDos = nullptr;
-	this->congelamientoTres = nullptr;
-	this->congelamientoCuatro = nullptr;
-	this->fontToBeUsed = nullptr;
-	this->portal = nullptr;
-
-	//The music that will be played
-	gMusic = nullptr;
-	gShooting = nullptr;
-	gJumping = nullptr;
-	gDying = nullptr;
-	gBallBreaking = nullptr;
-	gBonus = nullptr;
-	gOneUp = nullptr;
-	gGameover = nullptr;
-
-	//Tamaños para dibujar el texto en pantalla. Los inicializo en 0, despues se modifican.
-	this->altoText = 0;
-	this->anchoPoints = 0;
-	this->anchoLives = 0;
-	this->anchoLevel = 0;
-	this->anchoNumber = 0;
-
-	//Limites
-	this->limDerCamera = 0;
-	this->limInfCamera = 0;
-	this->limIzqCamera = 0;
-	this->limSupCamera = 0;
-	this->limiteDerecho = 0;
-	this->limiteInferior = 0;
-	this->limiteIzquierdo = 0;
-	this->limiteSuperior = 0;
-
-	//Paths
-	this->imagePath = "resources/background1.png";
-	this->fontPath = "resources/dailypla.ttf";
-	this->rectangleImage = "resources/textures/rectangle.png";
-	this->circleImage = "resources/textures/circle.png";
-	this->triangleImagePath = "resources/textures/triangle.png";
-	this->squareImagePath = "resources/textures/cuadrado.png";
-	this->pentagonImagePath = "resources/textures/pentagon.png";
-	this->hexagonImagePath = "resources/textures/hexagon.png";
-	this->trapexImagePath = "resources/textures/trapecio.png";
-	this->paralelogramImagePath = "resources/textures/paralelogramo.png";
-	this->snowballImagePath = "resources/textures/snowball.png";
-	this->portalballImagePath = "resources/textures/portalball.png";
-	this->fireballImagePath = "resources/textures/bolaDeFuego.png";
-	this->bonusPortalPath = "resources/textures/BonusPortal.png";
-	this->bonusPotenciaPath = "resources/textures/BonusPotencia.png";
-	this->bonusVelocidadPath = "resources/textures/BonusVelocidad.png";
-	this->bonusVidaPath = "resources/textures/BonusVida.png";
-	this->portalPath = "resources/sprites/portal.png";
-	this->gameOverScreenPath = "resources/textures/gameOver.png";
-	this->waitingScreenPath = "resources/textures/waitingBackground.png";
-
-	//Text
-	this->points = "Points: ";
-	this->lives = "Lives: ";
-	this->level = "Level ";
-
-	//Hardcodeo esto por ahora.
-	this->ancho_px = 1024;
-	this->alto_px = 703;
-
-	std::ifstream in(imagePath);
-	unsigned int width, height;
-
-	in.seekg(16);
-	in.read((char *) &width, 4);
-	in.read((char *) &height, 4);
-
-	width = ntohl(width);
-	height = ntohl(height);
-
-	this->alto_un = (float)height / FACTOR_CONVERSION_UN_A_PX;//Alto de la imagen dividido factor de conversion
-	this->ancho_un = (float) width / FACTOR_CONVERSION_UN_A_PX;//Ancho de la imagen dividido factor de conversion
-	this->currentZoomFactor = 1.0;
-	this->camera = {0,0,ancho_px / currentZoomFactor,alto_px / (currentZoomFactor)};
-	this->coordRel = {0,0,ancho_px,alto_px};
-
-	this->nivel = 1;
-	this->setearLimitesDelNivel(nivel);
-
-	this->un_to_px_x = this->un_to_px_x_inicial = currentZoomFactor * FACTOR_CONVERSION_UN_A_PX;
-	this->un_to_px_y = this->un_to_px_y_inicial = currentZoomFactor * FACTOR_CONVERSION_UN_A_PX;
-
-	this->runWindow(ancho_px, alto_px, imagePath);
-}
-
-Drawer::~Drawer() {
-	Mix_FreeMusic(gMusic);
-	SDL_DestroyTexture(image);
-	SDL_DestroyTexture(waitingImage);
-	SDL_DestroyTexture(imagenPersonaje);
-	SDL_DestroyTexture(imagenPersonaje2);
-	SDL_DestroyTexture(imagenPersonaje3);
-	SDL_DestroyTexture(imagenPersonaje4);
-	SDL_DestroyTexture(imagenPersonaje5);
-	SDL_DestroyTexture(imagenEnemigos);
-	SDL_DestroyTexture(imagenEnemigoFuego);
-	SDL_DestroyTexture(congelamientoUno);
-	SDL_DestroyTexture(congelamientoDos);
-	SDL_DestroyTexture(congelamientoTres);
-	SDL_DestroyTexture(congelamientoCuatro);
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
-	TTF_CloseFont(fontToBeUsed);
-	TTF_Quit();
-	SDL_Quit();
-	IMG_Quit();
 }
 
 void Drawer::updateView(dataFromClient_t data, char* name) {

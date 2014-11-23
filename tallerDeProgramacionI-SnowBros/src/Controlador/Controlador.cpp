@@ -82,6 +82,12 @@ void Controlador::handleEvent(SDL_Event* evento,bool* running, int32_t *code, Ui
 					cantEventos++;
 					break;
 				}
+				case SDLK_RCTRL:{
+					*type = SDL_KEYDOWN;
+					*code= evento->key.keysym.sym;
+					cantEventos++;
+					break;
+				}
 				case SDLK_SPACE:{
 					*type = SDL_KEYDOWN;
 					*code= evento->key.keysym.sym;
@@ -113,6 +119,12 @@ void Controlador::handleEvent(SDL_Event* evento,bool* running, int32_t *code, Ui
 					break;
 				}
 				case SDLK_SPACE:{
+					*type = SDL_KEYUP;
+					*code= evento->key.keysym.sym;
+					cantEventos++;
+					break;
+				}
+				case SDLK_RCTRL:{
 					*type = SDL_KEYUP;
 					*code= evento->key.keysym.sym;
 					cantEventos++;

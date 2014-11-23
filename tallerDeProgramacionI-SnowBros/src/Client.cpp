@@ -83,12 +83,13 @@ int Client::run() {
 
 			view_->setNivel(data.gameData->nivel);
 			onRender(data);
+			free(data.gameData);
 			free(data.proyectiles);
+			free(data.personajes);
 			free(data.enemigos);
 			free(data.dinamicos);
-			free(data.personajes);
 			free(data.sonidos);
-			free(data.gameData);
+
 		}
 		SDL_Delay(1);
 	}
@@ -310,7 +311,6 @@ void Client::recibirDelServer() {
 				//Recibimos los sonidos a reproducir
 				recibirSonidos(&(data.sonidos), data.gameData->cantSonidos);
 
-
 				shared_rcv_queue_->push(data);
 			}
 			if(msgType == PASO_DE_NIVEL){
@@ -320,9 +320,6 @@ void Client::recibirDelServer() {
 			if(msgType == TERMINO_EL_PASO_DE_NIVEL){
 				view_->finalizarTransicionNivel();
 			}
-
-
-
 
 			shared_rcv_queue_->push(data);
 		}

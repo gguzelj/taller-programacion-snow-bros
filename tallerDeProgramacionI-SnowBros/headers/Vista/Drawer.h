@@ -136,7 +136,6 @@ typedef struct gameData{
 	unsigned int cantPersonajes;
 	unsigned int cantDinamicos;
 	unsigned int cantSonidos;
-	unsigned int nivel;
 }gameData_t;
 
 typedef struct dataFromClient{

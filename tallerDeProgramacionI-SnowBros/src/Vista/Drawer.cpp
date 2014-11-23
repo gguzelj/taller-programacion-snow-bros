@@ -233,6 +233,8 @@ Drawer::Drawer() {
 	this->fontToBeUsed = nullptr;
 	this->portal = nullptr;
 
+
+	this->pasandoDeNivel = false;
 	//The music that will be played
 	gMusic = nullptr;
 	gShooting = nullptr;
@@ -289,7 +291,8 @@ Drawer::Drawer() {
 
 	//Hardcodeo esto por ahora.
 	this->ancho_px = 1024;
-	this->alto_px = 703;
+	this->alto_px = 690;
+
 
 	std::ifstream in(imagePath);
 	unsigned int width, height;
@@ -308,7 +311,8 @@ Drawer::Drawer() {
 	this->coordRel = {0,0,ancho_px,alto_px};
 
 	this->nivel = 1;
-	this->setearLimitesDelNivel(nivel);
+
+	this->setearLimitesDelNivel(this->nivel);
 
 	this->un_to_px_x = this->un_to_px_x_inicial = currentZoomFactor * FACTOR_CONVERSION_UN_A_PX;
 	this->un_to_px_y = this->un_to_px_y_inicial = currentZoomFactor * FACTOR_CONVERSION_UN_A_PX;
@@ -729,6 +733,8 @@ void Drawer::drawCharacter(personaje_t person, int index, int connectionState) {
 	case KICKING:
 		drawPersonajePateando(renderer, textura, orientacion, pos_x, pos_y, anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
 		break;
+	case FLYING:
+		drawPersonajeVolando(renderer, textura, orientacion, pos_x, pos_y, anchoPersonaje(un_to_px_x), altoPersonaje(un_to_px_y));
 	}
 }
 
@@ -798,7 +804,29 @@ void Drawer::presentScenary() {
 	SDL_RenderPresent(renderer);
 }
 
-void Drawer::setearLimitesDelNivel(int nivel){
+void Drawer::transicionNivel(){
+	this->pasandoDeNivel = true;
+	std::cerr<< (this->nivel) +1<<std::endl;
+	this->setearLimiteInferiorDelNivel((this->nivel)+1);
+}
+
+
+
+void Drawer::setearLimiteInferiorDelNivel(unsigned int nivel){
+
+	if(nivel == 1){
+		limInfCamera = 750;
+		limiteInferior = 750 *currentZoomFactor ;
+
+	}
+	if(nivel == 2){
+		limInfCamera = 0;
+		limiteInferior = 0 ;
+	}
+}
+
+
+void Drawer::setearLimitesDelNivel(unsigned int nivel){
 	float ancho_imagen = ancho_un * FACTOR_CONVERSION_UN_A_PX;
 	float alto_imagen = alto_un * FACTOR_CONVERSION_UN_A_PX;
 	limIzqCamera = 0;
@@ -807,17 +835,19 @@ void Drawer::setearLimitesDelNivel(int nivel){
 	limiteDerecho = ancho_imagen - coordRel.w + (currentZoomFactor - 1) * (ancho_imagen);
 
 	if(nivel == 1){
-		limInfCamera = 800;
-		limSupCamera = 1520 - camera.h;
-		limiteInferior = 800 *currentZoomFactor ;
+
+		limSupCamera = alto_imagen - camera.h;
 		limiteSuperior =  alto_imagen - coordRel.h + (currentZoomFactor - 1) * (alto_imagen);
+
 	}
+
 	if(nivel == 2){
-		limInfCamera = 0;
-		limSupCamera = 760 - camera.h;
-		limiteInferior = 0 ;
-		limiteSuperior = 760 * currentZoomFactor - coordRel.h;
+
+		limSupCamera = 690 - camera.h;
+		limiteSuperior = 690 * currentZoomFactor - coordRel.h;
 	}
+
+	this->setearLimiteInferiorDelNivel(nivel);
 }
 
 void ajusteFueraDeLimite(SDL_Rect &rect, int limIzq, int limDer, int limInf, int limSup) {
@@ -908,6 +938,13 @@ void Drawer::actualizarCamara(personaje_t personaje) {
 	ajusteFueraDeLimite(coordRel, limiteIzquierdo, limiteDerecho, limiteInferior, limiteSuperior);
 }
 
+
+
+
+
+
+
+
 void Drawer::zoomIn() {
 	if (currentZoomFactor < ZOOM_MAX) {
 		currentZoomFactor += factor;
@@ -931,6 +968,9 @@ void Drawer::zoomIn() {
 		setearLimitesDelNivel(nivel);
 	}
 }
+
+
+
 
 void Drawer::zoomOut() {
 	currentZoomFactor -= factor;

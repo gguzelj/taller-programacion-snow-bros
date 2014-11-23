@@ -69,10 +69,14 @@
 #define PUSHING 'p'
 #define KICKING 'k'
 
+#define FLYING 'y'
+
+
 #define BALLBREAKING 'K'
 #define GAMEOVER 'G'
 #define BONUS 'B'
 #define ONEUP 'O'
+
 
 using namespace std;
 
@@ -125,6 +129,7 @@ typedef struct enemigo{
 }enemigo_t;
 
 typedef struct gameData{
+	unsigned int nivel;
 	bool paused;
 	bool gameOver;
 	unsigned int cantProyectiles;
@@ -132,7 +137,6 @@ typedef struct gameData{
 	unsigned int cantPersonajes;
 	unsigned int cantDinamicos;
 	unsigned int cantSonidos;
-	unsigned int nivel;
 }gameData_t;
 
 typedef struct dataFromClient{
@@ -164,10 +168,21 @@ public:
 	void zoomIn();
 	//Zooms out in a factor of 0.99x
 	void zoomOut();
+	void setNivel(unsigned int nivel){
+		if(!this->pasandoDeNivel){
+			this->nivel = nivel;
+			this->setearLimitesDelNivel(nivel);
+		}
+	}
+	void transicionNivel();
+	void finalizarTransicionNivel(){
+		this->pasandoDeNivel = false;
+	}
+
 
 private:
 
-	int nivel;
+	unsigned int nivel;
 
 	int limIzqCamera ;
 	int limDerCamera ;
@@ -179,6 +194,7 @@ private:
 	int limiteInferior ;
 	int limiteSuperior ;
 
+	bool pasandoDeNivel;
 
 	//SDL Attributes
 	SDL_Renderer *renderer;
@@ -299,13 +315,14 @@ private:
 
 	//Private Methods
 	//General purpose methods
-	void setearLimitesDelNivel(int nivel);
+	void setearLimitesDelNivel(unsigned int nivel);
 	void loadFont();
 	bool loadMedia();
 	void loadMusic();
 	void runWindow(int ancho_px ,int alto_px ,string imagePath);
 	void actualizarCamara(personaje_t personaje);
 	SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren);
+	void setearLimiteInferiorDelNivel(unsigned int nivel);
 
 	//Drawing methods
 	void drawBackground();

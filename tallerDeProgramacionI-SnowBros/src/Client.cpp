@@ -1,4 +1,8 @@
 #include "../headers/Client.h"
+#define GAME_DATA 'g'
+#define PASO_DE_NIVEL 'n'
+#define TERMINO_EL_PASO_DE_NIVEL 't'
+
 
 void help();
 
@@ -77,13 +81,15 @@ int Client::run() {
 		bool hayData = shared_rcv_queue_->try_pop(data);
 		if (hayData){
 
+			view_->setNivel(data.gameData->nivel);
 			onRender(data);
+			free(data.gameData);
 			free(data.proyectiles);
+			free(data.personajes);
 			free(data.enemigos);
 			free(data.dinamicos);
-			free(data.personajes);
 			free(data.sonidos);
-			free(data.gameData);
+
 		}
 		SDL_Delay(1);
 	}
@@ -275,6 +281,7 @@ void Client::enviarAlServer() {
 void Client::recibirDelServer() {
 
 	dataFromServer_t data;
+	char msgType;
 
 	try {
 
@@ -282,25 +289,37 @@ void Client::recibirDelServer() {
 		//personajes y la cantidad de objetos dinamicos:
 		while (running_) {
 
-			//Recibimos los datos del juego (estadisticas, etc..)
-			recibirGameData(data.gameData);
+			recvall(sock, &msgType, sizeof(msgType));
 
-			//Recibimos los personajes
-			recibirPersonajes(data.personajes);
+			if(msgType == GAME_DATA){
+				//Recibimos los datos del juego (estadisticas, etc..)
+				recibirGameData(data.gameData);
 
-			//Recibimos los enemigos
-			recibirEnemigos(data.enemigos, data.gameData->cantEnemigos);
+				//Recibimos los personajes
+				recibirPersonajes(data.personajes);
 
-			//Recibimos los objetos dinamicos
-			recibirDinamicos(data.dinamicos, data.gameData->cantDinamicos);
+				//Recibimos los enemigos
+				recibirEnemigos(data.enemigos, data.gameData->cantEnemigos);
 
-			//Recibimos los proyectiles del juego
-			recibirProyectiles(data.proyectiles, data.gameData->cantProyectiles);
+				//Recibimos los objetos dinamicos
+				recibirDinamicos(data.dinamicos, data.gameData->cantDinamicos);
 
-			//Recibimos los sonidos a reproducir
-			recibirSonidos(&(data.sonidos), data.gameData->cantSonidos);
 
-			shared_rcv_queue_->push(data);
+				//Recibimos los proyectiles del juego
+				recibirProyectiles(data.proyectiles, data.gameData->cantProyectiles);
+
+				//Recibimos los sonidos a reproducir
+				recibirSonidos(&(data.sonidos), data.gameData->cantSonidos);
+
+				shared_rcv_queue_->push(data);
+			}
+			if(msgType == PASO_DE_NIVEL){
+				view_->transicionNivel();
+				std::cerr<< "se genera la transicion";
+			}
+			if(msgType == TERMINO_EL_PASO_DE_NIVEL){
+				view_->finalizarTransicionNivel();
+			}
 		}
 
 	} catch (const receiveException& e) {

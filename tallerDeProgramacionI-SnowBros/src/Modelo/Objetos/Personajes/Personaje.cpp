@@ -256,6 +256,9 @@ void Personaje::controlarEstado() {
 	}
 
 	if (esta_muerto) {
+		stop();
+		dejarDisparar();
+		dejarDispararPortal();
 		volverAPosicionInicial();
 		esta_muerto = false;
 		state = &Personaje::standby;

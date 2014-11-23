@@ -641,12 +641,11 @@ void Server::reiniciar(){
 	model_ = new Escenario(parser_);
 
 	//Quitamos a los jugadores que no esten activos
-//	borrarJugadoresInactivos();
+	borrarJugadoresInactivos();
 
 	//Creamos jugadores para todos los clientes existentes
 	for (unsigned int i = 0; i < connections_.size(); i++) {
-		if (connections_[i]->activa)
-			crearPersonaje(connections_[i],false);
+		crearPersonaje(connections_[i],false);
 	}
 
 	if (connections_.size() == connectionsLimit_)
@@ -660,7 +659,10 @@ void Server::borrarJugadoresInactivos(){
 	//Quitamos la conexion de la lista
 	for (auto con = connections_.begin(); con != connections_.end(); ++con) {
 		if (!(*con)->activa){
-				connections_.erase(con++);
+			connections_.erase(con);
+		}
+		if(con == connections_.end()){
+			return;
 		}
 	}
 }

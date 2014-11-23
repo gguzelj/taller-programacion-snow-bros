@@ -13,6 +13,7 @@ Escenario::Escenario(JsonParser *parser) {
 	proyectiles_ = new std::list<Proyectil*>;
 	personajes_ = new std::list<Personaje*>;
 	enemigos_ = new std::list<Enemigo*>;
+	enemigosNivelDos_ = new std::list<Enemigo*>;
 	ancho_un = parser->getAnchoUnEscenario();
 	alto_un = parser->getAltoUnEscenario();
 	world_ = new b2World(gravity);
@@ -58,6 +59,12 @@ Escenario::Escenario(JsonParser *parser) {
 		else if (parser->getTipoObjeto(index) == ENEMIGOFUEGO)
 			enemigos_->push_back(new EnemigoFuego(parser, index, this));
 
+		else if (parser->getTipoObjeto(index) == ENEMIGOBASICODOS)
+				enemigosNivelDos_->push_back(new EnemigoBasico(parser, index, this));
+
+		else if (parser->getTipoObjeto(index) == ENEMIGOFUEGODOS)
+				enemigosNivelDos_->push_back(new EnemigoFuego(parser, index, this));
+
 		else
 			throw ErrorTipoDeObjeto();
 
@@ -66,6 +73,7 @@ Escenario::Escenario(JsonParser *parser) {
 		else
 			figurasDinamicas_->push_back(figura_i);
 	}
+	std::cerr <<enemigosNivelDos_->size();
 }
 
 Escenario::~Escenario() {
@@ -235,6 +243,7 @@ void Escenario::crearEnemigosSiguienteNivel(){
 }
 
 void Escenario::pasarDeNivel(){
+	this->nivel++;
 	//creacion del escenario y demas.
 	new Rectangulo(ancho_un, 0, 0, 0, 28.8, world_);
 	//Freno la velocidad que le puse al personaje para hacerlo subir

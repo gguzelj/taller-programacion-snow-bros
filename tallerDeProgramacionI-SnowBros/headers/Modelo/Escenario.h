@@ -195,6 +195,14 @@ public:
 	void eliminarTecho(){
 		delete(this->techo);
 	}
+
+	void setearEnemigos(unsigned int nivel){
+		if(nivel == 2){
+			for(auto en = enemigosNivelDos_->begin() ; en != enemigosNivelDos_->end();en++){
+				this->enemigos_->push_back((*en));
+			}
+		}
+	}
 private:
 	Contacto contactos;
 	const float32 timeStep = 1 / 40.0; 		//the length of time passed to simulate (seconds)
@@ -208,6 +216,7 @@ private:
 	std::list<Proyectil*>* proyectiles_;
 	std::list<Personaje*>* personajes_;
 	std::list<Enemigo*>* enemigos_;
+	std::list<Enemigo*>* enemigosNivelDos_;
 	unsigned int nivel;
 
 	Rectangulo* techo;

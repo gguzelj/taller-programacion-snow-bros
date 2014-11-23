@@ -30,6 +30,8 @@
 #define TRAPECIO               "trapecio"
 #define ENEMIGOBASICO			"enemigobasico"
 #define ENEMIGOFUEGO			"enemigofuego"
+#define ENEMIGOBASICODOS       "enemigobasicodos"
+#define ENEMIGOFUEGODOS        "enemigofuegodos"
 
 //Valores Default para el juego
 #define MAXIMO_JUGADORES_DEF	4

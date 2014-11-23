@@ -19,7 +19,7 @@ Server::Server() {
 	jsonPath_ = "";
 	shared_rcv_queue_ = new Threadsafe_queue<receivedData_t*>();
 
-	gameData_.paused = false;
+	gameData_.paused = true;
 
 	//Inicializo el generador de randoms
 	srand(static_cast<unsigned>(time(0)));
@@ -301,7 +301,6 @@ void Server::enviarDatosJuego(int sockfd) {
 
 	try {
 		datos_.nivel = model_->getNivel();
-		std::cerr<<datos_.nivel;
 		datos_.cantPersonajes = model_->getCantPersonajes();
 		datos_.cantEnemigos = model_->getCantEnemigos();
 		datos_.cantObjDinamicos = model_->getCantObjDinamicos();
@@ -485,7 +484,6 @@ void Server::step() {
 	}
 
 	if(model_->getCantEnemigos() == 0 && !model_->estaPasandoDeNivel() && model_->getNivel() < NIVEL_MAX){
-
 		std::thread t(&Server::pasarDeNivel, this);
 		t.detach();
 	}
@@ -497,26 +495,23 @@ void Server::step() {
 
 //Thread que maneja la logica de pasar de nivel.
 void Server::pasarDeNivel(){
-	model_->crearEnemigosSiguienteNivel();
-	//mando a los clientes que se esta por pasar de nivel.
-	char msgType = PASO_DE_NIVEL;
-	for(auto conn = connections_.begin(); conn != connections_.end();conn++){
-		sendall((*conn)->socket,&msgType,sizeof(msgType) );
-	}
-	//seteo que el nuevo nivel para que no cree denuevo el thread.
-	model_->setNivel((model_->getNivel()) +1);
+	model_->setearEnemigos(2);
 
 	//espero para que lleguen a agarrar los bonus que quedan.
 
 	sleep(5);
 
+	char msgType = PASO_DE_NIVEL;
+	for(auto conn = connections_.begin(); conn != connections_.end();conn++){
+		sendall((*conn)->socket,&msgType,sizeof(msgType) );
+	}
 
 	//seteo que se esta pasando de nivel para que los personajes vuelen.
 	model_->setPasandoDeNivel(true);
 	//saco el techo para que no se choquen
 	model_->eliminarTecho();
 	//espero hasta que todos hayan subido.
-	sleep(10);
+	sleep(8);
 
 	msgType = TERMINO_EL_PASO_DE_NIVEL;
 		for(auto conn = connections_.begin(); conn != connections_.end();conn++){

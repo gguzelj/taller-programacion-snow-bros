@@ -149,7 +149,9 @@ bool ParserValidator::valTipoObjeto(Json::Value obj, std::string &tipo) {
 		tipo != POLIGONO &&
 		tipo != TRAPECIO &&
 		tipo != ENEMIGOBASICO &&
-		tipo != ENEMIGOFUEGO) {
+		tipo != ENEMIGOFUEGO &&
+		tipo!= ENEMIGOBASICODOS &&
+		tipo!= ENEMIGOFUEGODOS) {
 		Log::ins()->add(
 		PARSER_MSG_OBJ_TIPO_DESCONOCIDO + obj.toStyledString(), Log::WARNING);
 		return true;

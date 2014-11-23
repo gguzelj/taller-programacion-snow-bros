@@ -262,6 +262,43 @@
                        "rot":0,
                        "masa":3,
                        "estatico":true
+                     },
+                     {
+                       "tipo":"enemigobasicodos",
+                       "x":12,
+                       "y":25,
+                       "escala":1,//campo obligatorio por el json
+                       "rot":45,//campo obligatorio por el json
+                       "masa":1,//campo obligatorio por el json
+                       "estatico":false//campo obligatorio por el json
+                     },
+                     {
+                       "tipo":"enemigobasicodos",
+                       "x":-5,
+                       "y":13,
+                       "escala":1,//campo obligatorio por el json
+                       "rot":45,//campo obligatorio por el json
+                       "masa":1,//campo obligatorio por el json
+                       "estatico":false//campo obligatorio por el json
+
+                     },
+                     {
+                       "tipo":"enemigofuegodos",
+                       "x":5,
+                       "y":25,
+                       "escala":1,//campo obligatorio por el json
+                       "rot":45,//campo obligatorio por el json
+                       "masa":1,//campo obligatorio por el json
+                       "estatico":false//campo obligatorio por el json
+                     },
+                     {
+                       "tipo":"enemigobasicodos",
+                       "x":20,
+                       "y":10,
+                       "escala":1,//campo obligatorio por el json
+                       "rot":45,//campo obligatorio por el json
+                       "masa":1,//campo obligatorio por el json
+                       "estatico":false//campo obligatorio por el json
                      }
                    ]
     }

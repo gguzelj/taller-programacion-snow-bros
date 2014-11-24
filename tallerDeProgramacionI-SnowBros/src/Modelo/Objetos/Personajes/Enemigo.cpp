@@ -114,10 +114,11 @@ void Enemigo::morir() {
 }
 
 void Enemigo::morirDelay() {
-	if (escenario_->debeCrearBonus())
-		escenario_->agregarBonus(escenario_->crearBonus(this));
-	sleep(1);
+	sleep(0.3f);
 	this->estaVivo = false;
+//	Que solo lo cree la bola no si choca con un enemigo
+//	if (escenario_->debeCrearBonus() )
+//		escenario_->agregarBonus(escenario_->crearBonus(this));
 }
 
 void Enemigo::beginContactBolaEnemigo(BolaEnemigo* bola, b2Contact* contact) {
@@ -126,7 +127,6 @@ void Enemigo::beginContactBolaEnemigo(BolaEnemigo* bola, b2Contact* contact) {
 	velocidadActual.y = 70;
 	velocidadActual.x *= -1;
 	this->body->SetLinearVelocity(velocidadActual);
-std::cout << "choque" << std::endl;
 	//Lanzamos un thread para que muera el enemigo
 	std::thread r(&Enemigo::morirDelay, this);
 	r.detach();

@@ -248,6 +248,7 @@ void Character::detectarEstado() {
 	//Esta saltando?
 	if (getVelocity().y > 0.0f && estaEnAire()) {
 		state = &Character::jumping;
+		atravezarPlataformas();
 		return;
 	}
 

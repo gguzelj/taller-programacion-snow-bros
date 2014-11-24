@@ -26,6 +26,7 @@
 #define CIRCULO_CODE 'c'
 #define PARALELOGRAMO_CODE 'p'
 #define RECTANGULO_CODE 'r'
+#define PLATAFORMAHIELO_CODE 'l'
 #define TRAPECIO_CODE 't'
 #define TRIANGULO_CODE '3'
 #define CUADRADO_CODE '4'
@@ -235,6 +236,7 @@ private:
 
 	//Scene texture
 	LTexture rectangleLT;
+	LTexture icePlatformLT;
 	LTexture circleLT;
 	LTexture triangleLT;
 	LTexture squareLT;
@@ -275,6 +277,7 @@ private:
 	string fontPath;
 	string imagePath;
 	string rectangleImage;
+	string icePlatformImage;
 	string circleImage;
 	string triangleImagePath;
 	string squareImagePath;

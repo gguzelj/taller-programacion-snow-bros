@@ -5,6 +5,8 @@ Drawer::Drawer() {
 	this->personajeOn = {true,true,true,true,true};
 	this->contadorOn = {5,5,5,5,5};
 
+	this->pasandoDeNivel = false;
+
 	this->renderer = nullptr;
 	this->window = nullptr;
 	this->image = nullptr;
@@ -56,6 +58,7 @@ Drawer::Drawer() {
 	this->imagePath = "resources/background1.png";
 	this->fontPath = "resources/dailypla.ttf";
 	this->rectangleImage = "resources/textures/rectangle.png";
+	this->icePlatformImage = "resources/textures/icePlatform.png";
 	this->circleImage = "resources/textures/circle.png";
 	this->triangleImagePath = "resources/textures/triangle.png";
 	this->squareImagePath = "resources/textures/cuadrado.png";
@@ -210,6 +213,10 @@ bool Drawer::loadMedia() {
 		printf("Failed to load rectangle texture!\n");
 		success = false;
 	}
+	if (!icePlatformLT.loadFromFile(icePlatformImage, renderer)) {
+		printf("Failed to load icePlatform texture!\n");
+		success = false;
+	}
 	if (!circleLT.loadFromFile(circleImage, renderer)) {
 		printf("Failed to load circle texture!\n");
 		success = false;
@@ -277,61 +284,61 @@ bool Drawer::loadMedia() {
 	LTexture imagenBonusVelocidad;
 	LTexture imagenBonusVida;
 
-	SDL_Color textColor = { 255, 255, 255, 0xFF };
+	SDL_Color blanco = { 255, 255, 255, 0xFF };
 
 	//Load messages
-	if(!pointsLT.loadFromRenderedText(renderer, fontToBeUsed, points, textColor, &anchoPoints, &altoText)){
+	if(!pointsLT.loadFromRenderedText(renderer, fontToBeUsed, points, blanco, &anchoPoints, &altoText)){
 		printf("Failed to load text texture!\n");
 		success = false;
 	}
-	if(!livesLT.loadFromRenderedText(renderer, fontToBeUsed, lives, textColor, &anchoLives, &altoText)){
+	if(!livesLT.loadFromRenderedText(renderer, fontToBeUsed, lives, blanco, &anchoLives, &altoText)){
 		printf("Failed to load text texture!\n");
 		success = false;
 	}
 
-	if(!levelsLT.loadFromRenderedText(renderer, fontToBeUsed, level, textColor, &anchoLevel, &altoText)){
+	if(!levelsLT.loadFromRenderedText(renderer, fontToBeUsed, level, blanco, &anchoLevel, &altoText)){
 		printf("Failed to load text texture!\n");
 		success = false;
 	}
 
 	//Load numbers
-	if(!ceroLT.loadFromRenderedText(renderer, fontToBeUsed, "0", textColor, &anchoNumber, &altoText)){
+	if(!ceroLT.loadFromRenderedText(renderer, fontToBeUsed, "0", blanco, &anchoNumber, &altoText)){
 		printf("Failed to load text texture!\n");
 		success = false;
 	}
-	if(!unoLT.loadFromRenderedText(renderer, fontToBeUsed, "1", textColor, &anchoNumber, &altoText)){
+	if(!unoLT.loadFromRenderedText(renderer, fontToBeUsed, "1", blanco, &anchoNumber, &altoText)){
 		printf("Failed to load text texture!\n");
 		success = false;
 	}
-	if(!dosLT.loadFromRenderedText(renderer, fontToBeUsed, "2", textColor, &anchoNumber, &altoText)){
+	if(!dosLT.loadFromRenderedText(renderer, fontToBeUsed, "2", blanco, &anchoNumber, &altoText)){
 		printf("Failed to load text texture!\n");
 		success = false;
 	}
-	if(!tresLT.loadFromRenderedText(renderer, fontToBeUsed, "3", textColor, &anchoNumber, &altoText)){
+	if(!tresLT.loadFromRenderedText(renderer, fontToBeUsed, "3", blanco, &anchoNumber, &altoText)){
 		printf("Failed to load text texture!\n");
 		success = false;
 	}
-	if(!cuatroLT.loadFromRenderedText(renderer, fontToBeUsed, "4", textColor, &anchoNumber, &altoText)){
+	if(!cuatroLT.loadFromRenderedText(renderer, fontToBeUsed, "4", blanco, &anchoNumber, &altoText)){
 		printf("Failed to load text texture!\n");
 		success = false;
 	}
-	if(!cincoLT.loadFromRenderedText(renderer, fontToBeUsed, "5", textColor, &anchoNumber, &altoText)){
+	if(!cincoLT.loadFromRenderedText(renderer, fontToBeUsed, "5", blanco, &anchoNumber, &altoText)){
 		printf("Failed to load text texture!\n");
 		success = false;
 	}
-	if(!seisLT.loadFromRenderedText(renderer, fontToBeUsed, "6", textColor, &anchoNumber, &altoText)){
+	if(!seisLT.loadFromRenderedText(renderer, fontToBeUsed, "6", blanco, &anchoNumber, &altoText)){
 		printf("Failed to load text texture!\n");
 		success = false;
 	}
-	if(!sieteLT.loadFromRenderedText(renderer, fontToBeUsed, "7", textColor, &anchoNumber, &altoText)){
+	if(!sieteLT.loadFromRenderedText(renderer, fontToBeUsed, "7", blanco, &anchoNumber, &altoText)){
 		printf("Failed to load text texture!\n");
 		success = false;
 	}
-	if(!ochoLT.loadFromRenderedText(renderer, fontToBeUsed, "8", textColor, &anchoNumber, &altoText)){
+	if(!ochoLT.loadFromRenderedText(renderer, fontToBeUsed, "8", blanco, &anchoNumber, &altoText)){
 		printf("Failed to load text texture!\n");
 		success = false;
 	}
-	if(!nueveLT.loadFromRenderedText(renderer, fontToBeUsed, "9", textColor, &anchoNumber, &altoText)){
+	if(!nueveLT.loadFromRenderedText(renderer, fontToBeUsed, "9", blanco, &anchoNumber, &altoText)){
 		printf("Failed to load text texture!\n");
 		success = false;
 	}
@@ -469,6 +476,9 @@ void Drawer::drawFigura(figura_t objeto) {
 
 	if (objeto.id == RECTANGULO_CODE) {
 		rectangleLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
+	}
+	if(objeto.id == PLATAFORMAHIELO_CODE) {
+		icePlatformLT.render(renderer, pos_x, pos_y, ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);
 	}
 	if (objeto.id == CIRCULO_CODE) {
 		circleLT.render(renderer, pos_x, pos_y,	ancho * un_to_px_x, alto * un_to_px_y, nullptr, objeto.rotacion * -RADTODEG, nullptr);

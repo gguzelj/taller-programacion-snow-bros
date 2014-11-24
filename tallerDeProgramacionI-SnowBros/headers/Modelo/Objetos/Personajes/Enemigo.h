@@ -25,7 +25,6 @@ protected:
 public:
 	bool esAtravezable;
 	bool estaVivo;
-	bool estaCongelandose;
 	int cantidadDeRebotesParaDestruccion = 0;
 
 	b2Fixture* paredIzquierda;

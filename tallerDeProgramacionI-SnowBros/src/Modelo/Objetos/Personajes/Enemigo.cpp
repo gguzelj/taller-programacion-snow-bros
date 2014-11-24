@@ -25,7 +25,6 @@ Enemigo::Enemigo(JsonParser *parser, int index, Escenario* escenario) {
 	this->alto = MITAD_ALTO_ENEMIGO;
 	this->nivelDeCongelamiento = 0;
 	this->estaVivo = true;
-	this->estaCongelandose = false;
 	this->puntos = 50;
 
 	//Defino body del Enemigo
@@ -171,13 +170,6 @@ void Enemigo::congelar() {
 	float tiempoDeEsperaMaximo = 5.0f;
 	aceleracion = 0;
 	while (nivelDeCongelamiento != 0) {
-		//En caso de que este hecho bola de nieve, lo hacemos
-		//No atravezable, para que pueda empujarlo
-
-		if((nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX))
-			estaCongelandose = true;
-		else
-			estaCongelandose = false;
 
 		if (difftime(time(nullptr), tiempoDeImpactoDeLaUltimaBola) > tiempoDeEsperaMaximo) {
 			this->nivelDeCongelamiento -= 2;
@@ -228,9 +220,12 @@ int Enemigo::getPuntos() {
 void Enemigo::controlarEstado() {
 	Character::controlarEstado();
 
-	if(estaCongelandose){
+	if(nivelDeCongelamiento > 0 && !estaCongelado())
 		hacerAtravezable();
-	}
+	else
+		this->cambiarFilterIndex(ENEMIGO_FILTER_INDEX);
+
+
 	if(estaCongelado()){
 		noAtravezarPlataformas();
 	}

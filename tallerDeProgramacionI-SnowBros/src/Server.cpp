@@ -5,8 +5,6 @@
 #define TERMINO_EL_PASO_DE_NIVEL 't'
 #include <ctime>
 
-
-
 Server::Server() {
 	sockfd_ = 0;
 	port_ = 0;
@@ -18,6 +16,7 @@ Server::Server() {
 
 	gameData_.paused = true;
 	gameData_.gameOver = false;
+	gameData_.won = false;
 
 	acceptNewClients_ = true;
 	running_ = false;
@@ -129,12 +128,6 @@ void Server::run() {
 		enviarAClientes();
 
 		borrarJugadoresInactivos();
-
-		if (model_->getCantidadDePersonajesVivos() == 0 && !connections_.empty()){
-			std::thread t(&Server::gameOver, this);
-			t.detach();
-			reiniciar();
-		}
 	}
 
 	Log::ins()->add(SRV_MSG_END_GAME, Log::INFO);
@@ -499,6 +492,18 @@ void Server::step() {
 
 
 	SDL_Delay(30);
+
+	if (perdio()){
+		std::thread t(&Server::gameOver, this);
+		t.detach();
+		reiniciar();
+	}
+	else if(gano()){
+		std::thread t(&Server::winGame, this);
+		t.detach();
+		model_->borrarPersonajes();
+		reiniciar();
+	}
 }
 
 
@@ -718,6 +723,7 @@ void Server::reiniciar(){
 	gameData_.paused = true;
 
 	//Reiniciamos el modelo
+
 	delete model_;
 	model_ = new Escenario(parser_);
 
@@ -756,6 +762,14 @@ void Server::gameOver(){
 	gameData_.gameOver = false;
 }
 
+void Server::winGame(){
+	gameData_.won = true;
+
+	sleep(TIEMPO_VICTORIA);
+
+	gameData_.won = false;
+}
+
 int Server::getNumberOfConnection(connection_t* connection){
 	int index = 0;
 	for (auto con = connections_.begin(); con != connections_.end(); ++con) {
@@ -764,4 +778,12 @@ int Server::getNumberOfConnection(connection_t* connection){
 		index ++;
 	}
 	return -1;
+}
+
+bool Server::perdio(){
+	return (model_->getCantidadDePersonajesVivos() == 0 && !connections_.empty());
+}
+
+bool Server::gano(){
+	return (model_->getCantEnemigos()==0 && model_->getCantProyectiles()==0 && model_->getNivel()==2);
 }

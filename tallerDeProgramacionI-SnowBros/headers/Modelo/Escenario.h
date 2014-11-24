@@ -65,6 +65,7 @@ typedef struct gameData {
 	unsigned int nivel;
 	bool paused;
 	bool gameOver;
+	bool won;
 	unsigned int cantProyectiles;
 	unsigned int cantEnemigos;
 	unsigned int cantPersonajes;
@@ -231,6 +232,7 @@ public:
 	}
 
 	void borrarPersonajesInactivos();
+	void borrarPersonajes();
 
 private:
 	Contacto contactos;

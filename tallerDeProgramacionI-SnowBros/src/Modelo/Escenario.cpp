@@ -553,3 +553,10 @@ void Escenario::borrarPersonajesInactivos(){
 		}
 	}
 }
+
+void Escenario::borrarPersonajes(){
+	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {
+		world_->DestroyBody((*per)->getb2Body());
+		personajes_->erase(per++);
+	}
+}

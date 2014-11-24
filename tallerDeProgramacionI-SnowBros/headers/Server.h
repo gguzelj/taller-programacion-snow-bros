@@ -46,6 +46,7 @@
 
 #define TAM 20
 #define TIEMPO_GAMEOVER 3
+#define TIEMPO_VICTORIA 5
 
 #define COLOR_BLANCO 'b'
 #define COLOR_AZUL 'a'
@@ -323,6 +324,9 @@ private:
 	void borrarJugadoresInactivos();
 
 	void gameOver();
+	void winGame();
+	bool perdio();
+	bool gano();
 
 	int getNumberOfConnection(connection_t* connection);
 };

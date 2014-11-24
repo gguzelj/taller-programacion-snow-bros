@@ -146,19 +146,11 @@ void destruirJointsDeBolaEnemigo(BolaEnemigo* enemigo, std::list<Personaje*>* pe
 	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {
 		if (!ASIGNADO((*per)->id)) {
 			if ((*per)->getArrastradoPor() == enemigo) {
-				std::cout << "pre destroy"<< std::endl;
 				world_->DestroyJoint((*per)->getJoint());
-				std::cout << "post destroy"<< std::endl;
 				(*per)->setArrastrado(false);
-				std::cout << "post destroy 2"<< std::endl;
 				(*per)->setArrastradoPor(nullptr);
-				std::cout << "post destroy 3"<< std::endl;
 				(*per)->setJoint(nullptr);
-				std::cout << "post destroy 4"<< std::endl;
 				(*per)->state = &Personaje::standby;
-				std::cout << "post destroy 5"<< std::endl;
-
-
 			}
 		}
 	}

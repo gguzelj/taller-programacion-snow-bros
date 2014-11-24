@@ -26,6 +26,7 @@
 #define PENTAGONO_CODE '5'
 #define HEXAGONO_CODE '6'
 
+#define ID_PLATAFORMAHIELO 0
 #define ID_CIRCULO 1
 #define ID_MURO 2
 #define ID_PARALELOGRAMO 3
@@ -46,8 +47,6 @@
 #define ID_BONUS_AUMENTAR_POTENCIA 18
 #define ID_BONUS_BOLA_PORTAL 19
 
-#define FIGURA_WARNING_OVERLAP "El siguiente objeto se esta superponiendo con otros ya creados \n"
-
 #include <Box2D/Box2D.h>
 #include <Box2D/Collision/b2Collision.h>
 #include <list>
@@ -60,6 +59,7 @@ class Muro;
 class Paralelogramo;
 class Poligono;
 class Rectangulo;
+class PlataformaHielo;
 class Trapecio;
 class Personaje;
 class BolaNieve;
@@ -115,6 +115,7 @@ public:
 	virtual void beginContactParalelogramo(Paralelogramo*,b2Contact*){};
 	virtual void beginContactPoligono(Poligono*,b2Contact*){};
 	virtual void beginContactRectangulo(Rectangulo*,b2Contact*){};
+	virtual void beginContactPlataformaHielo(PlataformaHielo*,b2Contact*){};
 	virtual void beginContactTrapecio(Trapecio*,b2Contact*){};
 	virtual void beginContactEnemigo(Enemigo*,b2Contact*){};
 	virtual void beginContactPersonaje(Personaje*,b2Contact*){};
@@ -132,6 +133,7 @@ public:
 	virtual void endContactParalelogramo(Paralelogramo*,b2Contact*){};
 	virtual void endContactPoligono(Poligono*,b2Contact*){};
 	virtual void endContactRectanguo(Rectangulo*,b2Contact*){};
+	virtual void endContactPlataformaHielo(PlataformaHielo*,b2Contact*){};
 	virtual void endContactTrapecio(Trapecio*,b2Contact*){};
 	virtual void endContactEnemigo(Enemigo*,b2Contact*){};
 	virtual void endContactPersonaje(Personaje*,b2Contact*){};

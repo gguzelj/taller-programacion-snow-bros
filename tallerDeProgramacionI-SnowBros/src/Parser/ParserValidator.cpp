@@ -144,6 +144,7 @@ bool ParserValidator::valTipoObjeto(Json::Value obj, std::string &tipo) {
 	tipo = obj[TIPO].asString();
 
 	if (tipo != RECTANGULO &&
+		tipo != PLATAFORMA_HIELO &&
 		tipo != CIRCULO &&
 		tipo != PARALELOGRAMO &&
 		tipo != POLIGONO &&
@@ -305,7 +306,7 @@ bool ParserValidator::valAnchoObjeto(Json::Value obj, double &ancho) {
 	std::string tipoObjeto = obj[TIPO].asString();
 
 	//Solo los rectangulos y paralelogramos tienen este atributo
-	if (tipoObjeto != RECTANGULO && tipoObjeto != PARALELOGRAMO)
+	if (tipoObjeto != RECTANGULO && tipoObjeto != PARALELOGRAMO && tipoObjeto != PLATAFORMA_HIELO)
 		return false;
 
 	if (!obj.isMember(ANCHO)) {
@@ -341,7 +342,7 @@ bool ParserValidator::valAltoObjeto(Json::Value obj, double &alto) {
 
 	//Solo los rectangulos, paralelogramos y trapecios tienen este atributo.
 	if (tipoObjeto != RECTANGULO && tipoObjeto != PARALELOGRAMO
-			&& tipoObjeto != TRAPECIO)
+			&& tipoObjeto != TRAPECIO && tipoObjeto != PLATAFORMA_HIELO)
 		return false;
 
 	if (!obj.isMember(ALTO)) {

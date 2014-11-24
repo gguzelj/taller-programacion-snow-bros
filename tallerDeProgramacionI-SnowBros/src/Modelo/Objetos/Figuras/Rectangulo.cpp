@@ -67,7 +67,6 @@ Rectangulo::~Rectangulo(){
 }
 
 void Rectangulo::beginContact(Figura* figura,b2Contact* contact){
-
 	figura->beginContactRectangulo(this, contact);
 }
 

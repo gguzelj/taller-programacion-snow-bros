@@ -1,7 +1,7 @@
 #include "../../../../headers/Modelo/Objetos/Figuras/PlataformaHielo.h"
 
 PlataformaHielo::PlataformaHielo(JsonParser *parser, int index, b2World* world){
-	this->type = ID_RECTANGULO;
+	this->type = ID_PLATAFORMAHIELO;
 	this->x = parser->getCoorXObjeto(index);
 	this->y = parser->getCoorYObjeto(index);
 	this->alto = parser->getAltoObjeto(index);
@@ -35,14 +35,18 @@ PlataformaHielo::~PlataformaHielo(){
 	world->DestroyBody(body);
 }
 
-float Rectangulo::getAncho(){
+void PlataformaHielo::beginContact(Figura* figura,b2Contact* contact){
+	figura->beginContactPlataformaHielo(this, contact);
+}
+
+float PlataformaHielo::getAncho(){
 	return ancho;
 }
 
-float Rectangulo::getAlto(){
+float PlataformaHielo::getAlto(){
 	return alto;
 }
 
-char Rectangulo::getId(){
+char PlataformaHielo::getId(){
 	return PLATAFORMAHIELO_CODE;
 }

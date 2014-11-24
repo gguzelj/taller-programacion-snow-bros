@@ -198,7 +198,7 @@ void Drawer::loadFont() {
 	if (TTF_Init() == -1) {
 		manageSDL_ttfError();
 	}
-	int sizeOfTheFont = 15;
+	int sizeOfTheFont = 17;
 	fontToBeUsed = TTF_OpenFont(fontPath.c_str(), sizeOfTheFont);
 	if (fontToBeUsed == nullptr)
 		manageSDL_ttfLoadFontError();
@@ -286,6 +286,8 @@ bool Drawer::loadMedia() {
 
 	SDL_Color blanco = { 255, 255, 255, 0xFF };
 
+	SDL_Color negro = { 0, 0, 0, 0xFF };
+
 	//Load messages
 	if(!pointsLT.loadFromRenderedText(renderer, fontToBeUsed, points, blanco, &anchoPoints, &altoText)){
 		printf("Failed to load text texture!\n");
@@ -295,8 +297,7 @@ bool Drawer::loadMedia() {
 		printf("Failed to load text texture!\n");
 		success = false;
 	}
-
-	if(!levelsLT.loadFromRenderedText(renderer, fontToBeUsed, level, blanco, &anchoLevel, &altoText)){
+	if(!levelsLT.loadFromRenderedText(renderer, fontToBeUsed, level, negro, &anchoLevel, &altoText)){
 		printf("Failed to load text texture!\n");
 		success = false;
 	}
@@ -343,6 +344,21 @@ bool Drawer::loadMedia() {
 		success = false;
 	}
 	numerosLT = {&ceroLT, &unoLT, &dosLT, &tresLT, &cuatroLT, &cincoLT, &seisLT, &sieteLT, &ochoLT, &nueveLT};
+
+	//Load black numbers
+	if(!ceroBlackLT.loadFromRenderedText(renderer, fontToBeUsed, "0", negro, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!unoBlackLT.loadFromRenderedText(renderer, fontToBeUsed, "1", negro, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!dosBlackLT.loadFromRenderedText(renderer, fontToBeUsed, "2", negro, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	numerosBlackLT = {&ceroBlackLT, &unoBlackLT, &dosBlackLT};
 
 	return success;
 }
@@ -782,10 +798,11 @@ void Drawer::drawMessages(dataFromClient_t data, personaje_t personaje) {
 		}
 	}
 	//Dibujamos el indicador de nivel
+	coordXDelMensaje = (ancho_px - (anchoLives + anchoNumber*5)) / 2;
+	coordYDelMensaje = altoText + 50;
 	levelsLT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoPoints, altoText);
-	coordXDelMensaje += anchoLevel/2;
-	coordYDelMensaje += altoText + 5;
-	numerosLT[data.gameData->nivel]->render(renderer, coordXDelMensaje, coordYDelMensaje, anchoNumber, altoText);
+	coordXDelMensaje += anchoPoints;
+	numerosBlackLT[data.gameData->nivel]->render(renderer, coordXDelMensaje, coordYDelMensaje, anchoNumber, altoText);
 
 	//Dibujamos la pantalla de gameOver
 	if (data.gameData->gameOver){
@@ -818,21 +835,17 @@ void Drawer::transicionNivel(){
 	this->setearLimiteInferiorDelNivel((this->nivel)+1);
 }
 
-
-
 void Drawer::setearLimiteInferiorDelNivel(unsigned int nivel){
 
 	if(nivel == 1){
 		limInfCamera = 750;
 		limiteInferior = 750 *currentZoomFactor ;
-
 	}
 	if(nivel == 2){
 		limInfCamera = 0;
 		limiteInferior = 0 ;
 	}
 }
-
 
 void Drawer::setearLimitesDelNivel(unsigned int nivel){
 	float ancho_imagen = ancho_un * FACTOR_CONVERSION_UN_A_PX;
@@ -843,14 +856,11 @@ void Drawer::setearLimitesDelNivel(unsigned int nivel){
 	limiteDerecho = ancho_imagen - coordRel.w + (currentZoomFactor - 1) * (ancho_imagen);
 
 	if(nivel == 1){
-
 		limSupCamera = alto_imagen - camera.h;
 		limiteSuperior =  alto_imagen - coordRel.h + (currentZoomFactor - 1) * (alto_imagen);
-
 	}
 
 	if(nivel == 2){
-
 		limSupCamera = 690 - camera.h;
 		limiteSuperior = 690 * currentZoomFactor - coordRel.h;
 	}

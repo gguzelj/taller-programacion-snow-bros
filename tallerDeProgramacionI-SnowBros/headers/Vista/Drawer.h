@@ -270,8 +270,12 @@ private:
 	LTexture sieteLT;
 	LTexture ochoLT;
 	LTexture nueveLT;
+	LTexture ceroBlackLT;
+	LTexture unoBlackLT;
+	LTexture dosBlackLT;
 
 	std::vector<LTexture*> numerosLT;
+	std::vector<LTexture*> numerosBlackLT;
 
 	//Paths Attributes
 	string fontPath;

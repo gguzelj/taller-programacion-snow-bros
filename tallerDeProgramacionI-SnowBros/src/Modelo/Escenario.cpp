@@ -115,8 +115,8 @@ bool Escenario::asignarPersonaje(conn_id id) {
 	return false;
 }
 
-bool Escenario::crearPersonaje(float x, float y, conn_id id) {
-	Personaje* nuevoPersonaje = new Personaje(x, y, id, this);
+bool Escenario::crearPersonaje(float x, float y, conn_id id,char color) {
+	Personaje* nuevoPersonaje = new Personaje(x, y, id, this,color);
 	if (!nuevoPersonaje)
 		return false;
 	personajes_->push_back(nuevoPersonaje);
@@ -463,6 +463,7 @@ personaje_t* Escenario::getPersonajesParaEnvio() {
 		pers[i].points = (*personaje)->getPoints();
 		pers[i].lives = (*personaje)->getLives();
 		pers[i].inmune = (*personaje)->getInmune();
+		pers[i].color = (*personaje)->color;
 		i++;
 	}
 
@@ -477,6 +478,7 @@ personaje_t* Escenario::getPersonajesParaEnvio() {
 		pers[i].centro.y = 0;
 		pers[i].connectionState = DESCONECTADO;
 		pers[i].inmune = true;
+		pers[i].color = 'n';
 	}
 	return pers;
 }

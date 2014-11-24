@@ -126,7 +126,6 @@ void Enemigo::beginContactBolaEnemigo(BolaEnemigo* bola, b2Contact* contact) {
 	velocidadActual.y = 70;
 	velocidadActual.x *= -1;
 	this->body->SetLinearVelocity(velocidadActual);
-std::cout << "choque" << std::endl;
 	//Lanzamos un thread para que muera el enemigo
 	std::thread r(&Enemigo::morirDelay, this);
 	r.detach();

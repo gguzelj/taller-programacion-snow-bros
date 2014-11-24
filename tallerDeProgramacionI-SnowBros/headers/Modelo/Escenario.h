@@ -48,6 +48,7 @@ typedef struct personaje {
 	int points;
 	int lives;
 	bool inmune;
+	char color;
 } personaje_t;
 
 typedef struct enemigo {
@@ -125,7 +126,7 @@ public:
 	/*
 	 * Crea un personaje en la posicion x,y con id
 	 */
-	bool crearPersonaje(float x, float y, conn_id id);
+	bool crearPersonaje(float x, float y, conn_id id, char color);
 
 	/*
 	 * Creamos los portales del juego

@@ -3,7 +3,7 @@
 
 #define ORIENTACION_INICIAL 'l'
 
-Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
+Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario, char color) {
 
 	//Parametros generales
 	this->escenario_ = escenario;
@@ -24,6 +24,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario) {
 	this->kickCooldown = 0;
 	this->portalCooldown = 0;
 
+	this->color = color;
 
 	this->arrastradoPor = nullptr;
 	this->joint = nullptr;

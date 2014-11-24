@@ -31,8 +31,9 @@ public:
 	conn_id id;
 	Portal *portal1;
 	Portal *portal2;
+	char color;
 
-	Personaje(float x, float y, char id[], Escenario* escenario);
+	Personaje(float x, float y, char id[], Escenario* escenario, char color);
 	~Personaje();
 
 	/*

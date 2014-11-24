@@ -128,6 +128,8 @@ void Server::run() {
 		step();
 		enviarAClientes();
 
+		borrarJugadoresInactivos();
+
 		if (model_->getCantidadDePersonajesVivos() == 0 && !connections_.empty()){
 			std::thread t(&Server::gameOver, this);
 			t.detach();
@@ -651,6 +653,12 @@ void Server::recvall(int s, void *data, int len) throw (receiveException) {
 
 	return;
 }
+char getColor(int indice){
+	if (indice == 0)return COLOR_BLANCO;
+	else if (indice == 1)return COLOR_AZUL;
+	else if (indice == 2)return COLOR_ROJO;
+	else return COLOR_VERDE;
+}
 
 /*
  * Rutina para crear un personaje:
@@ -662,7 +670,10 @@ void Server::crearPersonaje(connection_t* connection, bool reconexion) {
 	if (reconexion) {
 		model_->setPersonajeConnectionState(connection->id, CONECTADO);
 	} else {
-		model_->crearPersonaje(getInitialX(), getInitialY(), connection->id);
+		int indice = getNumberOfConnection(connection);
+		if (indice == -1)throw;
+		char color = getColor(indice);
+		model_->crearPersonaje(getInitialX(), getInitialY(), connection->id, color);
 	}
 
 	Log::ins()->add(SRV_MSG_NEW_PER + std::string(connection->id), Log::INFO);
@@ -743,4 +754,14 @@ void Server::gameOver(){
 	sleep(TIEMPO_GAMEOVER);
 
 	gameData_.gameOver = false;
+}
+
+int Server::getNumberOfConnection(connection_t* connection){
+	int index = 0;
+	for (auto con = connections_.begin(); con != connections_.end(); ++con) {
+		if((*con) == connection)
+			return index;
+		index ++;
+	}
+	return -1;
 }

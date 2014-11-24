@@ -47,6 +47,11 @@
 #define TAM 20
 #define TIEMPO_GAMEOVER 3
 
+#define COLOR_BLANCO 'b'
+#define COLOR_AZUL 'a'
+#define COLOR_VERDE 'v'
+#define COLOR_ROJO 'r'
+
 //MENSAJES
 #define SRV_MSG_CREATE					"Creando Servidor"
 #define SRV_MSG_VAL_PARAM				"Validando parametros"
@@ -318,6 +323,8 @@ private:
 	void borrarJugadoresInactivos();
 
 	void gameOver();
+
+	int getNumberOfConnection(connection_t* connection);
 };
 
 #endif /* SERVER_H_ */

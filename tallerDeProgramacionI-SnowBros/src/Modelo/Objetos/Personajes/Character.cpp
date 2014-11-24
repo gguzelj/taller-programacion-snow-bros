@@ -8,11 +8,15 @@ void Character::move(char orient) {
 	//Primero intentamos movermos en la direccion indicada
 	//pero solamente si el personaje ya se estaba moviendo
 	//en esa direccion
-	if (movimientoIzquierda)
+	if (movimientoIzquierda && !movimientoDerecha){
+		orientacion = IZQUIERDA;
 		return;
+	}
 
-	if (movimientoDerecha)
+	if (movimientoDerecha && !movimientoIzquierda){
+		orientacion = DERECHA;
 		return;
+	}
 
 	//Si el personaje no se movia para ningun lado, seteamos
 	//una orientacion y lo movemos
@@ -51,13 +55,13 @@ bool Character::detener(char orientacion) {
 
 	if (movimientoIzquierda && (orientacion == IZQUIERDA)) {
 		movimientoIzquierda = false;
-		stop();
+		stop(movimientoIzquierda,movimientoDerecha);
 		return true;
 	}
 
 	if (movimientoDerecha && (orientacion == DERECHA)) {
 		movimientoDerecha = false;
-		stop();
+		stop(movimientoIzquierda,movimientoDerecha);
 		return true;
 	}
 	return false;
@@ -111,12 +115,14 @@ void Character::pushRight() {
 	this->body->SetLinearVelocity(velocidadActual);
 }
 
-void Character::stop() {
-	b2Vec2 velocidadActual = this->body->GetLinearVelocity();
-	velocidadActual.x = 0;
-	if (state == &Character::walking)
-		velocidadActual.y = 0;
-	this->body->SetLinearVelocity(velocidadActual);
+void Character::stop(bool movimientoIzquierda, bool movimientoDerecha) {
+	if(!(movimientoIzquierda || movimientoDerecha)){
+		b2Vec2 velocidadActual = this->body->GetLinearVelocity();
+		velocidadActual.x = 0;
+		if ( (state == &Character::walking || state == &Character::shooting) && velocidadActual.y <0)
+			velocidadActual.y = 0;
+		this->body->SetLinearVelocity(velocidadActual);
+	}
 }
 
 b2Fixture* Character::GetFixtureList() {

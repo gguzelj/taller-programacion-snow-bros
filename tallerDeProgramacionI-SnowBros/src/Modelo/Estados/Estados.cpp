@@ -31,12 +31,16 @@ void StandByState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 			character.jump();
 			break;
 
-		case SDLK_LEFT:
+		case SDLK_LEFT:{
 			character.move(IZQUIERDA);
+			character.movimientoIzquierda = true;
+		}
 			break;
 
-		case SDLK_RIGHT:
+		case SDLK_RIGHT:{
 			character.move(DERECHA);
+			character.movimientoDerecha = true;
+		}
 			break;
 
 		case SDLK_SPACE:
@@ -54,12 +58,18 @@ void StandByState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 
 		switch (input) {
 
-		case SDLK_LEFT:
+		case SDLK_LEFT:{
 			orientacion = IZQUIERDA;
+			//Detiene si la orientacion es la misma que tenia
+			character.detener(orientacion);
+		}
 			break;
 
-		case SDLK_RIGHT:
+		case SDLK_RIGHT:{
 			orientacion = DERECHA;
+			//Detiene si la orientacion es la misma que tenia
+			character.detener(orientacion);
+		}
 			break;
 
 		case SDLK_SPACE:
@@ -73,8 +83,6 @@ void StandByState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 
 		}
 
-		//Detiene si la orientacion es la misma que tenia
-		character.detener(orientacion);
 	}
 
 }
@@ -95,12 +103,16 @@ void WalkingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 			character.jump();
 			break;
 
-		case SDLK_LEFT:
+		case SDLK_LEFT:{
 			character.move(IZQUIERDA);
+			character.movimientoIzquierda = true;
+		}
 			break;
 
-		case SDLK_RIGHT:
+		case SDLK_RIGHT:{
 			character.move(DERECHA);
+			character.movimientoDerecha = true;
+		}
 			break;
 
 		case SDLK_SPACE:
@@ -118,12 +130,18 @@ void WalkingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 
 		switch (input) {
 
-		case SDLK_LEFT:
+		case SDLK_LEFT:{
 			orientacion = IZQUIERDA;
+			//Detiene si la orientacion es la misma que tenia
+			character.detener(orientacion);
+		}
 			break;
 
-		case SDLK_RIGHT:
+		case SDLK_RIGHT:{
 			orientacion = DERECHA;
+			//Detiene si la orientacion es la misma que tenia
+			character.detener(orientacion);
+		}
 			break;
 
 		case SDLK_SPACE:
@@ -136,7 +154,7 @@ void WalkingState::handleInput(Character &character, SDL_Keycode input, Uint32 i
 			break;
 		}
 
-		character.detener(orientacion);
+//		character.detener(orientacion);
 	}
 }
 
@@ -162,25 +180,36 @@ void OnAirState::handleInput(Character &character, SDL_Keycode input, Uint32 inp
 				personaje->dispararPortal();
 			break;
 
-		case SDLK_LEFT:
+		case SDLK_LEFT:{
 			character.move(IZQUIERDA);
+			character.movimientoIzquierda = true;
+		}
 			break;
 
-		case SDLK_RIGHT:
+		case SDLK_RIGHT:{
 			character.move(DERECHA);
+			character.movimientoDerecha = true;
+		}
 			break;
+
 		}
 		break;
 
 	case SDL_KEYUP:
 
 		switch (input) {
-		case SDLK_LEFT:
+		case SDLK_LEFT:{
 			orientacion = IZQUIERDA;
+			//Detiene si la orientacion es la misma que tenia
+			character.detener(orientacion);
+		}
 			break;
 
-		case SDLK_RIGHT:
+		case SDLK_RIGHT:{
 			orientacion = DERECHA;
+			//Detiene si la orientacion es la misma que tenia
+			character.detener(orientacion);
+		}
 			break;
 
 		case SDLK_SPACE:
@@ -194,8 +223,8 @@ void OnAirState::handleInput(Character &character, SDL_Keycode input, Uint32 inp
 
 		}
 
-		character.detener(orientacion);
-		break;
+//		character.detener(orientacion);
+//		break;
 	}
 }
 
@@ -216,12 +245,16 @@ void ShootingState::handleInput(Character &character, SDL_Keycode input, Uint32 
 			character.jump();
 			break;
 
-		case SDLK_LEFT:
+		case SDLK_LEFT:{
 			character.move(IZQUIERDA);
+			character.movimientoIzquierda = true;
+		}
 			break;
 
-		case SDLK_RIGHT:
+		case SDLK_RIGHT:{
 			character.move(DERECHA);
+			character.movimientoDerecha = true;
+		}
 			break;
 		}
 		break;
@@ -229,12 +262,18 @@ void ShootingState::handleInput(Character &character, SDL_Keycode input, Uint32 
 	case SDL_KEYUP:
 
 		switch (input) {
-		case SDLK_LEFT:
+		case SDLK_LEFT:{
 			orientacion = IZQUIERDA;
+			//Detiene si la orientacion es la misma que tenia
+			character.detener(orientacion);
+		}
 			break;
 
-		case SDLK_RIGHT:
+		case SDLK_RIGHT:{
 			orientacion = DERECHA;
+			//Detiene si la orientacion es la misma que tenia
+			character.detener(orientacion);
+		}
 			break;
 
 		case SDLK_SPACE:
@@ -248,8 +287,8 @@ void ShootingState::handleInput(Character &character, SDL_Keycode input, Uint32 
 
 		}
 
-		character.detener(orientacion);
-		break;
+//		character.detener(orientacion);
+//		break;
 	}
 }
 

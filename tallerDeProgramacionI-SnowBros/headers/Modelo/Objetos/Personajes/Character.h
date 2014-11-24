@@ -94,7 +94,7 @@ public:
 	void moveRight();
 	void pushLeft();
 	void pushRight();
-	void stop();
+	void stop(bool movimientoIzquierda, bool movimientoDerecha);
 	void decreaseEspera();
 	void decreaseJumpCooldown();
 	void decreaseShootCooldown();

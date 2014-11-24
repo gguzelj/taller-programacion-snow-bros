@@ -114,10 +114,11 @@ void Enemigo::morir() {
 }
 
 void Enemigo::morirDelay() {
-	if (escenario_->debeCrearBonus())
-		escenario_->agregarBonus(escenario_->crearBonus(this));
-	sleep(1);
+	sleep(0.3f);
 	this->estaVivo = false;
+//	Que solo lo cree la bola no si choca con un enemigo
+//	if (escenario_->debeCrearBonus() )
+//		escenario_->agregarBonus(escenario_->crearBonus(this));
 }
 
 void Enemigo::beginContactBolaEnemigo(BolaEnemigo* bola, b2Contact* contact) {

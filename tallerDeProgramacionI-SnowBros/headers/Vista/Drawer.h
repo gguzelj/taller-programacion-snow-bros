@@ -77,6 +77,10 @@
 #define BONUS 'B'
 #define ONEUP 'O'
 
+#define COLOR_BLANCO 'b'
+#define COLOR_AZUL 'a'
+#define COLOR_VERDE 'v'
+#define COLOR_ROJO 'r'
 
 using namespace std;
 
@@ -116,6 +120,7 @@ typedef struct personaje{
 	int points;
 	int lives;
 	bool inmune;
+	char color;
 }personaje_t;
 
 typedef struct enemigo{
@@ -380,7 +385,7 @@ private:
 	 * Selecciona una textura en base a un indice que corresponde a cada jugador.
 	 * Este indice no puede ser negativo, ni tampoco > = 5
 	 */
-	SDL_Texture* selectTexture(int index) throw(ErrorFueraDeRango);
+	SDL_Texture* selectTexture(char color) throw(ErrorFueraDeRango);
 };
 
 

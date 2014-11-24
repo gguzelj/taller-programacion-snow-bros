@@ -702,7 +702,7 @@ void Drawer::drawCharacter(personaje_t person, int index, int connectionState) {
 	SDL_Texture *textura;
 
 	if (connectionState == 1)
-		textura = selectTexture(index);	//Elijo una textura para el jugador normal
+		textura = selectTexture(person.color);	//Elijo una textura para el jugador normal
 	else if (connectionState == 0)
 		textura = imagenPersonaje5;	//Selecciono la textura waiting
 
@@ -936,13 +936,6 @@ void Drawer::actualizarCamara(personaje_t personaje) {
 	ajusteFueraDeLimite(coordRel, limiteIzquierdo, limiteDerecho, limiteInferior, limiteSuperior);
 }
 
-
-
-
-
-
-
-
 void Drawer::zoomIn() {
 	if (currentZoomFactor < ZOOM_MAX) {
 		currentZoomFactor += factor;
@@ -1010,22 +1003,21 @@ void Drawer::zoomOut() {
 	setearLimitesDelNivel(nivel);
 }
 
-SDL_Texture* Drawer::selectTexture(int index) throw (ErrorFueraDeRango) {
-	if (index >= 4 || index < 0)
-		throw ErrorFueraDeRango();
-
-	if (index == 0)
+SDL_Texture* Drawer::selectTexture(char color) throw (ErrorFueraDeRango) {
+	if (color == COLOR_BLANCO)
 		return imagenPersonaje;
 
-	else if (index == 1)
+	else if (color == COLOR_AZUL)
 		return imagenPersonaje2;
 
-	else if (index == 2)
+	else if (color == COLOR_ROJO)
 		return imagenPersonaje3;
 
-	else {
+	else if (color == COLOR_VERDE)
 		return imagenPersonaje4;
-	}
+
+	else
+		throw ErrorFueraDeRango();
 }
 
 void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {

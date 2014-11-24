@@ -146,11 +146,19 @@ void destruirJointsDeBolaEnemigo(BolaEnemigo* enemigo, std::list<Personaje*>* pe
 	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {
 		if (!ASIGNADO((*per)->id)) {
 			if ((*per)->getArrastradoPor() == enemigo) {
+				std::cout << "pre destroy"<< std::endl;
 				world_->DestroyJoint((*per)->getJoint());
+				std::cout << "post destroy"<< std::endl;
 				(*per)->setArrastrado(false);
+				std::cout << "post destroy 2"<< std::endl;
 				(*per)->setArrastradoPor(nullptr);
+				std::cout << "post destroy 3"<< std::endl;
 				(*per)->setJoint(nullptr);
+				std::cout << "post destroy 4"<< std::endl;
 				(*per)->state = &Personaje::standby;
+				std::cout << "post destroy 5"<< std::endl;
+
+
 			}
 		}
 	}
@@ -353,16 +361,16 @@ Figura* Escenario::crearBonus(Figura* enem) {
 
 	//Cambiar el modulo por la cant de bonus
 	switch (rand() % 4) {
-	case 1:
+	case 0:
 		fig = (Figura*) new BonusMoverRapido(enem->getX(), enem->getY(), world_);
 		break;
-	case 2:
+	case 1:
 		fig = (Figura*) new BonusVidaExtra(enem->getX(), enem->getY(), world_);
 		break;
-	case 3:
+	case 2:
 		fig = (Figura*) new BonusAumentarPotencia(enem->getX(), enem->getY(), world_);
 		break;
-	case 4:
+	case 3:
 		fig = (Figura*) new BonusBolaPortal(enem->getX(), enem->getY(), world_);
 		break;
 	}

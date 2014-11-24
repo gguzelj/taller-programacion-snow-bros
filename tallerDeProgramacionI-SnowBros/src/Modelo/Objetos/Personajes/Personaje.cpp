@@ -431,7 +431,7 @@ void Personaje::setConnectionState(char state) {
 }
 
 void Personaje::setJoint(b2RevoluteJoint* joint) {
-	joint = joint;
+	this->joint = joint;
 }
 
 void Personaje::setArrastrado(bool valor) {

@@ -234,7 +234,9 @@ bool ParserValidator::valEscalaObjeto(Json::Value obj, double &escala) {
 
 	//Los rectangulos, paralelogramos y trapecios no tienen escala
 	if (tipoObjeto == RECTANGULO || tipoObjeto == PARALELOGRAMO
-			|| tipoObjeto == TRAPECIO)
+		|| tipoObjeto == TRAPECIO || tipoObjeto == PLATAFORMA_HIELO
+		|| tipoObjeto == ENEMIGOFUEGO || tipoObjeto == ENEMIGOBASICO
+		|| tipoObjeto == ENEMIGOBASICODOS || tipoObjeto == ENEMIGOFUEGODOS)
 		return false;
 
 	//En cualquier otro caso, es un atributo obligatorio
@@ -408,6 +410,14 @@ bool ParserValidator::valBaseObjeto(Json::Value obj, double &base) {
  * Validaciones en flag de estatico del objeto
  */
 bool ParserValidator::valEstaticoObjeto(Json::Value obj, bool &estatico) {
+	//Podemos leer este atributo porque ya sabemos que es valido
+	std::string tipoObjeto = obj[TIPO].asString();
+
+	//Estos objetos no varian en su estaticidad
+	if (tipoObjeto == PLATAFORMA_HIELO
+		|| tipoObjeto == ENEMIGOFUEGO || tipoObjeto == ENEMIGOBASICO
+		|| tipoObjeto == ENEMIGOBASICODOS || tipoObjeto == ENEMIGOFUEGODOS)
+		return false;
 
 	if (!obj.isMember(ESTATICO)) {
 		Log::ins()->add(PARSER_MSG_OBJ_ESTATICO + obj.toStyledString(),
@@ -430,15 +440,16 @@ bool ParserValidator::valEstaticoObjeto(Json::Value obj, bool &estatico) {
  * Validamos la rotacion del objeto
  */
 int ParserValidator::valRotObjeto(Json::Value obj) {
-
-	int rotacion;
-
 	//Podemos leer este atributo porque ya sabemos que es valido
 	std::string tipoObjeto = obj[TIPO].asString();
 
-	//Los circulo no tienen rotacion
-	if (tipoObjeto == CIRCULO)
+	//Estos objetos no tienen rotacion
+	if (tipoObjeto == PLATAFORMA_HIELO || tipoObjeto == CIRCULO
+		|| tipoObjeto == ENEMIGOFUEGO || tipoObjeto == ENEMIGOBASICO
+		|| tipoObjeto == ENEMIGOBASICODOS || tipoObjeto == ENEMIGOFUEGODOS)
 		return false;
+
+	int rotacion;
 
 	if (!obj.isMember(ROT)) {
 		Log::ins()->add(PARSER_MSG_OBJ_ROT + obj.toStyledString(),
@@ -468,6 +479,13 @@ int ParserValidator::valRotObjeto(Json::Value obj) {
  * Validamos la masa del objeto
  */
 int ParserValidator::valMasaObjeto(Json::Value obj) {
+	//Podemos leer este atributo porque ya sabemos que es valido
+	std::string tipoObjeto = obj[TIPO].asString();
+
+	//Estos objetos no tienen rotacion
+	if (tipoObjeto == ENEMIGOFUEGO || tipoObjeto == ENEMIGOBASICO
+		|| tipoObjeto == ENEMIGOBASICODOS || tipoObjeto == ENEMIGOFUEGODOS)
+		return false;
 
 	int masa;
 

@@ -9,6 +9,7 @@ Drawer::Drawer() {
 	this->window = nullptr;
 	this->image = nullptr;
 	this->waitingImage = nullptr;
+	this->winningImage = nullptr;
 	this->imagenPersonaje = nullptr;
 	this->imagenPersonaje2 = nullptr;
 	this->imagenPersonaje3 = nullptr;
@@ -73,6 +74,7 @@ Drawer::Drawer() {
 	this->portalPath = "resources/sprites/portal.png";
 	this->gameOverScreenPath = "resources/textures/gameOver.png";
 	this->waitingScreenPath = "resources/textures/waitingBackground.png";
+	this->winningScreenPath = "resources/textures/winningBackground.png";
 
 	//Text
 	this->points = "Points: ";
@@ -112,6 +114,7 @@ Drawer::~Drawer() {
 	Mix_FreeMusic(gMusic);
 	SDL_DestroyTexture(image);
 	SDL_DestroyTexture(waitingImage);
+	SDL_DestroyTexture(winningImage);
 	SDL_DestroyTexture(imagenPersonaje);
 	SDL_DestroyTexture(imagenPersonaje2);
 	SDL_DestroyTexture(imagenPersonaje3);
@@ -352,8 +355,12 @@ void Drawer::updateView(dataFromClient_t data, char* name) {
 
 	this->clearScenary();
 	//Evaluamos si dibujar la pantalla de espera o el escenario normal
-	if (data.gameData->paused && !data.gameData->gameOver)
+	if (data.gameData->paused && !data.gameData->gameOver && !data.gameData->won)
 		drawWaitingScreen();
+
+	else if(data.gameData->won)
+		drawWinningScreen(data);
+
 	else{
 		this->drawBackground();
 		this->drawScenary(data, name);
@@ -447,6 +454,8 @@ void Drawer::drawScenary(dataFromClient_t data, char* name) {
 		if (strcmp(data.personajes[i].id, name) == 0)
 			drawCharacter(data.personajes[i], i, data.personajes[i].connectionState);
 	}
+
+	puntaje = data.personajes[0].points;
 }
 
 /*
@@ -787,12 +796,29 @@ void Drawer::drawWaitingScreen() {
 	renderTexture(waitingImage, renderer, 0, 0);
 }
 
+void Drawer::drawWinningScreen(dataFromClient_t data){
+	renderTexture(winningImage, renderer, 0, 0);
+
+	//Mostramos el puntaje obtenido
+	//Set the coordinates which we want to draw to
+	float coordXDelMensaje = 670;
+	float coordYDelMensaje = 400;
+
+	int puntos = puntaje;
+	//Render the first message
+	for(int i = 5; i > 0; i--){
+		numerosLT[puntos%10]->render(renderer, coordXDelMensaje+anchoNumber*(i-1), coordYDelMensaje, anchoNumber, altoText);
+		puntos/=10;
+	}
+
+}
+
 void Drawer::drawGameOverScreen(){
 	int anchoT = 500;
 	int altoT = 100;
 
 	//Pense que esto lo dibujaba en medio de la pantall, pero no..
-	float ox = 200;
+	float ox = (ancho_px/2)-(anchoT/2);
 	float oy = 300;
 
 	gameOverScreenLT.render(renderer, ox, oy, anchoT, altoT);
@@ -1050,6 +1076,10 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 	}
 	waitingImage = loadTexture(waitingScreenPath, renderer);
 	if (waitingImage == nullptr) {
+		manageLoadBackgroundError();
+	}
+	winningImage = loadTexture(winningScreenPath, renderer);
+	if (winningImage == nullptr) {
 		manageLoadBackgroundError();
 	}
 	imagenPersonaje = loadTexture(SPRITE_PATH, renderer);

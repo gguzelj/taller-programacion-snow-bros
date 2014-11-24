@@ -137,6 +137,7 @@ typedef struct gameData{
 	unsigned int nivel;
 	bool paused;
 	bool gameOver;
+	bool won;
 	unsigned int cantProyectiles;
 	unsigned int cantEnemigos;
 	unsigned int cantPersonajes;
@@ -206,6 +207,7 @@ private:
 	SDL_Window *window;
 	SDL_Texture *image;
 	SDL_Texture *waitingImage;
+	SDL_Texture *winningImage;
 	SDL_Texture* imagenPersonaje;
 	SDL_Texture* imagenPersonaje2;
 	SDL_Texture* imagenPersonaje3;
@@ -255,6 +257,7 @@ private:
 	LTexture livesLT;
 	LTexture levelsLT;
 	LTexture waitingScreenLT;
+	LTexture winningScreenLT;
 	LTexture gameOverScreenLT;
 
 	//Cargo los numeros del 0 al 9
@@ -292,6 +295,7 @@ private:
 	string portalPath;
 	string gameOverScreenPath;
 	string waitingScreenPath;
+	string winningScreenPath;
 
 	//Texto de puntos y vidas.
 	string points;
@@ -317,6 +321,7 @@ private:
 	int anchoNumber;
 	int anchoWaiting;
 	int altoWaiting;
+	int puntaje;
 
 	//Private Methods
 	//General purpose methods
@@ -338,6 +343,7 @@ private:
 	void drawEnemy(enemigo_t enemigo);
 	void drawMessages(dataFromClient_t data, personaje_t personaje);
 	void drawWaitingScreen();
+	void drawWinningScreen(dataFromClient_t data);
 	void drawGameOverScreen();
 	void presentScenary();
 	void clearScenary();

@@ -25,6 +25,7 @@ protected:
 public:
 	bool esAtravezable;
 	bool estaVivo;
+	bool estaCongelandose;
 	int cantidadDeRebotesParaDestruccion = 0;
 
 	b2Fixture* paredIzquierda;
@@ -51,7 +52,7 @@ public:
 	void disparar();
 	void empujar();
 	void hacerAtravezable();
-	void hacerNoAtravezable();
+	void noAtravezarPlataformas();
 	void handleInput(SDL_Keycode input, Uint32 input_type);
 	void jump();
 	void morir();

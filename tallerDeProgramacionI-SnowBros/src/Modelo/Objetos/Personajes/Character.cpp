@@ -8,11 +8,15 @@ void Character::move(char orient) {
 	//Primero intentamos movermos en la direccion indicada
 	//pero solamente si el personaje ya se estaba moviendo
 	//en esa direccion
-	if (movimientoIzquierda)
+	if (movimientoIzquierda && !movimientoDerecha){
+		orientacion = IZQUIERDA;
 		return;
+	}
 
-	if (movimientoDerecha)
+	if (movimientoDerecha && !movimientoIzquierda){
+		orientacion = DERECHA;
 		return;
+	}
 
 	//Si el personaje no se movia para ningun lado, seteamos
 	//una orientacion y lo movemos

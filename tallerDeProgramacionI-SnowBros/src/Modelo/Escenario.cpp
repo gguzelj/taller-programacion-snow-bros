@@ -76,7 +76,6 @@ Escenario::Escenario(JsonParser *parser) {
 		else
 			figurasDinamicas_->push_back(figura_i);
 	}
-	std::cerr <<enemigosNivelDos_->size();
 }
 
 Escenario::~Escenario() {
@@ -331,14 +330,12 @@ void Escenario::pasarDeNivel(){
 
 		for(auto pers = personajes_->begin(); pers != personajes_->end(); pers++){
 			(*pers)->getb2Body()->SetLinearVelocity(velocidad);
-			(*pers)->setPosicionInicial((*pers)->getPosicionInicial().x,-(*pers)->getPosicionInicial().y);
+			(*pers)->setPosicionInicial((*pers)->getPosicionInicial().x,3);
 			(*pers)->entrarEnPeriodoDeInmunidad();
 			(*pers)->volverAPosicionInicial();
 		}
 	}
 }
-
-
 
 void Escenario::addPointsToPlayers(int puntos) {
 	for (auto per = personajes_->begin(); per != personajes_->end(); ++per) {

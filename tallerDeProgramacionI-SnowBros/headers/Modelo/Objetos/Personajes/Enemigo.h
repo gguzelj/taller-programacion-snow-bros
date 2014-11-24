@@ -23,7 +23,7 @@ protected:
 	void morirDelay();
 
 public:
-
+	bool esAtravezable;
 	bool estaVivo;
 	int cantidadDeRebotesParaDestruccion = 0;
 
@@ -51,11 +51,11 @@ public:
 	void disparar();
 	void empujar();
 	void hacerAtravezable();
+	void hacerNoAtravezable();
 	void handleInput(SDL_Keycode input, Uint32 input_type);
 	void jump();
 	void morir();
 	void movimientoBola();
-	void noAtravezarPlataformas();
 };
 
 #endif /* ENEMIGO_H_ */

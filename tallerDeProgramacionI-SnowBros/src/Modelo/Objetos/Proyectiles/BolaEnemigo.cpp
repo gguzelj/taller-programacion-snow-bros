@@ -78,15 +78,15 @@ void BolaEnemigo::morir(){
 	time_t tiempoInicial, tiempoFinal;
 	time(&tiempoInicial);
 	time(&tiempoFinal);
-	while(difftime(tiempoFinal,tiempoInicial) < 7){
+	while(difftime(tiempoFinal,tiempoInicial) < 3){
 		sleep(0.5);
 		this->actualizar();
 		time(&tiempoFinal);
 	}
-	destruir = true;
 	escenario->agregarSonido(BALLBREAKING);
 	if (escenario->debeCrearBonus())
 		escenario->agregarBonus(escenario->crearBonus(this));
+	destruir = true;
 }
 
 void BolaEnemigo::beginContact(Figura *fig, b2Contact* contact){

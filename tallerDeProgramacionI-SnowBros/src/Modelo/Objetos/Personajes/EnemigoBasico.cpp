@@ -59,6 +59,7 @@ void EnemigoBasico::mover() {
 	if (v1 > 5) {
 		if ((posicionPersonajeY + 1) < posicionEnemigoY && this->getNivelDeCongelamiento() == 0) {
 			this->handleInput(SDLK_UP, SDL_KEYUP);
+			this->atravezarPlataformas();
 		}
 	}
 

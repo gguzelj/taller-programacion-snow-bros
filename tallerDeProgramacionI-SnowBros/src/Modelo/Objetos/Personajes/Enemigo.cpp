@@ -19,7 +19,7 @@ Enemigo::Enemigo(JsonParser *parser, int index, Escenario* escenario) {
 	this->movimientoIzquierda = false;
 	this->teletransportar = false;
 	this->tiempoDeImpactoDeLaUltimaBola = 0.0f;
-//	this->esAtravezable = false;
+	this->esAtravezable = false;
 	this->lives = 5;
 	this->ancho = MITAD_ANCHO_ENEMIGO;
 	this->alto = MITAD_ALTO_ENEMIGO;
@@ -77,7 +77,7 @@ Enemigo::Enemigo(JsonParser *parser, int index, Escenario* escenario) {
 }
 
 Enemigo::~Enemigo() {
-	this->world->DestroyBody(this->body);
+	//this->world->DestroyBody(this->body);
 }
 
 void Enemigo::disparar() {
@@ -120,17 +120,15 @@ void Enemigo::morirDelay() {
 }
 
 void Enemigo::beginContactBolaEnemigo(BolaEnemigo* bola, b2Contact* contact) {
-
-	//Lanzamos un thread para que muera el enemigo
-	std::thread r(&Enemigo::morirDelay, this);
-	r.detach();
-
 	//Lanzamos el enemigo por los aires
 	b2Vec2 velocidadActual = this->body->GetLinearVelocity();
 	velocidadActual.y = 70;
 	velocidadActual.x *= -1;
 	this->body->SetLinearVelocity(velocidadActual);
 
+	//Lanzamos un thread para que muera el enemigo
+	std::thread r(&Enemigo::morirDelay, this);
+	r.detach();
 }
 
 void Enemigo::handleInput(SDL_Keycode input, Uint32 input_type) {
@@ -174,8 +172,7 @@ void Enemigo::congelar() {
 	while (nivelDeCongelamiento != 0) {
 		//En caso de que este hecho bola de nieve, lo hacemos
 		//No atravezable, para que pueda empujarlo
-		if((nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX))
-			noAtravezarPlataformas();
+		esAtravezable = (nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX);
 
 		if (difftime(time(nullptr), tiempoDeImpactoDeLaUltimaBola) > tiempoDeEsperaMaximo) {
 			this->nivelDeCongelamiento -= 2;
@@ -185,10 +182,9 @@ void Enemigo::congelar() {
 		}
 		//En caso de que este hecho bola de nieve, lo hacemos
 		//No atravezable, para que pueda empujarlo
-		if((nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX))
-			noAtravezarPlataformas();
+		esAtravezable = (nivelDeCongelamiento != NIVEL_CONGELAMIENTO_MAX);
 	}
-	noAtravezarPlataformas();
+	esAtravezable = false;
 	aceleracion = 7.0f;
 }
 
@@ -212,7 +208,7 @@ void Enemigo::hacerAtravezable() {
 	this->cambiarFilterIndex(PERSONAJE_FILTER_INDEX);
 }
 
-void Enemigo::noAtravezarPlataformas(){
+void Enemigo::hacerNoAtravezable() {
 	this->cambiarFilterIndex(ENEMIGO_FILTER_INDEX);
 }
 
@@ -230,6 +226,12 @@ int Enemigo::getPuntos() {
 
 void Enemigo::controlarEstado() {
 	Character::controlarEstado();
+
+	//Analizamos si el enemigo es atravezable
+	if (esAtravezable)
+		hacerAtravezable();
+	else
+		hacerNoAtravezable();
 }
 
 void Enemigo::mover() {

@@ -14,6 +14,7 @@
 #define MURO_CODE 'm'
 #define PARALELOGRAMO_CODE 'p'
 #define RECTANGULO_CODE 'r'
+#define PLATAFORMAHIELO_CODE 'l'
 #define PORTAL_CODE 'o'
 #define BONUS_POTENCIA_CODE 'g'
 #define BONUS_VELOCIDAD_CODE 'h'

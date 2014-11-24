@@ -1,11 +1,5 @@
 #include "../../../../headers/Modelo/Objetos/Figuras/Rectangulo.h"
 
-Rectangulo::~Rectangulo(){
-	this->world->DestroyBody(this->body);
-}
-/*
- * Este constructor se va a usar para todas las figuras rectangulo que vengan del json.
- */
 Rectangulo::Rectangulo(JsonParser *parser, int index, b2World* world){
 	this->type = ID_RECTANGULO;
 	this->x = parser->getCoorXObjeto(index);
@@ -68,10 +62,12 @@ Rectangulo::Rectangulo(float ancho, float alto, int rot, float pos_x, float pos_
 	fixture->SetUserData(this);
 }
 
+Rectangulo::~Rectangulo(){
+	world->DestroyBody(body);
+}
+
 void Rectangulo::beginContact(Figura* figura,b2Contact* contact){
-
 	figura->beginContactRectangulo(this, contact);
-
 }
 
 float Rectangulo::getAncho(){

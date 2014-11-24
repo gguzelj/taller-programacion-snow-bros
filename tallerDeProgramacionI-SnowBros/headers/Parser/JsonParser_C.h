@@ -24,12 +24,13 @@
 #define ESTATICO               "estatico"
 
 #define RECTANGULO             "rectangulo"
+#define PLATAFORMA_HIELO	   "plataforma_hielo"
 #define CIRCULO                "circulo"
 #define PARALELOGRAMO          "paralelogramo"
 #define POLIGONO               "poligono"
 #define TRAPECIO               "trapecio"
-#define ENEMIGOBASICO			"enemigobasico"
-#define ENEMIGOFUEGO			"enemigofuego"
+#define ENEMIGOBASICO		   "enemigobasico"
+#define ENEMIGOFUEGO		   "enemigofuego"
 #define ENEMIGOBASICODOS       "enemigobasicodos"
 #define ENEMIGOFUEGODOS        "enemigofuegodos"
 

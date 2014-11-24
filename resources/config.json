@@ -4,7 +4,7 @@
         "gravedad":-10,
         "objetos": [
                      {
-                       "tipo":"rectangulo",
+                       "tipo":"plataforma_hielo",
                        "x":-23,
                        "y":-6,
                        "alto":1,
@@ -129,7 +129,6 @@
                        "x":-5,
                        "y":-10,
                        "escala":2,
-                       "color":"#8834AA",
                        "rot":45,
                        "masa":5,
                        "estatico":true
@@ -140,7 +139,6 @@
                        "x":5,
                        "y":-10,
                        "escala":2,
-                       "color":"#8834AA",
                        "rot":45,
                        "masa":5,
                        "estatico":true
@@ -248,48 +246,28 @@
                      {
                        "tipo":"enemigobasicodos",
                        "x":12,
-                       "y":25,
-                       "escala":1,//campo obligatorio por el json
-                       "rot":45,//campo obligatorio por el json
-                       "masa":1,//campo obligatorio por el json
-                       "estatico":false//campo obligatorio por el json
+                       "y":25
                      },
                      {
                        "tipo":"enemigobasicodos",
                        "x":-5,
-                       "y":13,
-                       "escala":1,//campo obligatorio por el json
-                       "rot":45,//campo obligatorio por el json
-                       "masa":1,//campo obligatorio por el json
-                       "estatico":false//campo obligatorio por el json
+                       "y":13
 
                      },
                      {
                        "tipo":"enemigofuegodos",
                        "x":5,
-                       "y":25,
-                       "escala":1,//campo obligatorio por el json
-                       "rot":45,//campo obligatorio por el json
-                       "masa":1,//campo obligatorio por el json
-                       "estatico":false//campo obligatorio por el json
+                       "y":25
                      },
                      {
                        "tipo":"enemigobasico",
                        "x":-2,
-                       "y":-10,
-                       "escala":1,//campo obligatorio por el json
-                       "rot":45,//campo obligatorio por el json
-                       "masa":1,//campo obligatorio por el json
-                       "estatico":false//campo obligatorio por el json
+                       "y":-10
                      },
                      {
                        "tipo":"enemigobasico",
                        "x":2,
-                       "y":-10,
-                       "escala":1,//campo obligatorio por el json
-                       "rot":45,//campo obligatorio por el json
-                       "masa":1,//campo obligatorio por el json
-                       "estatico":false//campo obligatorio por el json
+                       "y":-10
                      }
                    ]
     }

@@ -259,13 +259,13 @@ void Personaje::controlarEstado() {
 	decreaseKickCooldown();
 
 	if (state == &Personaje::kicking && getKickCooldown() == 0) {
-		stop();
+		stop(movimientoIzquierda,movimientoDerecha);
 		state = &Personaje::standby;
 		return;
 	}
 
 	if (esta_muerto) {
-		stop();
+		stop(movimientoIzquierda,movimientoDerecha);
 		dejarDisparar();
 		dejarDispararPortal();
 		volverAPosicionInicial();

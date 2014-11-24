@@ -161,7 +161,7 @@ void Drawer::loadMusic(){
 	}
 
 	//Load background music
-	gMusic = Mix_LoadMUS( "resources/SoundEffects/beat.wav" );
+	gMusic = Mix_LoadMUS( "resources/SoundEffects/background.mid");
 	if(!gMusic){
 		printf( "Failed to load background music! SDL_mixer Error: %s\n", Mix_GetError() );
 	}

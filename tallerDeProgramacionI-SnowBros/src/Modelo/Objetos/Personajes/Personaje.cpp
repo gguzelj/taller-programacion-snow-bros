@@ -173,10 +173,6 @@ void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 	if (lives > 0 && !inmune) {
 		state = &Personaje::dying;
 		sacarVida();
-		if(lives > 0)
-			escenario_->agregarSonido(DYING);
-		else
-			escenario_->agregarSonido(GAMEOVER);
 		std::thread t(&Personaje::morir, this);
 		t.detach();
 	}
@@ -390,6 +386,10 @@ void Personaje::dejarDispararPortal(){
 }
 
 void Personaje::morir() {
+	if(lives > 0)
+		escenario_->agregarSonido(DYING);
+	else
+		escenario_->agregarSonido(GAMEOVER);
 	sleep(1);
 	entrarEnPeriodoDeInmunidad();
 	esta_muerto = true;

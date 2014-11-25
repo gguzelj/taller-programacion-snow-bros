@@ -341,6 +341,9 @@ void Escenario::pasarDeNivel(){
 		//logica para volver a aparecer en el nuevo nivel.
 
 		for(auto pers = personajes_->begin(); pers != personajes_->end(); pers++){
+			for (b2Fixture* fix = (*pers)->getb2Body()->GetFixtureList(); fix; fix = fix->GetNext()){
+			    fix->SetSensor(false);
+			}
 			(*pers)->getb2Body()->SetLinearVelocity(velocidad);
 			(*pers)->setPosicionInicial((*pers)->getPosicionInicial().x,3);
 			(*pers)->entrarEnPeriodoDeInmunidad();

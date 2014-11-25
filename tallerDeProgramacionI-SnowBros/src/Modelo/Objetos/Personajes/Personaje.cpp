@@ -156,9 +156,6 @@ void Personaje::beginContactBolaFuego(BolaFuego* bola, b2Contact* contacto) {
 		std::thread t(&Personaje::morir, this);
 		t.detach();
 	}
-
-	// TODO En caso que el personaje pierda todas sus vidas, el mismo no debe aparecer mas en la pantalla. Es decir,
-	// hay que sacarlo del modelo.
 }
 
 void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
@@ -173,10 +170,6 @@ void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 	if (lives > 0 && !inmune) {
 		state = &Personaje::dying;
 		sacarVida();
-		if(lives > 0)
-			escenario_->agregarSonido(DYING);
-		else
-			escenario_->agregarSonido(GAMEOVER);
 		std::thread t(&Personaje::morir, this);
 		t.detach();
 	}
@@ -390,6 +383,10 @@ void Personaje::dejarDispararPortal(){
 }
 
 void Personaje::morir() {
+	if(lives > 0)
+		escenario_->agregarSonido(DYING);
+	else
+		escenario_->agregarSonido(GAMEOVER);
 	sleep(1);
 	entrarEnPeriodoDeInmunidad();
 	esta_muerto = true;

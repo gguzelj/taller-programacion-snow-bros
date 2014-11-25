@@ -75,6 +75,7 @@
 #define SRV_MSG_TRY_RECONN				"Intentamos reconectar al cliente. ID: "
 #define SRV_MSG_RECONN					"Cliente reconectado. ID: "
 #define SRV_MSG_RECONN_ERROR			"Ya existe una conexion con el mismo identificador. ID: "
+#define SRV_MSG_RECONN_ERROR_RUNNING	"No puede conetarse al juego hasta que el mismo termine. ID: "
 #define SRV_MSG_INIT_DATA				"Datos iniciales del juego enviados"
 #define SRV_MSG_RECEIVE_ERROR			"No se pueden recibir datos del cliente. ID: "
 #define SRV_MSG_SEND_ERROR				"No se pueden enviar datos al cliente. ID: "
@@ -158,6 +159,7 @@ private:
 	std::thread newConnectionsThread_;
 
 	std::vector<connection_t*> connections_;
+	std::vector<connection_t*> connectionsHistory_;
 	Threadsafe_queue<receivedData_t*>* shared_rcv_queue_;
 
 	//////////////////////////////////////////

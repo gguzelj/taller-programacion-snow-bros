@@ -46,7 +46,7 @@
 
 #define TAM 20
 #define TIEMPO_GAMEOVER 3
-#define TIEMPO_VICTORIA 10
+#define TIEMPO_VICTORIA 8
 
 #define COLOR_BLANCO 'b'
 #define COLOR_AZUL 'a'

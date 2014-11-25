@@ -763,10 +763,12 @@ void Server::gameOver(){
 
 void Server::winGame(){
 	gameData_.won = true;
+	gameData_.paused = true;
 
 	sleep(TIEMPO_VICTORIA);
 
 	gameData_.won = false;
+	gameData_.paused = false;
 }
 
 int Server::getNumberOfConnection(connection_t* connection){

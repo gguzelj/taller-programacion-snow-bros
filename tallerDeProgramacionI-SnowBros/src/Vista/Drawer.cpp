@@ -600,7 +600,7 @@ void Drawer::drawMessages(dataFromClient_t data, personaje_t personaje) {
 
 				//Render the first message
 				string name = string(data.personajes[p].id);
-				for(int i = 0; i < name.size(); i++)
+				for(unsigned int i = 0; i < name.size(); i++)
 					letrasLT[name[i]-'A']->render(renderer, coordXDelMensaje+anchoNumber*i, coordYDelMensaje, anchoNumber, altoText);
 				coordYDelMensaje += altoText + 5;
 				pointsLT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoPoints, altoText);

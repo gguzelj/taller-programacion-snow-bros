@@ -239,6 +239,9 @@ private:
 	Mix_Chunk *gTransition;
 	Mix_Chunk *gkicking;
 
+	SDL_Color blanco;
+	SDL_Color negro;
+
 	//Scene texture
 	LTexture rectangleLT;
 	LTexture icePlatformLT;
@@ -280,8 +283,14 @@ private:
 	LTexture unoBlackLT;
 	LTexture dosBlackLT;
 
+	//Cargo las letras minusculas
+	LTexture aLT, bLT, cLT, dLT, eLT, fLT, gLT, hLT, iLT, jLT, kLT, lLT, mLT, nLT, oLT, pLT, qLT, rLT, sLT, tLT, uLT, vLT, wLT, xLT, yLT, zLT;
+	LTexture auxLT;
+	LTexture ALT, BLT, CLT, DLT, ELT, FLT, GLT, HLT, ILT, JLT, KLT, LLT, MLT, NLT, OLT, PLT, QLT,RLT, SLT,TLT, ULT, VLT, WLT, XLT, YLT, ZLT;
+
 	std::vector<LTexture*> numerosLT;
 	std::vector<LTexture*> numerosBlackLT;
+	std::vector<LTexture*> letrasLT;
 
 	//Paths Attributes
 	string fontPath;
@@ -343,6 +352,9 @@ private:
 	void actualizarCamara(personaje_t personaje);
 	SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren);
 	void setearLimiteInferiorDelNivel(unsigned int nivel);
+
+	bool loadMusicAndSfx();
+	void loadLetters();
 
 	//Drawing methods
 	void drawBackground();

@@ -158,227 +158,6 @@ void Drawer::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, SD
 	renderTexture(tex, ren, dst, clip);
 }
 
-void Drawer::loadMusic(){
-	 //Initialize SDL_mixer con parametros default
-	if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 ){
-		printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
-	}
-
-	//Load background music
-	gMusic = Mix_LoadMUS( "resources/SoundEffects/background.mid");
-	if(!gMusic){
-		printf( "Failed to load background music! SDL_mixer Error: %s\n", Mix_GetError() );
-	}
-	//Load soundeffects
-	gShooting = Mix_LoadWAV("resources/SoundEffects/shooting.wav");
-	if(!gShooting){
-		printf( "Failed to load shooting wav! SDL_mixer Error: %s\n", Mix_GetError() );
-	}
-	gJumping = Mix_LoadWAV("resources/SoundEffects/jumping.wav");
-	if(!gJumping){
-		printf( "Failed to load jumping wav! SDL_mixer Error: %s\n", Mix_GetError() );
-	}
-	gDying = Mix_LoadWAV("resources/SoundEffects/dying.wav");
-	if(!gDying){
-		printf( "Failed to load dying wav! SDL_mixer Error: %s\n", Mix_GetError() );
-	}
-	gBallBreaking = Mix_LoadWAV("resources/SoundEffects/breakball.wav");
-	if(!gBallBreaking){
-		printf( "Failed to load ball breaking wav! SDL_mixer Error: %s\n", Mix_GetError() );
-	}
-	gBonus = Mix_LoadWAV("resources/SoundEffects/bonus.wav");
-	if(!gBonus){
-		printf( "Failed to load bonus wav! SDL_mixer Error: %s\n", Mix_GetError() );
-	}
-	gOneUp = Mix_LoadWAV("resources/SoundEffects/oneup.wav");
-	if(!gOneUp){
-		printf( "Failed to load oneup wav! SDL_mixer Error: %s\n", Mix_GetError() );
-	}
-	gGameover = Mix_LoadWAV("resources/SoundEffects/gameover.wav");
-	if(!gGameover){
-		printf( "Failed to load gameover wav! SDL_mixer Error: %s\n", Mix_GetError() );
-	}
-	gTransition = Mix_LoadWAV("resources/SoundEffects/surf.wav");
-	if(!gTransition){
-		printf( "Failed to load gameover wav! SDL_mixer Error: %s\n", Mix_GetError() );
-	}
-	gkicking = Mix_LoadWAV("resources/SoundEffects/byebye.wav");
-	if(!gkicking){
-		printf( "Failed to load gameover wav! SDL_mixer Error: %s\n", Mix_GetError() );
-	}
-}
-
-void Drawer::loadFont() {
-	//Initialize SDL_ttf
-	if (TTF_Init() == -1) {
-		manageSDL_ttfError();
-	}
-	int sizeOfTheFont = 17;
-	fontToBeUsed = TTF_OpenFont(fontPath.c_str(), sizeOfTheFont);
-	if (fontToBeUsed == nullptr)
-		manageSDL_ttfLoadFontError();
-}
-
-bool Drawer::loadMedia() {
-	//Loading success flag
-	bool success = true;
-
-	//Load images
-	if (!rectangleLT.loadFromFile(rectangleImage, renderer)) {
-		printf("Failed to load rectangle texture!\n");
-		success = false;
-	}
-	if (!icePlatformLT.loadFromFile(icePlatformImage, renderer)) {
-		printf("Failed to load icePlatform texture!\n");
-		success = false;
-	}
-	if (!circleLT.loadFromFile(circleImage, renderer)) {
-		printf("Failed to load circle texture!\n");
-		success = false;
-	}
-	if (!triangleLT.loadFromFile(triangleImagePath, renderer)) {
-		printf("Failed to load triangle texture!\n");
-		success = false;
-	}
-	if (!squareLT.loadFromFile(squareImagePath, renderer)) {
-		printf("Failed to load square texture!\n");
-		success = false;
-	}
-	if (!pentagonLT.loadFromFile(pentagonImagePath, renderer)) {
-		printf("Failed to load pentagon texture!\n");
-		success = false;
-	}
-	if (!hexagonLT.loadFromFile(hexagonImagePath, renderer)) {
-		printf("Failed to load hexagon texture!\n");
-		success = false;
-	}
-	if (!trapexLT.loadFromFile(trapexImagePath, renderer)) {
-		printf("Failed to load trapex texture!\n");
-		success = false;
-	}
-	if (!paralelogramLT.loadFromFile(paralelogramImagePath, renderer)) {
-		printf("Failed to load paralelogram texture!\n");
-		success = false;
-	}
-	if (!snowballLT.loadFromFile(snowballImagePath, renderer)) {
-		printf("Failed to load snowball texture!\n");
-		success = false;
-	}
-	if (!portalballLT.loadFromFile(portalballImagePath, renderer)) {
-		printf("Failed to load portalball texture!\n");
-		success = false;
-	}
-	if (!fireballLT.loadFromFile(fireballImagePath, renderer)) {
-		printf("Failed to load fireball texture!\n");
-		success = false;
-	}
-	if (!bonusPortalLT.loadFromFile(bonusPortalPath, renderer)) {
-		printf("Failed to load bonusPortal texture!\n");
-		success = false;
-	}
-	if (!bonusPotenciaLT.loadFromFile(bonusPotenciaPath, renderer)) {
-		printf("Failed to load bonusPotencia texture!\n");
-		success = false;
-	}
-	if (!bonusVelocidadLT.loadFromFile(bonusVelocidadPath, renderer)) {
-		printf("Failed to load bonusVelocidad texture!\n");
-		success = false;
-	}
-	if (!bonusVidaLT.loadFromFile(bonusVidaPath, renderer)) {
-		printf("Failed to load bonusVida texture!\n");
-		success = false;
-	}
-
-	if(!gameOverScreenLT.loadFromFile(gameOverScreenPath, renderer)){
-		printf("Failed to load text texture!\n");
-		success = false;
-	}
-
-	LTexture imagenBonusPortal;
-	LTexture imagenBonusPotencia;
-	LTexture imagenBonusVelocidad;
-	LTexture imagenBonusVida;
-
-	SDL_Color blanco = { 255, 255, 255, 0xFF };
-
-	SDL_Color negro = { 0, 0, 0, 0xFF };
-
-	//Load messages
-	if(!pointsLT.loadFromRenderedText(renderer, fontToBeUsed, points, blanco, &anchoPoints, &altoText)){
-		printf("Failed to load text texture!\n");
-		success = false;
-	}
-	if(!livesLT.loadFromRenderedText(renderer, fontToBeUsed, lives, blanco, &anchoLives, &altoText)){
-		printf("Failed to load text texture!\n");
-		success = false;
-	}
-	if(!levelsLT.loadFromRenderedText(renderer, fontToBeUsed, level, negro, &anchoLevel, &altoText)){
-		printf("Failed to load text texture!\n");
-		success = false;
-	}
-
-	//Load numbers
-	if(!ceroLT.loadFromRenderedText(renderer, fontToBeUsed, "0", blanco, &anchoNumber, &altoText)){
-		printf("Failed to load text texture!\n");
-		success = false;
-	}
-	if(!unoLT.loadFromRenderedText(renderer, fontToBeUsed, "1", blanco, &anchoNumber, &altoText)){
-		printf("Failed to load text texture!\n");
-		success = false;
-	}
-	if(!dosLT.loadFromRenderedText(renderer, fontToBeUsed, "2", blanco, &anchoNumber, &altoText)){
-		printf("Failed to load text texture!\n");
-		success = false;
-	}
-	if(!tresLT.loadFromRenderedText(renderer, fontToBeUsed, "3", blanco, &anchoNumber, &altoText)){
-		printf("Failed to load text texture!\n");
-		success = false;
-	}
-	if(!cuatroLT.loadFromRenderedText(renderer, fontToBeUsed, "4", blanco, &anchoNumber, &altoText)){
-		printf("Failed to load text texture!\n");
-		success = false;
-	}
-	if(!cincoLT.loadFromRenderedText(renderer, fontToBeUsed, "5", blanco, &anchoNumber, &altoText)){
-		printf("Failed to load text texture!\n");
-		success = false;
-	}
-	if(!seisLT.loadFromRenderedText(renderer, fontToBeUsed, "6", blanco, &anchoNumber, &altoText)){
-		printf("Failed to load text texture!\n");
-		success = false;
-	}
-	if(!sieteLT.loadFromRenderedText(renderer, fontToBeUsed, "7", blanco, &anchoNumber, &altoText)){
-		printf("Failed to load text texture!\n");
-		success = false;
-	}
-	if(!ochoLT.loadFromRenderedText(renderer, fontToBeUsed, "8", blanco, &anchoNumber, &altoText)){
-		printf("Failed to load text texture!\n");
-		success = false;
-	}
-	if(!nueveLT.loadFromRenderedText(renderer, fontToBeUsed, "9", blanco, &anchoNumber, &altoText)){
-		printf("Failed to load text texture!\n");
-		success = false;
-	}
-	numerosLT = {&ceroLT, &unoLT, &dosLT, &tresLT, &cuatroLT, &cincoLT, &seisLT, &sieteLT, &ochoLT, &nueveLT};
-
-	//Load black numbers
-	if(!ceroBlackLT.loadFromRenderedText(renderer, fontToBeUsed, "0", negro, &anchoNumber, &altoText)){
-		printf("Failed to load text texture!\n");
-		success = false;
-	}
-	if(!unoBlackLT.loadFromRenderedText(renderer, fontToBeUsed, "1", negro, &anchoNumber, &altoText)){
-		printf("Failed to load text texture!\n");
-		success = false;
-	}
-	if(!dosBlackLT.loadFromRenderedText(renderer, fontToBeUsed, "2", negro, &anchoNumber, &altoText)){
-		printf("Failed to load text texture!\n");
-		success = false;
-	}
-	numerosBlackLT = {&ceroBlackLT, &unoBlackLT, &dosBlackLT};
-
-	return success;
-}
-
-
 void Drawer::updateView(dataFromClient_t data, char* name) {
 
 	personaje_t personajePrincipal;
@@ -493,7 +272,6 @@ void Drawer::drawScenary(dataFromClient_t data, char* name) {
 			drawCharacter(data.personajes[i], i, data.personajes[i].connectionState);
 			if(data.personajes[i].points != 0)
 				puntaje = data.personajes[i].points;
-			cout<<puntaje<<endl;
 		}
 	}
 }
@@ -791,8 +569,8 @@ void Drawer::drawCharacter(personaje_t person, int index, int connectionState) {
 void Drawer::drawMessages(dataFromClient_t data, personaje_t personaje) {
 
 	//Set the coordinates which we want to draw to
-	float coordXDelMensaje = 10; //Por ahora lo puse asi, despues lo acomodamos bien con los demas mensajes.
-	float coordYDelMensaje = 10; //Parte superior de la pantalla
+	float coordXDelMensaje = 5; //Por ahora lo puse asi, despues lo acomodamos bien con los demas mensajes.
+	float coordYDelMensaje = 5; //Parte superior de la pantalla
 
 	if(data.cantPersonajes >0){
 		int desplazamientoEnX = (ancho_px - (anchoLives + anchoNumber*5)) / data.cantPersonajes;
@@ -803,6 +581,10 @@ void Drawer::drawMessages(dataFromClient_t data, personaje_t personaje) {
 				int vidas = data.personajes[p].lives;
 
 				//Render the first message
+				string name = string(data.personajes[p].id);
+				for(int i = 0; i < name.size(); i++)
+					letrasLT[name[i]-'A']->render(renderer, coordXDelMensaje+anchoNumber*i, coordYDelMensaje, anchoNumber, altoText);
+				coordYDelMensaje += altoText + 5;
 				pointsLT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoPoints, altoText);
 				coordXDelMensaje += anchoPoints;
 				for(int i = 5; i > 0; i--){
@@ -819,13 +601,13 @@ void Drawer::drawMessages(dataFromClient_t data, personaje_t personaje) {
 
 				//Corijo la posicion para el proximo personaje
 				coordXDelMensaje += desplazamientoEnX - anchoLives;
-				coordYDelMensaje -= altoText + 5;
+				coordYDelMensaje -= 2* (altoText + 5);
 			}
 		}
 	}
 	//Dibujamos el indicador de nivel
 	coordXDelMensaje = (ancho_px - (anchoLives + anchoNumber*5)) / 2;
-	coordYDelMensaje = altoText + 50;
+	coordYDelMensaje = altoText + 60;
 	levelsLT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoPoints, altoText);
 	coordXDelMensaje += anchoPoints;
 	numerosBlackLT[data.gameData->nivel]->render(renderer, coordXDelMensaje, coordYDelMensaje, anchoNumber, altoText);
@@ -854,17 +636,13 @@ void Drawer::drawWinningScreen(dataFromClient_t data){
 		numerosLT[puntos%10]->render(renderer, coordXDelMensaje+anchoNumber*(i-1), coordYDelMensaje, anchoNumber, altoText);
 		puntos/=10;
 	}
-
 }
 
 void Drawer::drawGameOverScreen(){
 	int anchoT = 500;
 	int altoT = 100;
-
-	//Pense que esto lo dibujaba en medio de la pantall, pero no..
 	float ox = (ancho_px/2)-(anchoT/2);
 	float oy = 300;
-
 	gameOverScreenLT.render(renderer, ox, oy, anchoT, altoT);
 }
 
@@ -903,12 +681,10 @@ void Drawer::setearLimitesDelNivel(unsigned int nivel){
 		limSupCamera = alto_imagen - camera.h;
 		limiteSuperior =  alto_imagen - coordRel.h + (currentZoomFactor - 1) * (alto_imagen);
 	}
-
 	if(nivel == 2){
 		limSupCamera = 690 - camera.h;
 		limiteSuperior = 690 * currentZoomFactor - coordRel.h;
 	}
-
 	this->setearLimiteInferiorDelNivel(nivel);
 }
 
@@ -939,16 +715,6 @@ void Drawer::inicializarCamara(personaje_t personaje) {
 	coordRel.x = camera.x;
 	coordRel.y = camera.y;
 
-	/*int limIzqCamera = 0;
-	int limDerCamera = ancho_imagen - camera.w;
-	int limInfCamera = 0;
-	int limSupCamera = alto_imagen - camera.h;
-
-	int limiteIzquierdo = 0;
-	int limiteDerecho = ancho_imagen - coordRel.w + (currentZoomFactor - 1) * (ancho_imagen);
-	int limiteInferior = 0;
-	int limiteSuperior = alto_imagen - coordRel.h + (currentZoomFactor - 1) * (alto_imagen);*/
-
 	ajusteFueraDeLimite(camera, limIzqCamera, limDerCamera, limInfCamera, limSupCamera);
 	ajusteFueraDeLimite(coordRel, limiteIzquierdo, limiteDerecho, limiteInferior, limiteSuperior);
 }
@@ -965,16 +731,6 @@ void Drawer::actualizarCamara(personaje_t personaje) {
 
 	float x_relativa = coord_relativa(coordRel.x + (coordRel.w / 2), pos_x);
 	float y_relativa = coord_relativa(coordRel.y + (coordRel.h / 2), pos_y);
-
-	/*int limIzqCamera = 0;
-	int limDerCamera = ancho_imagen - camera.w;
-	int limInfCamera = 0;
-	int limSupCamera = alto_imagen - camera.h;
-
-	int limiteIzquierdo = 0;
-	int limiteDerecho = ancho_imagen - coordRel.w + (currentZoomFactor - 1) * (ancho_imagen);
-	int limiteInferior = 0;
-	int limiteSuperior = alto_imagen - coordRel.h + (currentZoomFactor - 1) * (alto_imagen);*/
 
 	if (x_relativa <= COTA_INF_X) {
 		if (camera.x > limIzqCamera)
@@ -1023,9 +779,6 @@ void Drawer::zoomIn() {
 		setearLimitesDelNivel(nivel);
 	}
 }
-
-
-
 
 void Drawer::zoomOut() {
 	currentZoomFactor -= factor;
@@ -1266,4 +1019,344 @@ SDL_Texture* Drawer::loadTexture(const std::string &file, SDL_Renderer *ren) {
 
 void Drawer::logSDLError(const std::string &msg) {
 	Log::ins()->add(msg + SDL_GetError(), Log::ERROR);
+}
+
+
+void Drawer::loadMusic(){
+	 //Initialize SDL_mixer con parametros default
+	if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 ){
+		printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+
+	//Load background music
+	gMusic = Mix_LoadMUS( "resources/SoundEffects/background.mid");
+	if(!gMusic){
+		printf( "Failed to load background music! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	//Load soundeffects
+	gShooting = Mix_LoadWAV("resources/SoundEffects/shooting.wav");
+	if(!gShooting){
+		printf( "Failed to load shooting wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	gJumping = Mix_LoadWAV("resources/SoundEffects/jumping.wav");
+	if(!gJumping){
+		printf( "Failed to load jumping wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	gDying = Mix_LoadWAV("resources/SoundEffects/dying.wav");
+	if(!gDying){
+		printf( "Failed to load dying wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	gBallBreaking = Mix_LoadWAV("resources/SoundEffects/breakball.wav");
+	if(!gBallBreaking){
+		printf( "Failed to load ball breaking wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	gBonus = Mix_LoadWAV("resources/SoundEffects/bonus.wav");
+	if(!gBonus){
+		printf( "Failed to load bonus wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	gOneUp = Mix_LoadWAV("resources/SoundEffects/oneup.wav");
+	if(!gOneUp){
+		printf( "Failed to load oneup wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	gGameover = Mix_LoadWAV("resources/SoundEffects/gameover.wav");
+	if(!gGameover){
+		printf( "Failed to load gameover wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	gTransition = Mix_LoadWAV("resources/SoundEffects/surf.wav");
+	if(!gTransition){
+		printf( "Failed to load gameover wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	gkicking = Mix_LoadWAV("resources/SoundEffects/byebye.wav");
+	if(!gkicking){
+		printf( "Failed to load gameover wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+}
+
+void Drawer::loadFont() {
+	//Initialize SDL_ttf
+	if (TTF_Init() == -1) {
+		manageSDL_ttfError();
+	}
+	int sizeOfTheFont = 17;
+	fontToBeUsed = TTF_OpenFont(fontPath.c_str(), sizeOfTheFont);
+	if (fontToBeUsed == nullptr)
+		manageSDL_ttfLoadFontError();
+}
+
+bool Drawer::loadMedia() {
+	//Loading success flag
+	bool success = true;
+
+	//Load images
+	if (!rectangleLT.loadFromFile(rectangleImage, renderer)) {
+		printf("Failed to load rectangle texture!\n");
+		success = false;
+	}
+	if (!icePlatformLT.loadFromFile(icePlatformImage, renderer)) {
+		printf("Failed to load icePlatform texture!\n");
+		success = false;
+	}
+	if (!circleLT.loadFromFile(circleImage, renderer)) {
+		printf("Failed to load circle texture!\n");
+		success = false;
+	}
+	if (!triangleLT.loadFromFile(triangleImagePath, renderer)) {
+		printf("Failed to load triangle texture!\n");
+		success = false;
+	}
+	if (!squareLT.loadFromFile(squareImagePath, renderer)) {
+		printf("Failed to load square texture!\n");
+		success = false;
+	}
+	if (!pentagonLT.loadFromFile(pentagonImagePath, renderer)) {
+		printf("Failed to load pentagon texture!\n");
+		success = false;
+	}
+	if (!hexagonLT.loadFromFile(hexagonImagePath, renderer)) {
+		printf("Failed to load hexagon texture!\n");
+		success = false;
+	}
+	if (!trapexLT.loadFromFile(trapexImagePath, renderer)) {
+		printf("Failed to load trapex texture!\n");
+		success = false;
+	}
+	if (!paralelogramLT.loadFromFile(paralelogramImagePath, renderer)) {
+		printf("Failed to load paralelogram texture!\n");
+		success = false;
+	}
+	if (!snowballLT.loadFromFile(snowballImagePath, renderer)) {
+		printf("Failed to load snowball texture!\n");
+		success = false;
+	}
+	if (!portalballLT.loadFromFile(portalballImagePath, renderer)) {
+		printf("Failed to load portalball texture!\n");
+		success = false;
+	}
+	if (!fireballLT.loadFromFile(fireballImagePath, renderer)) {
+		printf("Failed to load fireball texture!\n");
+		success = false;
+	}
+	if (!bonusPortalLT.loadFromFile(bonusPortalPath, renderer)) {
+		printf("Failed to load bonusPortal texture!\n");
+		success = false;
+	}
+	if (!bonusPotenciaLT.loadFromFile(bonusPotenciaPath, renderer)) {
+		printf("Failed to load bonusPotencia texture!\n");
+		success = false;
+	}
+	if (!bonusVelocidadLT.loadFromFile(bonusVelocidadPath, renderer)) {
+		printf("Failed to load bonusVelocidad texture!\n");
+		success = false;
+	}
+	if (!bonusVidaLT.loadFromFile(bonusVidaPath, renderer)) {
+		printf("Failed to load bonusVida texture!\n");
+		success = false;
+	}
+
+	if(!gameOverScreenLT.loadFromFile(gameOverScreenPath, renderer)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+
+	LTexture imagenBonusPortal;
+	LTexture imagenBonusPotencia;
+	LTexture imagenBonusVelocidad;
+	LTexture imagenBonusVida;
+
+	SDL_Color blanco = { 255, 255, 255, 0xFF };
+	SDL_Color negro = { 0, 0, 0, 0xFF };
+
+	//Load messages
+	if(!pointsLT.loadFromRenderedText(renderer, fontToBeUsed, points, blanco, &anchoPoints, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!livesLT.loadFromRenderedText(renderer, fontToBeUsed, lives, blanco, &anchoLives, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!levelsLT.loadFromRenderedText(renderer, fontToBeUsed, level, negro, &anchoLevel, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+
+	//Load numbers
+	if(!ceroLT.loadFromRenderedText(renderer, fontToBeUsed, "0", blanco, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!unoLT.loadFromRenderedText(renderer, fontToBeUsed, "1", blanco, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!dosLT.loadFromRenderedText(renderer, fontToBeUsed, "2", blanco, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!tresLT.loadFromRenderedText(renderer, fontToBeUsed, "3", blanco, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!cuatroLT.loadFromRenderedText(renderer, fontToBeUsed, "4", blanco, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!cincoLT.loadFromRenderedText(renderer, fontToBeUsed, "5", blanco, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!seisLT.loadFromRenderedText(renderer, fontToBeUsed, "6", blanco, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!sieteLT.loadFromRenderedText(renderer, fontToBeUsed, "7", blanco, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!ochoLT.loadFromRenderedText(renderer, fontToBeUsed, "8", blanco, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!nueveLT.loadFromRenderedText(renderer, fontToBeUsed, "9", blanco, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	numerosLT = {&ceroLT, &unoLT, &dosLT, &tresLT, &cuatroLT, &cincoLT, &seisLT, &sieteLT, &ochoLT, &nueveLT};
+
+	//Load black numbers
+	if(!ceroBlackLT.loadFromRenderedText(renderer, fontToBeUsed, "0", negro, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!unoBlackLT.loadFromRenderedText(renderer, fontToBeUsed, "1", negro, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	if(!dosBlackLT.loadFromRenderedText(renderer, fontToBeUsed, "2", negro, &anchoNumber, &altoText)){
+		printf("Failed to load text texture!\n");
+		success = false;
+	}
+	numerosBlackLT = {&ceroBlackLT, &unoBlackLT, &dosBlackLT};
+
+	loadLetters();
+
+	return success;
+}
+
+void Drawer::loadLetters(){
+
+	SDL_Color blanco = { 255, 255, 255, 0xFF };
+
+	if(!aLT.loadFromRenderedText(renderer, fontToBeUsed, "a", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!bLT.loadFromRenderedText(renderer, fontToBeUsed, "b", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!cLT.loadFromRenderedText(renderer, fontToBeUsed, "c", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!dLT.loadFromRenderedText(renderer, fontToBeUsed, "d", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!eLT.loadFromRenderedText(renderer, fontToBeUsed, "e", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!fLT.loadFromRenderedText(renderer, fontToBeUsed, "f", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!gLT.loadFromRenderedText(renderer, fontToBeUsed, "g", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!hLT.loadFromRenderedText(renderer, fontToBeUsed, "h", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!iLT.loadFromRenderedText(renderer, fontToBeUsed, "i", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!jLT.loadFromRenderedText(renderer, fontToBeUsed, "j", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!kLT.loadFromRenderedText(renderer, fontToBeUsed, "k", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!lLT.loadFromRenderedText(renderer, fontToBeUsed, "l", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!mLT.loadFromRenderedText(renderer, fontToBeUsed, "m", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!nLT.loadFromRenderedText(renderer, fontToBeUsed, "n", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!oLT.loadFromRenderedText(renderer, fontToBeUsed, "o", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!pLT.loadFromRenderedText(renderer, fontToBeUsed, "p", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!qLT.loadFromRenderedText(renderer, fontToBeUsed, "q", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!rLT.loadFromRenderedText(renderer, fontToBeUsed, "r", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!sLT.loadFromRenderedText(renderer, fontToBeUsed, "s", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!tLT.loadFromRenderedText(renderer, fontToBeUsed, "t", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!uLT.loadFromRenderedText(renderer, fontToBeUsed, "u", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!vLT.loadFromRenderedText(renderer, fontToBeUsed, "v", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!wLT.loadFromRenderedText(renderer, fontToBeUsed, "w", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!xLT.loadFromRenderedText(renderer, fontToBeUsed, "x", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!yLT.loadFromRenderedText(renderer, fontToBeUsed, "y", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!zLT.loadFromRenderedText(renderer, fontToBeUsed, "z", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!ALT.loadFromRenderedText(renderer, fontToBeUsed, "A", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!BLT.loadFromRenderedText(renderer, fontToBeUsed, "B", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!CLT.loadFromRenderedText(renderer, fontToBeUsed, "C", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!DLT.loadFromRenderedText(renderer, fontToBeUsed, "D", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!ELT.loadFromRenderedText(renderer, fontToBeUsed, "E", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!FLT.loadFromRenderedText(renderer, fontToBeUsed, "F", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!GLT.loadFromRenderedText(renderer, fontToBeUsed, "G", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!HLT.loadFromRenderedText(renderer, fontToBeUsed, "H", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!ILT.loadFromRenderedText(renderer, fontToBeUsed, "I", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!JLT.loadFromRenderedText(renderer, fontToBeUsed, "J", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!KLT.loadFromRenderedText(renderer, fontToBeUsed, "K", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!LLT.loadFromRenderedText(renderer, fontToBeUsed, "L", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!MLT.loadFromRenderedText(renderer, fontToBeUsed, "M", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!NLT.loadFromRenderedText(renderer, fontToBeUsed, "N", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!OLT.loadFromRenderedText(renderer, fontToBeUsed, "O", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!PLT.loadFromRenderedText(renderer, fontToBeUsed, "P", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!QLT.loadFromRenderedText(renderer, fontToBeUsed, "Q", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!RLT.loadFromRenderedText(renderer, fontToBeUsed, "R", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!SLT.loadFromRenderedText(renderer, fontToBeUsed, "S", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!TLT.loadFromRenderedText(renderer, fontToBeUsed, "T", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!ULT.loadFromRenderedText(renderer, fontToBeUsed, "U", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!VLT.loadFromRenderedText(renderer, fontToBeUsed, "V", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!WLT.loadFromRenderedText(renderer, fontToBeUsed, "W", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!XLT.loadFromRenderedText(renderer, fontToBeUsed, "X", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!YLT.loadFromRenderedText(renderer, fontToBeUsed, "Y", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!ZLT.loadFromRenderedText(renderer, fontToBeUsed, "Z", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+	if(!auxLT.loadFromRenderedText(renderer, fontToBeUsed, "0", blanco, &anchoNumber, &altoText))
+		printf("Failed to load text texture!\n");
+
+	letrasLT = {&ALT, &BLT, &CLT, &DLT, &ELT, &FLT, &GLT, &HLT, &ILT, &JLT, &KLT, &LLT, &MLT,
+				&NLT, &OLT, &PLT, &QLT, &RLT, &SLT, &TLT, &ULT, &VLT, &WLT, &XLT, &YLT, &ZLT,
+				&auxLT, &auxLT, &auxLT, &auxLT, &auxLT, &auxLT, //Estan para hacer la cuenta con la tabla ascii
+				&aLT, &bLT, &cLT, &dLT, &eLT, &fLT, &gLT, &hLT, &iLT, &jLT, &kLT, &lLT, &mLT,
+				&nLT, &oLT, &pLT, &qLT, &rLT, &sLT, &tLT, &uLT, &vLT, &wLT, &xLT, &yLT, &zLT};
 }

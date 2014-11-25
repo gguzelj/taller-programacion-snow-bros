@@ -223,54 +223,38 @@ int Client::initialize() {
 }
 
 void Client::enviarHeartBeat() {
-
 	char heartBeatMsg = HB_MSG_TYPE;
-
 	try {
-
-			while (running_) {
-
-				sendall(sock, &heartBeatMsg, sizeof(heartBeatMsg));
-				usleep(HB_TIMEOUT);
-
-			}
-
-		} catch (const sendException& e) {
-			running_ = false;
-			Log::ins()->add(CLIENT_MSG_ERROR_WHEN_SENDING, Log::ERROR);
-			return;
+		while (running_) {
+			sendall(sock, &heartBeatMsg, sizeof(heartBeatMsg));
+			usleep(HB_TIMEOUT);
 		}
-
+	} catch (const sendException& e) {
+		running_ = false;
+		Log::ins()->add(CLIENT_MSG_ERROR_WHEN_SENDING, Log::ERROR);
+		return;
+	}
 }
 
 void Client::enviarAlServer() {
-
 	char eventMsg = EVENT_MSG_TYPE;
-
 	try {
-
 		while (running_) {
-
 			dataToSend_t* data = onEvent();
 			if (data->keycode_1 == 0 && data->keycode_2 == 0 && data->keycode_3 == 0) {
 				free(data);
 				continue;
 			}
-
 			sendall(sock, &eventMsg, sizeof(eventMsg));
 			sendall(sock, data, sizeof(dataToSend_t));
-
 			SDL_Delay(1);
 			free(data);
 		}
-
 	} catch (const sendException& e) {
 		running_ = false;
 		Log::ins()->add(CLIENT_MSG_ERROR_WHEN_SENDING, Log::ERROR);
-
 		return;
 	}
-
 }
 
 /*

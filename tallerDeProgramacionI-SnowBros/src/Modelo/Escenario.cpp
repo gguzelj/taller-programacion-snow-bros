@@ -350,7 +350,7 @@ void Escenario::addPointsToPlayers(int puntos) {
 }
 
 bool Escenario::debeCrearBonus() {
-	return (rand() % 100 < 100);
+	return (rand() % 100 < 50);
 }
 
 Figura* Escenario::crearBonus(Figura* enem) {

@@ -188,6 +188,10 @@ void Escenario::clean() {
 			if (((BolaPortal*) (*pro))->crearPortal) {
 
 				Personaje* per = ((BolaPortal*) (*pro))->personaje;
+
+				if(per->portal1 && per->portal2)
+					return;
+
 				Portal *portal = ((BolaPortal*) (*pro))->crearNuevoPortal();
 
 				if (per->portal1)
@@ -202,8 +206,8 @@ void Escenario::clean() {
 					b2Vec2 portal1Address = per->portal1->getAddress();
 					b2Vec2 portal2Address = per->portal2->getAddress();
 
-					portal1Address.x += (portal1Address.x > 0) ? -1 : 1;
-					portal2Address.x += (portal2Address.x > 0) ? -1 : 1;
+					portal1Address.x += (portal1Address.x > 0) ? -1.5 : 1.5;
+					portal2Address.x += (portal2Address.x > 0) ? -1.5 : 1.5;
 
 					per->portal1->setDestination(portal2Address);
 					per->portal2->setDestination(portal1Address);
@@ -236,6 +240,9 @@ void Escenario::clean() {
 }
 
 void teletransportar(Figura* fig) {
+
+	if(fig->type == ID_PORTAL)
+		return;
 
 	if (fig->teletransportar) {
 

@@ -88,6 +88,8 @@ Drawer::Drawer() {
 	this->ancho_px = 1024;
 	this->alto_px = 690;
 
+	this->puntaje = 0;
+
 	std::ifstream in(imagePath);
 	unsigned int width, height;
 
@@ -474,11 +476,13 @@ void Drawer::drawScenary(dataFromClient_t data, char* name) {
 	}
 	//Dibujo ultimo el personaje del cliente para que se vea arriba de los demas.
 	for (unsigned int i = 0; i < data.cantPersonajes; i++) {
-		if (strcmp(data.personajes[i].id, name) == 0)
+		if (strcmp(data.personajes[i].id, name) == 0){
 			drawCharacter(data.personajes[i], i, data.personajes[i].connectionState);
+			if(data.personajes[i].points != 0)
+				puntaje = data.personajes[i].points;
+			cout<<puntaje<<endl;
+		}
 	}
-
-	puntaje = data.personajes[0].points;
 }
 
 /*

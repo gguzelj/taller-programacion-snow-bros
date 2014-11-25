@@ -37,7 +37,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario, char co
 	this->alto = MITAD_ALTO_PERSONAJE;
 
 	this->esta_muerto = false;
-	this->arma_portal = true;
+	this->arma_portal = false;
 	this->disparar_portal = false;
 	this->movimientoDisparar = false;
 	this->movimientoDerecha = false;
@@ -156,9 +156,6 @@ void Personaje::beginContactBolaFuego(BolaFuego* bola, b2Contact* contacto) {
 		std::thread t(&Personaje::morir, this);
 		t.detach();
 	}
-
-	// TODO En caso que el personaje pierda todas sus vidas, el mismo no debe aparecer mas en la pantalla. Es decir,
-	// hay que sacarlo del modelo.
 }
 
 void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {

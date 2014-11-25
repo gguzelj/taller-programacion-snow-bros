@@ -248,51 +248,6 @@ int Server::manejarNuevoCliente(connection_t *conn) {
 	return SRV_ERROR;
 }
 
-int Server::manejarReconexion(connection_t *conn) {
-
-	std::string msg;
-	int aviso;
-
-	Log::ins()->add(SRV_MSG_TRY_RECONN + std::string(conn->id), Log::INFO);
-
-	//El primer paso consta en buscar alguna conexion con el mismo ID
-	for (unsigned int i = 0; i < connections_.size(); i++) {
-
-		//Si encontramos una conexion inactiva con el mismo id, la activamos
-		// (Solo si el juego no comenzo...)
-		if (strcmp(connections_[i]->id, conn->id) == 0) {
-
-			if (connections_[i]->activa == false) {
-
-				//En otro caso, reestablecemos la conexion
-				aviso = SRV_NO_ERROR;
-				sendall(conn->socket, &aviso, sizeof(int));
-
-				Log::ins()->add(SRV_MSG_RECONN + std::string(conn->id), Log::INFO);
-
-				connections_[i] = conn;
-
-				return SRV_NO_ERROR;
-
-			} else {
-
-				aviso = SRV_ERROR;
-				sendall(conn->socket, &aviso, sizeof(int));
-
-				Log::ins()->add(SRV_MSG_RECONN_ERROR + std::string(conn->id), Log::WARNING);
-
-				return SRV_ERROR;
-			}
-		}
-	}
-
-	aviso = SRV_ERROR;
-	sendall(conn->socket, &aviso, sizeof(int));
-
-	return SRV_ERROR;
-
-}
-
 /*
  * Si se llama este metodo es porque se acepto un nuevo cliente.
  * Eso significa que no se llego al limite maximo de jugadores, y que
@@ -494,12 +449,15 @@ void Server::step() {
 	if (!gameData_.paused)
 		model_->step();
 
-	//si se esta pasndo de nivel hago subir a los personajes.
+	//si se esta pasando de nivel hago subir a los personajes.
 	if (model_->estaPasandoDeNivel()) {
 		for (auto pers = model_->getPersonajes()->begin(); pers != model_->getPersonajes()->end(); pers++) {
 			b2Vec2 velocidad = { 0, 20 };
 			(*pers)->state = &Character::flying;
 			(*pers)->atravezarPlataformas();
+			for (b2Fixture* fix = (*pers)->getb2Body()->GetFixtureList(); fix; fix = fix->GetNext()) {
+				fix->SetSensor(true);
+			}
 			(*pers)->getb2Body()->SetLinearVelocity(velocidad);
 		}
 	}
@@ -765,7 +723,6 @@ void Server::borrarJugadoresInactivos() {
 	//Quitamos la conexion de la lista
 	for (auto con = connections_.begin(); con != connections_.end(); ++con) {
 		if (!(*con)->activa) {
-			connectionsHistory_.push_back((*con));
 			connections_.erase(con);
 		}
 		if (con == connections_.end()) {
@@ -776,10 +733,12 @@ void Server::borrarJugadoresInactivos() {
 
 void Server::gameOver() {
 	gameData_.gameOver = true;
+	gameData_.paused = true;
 
 	sleep(TIEMPO_GAMEOVER);
 
 	gameData_.gameOver = false;
+	gameData_.paused = false;
 }
 
 void Server::winGame() {
@@ -807,5 +766,6 @@ bool Server::perdio() {
 }
 
 bool Server::gano() {
-	return (model_->getCantEnemigos() == 0 && model_->getCantProyectiles() == 0 && model_->getNivel() == 2);
+	//      return (model_->getCantEnemigos()==0 && model_->getCantProyectiles()==0 && model_->getNivel()==2);
+	return (model_->getCantEnemigos() == 0 && model_->noHayEnemigosBola() && model_->getNivel() == 2);
 }

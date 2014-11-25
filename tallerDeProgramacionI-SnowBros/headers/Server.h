@@ -187,11 +187,6 @@ private:
 	 */
 	int manejarNuevoCliente(connection_t *conn);
 
-	/*
-	 * Manejamos el caso de una reconexion
-	 */
-	int manejarReconexion(connection_t *conn);
-
 	/**
 	 * Validamos si con la ultima conexion el juego puede comenzar
 	 */

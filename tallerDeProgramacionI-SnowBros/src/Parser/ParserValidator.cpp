@@ -211,7 +211,7 @@ bool ParserValidator::valCoorYObjeto(Json::Value obj, double &y,
 	}
 
 	y = obj[Y_COOR].asDouble();
-	double margen = esc->altoUn / 2;
+	double margen = esc->altoUn / 2 + 5;
 
 	//Validamos que la coordenada X exista dentro del escenario del juego
 	if (y > margen || y < -margen) {

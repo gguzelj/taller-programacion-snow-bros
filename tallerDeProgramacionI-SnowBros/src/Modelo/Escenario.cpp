@@ -26,7 +26,7 @@ Escenario::Escenario(JsonParser *parser) {
 	world_->SetContactListener(&contactos);
 
 	//Create the ground
-	new Rectangulo(ancho_un - 3, 0, 0, 2, -alto_un / 2, world_);
+	//new Rectangulo(ancho_un - 3, 0, 0, 2, -alto_un / 2, world_);
 
 	//Create the roof
 	this->techo = new Rectangulo(ancho_un, 0, 0, 0, ALTURA_DEL_TECHO, world_);
@@ -341,6 +341,9 @@ void Escenario::pasarDeNivel(){
 		//logica para volver a aparecer en el nuevo nivel.
 
 		for(auto pers = personajes_->begin(); pers != personajes_->end(); pers++){
+			for (b2Fixture* fix = (*pers)->getb2Body()->GetFixtureList(); fix; fix = fix->GetNext()){
+			    fix->SetSensor(false);
+			}
 			(*pers)->getb2Body()->SetLinearVelocity(velocidad);
 			(*pers)->setPosicionInicial((*pers)->getPosicionInicial().x,3);
 			(*pers)->entrarEnPeriodoDeInmunidad();
@@ -575,4 +578,12 @@ void Escenario::borrarPersonajes(){
 		world_->DestroyBody((*per)->getb2Body());
 		personajes_->erase(per++);
 	}
+}
+
+bool Escenario::noHayEnemigosBola(){
+	for (auto proy = proyectiles_->begin(); proy != proyectiles_->end(); ++proy) {
+		if((*proy)->type == ID_BOLA_NIEVE_ENEMIGO)
+			return false;
+	}
+	return true;
 }

@@ -576,3 +576,11 @@ void Escenario::borrarPersonajes(){
 		personajes_->erase(per++);
 	}
 }
+
+bool Escenario::noHayEnemigosBola(){
+	for (auto proy = proyectiles_->begin(); proy != proyectiles_->end(); ++proy) {
+		if((*proy)->type == ID_BOLA_NIEVE_ENEMIGO)
+			return false;
+	}
+	return true;
+}

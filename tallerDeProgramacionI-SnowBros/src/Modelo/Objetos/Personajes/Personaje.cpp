@@ -37,7 +37,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario, char co
 	this->alto = MITAD_ALTO_PERSONAJE;
 
 	this->esta_muerto = false;
-	this->arma_portal = true;
+	this->arma_portal = false;
 	this->disparar_portal = false;
 	this->movimientoDisparar = false;
 	this->movimientoDerecha = false;

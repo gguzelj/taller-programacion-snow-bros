@@ -21,7 +21,7 @@ void EnemigoFuego::shoot() {
 	float x = getX();
 	float y = getY();
 
-	shootCooldown = 20;
+	shootCooldown = 40;
 
 	x += (orientacion == IZQUIERDA) ? -1 : 1;
 

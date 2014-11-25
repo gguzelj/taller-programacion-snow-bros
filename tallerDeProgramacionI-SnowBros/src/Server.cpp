@@ -786,5 +786,6 @@ bool Server::perdio(){
 }
 
 bool Server::gano(){
-	return (model_->getCantEnemigos()==0 && model_->getCantProyectiles()==0 && model_->getNivel()==2);
+//	return (model_->getCantEnemigos()==0 && model_->getCantProyectiles()==0 && model_->getNivel()==2);
+	return (model_->getCantEnemigos()==0 && model_->noHayEnemigosBola() && model_->getNivel()==2);
 }

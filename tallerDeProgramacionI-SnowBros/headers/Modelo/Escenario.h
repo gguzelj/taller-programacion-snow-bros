@@ -235,6 +235,8 @@ public:
 	void borrarPersonajesInactivos();
 	void borrarPersonajes();
 
+	bool noHayEnemigosBola();
+
 private:
 	Contacto contactos;
 	const float32 timeStep = 1 / 40.0; 		//the length of time passed to simulate (seconds)

@@ -758,10 +758,12 @@ void Server::borrarJugadoresInactivos(){
 
 void Server::gameOver(){
 	gameData_.gameOver = true;
+	gameData_.paused = true;
 
 	sleep(TIEMPO_GAMEOVER);
 
 	gameData_.gameOver = false;
+	gameData_.paused = false;
 }
 
 void Server::winGame(){

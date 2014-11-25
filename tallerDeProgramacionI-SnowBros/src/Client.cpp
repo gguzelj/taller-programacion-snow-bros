@@ -241,7 +241,7 @@ void Client::enviarAlServer() {
 	try {
 		while (running_) {
 			dataToSend_t* data = onEvent();
-			if (data->keycode_1 == 0 && data->keycode_2 == 0 && data->keycode_3 == 0) {
+			if (data->keycode_1 == 0 && data->keycode_2 == 0 && data->keycode_3 == 0 && data->keycode_4 == 0) {
 				free(data);
 				continue;
 			}
@@ -299,7 +299,6 @@ void Client::recibirDelServer() {
 			}
 			if(msgType == PASO_DE_NIVEL){
 				view_->transicionNivel();
-				std::cerr<< "se genera la transicion";
 			}
 			if(msgType == TERMINO_EL_PASO_DE_NIVEL){
 				view_->finalizarTransicionNivel();

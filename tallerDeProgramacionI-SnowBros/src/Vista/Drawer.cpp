@@ -671,7 +671,6 @@ void Drawer::presentScenary() {
 void Drawer::transicionNivel(){
 	this->pasandoDeNivel = true;
 	Mix_PlayChannel( -1, gTransition, 0 );
-	std::cerr<< (this->nivel) +1<<std::endl;
 	this->setearLimiteInferiorDelNivel((this->nivel)+1);
 }
 
@@ -1079,11 +1078,15 @@ void Drawer::loadMusic(){
 	}
 	gTransition = Mix_LoadWAV("resources/SoundEffects/surf.wav");
 	if(!gTransition){
-		printf( "Failed to load gameover wav! SDL_mixer Error: %s\n", Mix_GetError() );
+		printf( "Failed to load transition wav! SDL_mixer Error: %s\n", Mix_GetError() );
 	}
 	gkicking = Mix_LoadWAV("resources/SoundEffects/byebye.wav");
 	if(!gkicking){
-		printf( "Failed to load gameover wav! SDL_mixer Error: %s\n", Mix_GetError() );
+		printf( "Failed to load kicking wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	gWinningMusic = Mix_LoadWAV("resources/SoundEffects/victory.wav");
+	if(!gWinningMusic){
+		printf( "Failed to load victory wav! SDL_mixer Error: %s\n", Mix_GetError() );
 	}
 }
 

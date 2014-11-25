@@ -18,7 +18,9 @@ dataToSend_t* Controlador::handleEvents(bool* running){
 			handleEvent(&event, running, &(data->keycode_2),&(data->type_2));
 		if(cantEventos == 2)
 			handleEvent(&event, running, &(data->keycode_3),&(data->type_3));
-		if(cantEventos == 3){
+		if(cantEventos == 3)
+			handleEvent(&event, running, &(data->keycode_4),&(data->type_4));
+		if(cantEventos == 4){
 			int aux1 = 0;
 			unsigned int aux2 = 0;
 			handleEvent(&event, running, &aux1, &aux2);

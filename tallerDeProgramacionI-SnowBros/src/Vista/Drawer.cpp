@@ -35,6 +35,7 @@ Drawer::Drawer() {
 	gBonus = nullptr;
 	gOneUp = nullptr;
 	gGameover = nullptr;
+	gTransition = nullptr;
 
 	//Tamaños para dibujar el texto en pantalla. Los inicializo en 0, despues se modifican.
 	this->altoText = 0;
@@ -194,6 +195,10 @@ void Drawer::loadMusic(){
 	}
 	gGameover = Mix_LoadWAV("resources/SoundEffects/gameover.wav");
 	if(!gGameover){
+		printf( "Failed to load gameover wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	gTransition = Mix_LoadWAV("resources/SoundEffects/surf.wav");
+	if(!gTransition){
 		printf( "Failed to load gameover wav! SDL_mixer Error: %s\n", Mix_GetError() );
 	}
 }
@@ -861,6 +866,7 @@ void Drawer::presentScenary() {
 
 void Drawer::transicionNivel(){
 	this->pasandoDeNivel = true;
+	Mix_PlayChannel( -1, gTransition, 0 );
 	std::cerr<< (this->nivel) +1<<std::endl;
 	this->setearLimiteInferiorDelNivel((this->nivel)+1);
 }

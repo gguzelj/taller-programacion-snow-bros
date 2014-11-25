@@ -77,6 +77,7 @@
 #define GAMEOVER 'G'
 #define BONUS 'B'
 #define ONEUP 'O'
+#define TRANSITION 'T'
 
 #define COLOR_BLANCO 'b'
 #define COLOR_AZUL 'a'
@@ -235,6 +236,7 @@ private:
 	Mix_Chunk *gBonus;
 	Mix_Chunk *gOneUp;
 	Mix_Chunk *gGameover;
+	Mix_Chunk *gTransition;
 
 	//Scene texture
 	LTexture rectangleLT;

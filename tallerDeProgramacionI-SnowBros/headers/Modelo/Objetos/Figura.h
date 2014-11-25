@@ -96,7 +96,7 @@ public:
 	bool validarOverlap();
 	b2Fixture* GetFixtureList();
 	b2Vec2 GetWorldPoint(const b2Vec2& localPoint);
-	b2Vec2 GetCenter();
+	virtual b2Vec2 GetCenter();
 	b2Body* getBody();
 	float getX();
 	float getY();

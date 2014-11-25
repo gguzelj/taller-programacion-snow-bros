@@ -16,9 +16,6 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario, char co
 	this->state = &Personaje::standby;
 	this->orientacion = ORIENTACION_INICIAL;
 
-	this->esta_muerto = false;
-	this->arma_portal = false;
-
 	this->jumpCooldown = 0;
 	this->shootCooldown = 0;
 	this->kickCooldown = 0;

@@ -9,7 +9,7 @@ EnemigoBasico::EnemigoBasico(JsonParser *parser, int index, Escenario* escenario
 }
 
 EnemigoBasico::~EnemigoBasico() {
-	// TODO Auto-generated destructor stub
+
 }
 
 void EnemigoBasico::mover() {

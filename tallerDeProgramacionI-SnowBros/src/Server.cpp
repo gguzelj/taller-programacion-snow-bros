@@ -474,12 +474,15 @@ void Server::step() {
 		model_->step();
 
 
-	//si se esta pasndo de nivel hago subir a los personajes.
+	//si se esta pasando de nivel hago subir a los personajes.
 	if(model_->estaPasandoDeNivel()){
 		for(auto pers = model_->getPersonajes()->begin() ; pers != model_->getPersonajes()->end(); pers++){
 			b2Vec2 velocidad = {0,20};
 			(*pers)->state = &Character::flying;
 			(*pers)->atravezarPlataformas();
+			for (b2Fixture* fix = (*pers)->getb2Body()->GetFixtureList(); fix; fix = fix->GetNext()){
+			    fix->SetSensor(true);
+			}
 			(*pers)->getb2Body()->SetLinearVelocity(velocidad);
 		}
 	}

@@ -237,6 +237,7 @@ private:
 	Mix_Chunk *gOneUp;
 	Mix_Chunk *gGameover;
 	Mix_Chunk *gTransition;
+	Mix_Chunk *gkicking;
 
 	//Scene texture
 	LTexture rectangleLT;

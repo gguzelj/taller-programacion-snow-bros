@@ -36,6 +36,7 @@ Drawer::Drawer() {
 	gOneUp = nullptr;
 	gGameover = nullptr;
 	gTransition = nullptr;
+	gkicking = nullptr;
 
 	//Tamaños para dibujar el texto en pantalla. Los inicializo en 0, despues se modifican.
 	this->altoText = 0;
@@ -199,6 +200,10 @@ void Drawer::loadMusic(){
 	}
 	gTransition = Mix_LoadWAV("resources/SoundEffects/surf.wav");
 	if(!gTransition){
+		printf( "Failed to load gameover wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	gkicking = Mix_LoadWAV("resources/SoundEffects/byebye.wav");
+	if(!gkicking){
 		printf( "Failed to load gameover wav! SDL_mixer Error: %s\n", Mix_GetError() );
 	}
 }
@@ -421,6 +426,9 @@ void Drawer::reproducirSonidos(int* &sonidos, unsigned int size) {
 		}
 		else if(sonidos[i] == GAMEOVER){
 			Mix_PlayChannel( -1, gGameover, 0 );
+		}
+		else if(sonidos[i] == KICKING){
+			Mix_PlayChannel( -1, gkicking, 0 );
 		}
 	}
 }

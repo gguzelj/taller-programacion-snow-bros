@@ -48,9 +48,8 @@ Escenario::Escenario(JsonParser *parser) {
 			figura_i = new Rectangulo(parser, index, world_);
 
 		else if (parser->getTipoObjeto(index) == PLATAFORMA_HIELO)
-			continue;
 			//figura_i = new PlataformaHielo(parser, index, world_);
-
+			continue;
 		else if (parser->getTipoObjeto(index) == PARALELOGRAMO)
 			figura_i = new Paralelogramo(parser, index, world_);
 
@@ -541,6 +540,8 @@ void Escenario::actualizarEnemigos() {
 
 	for (auto en = enemigos_->begin(); en != enemigos_->end(); en++) {
 		(*en)->decreaseEspera();
+		if(nivel == 2 && (*en)->getY() > 0)
+			continue;
 		(*en)->mover();
 	}
 }

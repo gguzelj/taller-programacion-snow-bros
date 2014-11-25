@@ -723,6 +723,7 @@ void Server::borrarJugadoresInactivos() {
 	//Quitamos la conexion de la lista
 	for (auto con = connections_.begin(); con != connections_.end(); ++con) {
 		if (!(*con)->activa) {
+			connectionsHistory_.push_back((*con));
 			connections_.erase(con);
 		}
 		if (con == connections_.end()) {

@@ -547,14 +547,16 @@ void Escenario::actualizarEnemigos() {
 
 	for (auto en = enemigos_->begin(); en != enemigos_->end(); en++) {
 		(*en)->decreaseEspera();
-		if(nivel == 2 && (*en)->getY() > 0)
+		if(nivel == 1 && (*en)->getY() > 0)
 			continue;
 		(*en)->mover();
 	}
 }
+
 void Escenario::setNivel(unsigned int level) {
 	nivel = level;
 }
+
 unsigned int Escenario::getNivel() {
 	return nivel;
 }

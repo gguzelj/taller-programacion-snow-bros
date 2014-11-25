@@ -147,7 +147,7 @@
                        "tipo":"rectangulo",//niveldos
                        "x":0,
                        "y":0,
-                       "alto":3,
+                       "alto":2.45,
                        "ancho":55,
                        "rot":0,
                        "masa":3,

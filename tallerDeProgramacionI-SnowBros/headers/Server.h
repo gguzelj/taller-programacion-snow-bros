@@ -91,6 +91,8 @@ typedef struct receivedData {
 	uint32_t type_2;
 	int32_t keycode_3;
 	uint32_t type_3;
+	int32_t keycode_4;
+	uint32_t type_4;
 } receivedData_t;
 
 typedef struct firstConnectionDetails {

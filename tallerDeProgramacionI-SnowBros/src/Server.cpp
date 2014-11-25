@@ -463,11 +463,10 @@ void Server::step() {
 					personaje->handleInput(data->keycode_1, data->type_1);
 					personaje->handleInput(data->keycode_2, data->type_2);
 					personaje->handleInput(data->keycode_3, data->type_3);
+					personaje->handleInput(data->keycode_4, data->type_4);
 				}
 			}
-
 		}
-
 	}
 
 	//Solo simulamos mientras el juego no esta pausado
@@ -532,7 +531,7 @@ void Server::pasarDeNivel(){
 	//saco el techo para que no se choquen
 	model_->eliminarTecho();
 	//espero hasta que todos hayan subido.
-	sleep(8);
+	sleep(6);
 
 	//aviso que termino de pasar asi el cliente modifica el limite inferior de la camara.
 	msgType = TERMINO_EL_PASO_DE_NIVEL;

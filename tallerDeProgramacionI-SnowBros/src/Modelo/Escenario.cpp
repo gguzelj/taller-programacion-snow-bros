@@ -346,6 +346,7 @@ void Escenario::pasarDeNivel(){
 			}
 			(*pers)->getb2Body()->SetLinearVelocity(velocidad);
 			(*pers)->setPosicionInicial((*pers)->getPosicionInicial().x,3);
+			(*pers)->resetearPortales();
 			(*pers)->entrarEnPeriodoDeInmunidad();
 			(*pers)->volverAPosicionInicial();
 		}

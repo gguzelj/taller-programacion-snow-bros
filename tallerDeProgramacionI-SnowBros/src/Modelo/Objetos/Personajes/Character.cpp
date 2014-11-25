@@ -118,7 +118,7 @@ void Character::pushRight() {
 void Character::stop(bool movimientoIzquierda, bool movimientoDerecha) {
 	if(!(movimientoIzquierda || movimientoDerecha)){
 		b2Vec2 velocidadActual = this->body->GetLinearVelocity();
-		velocidadActual.x = 0;
+		//velocidadActual.x = 0;
 		if ( (state == &Character::walking || state == &Character::shooting) && velocidadActual.y <0)
 			velocidadActual.y = 0;
 		this->body->SetLinearVelocity(velocidadActual);
@@ -261,6 +261,10 @@ void Character::detectarEstado() {
 	//Esta moviendose?
 	if (movimientoDerecha || movimientoIzquierda) {
 		state = &Character::walking;
+		return;
+	}
+	if(!movimientoDerecha && !movimientoIzquierda) {
+		state = &Character::standby;
 		return;
 	}
 }

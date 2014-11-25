@@ -84,6 +84,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario, char co
 	paredDerecha = this->body->CreateFixture(&fixtureDef);
 
 	//Piso
+	fixtureDef.friction = 0.7f;
 	shapeDelPersonaje.SetAsBox(ancho * 0.001, alto / 1000, b2Vec2(0, -alto), 0);
 	piso = this->body->CreateFixture(&fixtureDef);
 
@@ -94,7 +95,6 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario, char co
 
 	//Entramos en el periodo de inmunidad
 	entrarEnPeriodoDeInmunidad();
-
 }
 
 Personaje::~Personaje() {

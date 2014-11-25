@@ -26,8 +26,12 @@ Drawer::Drawer() {
 	this->fontToBeUsed = nullptr;
 	this->portal = nullptr;
 
+	seEstaReproduciendoMusicaDeFondo = false;
+	seEstaReproduciendoMusicaDeVictoria = false;
+
 	//The music that will be played
 	gMusic = nullptr;
+	gWinningMusic = nullptr;
 	gShooting = nullptr;
 	gJumping = nullptr;
 	gDying = nullptr;
@@ -170,6 +174,10 @@ void Drawer::loadMusic(){
 		printf( "Failed to load background music! SDL_mixer Error: %s\n", Mix_GetError() );
 	}
 	//Load soundeffects
+	gWinningMusic = Mix_LoadWAV("resources/SoundEffects/victory.wav");
+	if(!gWinningMusic){
+		printf( "Failed to load victory wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
 	gShooting = Mix_LoadWAV("resources/SoundEffects/shooting.wav");
 	if(!gShooting){
 		printf( "Failed to load shooting wav! SDL_mixer Error: %s\n", Mix_GetError() );
@@ -200,11 +208,11 @@ void Drawer::loadMusic(){
 	}
 	gTransition = Mix_LoadWAV("resources/SoundEffects/surf.wav");
 	if(!gTransition){
-		printf( "Failed to load gameover wav! SDL_mixer Error: %s\n", Mix_GetError() );
+		printf( "Failed to load transition wav! SDL_mixer Error: %s\n", Mix_GetError() );
 	}
 	gkicking = Mix_LoadWAV("resources/SoundEffects/byebye.wav");
 	if(!gkicking){
-		printf( "Failed to load gameover wav! SDL_mixer Error: %s\n", Mix_GetError() );
+		printf( "Failed to load kicking wav! SDL_mixer Error: %s\n", Mix_GetError() );
 	}
 }
 
@@ -381,6 +389,12 @@ bool Drawer::loadMedia() {
 
 void Drawer::updateView(dataFromClient_t data, char* name) {
 
+	if(!seEstaReproduciendoMusicaDeFondo && !seEstaReproduciendoMusicaDeVictoria){
+		//Play the music
+		seEstaReproduciendoMusicaDeFondo = true;
+		Mix_PlayMusic( gMusic, -1 );
+	}
+
 	personaje_t personajePrincipal;
 	for (unsigned int i = 0; i < data.cantPersonajes; i++) {
 		if (strcmp((data.personajes[i]).id, name) == 0)
@@ -393,13 +407,21 @@ void Drawer::updateView(dataFromClient_t data, char* name) {
 	if (data.gameData->paused && !data.gameData->gameOver && !data.gameData->won)
 		drawWaitingScreen();
 
-	else if(data.gameData->won)
+	else if(data.gameData->won){
 		drawWinningScreen(data);
 
+		seEstaReproduciendoMusicaDeFondo = false;
+		if(!seEstaReproduciendoMusicaDeVictoria){
+			seEstaReproduciendoMusicaDeVictoria = true;
+			Mix_HaltMusic();
+			Mix_PlayChannel(-1, gWinningMusic, 0);
+		}
+	}
 	else{
 		this->drawBackground();
 		this->drawScenary(data, name);
 		this->drawMessages(data, personajePrincipal);
+		seEstaReproduciendoMusicaDeVictoria = false;
 	}
 	this->presentScenary();
 }
@@ -1177,9 +1199,6 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 
 	//Aca se carga la musica
 	loadMusic();
-
-	//Play the music
-	Mix_PlayMusic( gMusic, -1 );
 }
 
 void Drawer::manageSDL2_imageError() {

@@ -357,7 +357,7 @@ void Personaje::shootPortal(){
 }
 
 void Personaje::kick() {
-	kickCooldown = 12;
+	kickCooldown = KICKCOOLDOWN;
 	//Iteramos con los contactos de nuestro personaje hasta encontrar al enemigo y luego lo matamos
 	for (b2ContactEdge *ce = body->GetContactList(); ce; ce = ce->next) {
 		b2Contact* c = ce->contact;

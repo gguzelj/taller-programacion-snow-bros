@@ -301,6 +301,8 @@ void Escenario::tomarSonidos() {
 			agregarSonido(SHOOTING);
 		if ((*per)->getJumpCooldown() == JUMPCOOLDOWN - 1)
 			agregarSonido(JUMPING);
+		if ((*per)->getKickCooldown() == KICKCOOLDOWN -1)
+			agregarSonido(KICKING);
 	}
 }
 

@@ -144,10 +144,20 @@
                        "estatico":true
                      },
                      {
+                       "tipo":"rectangulo",//piso
+                       "x":2,
+                       "y":-29.5,
+                       "alto":1.5,
+                       "ancho":53,
+                       "rot":0,
+                       "masa":3,
+                       "estatico":true
+                     },
+                     {
                        "tipo":"rectangulo",//niveldos
                        "x":0,
                        "y":0,
-                       "alto":2.45,
+                       "alto":2.40,
                        "ancho":55,
                        "rot":0,
                        "masa":3,
@@ -268,6 +278,31 @@
                        "tipo":"enemigobasico",
                        "x":2,
                        "y":-10
+                     },
+                     {
+                       "tipo":"enemigobasico",
+                       "x":15,
+                       "y":-10
+                     },
+                     {
+                       "tipo":"enemigobasico",
+                       "x":-15,
+                       "y":-10
+                     },
+                     {
+                       "tipo":"enemigobasico",
+                       "x":0,
+                       "y":-10
+                     },
+                     {
+                       "tipo":"enemigofuego",
+                       "x":5,
+                       "y":-15
+                     },
+                     {
+                       "tipo":"enemigofuego",
+                       "x":-5,
+                       "y":-15
                      }
                    ]
     }

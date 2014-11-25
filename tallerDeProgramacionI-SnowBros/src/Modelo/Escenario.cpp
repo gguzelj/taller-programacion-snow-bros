@@ -26,7 +26,7 @@ Escenario::Escenario(JsonParser *parser) {
 	world_->SetContactListener(&contactos);
 
 	//Create the ground
-	new Rectangulo(ancho_un - 3, 0, 0, 2, -alto_un / 2, world_);
+	//new Rectangulo(ancho_un - 3, 0, 0, 2, -alto_un / 2, world_);
 
 	//Create the roof
 	this->techo = new Rectangulo(ancho_un, 0, 0, 0, ALTURA_DEL_TECHO, world_);

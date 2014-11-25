@@ -203,6 +203,8 @@ private:
 	int limiteSuperior ;
 
 	bool pasandoDeNivel;
+	bool seEstaReproduciendoMusicaDeFondo;
+	bool seEstaReproduciendoMusicaDeVictoria;
 
 	//SDL Attributes
 	SDL_Renderer *renderer;
@@ -229,6 +231,7 @@ private:
 
 	//The music that will be played
 	Mix_Music *gMusic;
+	Mix_Chunk *gWinningMusic;
 	Mix_Chunk *gShooting;
 	Mix_Chunk *gJumping;
 	Mix_Chunk *gDying;

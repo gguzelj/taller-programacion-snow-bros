@@ -26,8 +26,12 @@ Drawer::Drawer() {
 	this->fontToBeUsed = nullptr;
 	this->portal = nullptr;
 
+	seEstaReproduciendoMusicaDeFondo = false;
+	seEstaReproduciendoMusicaDeVictoria = false;
+
 	//The music that will be played
 	gMusic = nullptr;
+	gWinningMusic = nullptr;
 	gShooting = nullptr;
 	gJumping = nullptr;
 	gDying = nullptr;
@@ -160,6 +164,12 @@ void Drawer::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, SD
 
 void Drawer::updateView(dataFromClient_t data, char* name) {
 
+	if(!seEstaReproduciendoMusicaDeFondo && !seEstaReproduciendoMusicaDeVictoria){
+		//Play the music
+		seEstaReproduciendoMusicaDeFondo = true;
+		Mix_PlayMusic( gMusic, -1 );
+	}
+
 	personaje_t personajePrincipal;
 	for (unsigned int i = 0; i < data.cantPersonajes; i++) {
 		if (strcmp((data.personajes[i]).id, name) == 0)
@@ -172,13 +182,21 @@ void Drawer::updateView(dataFromClient_t data, char* name) {
 	if (data.gameData->paused && !data.gameData->gameOver && !data.gameData->won)
 		drawWaitingScreen();
 
-	else if(data.gameData->won)
+	else if(data.gameData->won){
 		drawWinningScreen(data);
 
+		seEstaReproduciendoMusicaDeFondo = false;
+		if(!seEstaReproduciendoMusicaDeVictoria){
+			seEstaReproduciendoMusicaDeVictoria = true;
+			Mix_HaltMusic();
+			Mix_PlayChannel(-1, gWinningMusic, 0);
+		}
+	}
 	else{
 		this->drawBackground();
 		this->drawScenary(data, name);
 		this->drawMessages(data, personajePrincipal);
+		seEstaReproduciendoMusicaDeVictoria = false;
 	}
 	this->presentScenary();
 }
@@ -930,9 +948,6 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 
 	//Aca se carga la musica
 	loadMusic();
-
-	//Play the music
-	Mix_PlayMusic( gMusic, -1 );
 }
 
 void Drawer::manageSDL2_imageError() {

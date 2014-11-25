@@ -48,8 +48,8 @@ Escenario::Escenario(JsonParser *parser) {
 			figura_i = new Rectangulo(parser, index, world_);
 
 		else if (parser->getTipoObjeto(index) == PLATAFORMA_HIELO)
-			//figura_i = new PlataformaHielo(parser, index, world_);
-			continue;
+			figura_i = new PlataformaHielo(parser, index, world_);
+
 		else if (parser->getTipoObjeto(index) == PARALELOGRAMO)
 			figura_i = new Paralelogramo(parser, index, world_);
 

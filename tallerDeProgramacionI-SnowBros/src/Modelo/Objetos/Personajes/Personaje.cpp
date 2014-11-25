@@ -76,15 +76,15 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario, char co
 	fix->SetUserData(this);
 
 	//Pared Izquierda
-	shapeDelPersonaje.SetAsBox(ancho / 100, alto * 0.002, b2Vec2(-ancho, 0), 0);
+	shapeDelPersonaje.SetAsBox(ancho / 1000, alto * 0.002, b2Vec2(-ancho, 0), 0);
 	paredIzquierda = this->body->CreateFixture(&fixtureDef);
 
 	//ParedDerecha
-	shapeDelPersonaje.SetAsBox(ancho / 100, alto * 0.002, b2Vec2(ancho, 0), 0);
+	shapeDelPersonaje.SetAsBox(ancho / 1000, alto * 0.002, b2Vec2(ancho, 0), 0);
 	paredDerecha = this->body->CreateFixture(&fixtureDef);
 
 	//Piso
-	shapeDelPersonaje.SetAsBox(ancho * 0.001, alto / 100, b2Vec2(0, -alto), 0);
+	shapeDelPersonaje.SetAsBox(ancho * 0.001, alto / 1000, b2Vec2(0, -alto), 0);
 	piso = this->body->CreateFixture(&fixtureDef);
 
 	//Seteamos esta clase como UserData

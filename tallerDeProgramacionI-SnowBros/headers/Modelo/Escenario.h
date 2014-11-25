@@ -24,6 +24,7 @@
 #include "Objetos/Figura.h"
 #include "Objetos/Figuras/Circulo.h"
 #include "Objetos/Figuras/Paralelogramo.h"
+#include "Objetos/Figuras/PlataformaHielo.h"
 #include "Objetos/Figuras/Rectangulo.h"
 #include "Objetos/Figuras/Poligono.h"
 #include "Objetos/Figuras/Trapecio.h"

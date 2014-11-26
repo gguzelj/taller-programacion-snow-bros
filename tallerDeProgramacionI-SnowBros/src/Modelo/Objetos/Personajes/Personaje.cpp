@@ -118,6 +118,8 @@ void crearJoint(Personaje* personaje, BolaEnemigo* bolaEnemigo, b2World* world_)
 
 void Personaje::handleInput(SDL_Keycode input, Uint32 input_type) {
 
+	if(state == &Personaje::flying)
+		return;
 	if (state == &Personaje::dying) {
 		dejarDisparar();
 		detener(IZQUIERDA);
@@ -226,12 +228,16 @@ bool Personaje::estaEmpujandoEnemigo() {
 
 void Personaje::controlarEstado() {
 
-	Character::controlarEstado();
+
 
 	if(state == &Character::flying){
 		this->movimientoDerecha = false;
 		this->movimientoIzquierda = false;
+		return;
 	}
+
+	Character::controlarEstado();
+
 
 	decreaseShootPortalCooldown();
 	shootPortal();

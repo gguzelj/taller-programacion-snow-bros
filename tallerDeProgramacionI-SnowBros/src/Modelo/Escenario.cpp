@@ -338,6 +338,7 @@ void Escenario::pasarDeNivel(){
 			(*pers)->setPosicionInicial((*pers)->getPosicionInicial().x,3);
 			(*pers)->resetearPortales();
 			(*pers)->entrarEnPeriodoDeInmunidad();
+			(*pers)->state = &Character::standby;
 			(*pers)->volverAPosicionInicial();
 		}
 	}

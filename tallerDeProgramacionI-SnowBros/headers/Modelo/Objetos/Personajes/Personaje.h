@@ -285,6 +285,13 @@ public:
 
 	void entrarEnPeriodoDeInmunidad();
 
+
+	void resetearPortales(){
+		this->arma_portal = false;
+		this->portal1 = nullptr;
+		this->portal2 = nullptr;
+	}
+
 	bool esta_muerto;
 
 private:

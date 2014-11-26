@@ -161,6 +161,7 @@ int Server::acceptConnection(int newsockfd) {
 
 	std::string msg;
 	bool reconexion;
+	int aviso;
 	connection_t* connection = (connection_t*) malloc(sizeof(connection_t));
 
 	Log::ins()->add(SRV_MSG_NEW_CLIENT, Log::INFO);
@@ -181,7 +182,12 @@ int Server::acceptConnection(int newsockfd) {
 				return SRV_ERROR;
 
 		} else {
+
+			aviso = SRV_ERROR;
+			sendall(connection->socket, &aviso, sizeof(int));
+			Log::ins()->add(SRV_MSG_RECONN_ERROR + std::string(connection->id), Log::WARNING);
 			return SRV_ERROR;
+
 		}
 
 		//Creamos el personaje y enviamos los datos del juego
@@ -205,6 +211,19 @@ int Server::manejarNuevoCliente(connection_t *conn) {
 	std::string msg;
 	int aviso;
 
+	//Buscamos en el historial de conexiones. Si el id ya se conecto, rechazamos
+	for (unsigned int i = 0; i < connectionsHistory_.size(); i++) {
+		if (strcmp(connectionsHistory_[i]->id, conn->id) == 0) {
+
+			aviso = SRV_ERROR;
+			sendall(conn->socket, &aviso, sizeof(int));
+
+			Log::ins()->add(SRV_MSG_RECONN_ERROR_RUNNING + std::string(conn->id), Log::WARNING);
+			return SRV_ERROR;
+
+		}
+	}
+
 	Log::ins()->add(SRV_MSG_SEARCH_POS + std::string(conn->id), Log::INFO);
 
 	//Validamos si existe lugar suficiente
@@ -227,49 +246,6 @@ int Server::manejarNuevoCliente(connection_t *conn) {
 	Log::ins()->add(SRV_MSG_REJ_CONN + std::string(conn->id), Log::WARNING);
 
 	return SRV_ERROR;
-}
-
-int Server::manejarReconexion(connection_t *conn) {
-
-	std::string msg;
-	int aviso;
-
-	Log::ins()->add(SRV_MSG_TRY_RECONN + std::string(conn->id), Log::INFO);
-
-	//El primer paso consta en buscar alguna conexion con el mismo ID
-	for (unsigned int i = 0; i < connections_.size(); i++) {
-
-		//Si encontramos una conexion inactiva con el mismo id, la activamos
-		if (strcmp(connections_[i]->id, conn->id) == 0) {
-
-			if (connections_[i]->activa == false) {
-
-				aviso = SRV_NO_ERROR;
-				sendall(conn->socket, &aviso, sizeof(int));
-
-				Log::ins()->add(SRV_MSG_RECONN + std::string(conn->id), Log::INFO);
-
-				connections_[i] = conn;
-
-				return SRV_NO_ERROR;
-
-			} else {
-
-				aviso = SRV_ERROR;
-				sendall(conn->socket, &aviso, sizeof(int));
-
-				Log::ins()->add(SRV_MSG_RECONN_ERROR + std::string(conn->id), Log::WARNING);
-
-				return SRV_ERROR;
-			}
-		}
-	}
-
-	aviso = SRV_ERROR;
-	sendall(conn->socket, &aviso, sizeof(int));
-
-	return SRV_ERROR;
-
 }
 
 /*
@@ -420,7 +396,7 @@ void Server::enviarAlCliente(connection_t *conn) {
 
 		try {
 
-			sendall(conn->socket,&msgType,sizeof(msgType));
+			sendall(conn->socket, &msgType, sizeof(msgType));
 
 			enviarGameData(conn->socket, dataToBeSent.gameData);
 			enviarPersonajes(conn->socket, dataToBeSent.personajes);
@@ -473,34 +449,31 @@ void Server::step() {
 	if (!gameData_.paused)
 		model_->step();
 
-
 	//si se esta pasando de nivel hago subir a los personajes.
-	if(model_->estaPasandoDeNivel()){
-		for(auto pers = model_->getPersonajes()->begin() ; pers != model_->getPersonajes()->end(); pers++){
-			b2Vec2 velocidad = {0,20};
+	if (model_->estaPasandoDeNivel()) {
+		for (auto pers = model_->getPersonajes()->begin(); pers != model_->getPersonajes()->end(); pers++) {
+			b2Vec2 velocidad = { 0, 20 };
 			(*pers)->state = &Character::flying;
 			(*pers)->atravezarPlataformas();
-			for (b2Fixture* fix = (*pers)->getb2Body()->GetFixtureList(); fix; fix = fix->GetNext()){
-			    fix->SetSensor(true);
+			for (b2Fixture* fix = (*pers)->getb2Body()->GetFixtureList(); fix; fix = fix->GetNext()) {
+				fix->SetSensor(true);
 			}
 			(*pers)->getb2Body()->SetLinearVelocity(velocidad);
 		}
 	}
 	// si se dan las condiciones de paso de nivel creo el thread.
-	if(model_->getCantEnemigos() == 0 && !model_->estaPasandoDeNivel() && model_->getNivel() < NIVEL_MAX){
+	if (model_->getCantEnemigos() == 0 && !model_->estaPasandoDeNivel() && model_->getNivel() < NIVEL_MAX) {
 		std::thread t(&Server::pasarDeNivel, this);
 		t.detach();
 	}
 
-
 	SDL_Delay(30);
 
-	if (perdio()){
+	if (perdio()) {
 		std::thread t(&Server::gameOver, this);
 		t.detach();
 		reiniciar();
-	}
-	else if(gano()){
+	} else if (gano()) {
 		std::thread t(&Server::winGame, this);
 		t.detach();
 		model_->borrarPersonajes();
@@ -508,11 +481,10 @@ void Server::step() {
 	}
 }
 
-
 //Thread que maneja la logica de pasar de nivel.
-void Server::pasarDeNivel(){
+void Server::pasarDeNivel() {
 	//seteo a la lista los enemigos del nivel 2 para que no cree el thread nuevamente
-	model_->setearEnemigos(model_->getNivel()+1);
+	model_->setearEnemigos(model_->getNivel() + 1);
 
 	//espero para que lleguen a agarrar los bonus que quedan.
 
@@ -521,11 +493,11 @@ void Server::pasarDeNivel(){
 	//aviso a los clientes que se paso de nivel, no lo hago antes para que no modifiquen sus camaras
 	//y se pueda ver el nivel siguiente al saltar muy alto.
 	char msgType = PASO_DE_NIVEL;
-	for(auto conn = connections_.begin(); conn != connections_.end();conn++){
-		sendall((*conn)->socket,&msgType,sizeof(msgType) );
+	for (auto conn = connections_.begin(); conn != connections_.end(); conn++) {
+		sendall((*conn)->socket, &msgType, sizeof(msgType));
 	}
 
-	for(auto pers = model_->getPersonajes()->begin() ; pers != model_->getPersonajes()->end(); pers++){
+	for (auto pers = model_->getPersonajes()->begin(); pers != model_->getPersonajes()->end(); pers++) {
 		(*pers)->entrarEnPeriodoDeInmunidad();
 	}
 
@@ -538,14 +510,12 @@ void Server::pasarDeNivel(){
 
 	//aviso que termino de pasar asi el cliente modifica el limite inferior de la camara.
 	msgType = TERMINO_EL_PASO_DE_NIVEL;
-		for(auto conn = connections_.begin(); conn != connections_.end();conn++){
-			sendall((*conn)->socket,&msgType,sizeof(msgType) );
-		}
+	for (auto conn = connections_.begin(); conn != connections_.end(); conn++) {
+		sendall((*conn)->socket, &msgType, sizeof(msgType));
+	}
 
 	model_->pasarDeNivel();
 }
-
-
 
 /*
  * Validaciones de parametros.
@@ -660,11 +630,15 @@ void Server::recvall(int s, void *data, int len) throw (receiveException) {
 
 	return;
 }
-char getColor(int indice){
-	if (indice == 0)return COLOR_BLANCO;
-	else if (indice == 1)return COLOR_AZUL;
-	else if (indice == 2)return COLOR_ROJO;
-	else return COLOR_VERDE;
+char getColor(int indice) {
+	if (indice == 0)
+		return COLOR_BLANCO;
+	else if (indice == 1)
+		return COLOR_AZUL;
+	else if (indice == 2)
+		return COLOR_ROJO;
+	else
+		return COLOR_VERDE;
 }
 
 /*
@@ -678,7 +652,8 @@ void Server::crearPersonaje(connection_t* connection, bool reconexion) {
 		model_->setPersonajeConnectionState(connection->id, CONECTADO);
 	} else {
 		int indice = getNumberOfConnection(connection);
-		if (indice == -1)throw;
+		if (indice == -1)
+			throw;
 		char color = getColor(indice);
 		model_->crearPersonaje(getInitialX(), getInitialY(), connection->id, color);
 	}
@@ -721,7 +696,7 @@ void Server::initSendingThread(connection_t* connection) {
 	Log::ins()->add(SRV_MSG_SEND_THREAD + std::string(connection->id), Log::INFO);
 }
 
-void Server::reiniciar(){
+void Server::reiniciar() {
 	gameData_.paused = true;
 
 	//Reiniciamos el modelo
@@ -734,29 +709,30 @@ void Server::reiniciar(){
 
 	//Creamos jugadores para todos los clientes existentes
 	for (unsigned int i = 0; i < connections_.size(); i++) {
-		crearPersonaje(connections_[i],false);
+		crearPersonaje(connections_[i], false);
 	}
 
 	if (connections_.size() == connectionsLimit_)
 		gameData_.paused = false;
 }
 
-void Server::borrarJugadoresInactivos(){
+void Server::borrarJugadoresInactivos() {
 	//Borramos al personaje del modelo
 	model_->borrarPersonajesInactivos();
 
 	//Quitamos la conexion de la lista
 	for (auto con = connections_.begin(); con != connections_.end(); ++con) {
-		if (!(*con)->activa){
+		if (!(*con)->activa) {
+			connectionsHistory_.push_back((*con));
 			connections_.erase(con);
 		}
-		if(con == connections_.end()){
+		if (con == connections_.end()) {
 			return;
 		}
 	}
 }
 
-void Server::gameOver(){
+void Server::gameOver() {
 	gameData_.gameOver = true;
 	gameData_.paused = true;
 
@@ -766,7 +742,7 @@ void Server::gameOver(){
 	gameData_.paused = false;
 }
 
-void Server::winGame(){
+void Server::winGame() {
 	gameData_.won = true;
 	gameData_.paused = true;
 
@@ -776,21 +752,21 @@ void Server::winGame(){
 	gameData_.paused = false;
 }
 
-int Server::getNumberOfConnection(connection_t* connection){
+int Server::getNumberOfConnection(connection_t* connection) {
 	int index = 0;
 	for (auto con = connections_.begin(); con != connections_.end(); ++con) {
-		if((*con) == connection)
+		if ((*con) == connection)
 			return index;
-		index ++;
+		index++;
 	}
 	return -1;
 }
 
-bool Server::perdio(){
+bool Server::perdio() {
 	return (model_->getCantidadDePersonajesVivos() == 0 && !connections_.empty());
 }
 
-bool Server::gano(){
-//	return (model_->getCantEnemigos()==0 && model_->getCantProyectiles()==0 && model_->getNivel()==2);
-	return (model_->getCantEnemigos()==0 && model_->noHayEnemigosBola() && model_->getNivel()==2);
+bool Server::gano() {
+	//      return (model_->getCantEnemigos()==0 && model_->getCantProyectiles()==0 && model_->getNivel()==2);
+	return (model_->getCantEnemigos() == 0 && model_->noHayEnemigosBola() && model_->getNivel() == 2);
 }

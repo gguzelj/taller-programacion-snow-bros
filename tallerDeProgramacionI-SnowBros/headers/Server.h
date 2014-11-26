@@ -45,7 +45,7 @@
 #define EVENT_MSG_TYPE 2
 
 #define TAM 20
-#define TIEMPO_GAMEOVER 3
+#define TIEMPO_GAMEOVER 8
 #define TIEMPO_VICTORIA 8
 
 #define COLOR_BLANCO 'b'

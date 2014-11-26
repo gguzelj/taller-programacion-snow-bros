@@ -710,9 +710,6 @@ void Server::reiniciar() {
 	for (unsigned int i = 0; i < connections_.size(); i++) {
 		crearPersonaje(connections_[i], false);
 	}
-
-	if (connections_.size() == connectionsLimit_)
-		gameData_.paused = false;
 }
 
 void Server::borrarJugadoresInactivos() {

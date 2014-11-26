@@ -384,8 +384,10 @@ void Personaje::dejarDispararPortal(){
 void Personaje::morir() {
 	if(lives > 0)
 		escenario_->agregarSonido(DYING);
-	else
-		escenario_->agregarSonido(GAMEOVER);
+	else{
+		if (escenario_->getCantidadDePersonajesVivos()>1) //Si no soy el ultimo en morir, mando sonido de gameover
+			escenario_->agregarSonido(GAMEOVER);
+	}
 	sleep(1);
 	potencia = POT_NORMAL;
 	aceleracion = VEL_NORMAL;

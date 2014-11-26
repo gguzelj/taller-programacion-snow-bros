@@ -179,6 +179,7 @@ void Escenario::clean() {
 		b2Body* body = (*pro)->getb2Body();
 
 		if ((*pro)->type == ID_BOLA_NIEVE_ENEMIGO) {
+			std::cout << (*pro)->getX() << " " << (*pro)->getY() << (*pro) << endl;
 			if (!((BolaEnemigo*) (*pro))->destruir)
 				continue;
 		}
@@ -325,9 +326,6 @@ void Escenario::step() {
 
 
 void Escenario::crearEnemigosSiguienteNivel(){
-	for( int i = 0; i< 10; i++){
-		//Pensar la logica para crear los enemigos en el nuevo nivel.
-	}
 }
 
 void Escenario::pasarDeNivel(){

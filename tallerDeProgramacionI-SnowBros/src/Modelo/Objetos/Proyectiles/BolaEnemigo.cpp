@@ -80,7 +80,7 @@ void BolaEnemigo::morir(){
 	time(&tiempoFinal);
 	while(difftime(tiempoFinal,tiempoInicial) < 3){
 		sleep(0.5);
-		this->actualizar();
+		//this->actualizar();
 		time(&tiempoFinal);
 	}
 	escenario->agregarSonido(BALLBREAKING);

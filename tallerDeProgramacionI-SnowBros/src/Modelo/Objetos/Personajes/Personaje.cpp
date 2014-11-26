@@ -132,8 +132,6 @@ void Personaje::beginContactBolaEnemigo(BolaEnemigo * bola, b2Contact* contact) 
 	if (state == &Personaje::jumping)
 		return;
 
-	bola->cambiarFilterIndex(PERSONAJE_FILTER_INDEX);
-
 	movimientoDerecha = false;
 	movimientoIzquierda = false;
 	arrastrado = true;

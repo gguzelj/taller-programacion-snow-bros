@@ -243,6 +243,7 @@ private:
 	const int32 velocityIterations = 64;    //how strongly to correct velocity
 	const int32 positionIterations = 128;    //how strongly to correct position}
 	bool pasandoDeNivel;
+	bool en_step;
 
 	b2World* world_;
 	std::list<Figura*>* figurasEstaticas_;

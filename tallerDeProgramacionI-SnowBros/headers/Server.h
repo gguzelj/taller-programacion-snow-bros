@@ -143,7 +143,6 @@ public:
 	void reiniciar();
 
 private:
-
 	bool running_;
 	int port_;
 	int sockfd_;

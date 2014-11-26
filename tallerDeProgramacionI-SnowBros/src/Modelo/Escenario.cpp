@@ -22,6 +22,7 @@ Escenario::Escenario(JsonParser *parser) {
 
 	this->nivel = 1;
 	this->pasandoDeNivel = false;
+	this->en_step = false;
 
 	world_->SetContactListener(&contactos);
 
@@ -179,7 +180,6 @@ void Escenario::clean() {
 		b2Body* body = (*pro)->getb2Body();
 
 		if ((*pro)->type == ID_BOLA_NIEVE_ENEMIGO) {
-			std::cout << (*pro)->getX() << " " << (*pro)->getY() << (*pro) << endl;
 			if (!((BolaEnemigo*) (*pro))->destruir)
 				continue;
 		}
@@ -320,7 +320,9 @@ void Escenario::agregarSonido(int s) {
 void Escenario::step() {
 	preStep();
 	tomarSonidos();
+	en_step = true;
 	getWorld()->Step(timeStep, velocityIterations, positionIterations);
+	en_step = false;
 	actualizarEnemigos();
 }
 
@@ -358,6 +360,7 @@ void Escenario::addPointsToPlayers(int puntos) {
 }
 
 bool Escenario::debeCrearBonus() {
+	if(en_step) return false;
 	return (rand() % 100 < 50);
 }
 

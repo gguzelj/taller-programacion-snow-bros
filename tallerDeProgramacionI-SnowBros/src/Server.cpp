@@ -17,7 +17,6 @@ Server::Server() {
 	gameData_.paused = true;
 	gameData_.gameOver = false;
 	gameData_.won = false;
-
 	acceptNewClients_ = true;
 	running_ = false;
 
@@ -552,7 +551,7 @@ float Server::getInitialX() {
 }
 
 float Server::getInitialY() {
-	return -28.5;
+	return -28;
 }
 
 void Server::enviarProyectiles(int sock, proyectil_t* dinamicos) {
@@ -739,7 +738,8 @@ void Server::gameOver() {
 	sleep(TIEMPO_GAMEOVER);
 
 	gameData_.gameOver = false;
-	gameData_.paused = false;
+	if (connections_.size() == connectionsLimit_)
+		gameData_.paused = false;
 }
 
 void Server::winGame() {
@@ -749,7 +749,8 @@ void Server::winGame() {
 	sleep(TIEMPO_VICTORIA);
 
 	gameData_.won = false;
-	gameData_.paused = false;
+	if (connections_.size() == connectionsLimit_)
+		gameData_.paused = false;
 }
 
 int Server::getNumberOfConnection(connection_t* connection) {

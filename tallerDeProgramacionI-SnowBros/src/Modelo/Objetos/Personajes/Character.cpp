@@ -224,8 +224,11 @@ void Character::noAtravezarPlataformas() {
 
 void Character::detectarEstado() {
 
-	if (getVelocity().y < 0.0f)
+	if (getVelocity().y < 0.0f){
+		for (b2Fixture* fix = body->GetFixtureList(); fix; fix = fix->GetNext())
+		    fix->SetSensor(false);
 		this->noAtravezarPlataformas();
+	}
 
 	if (state == &Character::dying)
 		return;

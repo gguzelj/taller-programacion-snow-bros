@@ -163,6 +163,9 @@ void Personaje::beginContactEnemigo(Enemigo* enemigo, b2Contact* contact) {
 	if (state == &Personaje::dying || state == &Personaje::rolling || state == &Personaje::flying)
 		return;
 
+	if(enemigo->getNivelDeCongelamiento() > 0)
+		return;
+
 	if (enemigo->estaCongelado())
 		return;
 
@@ -376,6 +379,8 @@ void Personaje::jump() {
 		velocidadActual.y = 25;
 		body->SetLinearVelocity(velocidadActual);
 		atravezarPlataformas();
+		for (b2Fixture* fix = body->GetFixtureList(); fix; fix = fix->GetNext())
+		    fix->SetSensor(true);
 	}
 }
 

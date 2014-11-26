@@ -155,7 +155,7 @@ void destruirJointsDeBolaEnemigo(BolaEnemigo* enemigo, std::list<Personaje*>* pe
 				(*per)->setArrastradoPor(nullptr);
 				(*per)->setJoint(nullptr);
 				b2Transform tra = (*per)->getb2Body()->GetTransform();
-				tra.p.y += 1.5;
+				tra.p.y += 2.5;
 				(*per)->getb2Body()->SetTransform(tra.p, 0);
 				b2Vec2 vel = (*per)->getb2Body()->GetLinearVelocity();
 				vel.x = 0;
@@ -354,7 +354,7 @@ void Escenario::addPointsToPlayers(int puntos) {
 
 bool Escenario::debeCrearBonus() {
 	if(en_step) return false;
-	return (rand() % 100 < 50);
+	return (rand() % 100 < 100);
 }
 
 Figura* Escenario::crearBonus(Figura* enem) {

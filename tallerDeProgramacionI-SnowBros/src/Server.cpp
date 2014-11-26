@@ -172,6 +172,15 @@ int Server::acceptConnection(int newsockfd) {
 		connection->activa = true;
 		connection->socket = newsockfd;
 
+		//Si el juego ya comenzo rechazamos la conexion
+		if(!gameData_.paused) {
+
+			aviso = SRV_ERROR;
+			sendall(connection->socket, &aviso, sizeof(int));
+			Log::ins()->add("Se esta corriendo un juego. Andate: "+ std::string(connection->id), Log::WARNING);
+			return SRV_ERROR;
+		}
+
 		//Buscamos un lugar para la nueva conexion
 		if (esNuevoCliente(connection->id)) {
 
@@ -710,6 +719,9 @@ void Server::reiniciar() {
 	for (unsigned int i = 0; i < connections_.size(); i++) {
 		crearPersonaje(connections_[i], false);
 	}
+
+	//Limpiamos el historial de conexiones
+	connectionsHistory_.clear();
 }
 
 void Server::borrarJugadoresInactivos() {

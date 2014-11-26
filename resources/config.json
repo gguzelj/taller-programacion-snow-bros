@@ -384,36 +384,6 @@
                        "y":12
                      },
                      {
-                       "tipo":"enemigobasico",
-                       "x":-2,
-                       "y":-10
-                     },
-                     {
-                       "tipo":"enemigobasico",
-                       "x":2,
-                       "y":-10
-                     },
-                     {
-                       "tipo":"enemigobasico",
-                       "x":15,
-                       "y":-10
-                     },
-                     {
-                       "tipo":"enemigobasico",
-                       "x":-15,
-                       "y":-10
-                     },
-                     {
-                       "tipo":"enemigobasico",
-                       "x":0,
-                       "y":-10
-                     },
-                     {
-                       "tipo":"enemigofuego",
-                       "x":5,
-                       "y":-15
-                     },
-                     {
                        "tipo":"enemigofuego",
                        "x":-5,
                        "y":-15

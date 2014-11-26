@@ -38,6 +38,7 @@ BolaFuego::BolaFuego(float x, float y, int potencia, b2World* world) {
 }
 
 BolaFuego::~BolaFuego() {
+
 }
 
 void BolaFuego::setVelocidad(b2Vec2 velocidad) {

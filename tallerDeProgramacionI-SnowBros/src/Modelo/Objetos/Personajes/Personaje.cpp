@@ -60,7 +60,7 @@ Personaje::Personaje(float x, float y, conn_id id, Escenario* escenario, char co
 	//Definimos el fixture del personaje
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shapeDelPersonaje;
-	fixtureDef.density = 10;
+	fixtureDef.density = 5;
 	fixtureDef.restitution = 0;
 	fixtureDef.friction = 0.001f;
 	fixtureDef.filter.groupIndex = PERSONAJE_FILTER_INDEX;

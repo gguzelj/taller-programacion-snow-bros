@@ -97,12 +97,12 @@ void Enemigo::morir() {
 	BolaEnemigo *bola;
 
 	if (orientacion == IZQUIERDA)
-		bola = new BolaEnemigo(getX() - 1, getY() + MITAD_ALTO_ENEMIGO, world, escenario_);
+		bola = new BolaEnemigo(getX() - 2, getY(), world, escenario_);
 	else
-		bola = new BolaEnemigo(getX() + 1, getY() + MITAD_ALTO_ENEMIGO, world, escenario_);
+		bola = new BolaEnemigo(getX() + 2, getY(), world, escenario_);
 
-	vel.x = (orientacion == IZQUIERDA) ? -15 : 15;
-	vel.y = 5;
+	vel.x = (orientacion == IZQUIERDA) ? -35 : 35;
+	vel.y = 0;
 	bola->setVelocidad(vel);
 
 	escenario_->agregarProyectil(bola);

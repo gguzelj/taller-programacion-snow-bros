@@ -19,23 +19,39 @@ BolaEnemigo::BolaEnemigo(float x, float y, b2World* world, Escenario* esc) {
 	b2BodyDef cuerpoDeCirculo;
 	cuerpoDeCirculo.type = b2_dynamicBody;
 	cuerpoDeCirculo.position.Set(x, y);
-	cuerpoDeCirculo.gravityScale = 8;
+	cuerpoDeCirculo.gravityScale = 15;
 	this->body = this->world->CreateBody(&cuerpoDeCirculo);
-
-	b2FixtureDef fixture;
-	fixture.filter.groupIndex = BOLA_ENEMIGO_FILTER_INDEX;
-	fixture.density = 0.1;
-	fixture.restitution = 0.5;
 
 	b2CircleShape circleShape;
 	circleShape.m_p.Set(0, 0);
 	circleShape.m_radius = radio;
 
+	b2FixtureDef fixture;
+	fixture.filter.groupIndex = BOLA_ENEMIGO_FILTER_INDEX;
+	fixture.density = 10;
 	fixture.shape = &circleShape;
-	fixture.friction = 1.0f;
+	fixture.friction = 0;
 	b2Fixture *fix = this->body->CreateFixture(&fixture);
 
 	fix->SetUserData(this);
+
+	//Defino el Shape del sensor
+	b2PolygonShape shapeDelSensor;
+	shapeDelSensor.SetAsBox(radio, radio);
+	fixture.shape = &shapeDelSensor;
+	fixture.isSensor = true;
+
+	//Pared Izquierda
+	shapeDelSensor.SetAsBox(radio / 1000, radio* 0.002, b2Vec2(-radio - 0.1, 0), 0);
+	paredIzquierda = this->body->CreateFixture(&fixture);
+
+	//ParedDerecha
+	shapeDelSensor.SetAsBox(radio/ 1000, radio* 0.002, b2Vec2(radio + 0.1, 0), 0);
+	paredDerecha = this->body->CreateFixture(&fixture);
+
+	//Seteamos esta clase como UserData
+	paredIzquierda->SetUserData(this);
+	paredDerecha->SetUserData(this);
 }
 
 BolaEnemigo::~BolaEnemigo() {
@@ -61,6 +77,7 @@ char BolaEnemigo::getId() {
 	return BOLA_NIEVE_CODE;
 }
 
+//Deprecated
 void BolaEnemigo::actualizar(){
 	if(this->getVelocidad().y <0)
 		this->velocidad.y = this->getVelocidad().y;
@@ -90,6 +107,14 @@ void BolaEnemigo::morir(){
 }
 
 void BolaEnemigo::beginContact(Figura *fig, b2Contact* contact){
+	b2Fixture* fix;
+	this == contact->GetFixtureA()->GetUserData() ? fix = contact->GetFixtureA() : fix = contact->GetFixtureB();
+	b2Vec2 vel = this->body->GetLinearVelocity();
+	if(fix == paredDerecha && fig->esEstatico())
+		vel = {-VELX,0};
+	else if (fix == paredIzquierda && fig->esEstatico())
+		vel = {VELX,0};
+	this->body->SetLinearVelocity(vel);
 	fig->beginContactBolaEnemigo(this, contact);
 }
 

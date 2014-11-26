@@ -29,7 +29,6 @@ public:
 	char getId();
 
 	void beginContact(Figura*,b2Contact*);
-
 };
 
 #endif /* RECTANGULO_H_ */

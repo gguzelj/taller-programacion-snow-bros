@@ -17,6 +17,7 @@ Bonus::Bonus(float posicionX, float posicionY, b2World* world) {
 	cuerpo.type = b2_dynamicBody;
 	cuerpo.angle = angulo;
 	cuerpo.position.Set(x, y);
+	cuerpo.gravityScale = 0;
 	this->body = this->world->CreateBody(&cuerpo);
 
 	//definiendo ahora el fixture del rectangulo
@@ -26,6 +27,7 @@ Bonus::Bonus(float posicionX, float posicionY, b2World* world) {
 	fixtureDef.shape = &shape;
 	fixtureDef.density = (float) masa / (alto * ancho);
 	fixtureDef.friction = 0.7f;
+	fixtureDef.isSensor = true;
 
 	b2Fixture* fixture = body->CreateFixture(&fixtureDef);
 	fixture->SetUserData(this);

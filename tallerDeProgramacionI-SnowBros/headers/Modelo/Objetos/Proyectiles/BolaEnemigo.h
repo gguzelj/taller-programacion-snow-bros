@@ -7,6 +7,7 @@
 
 #define RADIO_BOLA_NIEVE_ENEMIGO 1
 #define MASA_BOLA_NIEVE_ENEMIGO 100
+#define VELX 30
 
 class Escenario;
 
@@ -19,6 +20,8 @@ private:
 
 public:
 
+	b2Fixture* paredIzquierda;
+	b2Fixture* paredDerecha;
 	bool destruir;
 
 	BolaEnemigo(float x, float y,b2World* world, Escenario* esc);

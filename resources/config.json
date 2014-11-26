@@ -1,6 +1,6 @@
 {
     "escenario": {
-        "maximo-jugadores":4,
+        "maximo-jugadores":2,
         "gravedad":-10,
         "objetos": [
                      {

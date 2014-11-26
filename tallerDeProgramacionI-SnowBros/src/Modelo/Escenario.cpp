@@ -154,25 +154,26 @@ void destruirJointsDeBolaEnemigo(BolaEnemigo* enemigo, std::list<Personaje*>* pe
 				(*per)->setArrastrado(false);
 				(*per)->setArrastradoPor(nullptr);
 				(*per)->setJoint(nullptr);
-				(*per)->state = &Personaje::standby;
+				b2Transform tra = (*per)->getb2Body()->GetTransform();
+				tra.p.y += 3;
+				(*per)->getb2Body()->SetTransform(tra.p, 0);
+
+				(*per)->state = &Character::jumping;
+				(*per)->jump();
 			}
 		}
 	}
 }
 
 void Escenario::clean() {
-
 	//Elimino figuras dinamicas
 	for (auto fig = figurasDinamicas_->begin(); fig != figurasDinamicas_->end(); ++fig) {
-
 		if ((*fig)->type == ID_BONUS_MOVER_RAPIDO || (*fig)->type == ID_BONUS_VIDA_EXTRA || (*fig)->type == ID_BONUS_AUMENTAR_POTENCIA || (*fig)->type == ID_BONUS_BOLA_PORTAL) {
-
 			if (!((Bonus*) (*fig))->activo()) {
 				world_->DestroyBody((*fig)->getBody());
 				figurasDinamicas_->erase(fig++);
 			}
 		}
-
 	}
 
 	//Elimino proyectiles
@@ -184,37 +185,27 @@ void Escenario::clean() {
 				continue;
 		}
 
-		//Creamos el protal, y lo asignamos al personaje
+		//Creamos el portal, y lo asignamos al personaje
 		if ((*pro)->type == ID_BOLA_PORTAL) {
 			if (((BolaPortal*) (*pro))->crearPortal) {
-
 				Personaje* per = ((BolaPortal*) (*pro))->personaje;
-
 				if(per->portal1 && per->portal2)
 					return;
-
 				Portal *portal = ((BolaPortal*) (*pro))->crearNuevoPortal();
-
 				if (per->portal1)
 					per->portal2 = portal;
 				else
 					per->portal1 = portal;
 
 				figurasDinamicas_->push_back(portal);
-
 				if (per->portal1 && per->portal2) {
-
 					b2Vec2 portal1Address = per->portal1->getAddress();
 					b2Vec2 portal2Address = per->portal2->getAddress();
-
 					portal1Address.x += (portal1Address.x > 0) ? -1.5 : 1.5;
 					portal2Address.x += (portal2Address.x > 0) ? -1.5 : 1.5;
-
 					per->portal1->setDestination(portal2Address);
 					per->portal2->setDestination(portal1Address);
-
 				}
-
 			}
 		}
 
@@ -325,7 +316,6 @@ void Escenario::step() {
 	en_step = false;
 	actualizarEnemigos();
 }
-
 
 void Escenario::crearEnemigosSiguienteNivel(){
 }

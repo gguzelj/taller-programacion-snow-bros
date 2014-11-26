@@ -15,6 +15,11 @@ public:
 	Portal(float ancho, float alto, int rot, b2Vec2 address, b2World* world);
 	virtual ~Portal();
 
+
+	bool esEstatico(){
+		return estatico;
+	}
+
 	void setDestination(const b2Vec2& destination);
 	const b2Vec2& getDestination();
 

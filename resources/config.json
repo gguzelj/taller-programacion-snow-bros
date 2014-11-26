@@ -25,7 +25,7 @@
                      },
                      {
                        "tipo":"plataforma_hielo",
-                       "x":24.5,
+                       "x":25.5,
                        "y":-12,
                        "alto":1,
                        "ancho":3.5,
@@ -35,7 +35,7 @@
                      },
                      {
                        "tipo":"plataforma_hielo",
-                       "x":-24.5,
+                       "x":-25.5,
                        "y":-12,
                        "alto":1,
                        "ancho":3.5,
@@ -228,7 +228,7 @@
                        "x":-9,
                        "y":5,
                        "alto":1,
-                       "ancho":15,
+                       "ancho":10,
                        "rot":0,
                        "masa":3,
                        "estatico":true
@@ -258,14 +258,14 @@
                        "x":9,
                        "y":5,
                        "alto":1,
-                       "ancho":15,
+                       "ancho":10,
                        "rot":0,
                        "masa":3,
                        "estatico":true
                      },
                      {
                        "tipo":"plataforma_hielo", //niveldos
-                       "x":-25,
+                       "x":-25.5,
                        "y":20,
                        "alto":1,
                        "ancho":3,
@@ -315,7 +315,7 @@
                      },
                      {
                        "tipo":"plataforma_hielo", //niveldos
-                       "x":25,
+                       "x":25.5,
                        "y":20,
                        "alto":1,
                        "ancho":3,

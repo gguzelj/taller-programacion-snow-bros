@@ -7,7 +7,7 @@
 
 #define RADIO_BOLA_NIEVE_ENEMIGO 1
 #define MASA_BOLA_NIEVE_ENEMIGO 100
-#define VELX 30
+#define VELX 20
 
 class Escenario;
 
@@ -26,6 +26,10 @@ public:
 
 	BolaEnemigo(float x, float y,b2World* world, Escenario* esc);
 	virtual ~BolaEnemigo();
+
+	bool esEstatico(){
+		return false;
+	}
 
 	b2Vec2 getPosicion(){
 		return (this->body)->GetPosition();

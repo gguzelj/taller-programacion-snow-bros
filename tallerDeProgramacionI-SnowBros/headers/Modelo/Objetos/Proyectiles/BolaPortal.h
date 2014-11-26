@@ -18,6 +18,11 @@ public:
 	BolaPortal(float x, float y, int potencia, b2World* world, Personaje*);
 	virtual ~BolaPortal();
 
+
+	bool esEstatico(){
+		return false;
+	}
+
 	void beginContactRectangulo(Rectangulo* rec,b2Contact* contact);
 
 	void setVelocidad(b2Vec2 velocidad);

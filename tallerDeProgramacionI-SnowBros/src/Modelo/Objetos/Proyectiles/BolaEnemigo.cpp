@@ -39,14 +39,14 @@ BolaEnemigo::BolaEnemigo(float x, float y, b2World* world, Escenario* esc) {
 	b2PolygonShape shapeDelSensor;
 	shapeDelSensor.SetAsBox(radio, radio);
 	fixture.shape = &shapeDelSensor;
-	fixture.isSensor = true;
+	//fixture.isSensor = true;
 
 	//Pared Izquierda
-	shapeDelSensor.SetAsBox(radio / 1000, radio* 0.002, b2Vec2(-radio - 0.1, 0), 0);
+	shapeDelSensor.SetAsBox(radio / 1000, radio* 0.002, b2Vec2(-radio, 0), 0);
 	paredIzquierda = this->body->CreateFixture(&fixture);
 
 	//ParedDerecha
-	shapeDelSensor.SetAsBox(radio/ 1000, radio* 0.002, b2Vec2(radio + 0.1, 0), 0);
+	shapeDelSensor.SetAsBox(radio/ 1000, radio* 0.002, b2Vec2(radio, 0), 0);
 	paredDerecha = this->body->CreateFixture(&fixture);
 
 	//Seteamos esta clase como UserData
@@ -84,10 +84,10 @@ void BolaEnemigo::actualizar(){
 	else
 		this->velocidad.y = 0;
 	if (this->getVelocidad().x > 0){
-		this->velocidad.x = 25;
+		this->velocidad.x = VELX;
 	}
 	else
-		this->velocidad.x = -25;
+		this->velocidad.x = -VELX;
 	this->setVelocidad(velocidad);
 }
 
@@ -97,7 +97,8 @@ void BolaEnemigo::morir(){
 	time(&tiempoFinal);
 	while(difftime(tiempoFinal,tiempoInicial) < 3){
 		sleep(0.5);
-		//this->actualizar();
+		if(escenario->enStep())
+			this->actualizar();
 		time(&tiempoFinal);
 	}
 	escenario->agregarSonido(BALLBREAKING);

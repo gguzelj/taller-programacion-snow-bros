@@ -8,6 +8,9 @@ class BonusAumentarPotencia: public Bonus {
 public:
 	BonusAumentarPotencia(float, float, b2World*);
 	~BonusAumentarPotencia();
+	bool esEstatico(){
+		return false;
+	}
 
 	char getId();
 	void beginContact(Figura* figura, b2Contact* contact);

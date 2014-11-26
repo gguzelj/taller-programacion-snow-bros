@@ -16,6 +16,9 @@ public:
 	PlataformaHielo(JsonParser *parser, int index, b2World* world);
 	~PlataformaHielo();
 
+	bool esEstatico(){
+		return estatico;
+	}
 	float getAncho();
 	float getAlto();
 	char getId();

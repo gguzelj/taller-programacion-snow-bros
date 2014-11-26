@@ -22,6 +22,11 @@ public:
 	Rectangulo(float ancho, float alto, int rot, float pos_x, float pos_y, b2World* world);
 	~Rectangulo();
 
+
+	bool esEstatico(){
+		return estatico;
+	}
+
 	bool esMuro();
 
 	float getAncho();

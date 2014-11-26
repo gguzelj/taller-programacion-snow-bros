@@ -43,6 +43,10 @@ public:
 	Personaje(float x, float y, char id[], Escenario* escenario, char color);
 	~Personaje();
 
+	bool esEstatico(){
+		return false;
+	}
+
 	/*
 	 * Se encarga de llamar al handleInput de su estado para resolver la accion
 	 * a realizar en base al input de entrada

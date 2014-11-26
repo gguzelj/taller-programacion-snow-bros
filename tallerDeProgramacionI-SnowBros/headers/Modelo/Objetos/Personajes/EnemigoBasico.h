@@ -8,6 +8,11 @@ public:
 	EnemigoBasico(JsonParser*, int index, Escenario*);
 	virtual ~EnemigoBasico();
 
+
+	bool esEstatico(){
+		return false;
+	}
+
 	void mover();
 };
 

@@ -33,6 +33,10 @@ public:
 	Enemigo(JsonParser *parser, int index, Escenario* escenario);
 	~Enemigo();
 
+	bool esEstatico(){
+		return false;
+	}
+
 	virtual void mover();
 
 	b2Body* getb2Body();

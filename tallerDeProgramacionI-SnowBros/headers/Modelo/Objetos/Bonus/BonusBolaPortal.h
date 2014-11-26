@@ -8,6 +8,9 @@ class BonusBolaPortal: public Bonus {
 public:
 	BonusBolaPortal(float, float, b2World*);
 	~BonusBolaPortal();
+	bool esEstatico(){
+		return false;
+	}
 
 	char getId();
 	void beginContact(Figura* figura, b2Contact* contact);

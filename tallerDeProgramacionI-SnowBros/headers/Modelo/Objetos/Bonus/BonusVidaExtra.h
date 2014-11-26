@@ -12,6 +12,9 @@ public:
 	BonusVidaExtra(float, float, b2World*);
 	~BonusVidaExtra();
 
+	bool esEstatico(){
+		return false;
+	}
 	char getId();
 	void beginContact(Figura* figura, b2Contact* contact);
 

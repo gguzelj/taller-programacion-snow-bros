@@ -13,6 +13,10 @@ public:
 	Poligono();
 	~Poligono();
 
+	bool esEstatico(){
+		return estatico;
+	}
+
 	int getLados();
 	float getEscala();
 

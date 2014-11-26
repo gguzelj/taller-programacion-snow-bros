@@ -277,7 +277,7 @@ void Personaje::controlarEstado() {
 		joint = nullptr;
 
 		b2Transform tra = body->GetTransform();
-		tra.p.y += 3;
+		tra.p.y += 2;
 		body->SetTransform(tra.p, 0);
 
 		state = &Character::jumping;

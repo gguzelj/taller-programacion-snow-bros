@@ -11,6 +11,11 @@ public:
 	EnemigoFuego(JsonParser*, int index, Escenario*);
 	virtual ~EnemigoFuego();
 
+
+	bool esEstatico(){
+		return false;
+	}
+
 	void mover();
 
 };

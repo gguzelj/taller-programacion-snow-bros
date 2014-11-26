@@ -98,6 +98,10 @@ public:
 
 	b2World* getWorld();
 
+	bool enStep() {
+		return en_step;
+	}
+
 
 	/*
 	 * Metodos encargados de preparar la informacion a enviar a los clientes.

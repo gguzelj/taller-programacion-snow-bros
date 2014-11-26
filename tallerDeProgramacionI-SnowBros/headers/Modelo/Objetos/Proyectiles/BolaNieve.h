@@ -17,6 +17,11 @@ public:
 	BolaNieve(float x, float y, int potencia, b2World* world);
 	virtual ~BolaNieve();
 
+
+	bool esEstatico(){
+		return false;
+	}
+
 	void setVelocidad(b2Vec2 velocidad);
 	float getRadio();
 

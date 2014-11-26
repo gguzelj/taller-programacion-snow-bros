@@ -11,6 +11,9 @@ class BonusMoverRapido: public Bonus {
 public:
 	BonusMoverRapido(float, float, b2World*);
 	~BonusMoverRapido();
+	bool esEstatico(){
+		return false;
+	}
 
 	char getId();
 	void beginContact(Figura* figura, b2Contact* contact);

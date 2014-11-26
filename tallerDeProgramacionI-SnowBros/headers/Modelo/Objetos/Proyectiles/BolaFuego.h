@@ -21,6 +21,10 @@ public:
 	BolaFuego(float x, float y, int potencia, b2World* world);
 	virtual ~BolaFuego();
 
+	bool esEstatico(){
+		return false;
+	}
+
 	void setVelocidad(b2Vec2 velocidad);
 
 	b2Vec2 getVelocidad();

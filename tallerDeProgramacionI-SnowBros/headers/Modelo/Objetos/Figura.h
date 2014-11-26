@@ -4,7 +4,7 @@
 #define FIGURA_FILTER_INDEX -3
 #define PELOTA_FILTER_INDEX -20
 #define MURO_FILTER_INDEX -15
-#define BOLA_ENEMIGO_FILTER_INDEX -5
+#define BOLA_ENEMIGO_FILTER_INDEX 4
 
 #define BOLA_FUEGO_CODE 'f'
 #define BOLA_NIEVE_CODE 'b'
@@ -102,7 +102,7 @@ public:
 	float getY();
 	float getAngulo();
 	float getMasa();
-	bool esEstatico();
+	virtual bool esEstatico();
 	virtual float getAlto() = 0;
 	virtual float getAncho() = 0;
 	virtual char getId() = 0;

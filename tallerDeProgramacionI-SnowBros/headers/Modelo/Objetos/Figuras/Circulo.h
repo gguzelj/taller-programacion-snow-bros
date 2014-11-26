@@ -9,6 +9,9 @@ private:
 public:
         Circulo(JsonParser *parser, int index, b2World* world);
         ~Circulo();
+    	bool esEstatico(){
+    		return estatico;
+    	}
         float getRadio();
         float getCoordX();
         float getCoordY();

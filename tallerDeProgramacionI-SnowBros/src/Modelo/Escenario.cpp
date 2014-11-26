@@ -155,9 +155,11 @@ void destruirJointsDeBolaEnemigo(BolaEnemigo* enemigo, std::list<Personaje*>* pe
 				(*per)->setArrastradoPor(nullptr);
 				(*per)->setJoint(nullptr);
 				b2Transform tra = (*per)->getb2Body()->GetTransform();
-				tra.p.y += 3;
+				tra.p.y += 1.5;
 				(*per)->getb2Body()->SetTransform(tra.p, 0);
-
+				b2Vec2 vel = (*per)->getb2Body()->GetLinearVelocity();
+				vel.x = 0;
+				(*per)->getb2Body()->SetLinearVelocity(vel);
 				(*per)->state = &Character::jumping;
 				(*per)->jump();
 			}

@@ -34,7 +34,6 @@ Drawer::Drawer() {
 	//The music that will be played
 	gMusic = nullptr;
 	gWinningMusic = nullptr;
-	gLosingMusic = nullptr;
 	gShooting = nullptr;
 	gJumping = nullptr;
 	gDying = nullptr;
@@ -203,7 +202,7 @@ void Drawer::updateView(dataFromClient_t data, char* name) {
 		if(!seEstaReproduciendoMusicaDeDerrota){
 			seEstaReproduciendoMusicaDeDerrota = true;
 			Mix_HaltMusic();
-			Mix_PlayChannel(-1, gLosingMusic, 0);
+			Mix_PlayChannel(-1, gGameover , 0);
 		}
 	}
 	else{
@@ -211,6 +210,7 @@ void Drawer::updateView(dataFromClient_t data, char* name) {
 		this->drawScenary(data, name);
 		this->drawMessages(data, personajePrincipal);
 		seEstaReproduciendoMusicaDeVictoria = false;
+		seEstaReproduciendoMusicaDeDerrota = false;
 	}
 	this->presentScenary();
 }
@@ -669,8 +669,8 @@ void Drawer::drawGameOverScreen(){
 	renderTexture(gameOverImage, renderer, 0, 0);
 
 	//Set the coordinates which we want to draw to
-	float coordXDelMensaje = 700;
-	float coordYDelMensaje = 570;
+	float coordXDelMensaje = 795;
+	float coordYDelMensaje = 490;
 	int puntos = puntaje;
 	//Render the first message
 	for(int i = 5; i > 0; i--){
@@ -1105,10 +1105,6 @@ void Drawer::loadMusic(){
 	}
 	gWinningMusic = Mix_LoadWAV("resources/SoundEffects/victory.wav");
 	if(!gWinningMusic){
-		printf( "Failed to load victory wav! SDL_mixer Error: %s\n", Mix_GetError() );
-	}
-	gLosingMusic = Mix_LoadWAV("resources/SoundEffects/victory.wav");
-	if(!gLosingMusic){
 		printf( "Failed to load victory wav! SDL_mixer Error: %s\n", Mix_GetError() );
 	}
 }

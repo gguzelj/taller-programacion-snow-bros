@@ -234,7 +234,6 @@ private:
 	//The music that will be played
 	Mix_Music *gMusic;
 	Mix_Chunk *gWinningMusic;
-	Mix_Chunk *gLosingMusic;
 	Mix_Chunk *gShooting;
 	Mix_Chunk *gJumping;
 	Mix_Chunk *gDying;

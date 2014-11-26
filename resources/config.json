@@ -376,16 +376,12 @@
                      {
                        "tipo":"enemigofuegodos",
                        "x":-5,
-                       "y":12,
-                     {
-                       "tipo":"enemigofuegodos",
-                       "x":5,
                        "y":12
                      },
                      {
                        "tipo":"enemigofuegodos",
                        "x":5,
-                       "y":25
+                       "y":12
                      },
                      {
                        "tipo":"enemigobasico",

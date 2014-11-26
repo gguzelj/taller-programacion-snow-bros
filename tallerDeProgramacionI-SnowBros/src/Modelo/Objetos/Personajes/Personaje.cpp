@@ -189,7 +189,8 @@ void Personaje::beginContactBonusMoverRapido(BonusMoverRapido* bonus, b2Contact*
 void Personaje::beginContactBonusAumentarPotencia(BonusAumentarPotencia* bonus, b2Contact* contact) {
 	escenario_->agregarSonido(BONUS);
 	bonus->desactivar();
-	potencia +=4;
+	std::thread t(&Personaje::aumentarPotencia, this);
+	t.detach();
 }
 
 void Personaje::beginContactBonusBolaPortal(BonusBolaPortal* bonus, b2Contact* contact) {
@@ -386,15 +387,24 @@ void Personaje::morir() {
 	else
 		escenario_->agregarSonido(GAMEOVER);
 	sleep(1);
+	potencia = POT_NORMAL;
+	aceleracion = VEL_NORMAL;
+	arma_portal = false;
 	entrarEnPeriodoDeInmunidad();
 	esta_muerto = true;
 	points /= 2;
 }
 
 void Personaje::aumentarVelocidad() {
-	aceleracion += 5;
-	sleep(15);
-	aceleracion -= 5;
+	aceleracion = VEL_RAPIDA;
+	sleep(DURACION_BONUS);
+	aceleracion = VEL_NORMAL;
+}
+
+void Personaje::aumentarPotencia() {
+	potencia = POT_FUERTE;
+	sleep(DURACION_BONUS);
+	potencia = POT_NORMAL;
 }
 
 void Personaje::volverAPosicionInicial() {

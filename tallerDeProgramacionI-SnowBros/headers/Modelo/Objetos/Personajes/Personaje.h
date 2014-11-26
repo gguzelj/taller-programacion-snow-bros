@@ -22,6 +22,12 @@
 #define KICKCOOLDOWN 12
 
 #define TIEMPO_INMUNIDAD 5
+#define DURACION_BONUS 15
+
+#define VEL_NORMAL 10
+#define VEL_RAPIDA 15
+#define POT_NORMAL 1
+#define POT_FUERTE 5
 
 typedef char conn_id[20];
 
@@ -137,6 +143,12 @@ public:
 	 * determinado. Luego vuelve a su velocidad normal.
 	 */
 	void aumentarVelocidad();
+
+	/*
+	 * Se encarga de aumentar la potencia de las bolas de nieve del personaje
+	 * durante un tiempo determinado. Luego vuelve a su potencia normal.
+	 */
+	void aumentarPotencia();
 
 	/*
 	 * Devuelve el personaje a su posicion inicial en el escenario

@@ -11,6 +11,7 @@ Drawer::Drawer() {
 	this->window = nullptr;
 	this->image = nullptr;
 	this->waitingImage = nullptr;
+	this->gameOverImage = nullptr;
 	this->winningImage = nullptr;
 	this->imagenPersonaje = nullptr;
 	this->imagenPersonaje2 = nullptr;
@@ -28,10 +29,12 @@ Drawer::Drawer() {
 
 	seEstaReproduciendoMusicaDeFondo = false;
 	seEstaReproduciendoMusicaDeVictoria = false;
+	seEstaReproduciendoMusicaDeDerrota = false;
 
 	//The music that will be played
 	gMusic = nullptr;
 	gWinningMusic = nullptr;
+	gLosingMusic = nullptr;
 	gShooting = nullptr;
 	gJumping = nullptr;
 	gDying = nullptr;
@@ -81,7 +84,7 @@ Drawer::Drawer() {
 	this->bonusVelocidadPath = "resources/textures/BonusVelocidad.png";
 	this->bonusVidaPath = "resources/textures/BonusVida.png";
 	this->portalPath = "resources/sprites/portal.png";
-	this->gameOverScreenPath = "resources/textures/gameOver.png";
+	this->gameOverScreenPath = "resources/textures/gameOverBackground.png";
 	this->waitingScreenPath = "resources/textures/waitingBackground.png";
 	this->winningScreenPath = "resources/textures/winningBackground.png";
 
@@ -125,6 +128,7 @@ Drawer::~Drawer() {
 	Mix_FreeMusic(gMusic);
 	SDL_DestroyTexture(image);
 	SDL_DestroyTexture(waitingImage);
+	SDL_DestroyTexture(gameOverImage);
 	SDL_DestroyTexture(winningImage);
 	SDL_DestroyTexture(imagenPersonaje);
 	SDL_DestroyTexture(imagenPersonaje2);
@@ -164,7 +168,7 @@ void Drawer::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, SD
 
 void Drawer::updateView(dataFromClient_t data, char* name) {
 
-	if(!seEstaReproduciendoMusicaDeFondo && !seEstaReproduciendoMusicaDeVictoria){
+	if(!seEstaReproduciendoMusicaDeFondo && !seEstaReproduciendoMusicaDeVictoria && !seEstaReproduciendoMusicaDeDerrota){
 		//Play the music
 		seEstaReproduciendoMusicaDeFondo = true;
 		Mix_PlayMusic( gMusic, -1 );
@@ -190,6 +194,16 @@ void Drawer::updateView(dataFromClient_t data, char* name) {
 			seEstaReproduciendoMusicaDeVictoria = true;
 			Mix_HaltMusic();
 			Mix_PlayChannel(-1, gWinningMusic, 0);
+		}
+	}
+
+	else if (data.gameData->gameOver){
+		drawGameOverScreen();
+		seEstaReproduciendoMusicaDeFondo = false;
+		if(!seEstaReproduciendoMusicaDeDerrota){
+			seEstaReproduciendoMusicaDeDerrota = true;
+			Mix_HaltMusic();
+			Mix_PlayChannel(-1, gLosingMusic, 0);
 		}
 	}
 	else{
@@ -629,11 +643,6 @@ void Drawer::drawMessages(dataFromClient_t data, personaje_t personaje) {
 	levelsLT.render(renderer, coordXDelMensaje, coordYDelMensaje, anchoPoints, altoText);
 	coordXDelMensaje += anchoPoints;
 	numerosBlackLT[data.gameData->nivel]->render(renderer, coordXDelMensaje, coordYDelMensaje, anchoNumber, altoText);
-
-	//Dibujamos la pantalla de gameOver
-	if (data.gameData->gameOver){
-		drawGameOverScreen();
-	}
 }
 
 void Drawer::drawWaitingScreen() {
@@ -657,11 +666,17 @@ void Drawer::drawWinningScreen(dataFromClient_t data){
 }
 
 void Drawer::drawGameOverScreen(){
-	int anchoT = 500;
-	int altoT = 100;
-	float ox = (ancho_px/2)-(anchoT/2);
-	float oy = 300;
-	gameOverScreenLT.render(renderer, ox, oy, anchoT, altoT);
+	renderTexture(gameOverImage, renderer, 0, 0);
+
+	//Set the coordinates which we want to draw to
+	float coordXDelMensaje = 700;
+	float coordYDelMensaje = 570;
+	int puntos = puntaje;
+	//Render the first message
+	for(int i = 5; i > 0; i--){
+		numerosLT[puntos%10]->render(renderer, coordXDelMensaje+anchoNumber*(i-1), coordYDelMensaje, anchoNumber, altoText);
+		puntos/=10;
+	}
 }
 
 void Drawer::presentScenary() {
@@ -886,6 +901,10 @@ void Drawer::runWindow(int ancho_px, int alto_px, string imagePath) {
 	if (waitingImage == nullptr) {
 		manageLoadBackgroundError();
 	}
+	gameOverImage = loadTexture(gameOverScreenPath, renderer);
+	if (gameOverImage == nullptr) {
+		manageLoadBackgroundError();
+	}
 	winningImage = loadTexture(winningScreenPath, renderer);
 	if (winningImage == nullptr) {
 		manageLoadBackgroundError();
@@ -1088,6 +1107,10 @@ void Drawer::loadMusic(){
 	if(!gWinningMusic){
 		printf( "Failed to load victory wav! SDL_mixer Error: %s\n", Mix_GetError() );
 	}
+	gLosingMusic = Mix_LoadWAV("resources/SoundEffects/victory.wav");
+	if(!gLosingMusic){
+		printf( "Failed to load victory wav! SDL_mixer Error: %s\n", Mix_GetError() );
+	}
 }
 
 void Drawer::loadFont() {
@@ -1168,11 +1191,6 @@ bool Drawer::loadMedia() {
 	}
 	if (!bonusVidaLT.loadFromFile(bonusVidaPath, renderer)) {
 		printf("Failed to load bonusVida texture!\n");
-		success = false;
-	}
-
-	if(!gameOverScreenLT.loadFromFile(gameOverScreenPath, renderer)){
-		printf("Failed to load text texture!\n");
 		success = false;
 	}
 

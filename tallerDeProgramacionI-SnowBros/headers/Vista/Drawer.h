@@ -205,12 +205,14 @@ private:
 	bool pasandoDeNivel;
 	bool seEstaReproduciendoMusicaDeFondo;
 	bool seEstaReproduciendoMusicaDeVictoria;
+	bool seEstaReproduciendoMusicaDeDerrota;
 
 	//SDL Attributes
 	SDL_Renderer *renderer;
 	SDL_Window *window;
 	SDL_Texture *image;
 	SDL_Texture *waitingImage;
+	SDL_Texture *gameOverImage;
 	SDL_Texture *winningImage;
 	SDL_Texture* imagenPersonaje;
 	SDL_Texture* imagenPersonaje2;
@@ -232,6 +234,7 @@ private:
 	//The music that will be played
 	Mix_Music *gMusic;
 	Mix_Chunk *gWinningMusic;
+	Mix_Chunk *gLosingMusic;
 	Mix_Chunk *gShooting;
 	Mix_Chunk *gJumping;
 	Mix_Chunk *gDying;
@@ -269,7 +272,6 @@ private:
 	LTexture levelsLT;
 	LTexture waitingScreenLT;
 	LTexture winningScreenLT;
-	LTexture gameOverScreenLT;
 
 	//Cargo los numeros del 0 al 9
 	LTexture ceroLT;

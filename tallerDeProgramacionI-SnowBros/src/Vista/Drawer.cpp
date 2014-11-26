@@ -507,6 +507,9 @@ void Drawer::drawFireEnemy(enemigo_t enemigo){
 		case SHOOTING:
 			drawFireEnemyShooting(renderer, imagen, orientacion, pos_x, pos_y,  ancho * un_to_px_x, alto * un_to_px_y);
 			break;
+		case FALLING:
+			drawFireEnemyShooting(renderer, imagen, orientacion, pos_x, pos_y,  ancho * un_to_px_x, alto * un_to_px_y);
+			break;
 		}
 		if(enemigo.nivelDeCongelamiento >0){
 			if(enemigo.nivelDeCongelamiento < 3){

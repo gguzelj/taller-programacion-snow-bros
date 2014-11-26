@@ -220,13 +220,12 @@ int Enemigo::getPuntos() {
 void Enemigo::controlarEstado() {
 	Character::controlarEstado();
 
-	if(nivelDeCongelamiento > 0 && !estaCongelado())
+	if (nivelDeCongelamiento > 0 && !estaCongelado())
 		hacerAtravezable();
-	else
+	else if (state == &Character::falling)
 		this->cambiarFilterIndex(ENEMIGO_FILTER_INDEX);
 
-
-	if(estaCongelado()){
+	if (estaCongelado()) {
 		noAtravezarPlataformas();
 	}
 }
